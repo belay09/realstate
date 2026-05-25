@@ -1,0 +1,19 @@
+# Overlay for first boot: expose web + API on host ports (no Caddy / no domain yet).
+# Usage on EC2:
+#   export VITE_API_BASE_URL=http://YOUR_EC2_PUBLIC_IP:8000/api/v1
+#   docker compose -f docker-compose.prod.yml -f docker-compose.prod.ip.yml up -d --build
+#
+# Visit: http://YOUR_EC2_PUBLIC_IP:8080  (site)  and  http://YOUR_EC2_PUBLIC_IP:8000/docs  (API)
+
+services:
+  api:
+    ports:
+      - "8000:8000"
+
+  web:
+    ports:
+      - "8080:80"
+
+  caddy:
+    profiles:
+      - donotstart

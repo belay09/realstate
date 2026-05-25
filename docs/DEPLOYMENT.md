@@ -1,5 +1,7 @@
 # Phases 13–14 — AWS EC2 + Cloudflare DNS
 
+> **New AWS account?** Start with the step-by-step walkthrough: **[AWS_FIRST_DEPLOY.md](./AWS_FIRST_DEPLOY.md)** (EC2 launch, SSH, IP test, then Cloudflare).
+
 ## Overview
 
 | Service | Role |

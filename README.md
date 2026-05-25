@@ -49,7 +49,9 @@ cd frontend && cp .env.example .env && npm install && npm run dev
 
 ## Deploy (production)
 
-See `docs/DEPLOYMENT.md` and `docker-compose.prod.yml`.
+1. **[docs/AWS_FIRST_DEPLOY.md](docs/AWS_FIRST_DEPLOY.md)** — new AWS account, EC2, SSH, first run on public IP  
+2. **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** — compose, Cloudflare, backups  
+3. `docker-compose.prod.yml` + `docker-compose.prod.ip.yml` (IP test before DNS)
 
 ## GitHub
 
