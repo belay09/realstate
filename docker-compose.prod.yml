@@ -1,0 +1,71 @@
+# Production stack on EC2 (API + Postgres + Caddy reverse proxy + static frontend).
+# Usage:
+#   cp backend/.env.production.example backend/.env.production   # fill secrets on server
+#   cp frontend/.env.production.example frontend/.env.production
+#   docker compose -f docker-compose.prod.yml up -d --build
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-belay_properties}
+      POSTGRES_USER: ${POSTGRES_USER:-belay}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-belay} -d ${POSTGRES_DB:-belay_properties}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Do not publish 5432 to the host in production.
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env.production
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-belay}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-belay_properties}
+      APP_ENV: production
+      DEBUG: "false"
+    depends_on:
+      db:
+        condition: service_healthy
+    expose:
+      - "8000"
+
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-https://api.realtor.example.com/api/v1}
+    restart: unless-stopped
+    expose:
+      - "80"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - api
+      - web
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:-realtor.example.com}
+      API_DOMAIN: ${API_DOMAIN:-api.realtor.example.com}
+
+volumes:
+  postgres_data:
+  caddy_data:
+  caddy_config:

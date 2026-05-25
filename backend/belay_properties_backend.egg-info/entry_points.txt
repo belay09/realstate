@@ -1,0 +1,2 @@
+[console_scripts]
+belay-create-admin = app.scripts.create_admin:main

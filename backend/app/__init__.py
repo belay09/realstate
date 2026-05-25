@@ -1,0 +1,1 @@
+"""Belay Properties backend application."""

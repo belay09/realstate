@@ -1,0 +1,10 @@
+# Replace domains via SITE_DOMAIN / API_DOMAIN env on the caddy service.
+# Cloudflare: point A records to EC2 public IP; SSL mode "Full" or "Full (strict)" with Caddy auto HTTPS.
+
+{$API_DOMAIN} {
+    reverse_proxy api:8000
+}
+
+{$SITE_DOMAIN} {
+    reverse_proxy web:80
+}
