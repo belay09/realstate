@@ -55,7 +55,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./deploy/${CADDYFILE:-Caddyfile}:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
@@ -64,6 +64,7 @@ services:
     environment:
       SITE_DOMAIN: ${SITE_DOMAIN:-realtor.example.com}
       API_DOMAIN: ${API_DOMAIN:-api.realtor.example.com}
+      CADDYFILE: ${CADDYFILE:-Caddyfile.cloudflare}
 
 volumes:
   postgres_data:

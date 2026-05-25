@@ -1,0 +1,16 @@
+# Cloudflare proxy: one hostname avoids SSL wildcard limits on api.realtor.* (not covered by *.belay-sirak.com).
+# Public site + API on SITE_DOMAIN; set VITE_API_BASE_URL=https://SITE_DOMAIN/api/v1
+
+http://{$SITE_DOMAIN} {
+	handle /api/* {
+		reverse_proxy api:8000
+	}
+	handle {
+		reverse_proxy web:80
+	}
+}
+
+# Optional separate API host (requires Cloudflare Advanced Certificate / Total TLS for api.realtor.*):
+# http://{$API_DOMAIN} {
+# 	reverse_proxy api:8000
+# }
