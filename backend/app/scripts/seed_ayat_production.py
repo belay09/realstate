@@ -1,4 +1,4 @@
-"""Load Ayat Share Company production inventory and pricing from backend/data/ayat_production.json."""
+"""Load Ayat production inventory and pricing from backend/data/ayat_production.json."""
 
 from __future__ import annotations
 
@@ -183,7 +183,12 @@ def seed_from_data(db: Session, data: dict) -> None:
         )
         if unit_data.get("orientation"):
             unit.orientation = unit_data["orientation"]
-        unit_by_key[_unit_key(unit_data["project_slug"], unit_data["block_code"], unit_data["unit_number"])] = unit
+        ukey = _unit_key(
+            unit_data["project_slug"],
+            unit_data["block_code"],
+            unit_data["unit_number"],
+        )
+        unit_by_key[ukey] = unit
 
     for listing_data in data["listings"]:
         ref = listing_data["unit_ref"]
@@ -249,7 +254,10 @@ def _seed_pricing(
         document_type="price_list",
         storage_url="internal://ayat_production.json",
         ocr_status="manual_entry",
-        extracted_text="Structured entry from backend/data/ayat_production.json — verify against official Ayat PDF.",
+        extracted_text=(
+            "Structured entry from backend/data/ayat_production.json. "
+            "Verify against official Ayat PDF."
+        ),
     )
     db.add(doc)
     db.flush()
