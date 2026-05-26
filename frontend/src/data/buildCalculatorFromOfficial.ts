@@ -1,7 +1,7 @@
 /**
- * Builds calculator constants from backend/data/ayat_official_2018.json (official Ayat strategy).
+ * Builds calculator constants from ayat_official_2018.json (official Ayat strategy).
  */
-import official from '../../../backend/data/ayat_official_2018.json'
+import { official, type ShopZoneJson } from './ayatOfficial2018'
 import type {
   CommercialZone,
   FinishKind,
@@ -22,11 +22,11 @@ const FINISH: Record<string, FinishKind> = {
 }
 
 function bandPrice(
-  loc: Record<string, Record<string, number>>,
+  loc: Partial<Record<'SFCA' | 'SFCR' | 'RFCA' | 'RFCR', Record<string, number>>>,
   code: string,
   band: string,
 ): number | undefined {
-  const p = loc[code]?.[band]
+  const p = loc[code as keyof typeof loc]?.[band]
   if (p != null) return p
   if (code === 'SFCR') return loc.SFCA?.[band]
   return undefined
@@ -36,10 +36,9 @@ export function buildResidentialPriceRows(): ResidentialPriceRow[] {
   const s10 = official.section10_apartments
   const rows: ResidentialPriceRow[] = []
   for (const [projectId, location] of Object.entries(s10.locations)) {
-    const loc = location as { SFCA?: Record<string, number>; SFCR?: Record<string, number>; RFCA?: Record<string, number>; RFCR?: Record<string, number> }
     for (const band of s10.floor_bands) {
       for (const code of [...SEMI_TYPES, ...REG_TYPES]) {
-        const price = bandPrice(loc as Record<string, Record<string, number>>, code, band.label)
+        const price = bandPrice(location, code, band.label)
         if (price == null) continue
         rows.push({
           projectId,
@@ -55,12 +54,14 @@ export function buildResidentialPriceRows(): ResidentialPriceRow[] {
 }
 
 export const OFFICIAL_BEDROOM_AREA_OPTIONS: Record<1 | 2 | 3, number[]> = {
-  1: official.section2_bedroom_sizes_sqm['1'] as number[],
-  2: official.section2_bedroom_sizes_sqm['2'] as number[],
-  3: [...official.section2_bedroom_sizes_sqm['3'], 107] as number[],
+  1: official.section2_bedroom_sizes_sqm['1'],
+  2: official.section2_bedroom_sizes_sqm['2'],
+  3: [...official.section2_bedroom_sizes_sqm['3'], 107],
 }
 
-// Map zone ids to existing i18n keys
+export const OFFICIAL_SHOP_SIZE_MIN = official.section11_shops.size_min_sqm
+export const OFFICIAL_SHOP_SIZE_MAX = official.section11_shops.size_max_sqm
+
 const SHOP_LABEL_KEYS: Record<string, string> = {
   ledeta: 'calculator.shopZones.ledeta',
   kazanchis: 'calculator.shopZones.kazanchis',
@@ -72,8 +73,8 @@ const SHOP_LABEL_KEYS: Record<string, string> = {
   'zone-8-linda': 'calculator.shopZones.zone8Linda',
 }
 
-export function buildCommercialZones(): CommercialZone[] {
-  return official.section11_shops.zones.map((z) => ({
+function shopZoneToCommercialZone(z: ShopZoneJson): CommercialZone {
+  return {
     id: z.id,
     labelKey: SHOP_LABEL_KEYS[z.id] ?? `calculator.shopZones.${z.id}`,
     floors: {
@@ -82,7 +83,11 @@ export function buildCommercialZones(): CommercialZone[] {
       '2F': z.floors['2F'] ?? 0,
       '3F': z.floors['3F'] ?? 0,
     },
-  }))
+  }
+}
+
+export function buildCommercialZones(): CommercialZone[] {
+  return official.section11_shops.zones.map(shopZoneToCommercialZone)
 }
 
 export const OFFICIAL_RESIDENTIAL_PROJECTS: ResidentialProject[] = [
@@ -169,8 +174,9 @@ export function buildMilestoneSchedules(): Record<MilestoneScheduleId, Milestone
     handover: 'calculator.milestones.handover',
   }
   const out = {} as Record<MilestoneScheduleId, MilestoneStep[]>
-  for (const [id, steps] of Object.entries(m)) {
-    out[id as MilestoneScheduleId] = steps.map((s) => ({
+  for (const id of Object.keys(m) as MilestoneScheduleId[]) {
+    const steps = m[id]
+    out[id] = steps.map((s) => ({
       id: s.id,
       labelKey: labelKeys[s.id] ?? s.id,
       percent: s.percent,

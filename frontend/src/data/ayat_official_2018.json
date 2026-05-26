@@ -1,0 +1,172 @@
+{
+  "_meta": {
+    "title": "Ayat Share Company aggregated sales strategy",
+    "reference": "Ayat/116/2018",
+    "issued_date_ec": "2018-05-15",
+    "price_valid_from_ec": "2018-05-15",
+    "price_valid_to_ec": "2018-08-15",
+    "adjustment_memo_ref": "906/18",
+    "adjustment_effective_from_ec": "2018-05-25",
+    "adjustment_effective_to_ec": "2018-08-25",
+    "currency": "ETB",
+    "includes_vat": true,
+    "source": "Official scanned pages (photos 2026-05-12). Not sample data."
+  },
+  "section2_bedroom_sizes_sqm": {
+    "1": [40, 45, 55, 60],
+    "2": [75, 80],
+    "3": [90, 95, 105, 115]
+  },
+  "section3_apartment_locations": [
+    "Bole Lemi",
+    "CMC",
+    "Bole Arabsa",
+    "Bole Summit",
+    "Michael Joro",
+    "Lemmi",
+    "Ayat (Main Village)"
+  ],
+  "section6_payment_tiers": [
+    { "id": "100", "down_payment_percent": 100, "client_discount_percent": 20, "employee_commission_percent": 2.0 },
+    { "id": "85", "down_payment_percent": 85, "client_discount_percent": 17, "employee_commission_percent": 1.7 },
+    { "id": "70", "down_payment_percent": 70, "client_discount_percent": 14, "employee_commission_percent": 1.4 },
+    { "id": "55", "down_payment_percent": 55, "client_discount_percent": 11, "employee_commission_percent": 1.1 },
+    { "id": "40", "down_payment_percent": 40, "client_discount_percent": 8, "employee_commission_percent": 0.8 },
+    { "id": "35", "down_payment_percent": 35, "client_discount_percent": 7, "employee_commission_percent": 0.7 },
+    { "id": "60_40", "down_payment_percent": 60, "client_discount_percent": 5, "employee_commission_percent": 0.5, "is_6040": true }
+  ],
+  "section7_group_discounts": [
+    { "min_buyers": 25, "max_buyers": 50, "additional_discount_percent": 2 },
+    { "min_buyers": 51, "max_buyers": 76, "additional_discount_percent": 4 },
+    { "min_buyers": 77, "max_buyers": 105, "additional_discount_percent": 6 },
+    { "min_buyers": 106, "max_buyers": null, "additional_discount_percent": 8 }
+  ],
+  "section10_apartments": {
+    "floor_bands": [
+      { "label": "3-10", "floor_min": 3, "floor_max": 10 },
+      { "label": "11-18", "floor_min": 11, "floor_max": 18 },
+      { "label": "19-26", "floor_min": 19, "floor_max": 26 },
+      { "label": "27-36", "floor_min": 27, "floor_max": 36 }
+    ],
+    "locations": {
+      "lideta-unstarted": {
+        "label": "Lideta — not started",
+        "SFCA": { "3-10": 155342, "11-18": 123717, "19-26": 115874, "27-36": 99935 },
+        "RFCA": { "3-10": 189750, "11-18": 157872, "19-26": 150535, "27-36": 133331 },
+        "RFCR": { "3-10": 199870, "11-18": 197340, "19-26": 196834, "27-36": 192280 }
+      },
+      "kazanchis-started": {
+        "label": "Kazanchis — started",
+        "SFCA": { "3-10": 146489, "11-18": 120175, "19-26": 106007, "27-36": 89815 },
+        "RFCA": { "3-10": 185449, "11-18": 157872, "19-26": 138897, "27-36": 118151 },
+        "RFCR": { "3-10": 198605, "11-18": 196328, "19-26": 195316, "27-36": 192027 }
+      },
+      "bole-unstarted": {
+        "label": "Bole (Belair) — not started",
+        "SFCA": { "3-10": 124223, "11-18": 108031, "19-26": 91839 },
+        "RFCA": { "3-10": 162932, "11-18": 141680, "19-26": 120428 },
+        "RFCR": { "3-10": 197087, "11-18": 194810, "19-26": 192533 }
+      },
+      "cmc-unstarted": {
+        "label": "CMC and others — not started",
+        "SFCA": { "3-10": 120175, "11-18": 104236, "19-26": 88297 },
+        "RFCA": { "3-10": 157619, "11-18": 136620, "19-26": 115621 },
+        "RFCR": { "3-10": 196075, "11-18": 192786, "19-26": 191774 }
+      },
+      "cmc-near-completion": {
+        "label": "CMC and others — near completion",
+        "SFCA": { "3-10": 125994, "11-18": 110055, "19-26": 94116 },
+        "RFCA": { "3-10": 164197, "11-18": 143704, "19-26": 123211 },
+        "RFCR": { "3-10": 196581, "11-18": 194304, "19-26": 193545 }
+      }
+    },
+    "listing_project_map": {
+      "ayat-hills": { "source": "lideta-unstarted", "max_floor": 16 },
+      "cmc-extension": {
+        "unstarted": "cmc-unstarted",
+        "near_completion": "cmc-near-completion",
+        "max_floor": 17
+      }
+    }
+  },
+  "section11_shops": {
+    "size_min_sqm": 30,
+    "size_max_sqm": 240,
+    "zones": [
+      {
+        "id": "ledeta",
+        "label": "Ledeta",
+        "floors": { "GF": 195569, "1F": 188485, "2F": 181654, "3F": 174570 }
+      },
+      {
+        "id": "kazanchis",
+        "label": "Kazanchis",
+        "floors": { "GF": 227953, "1F": 218592, "2F": 208978, "3F": 199617 }
+      },
+      {
+        "id": "bole-air",
+        "label": "Bole (Belair)",
+        "floors": { "GF": 126564, "1F": null, "2F": null, "3F": null }
+      },
+      {
+        "id": "zone-2",
+        "label": "Zone 2",
+        "floors": { "GF": 136165, "1F": 130245, "2F": 124324, "3F": 121364 }
+      },
+      {
+        "id": "meri-luke-1",
+        "label": "Meri Luke 1",
+        "floors": { "GF": 129473, "1F": 123844, "2F": 118215, "3F": 115400 }
+      },
+      {
+        "id": "summit",
+        "label": "Summit",
+        "floors": { "GF": 136165, "1F": 130245, "2F": 124324, "3F": 121364 }
+      },
+      {
+        "id": "zone-3-university",
+        "label": "Zone 3 (University)",
+        "floors": { "GF": 129473, "1F": 123844, "2F": 118215, "3F": 115400 }
+      },
+      {
+        "id": "zone-8-linda",
+        "label": "Zone 8 (Linda)",
+        "floors": { "GF": 136165, "1F": 130245, "2F": 124324, "3F": 121364 }
+      }
+    ]
+  },
+  "section13_milestones": {
+    "apt_near_100": [
+      { "id": "sign", "percent": 20 },
+      { "id": "m4", "percent": 25 },
+      { "id": "m8", "percent": 25 },
+      { "id": "m12", "percent": 20 },
+      { "id": "handover", "percent": 10 }
+    ],
+    "apt_unstarted_100": [
+      { "id": "sign", "percent": 15 },
+      { "id": "m4", "percent": 20 },
+      { "id": "m8", "percent": 20 },
+      { "id": "m12", "percent": 20 },
+      { "id": "m18", "percent": 15 },
+      { "id": "m24", "percent": 5 },
+      { "id": "handover", "percent": 5 }
+    ],
+    "apt_6040": [
+      { "id": "sign", "percent": 15 },
+      { "id": "m4", "percent": 20 },
+      { "id": "m8", "percent": 10 },
+      { "id": "m12", "percent": 5 },
+      { "id": "m18", "percent": 5 },
+      { "id": "m24", "percent": 3 },
+      { "id": "handover", "percent": 2 }
+    ],
+    "shop_unstarted_100": [
+      { "id": "sign", "percent": 25 },
+      { "id": "m4", "percent": 30 },
+      { "id": "m8", "percent": 20 },
+      { "id": "structure", "percent": 15 },
+      { "id": "handover", "percent": 10 }
+    ]
+  }
+}

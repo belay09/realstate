@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+# Keep in sync with frontend/src/data/ayat_official_2018.json (Docker web build uses the frontend copy).
 OFFICIAL_PATH = Path(__file__).resolve().parents[2] / "data" / "ayat_official_2018.json"
 
 # 3BR semi-finished uses SFCR; Section 10 has no SFCR semi column — fall back to SFCA band.

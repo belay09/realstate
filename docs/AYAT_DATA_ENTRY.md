@@ -2,7 +2,11 @@
 
 ## Official pricing (Ayat/116/2018)
 
-**Source of truth:** `backend/data/ayat_official_2018.json` (from company strategy scans — not sample data).
+**Source of truth:** `backend/data/ayat_official_2018.json` (from company strategy scans — not sample data). After edits, sync to the frontend copy used in production builds:
+
+```bash
+cp backend/data/ayat_official_2018.json frontend/src/data/ayat_official_2018.json
+```
 
 Includes Section 2 sizes, Section 3 locations, Section 6 discounts/commissions, Section 7 group tiers, Section 10 apartment per m² table, Section 11 shop per m² table, and Section 13 milestones. The calculator reads this file on the frontend; the seed script loads pricing and commission from it into PostgreSQL.
 

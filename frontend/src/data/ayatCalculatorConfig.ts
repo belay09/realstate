@@ -1,14 +1,15 @@
 /**
  * Ayat pricing calculator — constants from official strategy (Ayat/116/2018).
- * Source of truth: backend/data/ayat_official_2018.json (scanned company pages).
+ * Data: frontend/src/data/ayat_official_2018.json (sync with backend/data/).
  */
-import official from '../../../backend/data/ayat_official_2018.json'
 import {
   buildCommercialZones,
   buildMilestoneSchedules,
   buildResidentialPriceRows,
   OFFICIAL_BEDROOM_AREA_OPTIONS,
   OFFICIAL_RESIDENTIAL_PROJECTS,
+  OFFICIAL_SHOP_SIZE_MAX,
+  OFFICIAL_SHOP_SIZE_MIN,
 } from './buildCalculatorFromOfficial'
 
 export type PropertyKind = 'residential' | 'commercial'
@@ -105,8 +106,8 @@ export const RESIDENTIAL_PRICE_ROWS: ResidentialPriceRow[] = buildResidentialPri
 
 export const COMMERCIAL_ZONES: CommercialZone[] = buildCommercialZones()
 
-export const COMMERCIAL_AREA_MIN = official.section11_shops.size_min_sqm
-export const COMMERCIAL_AREA_MAX = official.section11_shops.size_max_sqm
+export const COMMERCIAL_AREA_MIN = OFFICIAL_SHOP_SIZE_MIN
+export const COMMERCIAL_AREA_MAX = OFFICIAL_SHOP_SIZE_MAX
 
 export type MilestoneScheduleId =
   | 'apt_near_100'
