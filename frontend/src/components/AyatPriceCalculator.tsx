@@ -20,6 +20,13 @@ import {
   calculateResidential,
   type CalculatorResult,
 } from '../lib/ayatCalculator'
+import {
+  formatBedroomCount,
+  formatFloorBandLabel,
+  formatShopFloorLabel,
+  formatSquareMeters,
+  formatUnitTypeLabel,
+} from '../lib/ayatLabels'
 import { formatMoney } from '../lib/format'
 
 type ShopFloor = 'GF' | '1F' | '2F' | '3F'
@@ -97,18 +104,27 @@ function CalculatorResults({
             <dt className="text-fg-muted">{t('calculator.pricePerSqm')}</dt>
             <dd className="text-xl font-bold text-fg">
               {formatMoney(result.pricePerSqm, result.currency)}
-              <span className="text-sm font-normal text-fg-muted"> / m²</span>
+              <span className="text-sm font-normal text-fg-muted">
+                {' '}
+                {t('calculator.perSquareMeter')}
+              </span>
             </dd>
             {result.floorBandLabel && (
               <p className="mt-1 text-xs text-fg-muted">
                 {kind === 'residential'
-                  ? t('calculator.floorBand', { band: result.floorBandLabel })
-                  : t('calculator.shopFloorSelected', { floor: result.floorBandLabel })}
+                  ? t('calculator.floorBand', {
+                      band: formatFloorBandLabel(result.floorBandLabel, t),
+                    })
+                  : t('calculator.shopFloorSelected', {
+                      floor: formatShopFloorLabel(result.floorBandLabel, t),
+                    })}
               </p>
             )}
             {result.unitTypeCode && (
               <p className="text-xs text-fg-muted">
-                {t('calculator.unitType', { code: result.unitTypeCode })}
+                {t('calculator.unitType', {
+                  label: formatUnitTypeLabel(result.unitTypeCode, t),
+                })}
               </p>
             )}
           </div>
@@ -374,7 +390,7 @@ export function AyatPriceCalculator({
       <div className="mb-5 flex flex-wrap gap-2">
         {BEDROOM_AREA_OPTIONS[preset.bedrooms].map((a) => (
           <ChoiceButton key={a} selected={areaSqm === a} onClick={() => setAreaSqm(a)}>
-            {a} m²
+            {formatSquareMeters(a, t)}
           </ChoiceButton>
         ))}
       </div>
@@ -515,7 +531,7 @@ export function AyatPriceCalculator({
                       setAreaSqm(null)
                     }}
                   >
-                    {t('calculator.bedrooms', { count: b })}
+                    {formatBedroomCount(b, t)}
                   </ChoiceButton>
                 ))}
               </div>
@@ -580,7 +596,7 @@ export function AyatPriceCalculator({
                 <div className="flex flex-wrap gap-2">
                   {areaOptions.map((a) => (
                     <ChoiceButton key={a} selected={areaSqm === a} onClick={() => setAreaSqm(a)}>
-                      {a} m²
+                      {formatSquareMeters(a, t)}
                     </ChoiceButton>
                   ))}
                 </div>
@@ -665,7 +681,11 @@ export function AyatPriceCalculator({
               <dd className="font-medium text-fg">{t(presetProject.nameKey)}</dd>
             </div>
             <div>
-              <dt className="text-fg-muted">{t('calculator.bedrooms', { count: preset.bedrooms })}</dt>
+              <dt className="text-fg-muted">{t('calculator.embeddedBedrooms')}</dt>
+              <dd className="font-medium text-fg">{formatBedroomCount(preset.bedrooms, t)}</dd>
+            </div>
+            <div>
+              <dt className="text-fg-muted">{t('calculator.finishLabel')}</dt>
               <dd className="font-medium text-fg">
                 {preset.finish === 'semi-finished'
                   ? t('calculator.finishSemi')
@@ -674,7 +694,9 @@ export function AyatPriceCalculator({
             </div>
             <div>
               <dt className="text-fg-muted">{t('calculator.embeddedSize')}</dt>
-              <dd className="font-medium text-fg">{areaSqm} m²</dd>
+              <dd className="font-medium text-fg">
+                {areaSqm != null ? formatSquareMeters(areaSqm, t) : '—'}
+              </dd>
             </div>
             <div>
               <dt className="text-fg-muted">{t('calculator.embeddedFloor')}</dt>

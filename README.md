@@ -43,16 +43,18 @@ docker compose run --rm api python -m app.scripts.create_admin
 cd frontend && cp .env.example .env && npm install && npm run dev
 ```
 
-- API: http://localhost:8000/docs  
-- Frontend: http://localhost:5173 (or 5174)  
+- API: http://localhost:8000/docs
+- Frontend: http://localhost:5173 (or 5174)
 - Admin: `/admin/login` — see `backend/README.md` for demo credentials after `create_admin`
 
 ## Deploy (production)
 
-1. **[docs/AWS_FIRST_DEPLOY.md](docs/AWS_FIRST_DEPLOY.md)** — new AWS account, EC2, SSH, first run on public IP  
-2. **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** — compose, Cloudflare, backups  
+1. **[docs/AWS_FIRST_DEPLOY.md](docs/AWS_FIRST_DEPLOY.md)** — new AWS account, EC2, SSH, first run on public IP
+2. **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** — compose, Cloudflare, backups
 3. `docker-compose.prod.yml` + `docker-compose.prod.ip.yml` (IP test before DNS)
 
 ## GitHub
 
 See `docs/GITHUB_SETUP.md` and `.github/workflows/ci.yml`.
+ssh -i ~/realstate/realstateKey.pem ec2-user@13.51.237.118 \
+  'cd ~/realstate && ./scripts/deploy-production.sh'
