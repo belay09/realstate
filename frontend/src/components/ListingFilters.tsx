@@ -114,7 +114,7 @@ export function ListingFilters({
   )
 
   return (
-    <div className="surface overflow-hidden">
+    <div className="surface relative z-30 overflow-visible">
       <div className="p-5 sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>

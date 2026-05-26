@@ -22,10 +22,14 @@ Production Ayat **inventory** (listings, units, projects) is in `backend/data/ay
 
 ## Quick start (production server)
 
+`scripts/deploy-production.sh` runs the seed automatically after migrations. Manual run:
+
 ```bash
 cd ~/realstate
-sudo docker compose -f docker-compose.prod.yml exec api python -m app.scripts.seed_ayat_production
+docker compose -f docker-compose.prod.yml exec -T api python -m app.scripts.seed_ayat_production
 ```
+
+You do **not** need to drop or recreate the database — the seed upserts projects, units, and listings in place.
 
 Local dev:
 

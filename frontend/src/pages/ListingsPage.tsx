@@ -95,7 +95,7 @@ export function ListingsPage() {
   const total = query.data?.total ?? 0
 
   return (
-    <div className="space-y-12 text-left">
+    <div className="space-y-12 overflow-visible text-left">
       <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-800 via-brand-700 to-brand-950 px-6 py-12 sm:px-10 sm:py-14">
         <div className="pointer-events-none absolute -right-10 top-0 h-56 w-56 rounded-full bg-brand-400/20 blur-3xl" />
         <div className="relative max-w-2xl">

@@ -44,6 +44,9 @@ echo "==> Starting stack..."
 echo "==> Running database migrations..."
 ./scripts/deploy-migrate.sh
 
+echo "==> Seeding Ayat inventory and official pricing (idempotent)..."
+"${COMPOSE[@]}" exec -T api python -m app.scripts.seed_ayat_production
+
 echo "==> Removing dangling images..."
 docker image prune -f
 
