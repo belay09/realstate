@@ -1,0 +1,52 @@
+# Deploy to EC2 after CI passes on main (push only).
+# Configure repository secrets — see docs/GITHUB_DEPLOY.md
+
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_branch == 'main')
+    environment: production
+    timeout-minutes: 45
+    steps:
+      - name: Verify deploy secrets
+        run: |
+          test -n "${{ secrets.EC2_HOST }}" || (echo "Missing EC2_HOST secret" && exit 1)
+          test -n "${{ secrets.EC2_USER }}" || (echo "Missing EC2_USER secret" && exit 1)
+          test -n "${{ secrets.EC2_SSH_KEY }}" || (echo "Missing EC2_SSH_KEY secret" && exit 1)
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: ${{ secrets.EC2_PORT }}
+          command_timeout: 40m
+          script_stop: true
+          script: |
+            set -euo pipefail
+            APP_DIR="${{ secrets.EC2_APP_PATH }}"
+            if [ -z "$APP_DIR" ]; then
+              APP_DIR="/home/${{ secrets.EC2_USER }}/realstate"
+            fi
+            cd "$APP_DIR"
+            chmod +x scripts/deploy-production.sh scripts/deploy-migrate.sh
+            ./scripts/deploy-production.sh

@@ -94,6 +94,18 @@ Schedule with cron (daily example):
 
 ## 7. Updates
 
+**Automatic (recommended):** push to `main` → CI runs → **Deploy** workflow SSHs to EC2.  
+Setup: **[GITHUB_DEPLOY.md](./GITHUB_DEPLOY.md)** (GitHub secrets + EC2 deploy key).
+
+**Manual on the server:**
+
+```bash
+cd ~/realstate
+./scripts/deploy-production.sh
+```
+
+Or:
+
 ```bash
 git pull
 docker compose -f docker-compose.prod.yml up -d --build
