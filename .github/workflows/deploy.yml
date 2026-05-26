@@ -76,6 +76,18 @@ jobs:
             if [ -z "$APP_DIR" ]; then
               APP_DIR="/home/${{ secrets.EC2_USER }}/realstate"
             fi
+            if [ ! -d "$APP_DIR/.git" ]; then
+              echo "ERROR: $APP_DIR is not a git repo. Clone on EC2 first — see docs/GITHUB_DEPLOY.md"
+              exit 1
+            fi
             cd "$APP_DIR"
+            echo "==> Pull latest main (deploy script may not exist until after this)..."
+            git fetch origin main
+            git checkout main
+            git pull --ff-only origin main || git reset --hard origin/main
+            if [ ! -f scripts/deploy-production.sh ]; then
+              echo "ERROR: scripts/deploy-production.sh missing after pull. Check repo remote and branch."
+              exit 1
+            fi
             chmod +x scripts/deploy-production.sh scripts/deploy-migrate.sh
             ./scripts/deploy-production.sh
