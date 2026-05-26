@@ -25,7 +25,7 @@ export function AdminDashboardPage() {
           <li key={href}>
             <Link
               to={href}
-              className="block rounded-xl border border-stone-200 bg-white p-4 shadow-sm transition hover:border-emerald-400 dark:border-stone-800 dark:bg-stone-950 dark:hover:border-emerald-700"
+              className="block rounded-xl border border-stone-200 bg-white p-4 shadow-sm transition hover:border-brand-400 dark:border-stone-800 dark:bg-stone-950 dark:hover:border-brand-700"
             >
               <span className="font-medium text-stone-900 dark:text-stone-50">{title}</span>
               <p className="mt-1 text-xs text-stone-500">{desc}</p>

@@ -1,4 +1,4 @@
-# Belay Properties — frontend
+# Belay Properties frontend
 
 Vite + React 19 + TypeScript + Tailwind CSS v4 + React Router + TanStack Query + Axios.
 
@@ -14,7 +14,7 @@ npm install
 npm run dev
 ```
 
-3. Open `http://localhost:5173` — public listings use `GET /public/listings`; admin uses JWT from `POST /auth/login`.
+3. Open `http://localhost:5173`. Public listings use `GET /public/listings`; admin uses JWT from `POST /auth/login`.
 
 ## Build
 

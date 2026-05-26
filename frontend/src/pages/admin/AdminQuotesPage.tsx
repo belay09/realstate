@@ -108,7 +108,7 @@ export function AdminQuotesPage() {
         </label>
 
         {generate.isError ? (
-          <p className="text-xs text-red-600">Quote failed — check unit has published pricing and plan is valid.</p>
+          <p className="text-xs text-red-600">Quote failed. Check unit has published pricing and plan is valid.</p>
         ) : null}
 
         <button type="submit" className="btn-primary" disabled={generate.isPending || !unitId}>
@@ -124,10 +124,10 @@ export function AdminQuotesPage() {
 function QuoteResult({ data }: { data: FullQuoteResponse }) {
   const p = data.pricing
   return (
-    <div className="space-y-4 rounded-xl border border-emerald-200 bg-emerald-50/50 p-4 dark:border-emerald-900 dark:bg-emerald-950/30">
+    <div className="space-y-4 rounded-xl border border-brand-200 bg-brand-50/50 p-4 dark:border-brand-900 dark:bg-brand-950/30">
       <div>
-        <p className="text-xs uppercase text-emerald-800 dark:text-emerald-400">{p.pricing_version_name}</p>
-        <p className="text-2xl font-semibold text-emerald-950 dark:text-emerald-50">
+        <p className="text-xs uppercase text-brand-800 dark:text-brand-400">{p.pricing_version_name}</p>
+        <p className="text-2xl font-semibold text-brand-950 dark:text-brand-50">
           {formatMoney(p.final_price, p.currency)}
         </p>
         {data.quote ? (

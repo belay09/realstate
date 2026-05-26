@@ -2,6 +2,7 @@ import * as React from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { Navigate, useNavigate } from 'react-router-dom'
 
+import { ThemeToggle } from '../../components/ThemeToggle'
 import { api } from '../../api/client'
 import { getAccessToken, setAccessToken } from '../../lib/auth'
 
@@ -31,10 +32,13 @@ export function AdminLoginPage() {
   }
 
   return (
-    <div className="mx-auto flex min-h-dvh max-w-md flex-col justify-center px-4">
-      <div className="rounded-2xl border border-stone-200 bg-white p-8 shadow-lg dark:border-stone-800 dark:bg-stone-950">
-        <h1 className="text-xl font-semibold text-stone-900 dark:text-stone-50">Admin sign in</h1>
-        <p className="mt-1 text-sm text-stone-500">Belay Properties staff</p>
+    <div className="mx-auto flex min-h-dvh max-w-md flex-col justify-center bg-canvas px-4">
+      <div className="mb-4 flex justify-end">
+        <ThemeToggle />
+      </div>
+      <div className="surface p-8">
+        <h1 className="text-h3">Admin sign in</h1>
+        <p className="mt-1 text-body-sm">Belay Properties staff</p>
         <form
           className="mt-6 space-y-4"
           onSubmit={(e) => {

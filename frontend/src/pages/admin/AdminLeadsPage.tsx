@@ -109,7 +109,7 @@ export function AdminLeadsPage() {
 
             <button
               type="button"
-              className="mt-3 text-xs font-medium text-emerald-700 underline dark:text-emerald-400"
+              className="mt-3 text-xs font-medium text-brand-700 underline dark:text-brand-400"
               onClick={() => setExpandedId(expandedId === lead.id ? null : lead.id)}
             >
               {expandedId === lead.id ? 'Hide sales actions' : 'Sales actions (quote → reserve → contract)'}

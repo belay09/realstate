@@ -71,7 +71,7 @@ export function AdminPaymentPlansPage() {
                 {plan.steps.map((s) => (
                   <li key={s.id}>
                     Step {s.step_order}: {s.percentage}%
-                    {s.milestone_name ? ` — ${s.milestone_name}` : ''}
+                    {s.milestone_name ? `: ${s.milestone_name}` : ''}
                   </li>
                 ))}
               </ol>

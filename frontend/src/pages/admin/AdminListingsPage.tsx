@@ -113,7 +113,7 @@ export function AdminListingsPage() {
                   <td className="space-x-2 px-3 py-2">
                     <button
                       type="button"
-                      className="text-xs text-emerald-700 hover:underline dark:text-emerald-400"
+                      className="text-xs text-brand-700 hover:underline dark:text-brand-400"
                       onClick={() => patch.mutate({ id: L.id, is_public: !L.is_public })}
                     >
                       Toggle public
@@ -181,7 +181,7 @@ function ListingImagesPanel({ listingId, title }: { listingId: string; title: st
 
   return (
     <div className="rounded-xl border border-stone-200 bg-white p-4 dark:border-stone-800 dark:bg-stone-950">
-      <h2 className="text-sm font-semibold text-stone-800 dark:text-stone-200">Images — {title}</h2>
+      <h2 className="text-sm font-semibold text-stone-800 dark:text-stone-200">Images for {title}</h2>
       <form
         className="mt-2 flex flex-wrap gap-2"
         onSubmit={(e) => {

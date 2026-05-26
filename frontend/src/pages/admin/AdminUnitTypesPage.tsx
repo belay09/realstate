@@ -118,7 +118,7 @@ export function AdminUnitTypesPage() {
                 <tr key={u.id}>
                   <td className="px-3 py-2 font-mono text-xs">{u.code}</td>
                   <td className="px-3 py-2">{u.name}</td>
-                  <td className="px-3 py-2">{u.bedrooms ?? '—'}</td>
+                  <td className="px-3 py-2">{u.bedrooms ?? '-'}</td>
                   <td className="px-3 py-2 text-xs text-stone-500">{u.id}</td>
                 </tr>
               ))}
@@ -129,7 +129,7 @@ export function AdminUnitTypesPage() {
 
       <p className="text-xs text-stone-500">
         Copy a <strong>unit type id</strong> for the Units form. From{' '}
-        <Link to="/admin/companies" className="text-emerald-700 underline dark:text-emerald-400">
+        <Link to="/admin/companies" className="text-brand-700 underline dark:text-brand-400">
           Companies
         </Link>{' '}
         use the same company as blocks/units.

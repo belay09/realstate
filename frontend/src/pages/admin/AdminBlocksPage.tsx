@@ -95,10 +95,10 @@ export function AdminBlocksPage() {
               {blocks.data.items.map((b) => (
                 <tr key={b.id}>
                   <td className="px-3 py-2 font-medium">{b.name}</td>
-                  <td className="px-3 py-2 text-stone-600 dark:text-stone-400">{b.code ?? '—'}</td>
+                  <td className="px-3 py-2 text-stone-600 dark:text-stone-400">{b.code ?? '-'}</td>
                   <td className="px-3 py-2">
                     <Link
-                      className="text-emerald-700 hover:underline dark:text-emerald-400"
+                      className="text-brand-700 hover:underline dark:text-brand-400"
                       to={`/admin/units?block_id=${b.id}`}
                     >
                       Units →

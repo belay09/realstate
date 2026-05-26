@@ -120,12 +120,12 @@ export function AdminUnitsPage() {
                 <tr key={u.id}>
                   <td className="px-3 py-2 font-medium">{u.unit_number}</td>
                   <td className="px-3 py-2">{u.status}</td>
-                  <td className="px-3 py-2">{u.floor_number ?? '—'}</td>
+                  <td className="px-3 py-2">{u.floor_number ?? '-'}</td>
                   <td className="space-x-2 px-3 py-2">
                     {u.status !== 'available' && (
                       <button
                         type="button"
-                        className="text-xs font-medium text-emerald-700 hover:underline dark:text-emerald-400"
+                        className="text-xs font-medium text-brand-700 hover:underline dark:text-brand-400"
                         onClick={() => setStatus.mutate({ id: u.id, to_status: 'available' })}
                       >
                         Mark available

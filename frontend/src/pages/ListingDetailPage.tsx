@@ -9,12 +9,14 @@ import type {
   PublicPaymentPreview,
   PublicPricePreview,
 } from '../api/types'
+import { useTranslation } from '../context/LocaleContext'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { formatMoney } from '../lib/format'
 
 const wa = import.meta.env.VITE_WHATSAPP_E164 as string | undefined
 
 export function ListingDetailPage() {
+  const { t } = useTranslation()
   const { slug } = useParams<{ slug: string }>()
   const [leadSent, setLeadSent] = useState(false)
   const [planCode, setPlanCode] = useState('full')
@@ -51,7 +53,7 @@ export function ListingDetailPage() {
     onSuccess: () => setLeadSent(true),
   })
 
-  usePageTitle(query.data?.title ?? 'Listing')
+  usePageTitle(query.data?.title ?? t('pageTitles.listing'))
 
   const priceOk = !priceQuery.isError && Boolean(priceQuery.data)
 
@@ -81,19 +83,19 @@ export function ListingDetailPage() {
   })
 
   if (!slug) {
-    return <p className="text-sm text-red-600">Missing listing slug.</p>
+    return <p className="text-sm text-red-600">{t('listingDetail.missingSlug')}</p>
   }
 
   if (query.isLoading) {
-    return <p className="text-sm text-stone-500">Loading…</p>
+    return <p className="text-body-sm">{t('listingDetail.loading')}</p>
   }
 
   if (query.isError || !query.data) {
     return (
       <div className="space-y-4 text-left">
-        <p className="text-sm text-red-700 dark:text-red-400">Listing not found or no longer available.</p>
-        <Link to="/listings" className="text-sm font-medium text-emerald-700 underline dark:text-emerald-400">
-          Back to listings
+        <p className="text-sm text-red-700 dark:text-red-400">{t('listingDetail.notFound')}</p>
+        <Link to="/listings" className="text-sm font-semibold text-brand-700 underline dark:text-brand-300">
+          {t('listingDetail.backToListings')}
         </Link>
       </div>
     )
@@ -106,44 +108,52 @@ export function ListingDetailPage() {
       `Hello, I am interested in: ${listing.title} (${listing.slug})`,
     )}`
 
+  const locationLine = [
+    [listing.city, listing.area].filter(Boolean).join(' · ') || t('listingDetail.locationPending'),
+    listing.bedrooms != null ? `${listing.bedrooms} ${t('listingDetail.bedrooms')}` : null,
+    `${t('listingDetail.unit')} ${listing.unit_number}`,
+    listing.floor_number != null
+      ? `${t('listingDetail.floor')} ${listing.floor_number}`
+      : null,
+  ]
+    .filter(Boolean)
+    .join(' · ')
+
   return (
-    <article className="mx-auto max-w-3xl space-y-8 text-left">
-      <Link to="/listings" className="text-sm font-medium text-emerald-700 hover:underline dark:text-emerald-400">
-        ← All listings
+    <article className="mx-auto max-w-4xl space-y-8 text-left">
+      <Link to="/listings" className="text-sm font-semibold text-brand-700 hover:underline dark:text-brand-300">
+        {t('listingDetail.allListings')}
       </Link>
 
-      <header className="space-y-2">
-        <p className="text-xs font-medium uppercase tracking-wide text-stone-500">
+      <header className="space-y-3">
+        <p className="section-eyebrow">
           {listing.company_name} · {listing.project_name}
         </p>
-        <h1 className="text-3xl font-semibold tracking-tight text-stone-900 dark:text-stone-50">{listing.title}</h1>
-        <p className="text-sm text-stone-600 dark:text-stone-300">
-          {[listing.city, listing.area].filter(Boolean).join(' · ') || 'Location to be confirmed'}
-          {listing.bedrooms != null ? ` · ${listing.bedrooms} bedrooms` : ''} · Unit {listing.unit_number}
-          {listing.floor_number != null ? `, floor ${listing.floor_number}` : ''}
-        </p>
+        <h1 className="text-h1">{listing.title}</h1>
+        <p className="text-body-sm">{locationLine}</p>
       </header>
 
       {listing.images.length > 0 ? (
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-4 overflow-hidden rounded-3xl sm:grid-cols-2">
           {listing.images.map((img) => (
             <img
               key={`${img.url}-${img.sort_order}`}
               src={img.url}
               alt=""
-              className={`w-full rounded-xl object-cover ${img.is_primary ? 'ring-2 ring-emerald-500 sm:col-span-2' : 'h-48'}`}
+              className={`w-full object-cover ${img.is_primary ? 'aspect-[16/10] ring-2 ring-brand-600 sm:col-span-2' : 'h-52'}`}
             />
           ))}
         </div>
       ) : (
-        <div className="rounded-xl border border-dashed border-stone-300 p-12 text-center text-sm text-stone-500 dark:border-stone-700">
-          No gallery images yet.
+        <div className="surface-muted border-dashed p-16 text-center text-body-sm">
+          {t('listingDetail.noGallery')}
         </div>
       )}
 
       {listing.description ? (
-        <div className="prose prose-stone max-w-none dark:prose-invert">
-          <p className="whitespace-pre-wrap text-stone-700 dark:text-stone-300">{listing.description}</p>
+        <div className="surface p-6 sm:p-8">
+          <h2 className="section-eyebrow">{t('listingDetail.aboutHome')}</h2>
+          <p className="mt-3 whitespace-pre-wrap text-body">{listing.description}</p>
         </div>
       ) : null}
 
@@ -160,13 +170,14 @@ export function ListingDetailPage() {
       <div className="flex flex-wrap gap-3">
         {waHref ? (
           <a href={waHref} target="_blank" rel="noreferrer" className="btn-primary">
-            WhatsApp about this home
+            {t('listingDetail.whatsapp')}
           </a>
         ) : (
-          <span className="text-xs text-stone-500">
-            Set <code className="rounded bg-stone-200 px-1 dark:bg-stone-800">VITE_WHATSAPP_E164</code> in{' '}
-            <code className="rounded bg-stone-200 px-1 dark:bg-stone-800">.env</code> to enable WhatsApp (E.164, no +
-            ).
+          <span className="text-xs text-fg-muted">
+            {t('listingDetail.whatsappHint', {
+              var: 'VITE_WHATSAPP_E164',
+              env: '.env',
+            })}
           </span>
         )}
       </div>
@@ -177,36 +188,34 @@ export function ListingDetailPage() {
 }
 
 function PricePreviewSection({ query }: { query: ReturnType<typeof useQuery<PublicPricePreview>> }) {
+  const { t } = useTranslation()
+
   if (query.isLoading) {
-    return (
-      <div className="rounded-xl border border-stone-200 bg-white p-4 text-sm text-stone-500 dark:border-stone-800 dark:bg-stone-950">
-        Loading indicative price…
-      </div>
-    )
+    return <div className="surface p-6 text-body-sm">{t('listingDetail.priceLoading')}</div>
   }
 
   if (query.isError || !query.data) {
     return (
-      <div className="rounded-xl border border-amber-200 bg-amber-50/80 p-4 text-sm text-amber-950 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-100">
-        <strong className="font-semibold">Price on request</strong>
-        <p className="mt-1 text-amber-900/80 dark:text-amber-200/80">
-          Published pricing is not available for this listing yet. Contact us for a formal quote.
-        </p>
+      <div className="surface-muted p-6">
+        <p className="section-eyebrow">{t('listingDetail.pricingEyebrow')}</p>
+        <p className="mt-2 text-h3">{t('listingDetail.priceOnRequest')}</p>
+        <p className="mt-2 text-body-sm">{t('listingDetail.priceOnRequestBody')}</p>
       </div>
     )
   }
 
   const p = query.data
   return (
-    <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-5 dark:border-emerald-900 dark:bg-emerald-950/30">
-      <p className="text-xs font-medium uppercase tracking-wide text-emerald-800 dark:text-emerald-400">
-        Indicative price · {p.pricing_version_name}
-      </p>
-      <p className="mt-1 text-3xl font-semibold text-emerald-950 dark:text-emerald-50">
+    <div className="surface border-brand-200/60 bg-gradient-to-br from-brand-50 to-surface p-6 sm:p-8 dark:border-brand-800 dark:from-brand-950/40">
+      <p className="section-eyebrow">{t('listingDetail.indicativePrice')}</p>
+      <p className="mt-1 text-xs text-fg-muted">{p.pricing_version_name}</p>
+      <p className="mt-3 text-stat">
         {formatMoney(p.final_price, p.currency)}
-        {p.includes_vat ? <span className="ml-2 text-sm font-normal text-emerald-800/80">incl. VAT</span> : null}
+        {p.includes_vat ? (
+          <span className="ml-2 text-sm font-medium text-fg-muted">{t('listingDetail.inclVat')}</span>
+        ) : null}
       </p>
-      <p className="mt-2 text-xs text-emerald-900/70 dark:text-emerald-200/70">{p.disclaimer}</p>
+      <p className="mt-3 text-xs leading-relaxed text-fg-muted">{p.disclaimer}</p>
     </div>
   )
 }
@@ -224,17 +233,19 @@ function PaymentPreviewSection({
   onPlanCodeChange: (code: string) => void
   priceAvailable: boolean
 }) {
+  const { t } = useTranslation()
+
   if (!priceAvailable) return null
   if (plansQuery.isLoading) {
-    return <p className="text-sm text-stone-500">Loading payment options…</p>
+    return <p className="text-body-sm">{t('listingDetail.loading')}</p>
   }
   if (!plansQuery.data?.length) return null
 
   return (
-    <div className="rounded-xl border border-stone-200 bg-white p-5 dark:border-stone-800 dark:bg-stone-950">
-      <h2 className="text-sm font-semibold text-stone-800 dark:text-stone-200">Payment plan preview</h2>
-      <label className="mt-2 block text-xs font-medium text-stone-600 dark:text-stone-400">
-        Plan
+    <div className="surface p-6 sm:p-8">
+      <h2 className="section-eyebrow">{t('listingDetail.paymentEyebrow')}</h2>
+      <label className="mt-2 block text-xs font-medium text-fg-muted">
+        {t('listingDetail.plan')}
         <select
           className="input mt-1 max-w-xs"
           value={planCode}
@@ -248,9 +259,11 @@ function PaymentPreviewSection({
         </select>
       </label>
       {previewQuery.isError ? (
-        <p className="mt-2 text-xs text-amber-800 dark:text-amber-200">This plan is not available for this unit.</p>
+        <p className="mt-2 text-xs text-brand-700 dark:text-brand-300">
+          {t('listingDetail.planUnavailable')}
+        </p>
       ) : previewQuery.data ? (
-        <ul className="mt-3 space-y-1 text-sm text-stone-700 dark:text-stone-300">
+        <ul className="mt-3 space-y-1 text-body-sm text-fg">
           {previewQuery.data.items.map((item) => (
             <li key={item.step_order}>
               {item.label}: {formatMoney(item.amount, previewQuery.data!.currency)}
@@ -258,10 +271,10 @@ function PaymentPreviewSection({
           ))}
         </ul>
       ) : previewQuery.isLoading ? (
-        <p className="mt-2 text-xs text-stone-500">Calculating schedule…</p>
+        <p className="mt-2 text-xs text-fg-muted">{t('listingDetail.calculating')}</p>
       ) : null}
       {previewQuery.data ? (
-        <p className="mt-2 text-xs text-stone-500">{previewQuery.data.disclaimer}</p>
+        <p className="mt-2 text-xs text-fg-muted">{previewQuery.data.disclaimer}</p>
       ) : null}
     </div>
   )
@@ -278,17 +291,19 @@ function LeadFormSection({
     typeof useMutation<unknown, unknown, { name: string; phone: string; email: string; message: string }>
   >
 }) {
+  const { t } = useTranslation()
+
   if (sent) {
     return (
-      <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-100">
-        Thank you — we received your enquiry for <strong>{slug}</strong>. Our team will contact you soon.
+      <div className="surface border-brand-200 bg-brand-50/80 p-6 text-sm text-brand-900 dark:border-brand-900 dark:bg-brand-950/40 dark:text-brand-100">
+        {t('listingDetail.thankYou', { slug })}
       </div>
     )
   }
 
   return (
     <form
-      className="space-y-3 rounded-xl border border-stone-200 bg-white p-5 dark:border-stone-800 dark:bg-stone-950"
+      className="surface space-y-4 p-6 sm:p-8"
       onSubmit={(e) => {
         e.preventDefault()
         const fd = new FormData(e.currentTarget)
@@ -300,28 +315,33 @@ function LeadFormSection({
         })
       }}
     >
-      <h2 className="text-sm font-semibold text-stone-800 dark:text-stone-200">Request information</h2>
-      <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
-        Name
+      <h2 className="section-eyebrow">{t('listingDetail.enquiryTitle')}</h2>
+      <label className="block text-xs font-medium text-fg-muted">
+        {t('listingDetail.name')}
         <input name="name" required className="input" autoComplete="name" />
       </label>
-      <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
-        Phone
+      <label className="block text-xs font-medium text-fg-muted">
+        {t('listingDetail.phone')}
         <input name="phone" required type="tel" className="input" autoComplete="tel" />
       </label>
-      <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
-        Email (optional)
+      <label className="block text-xs font-medium text-fg-muted">
+        {t('listingDetail.emailOptional')}
         <input name="email" type="email" className="input" autoComplete="email" />
       </label>
-      <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
-        Message
-        <textarea name="message" className="input min-h-[80px]" rows={3} placeholder="When would you like to visit?" />
+      <label className="block text-xs font-medium text-fg-muted">
+        {t('listingDetail.message')}
+        <textarea
+          name="message"
+          className="input min-h-[80px]"
+          rows={3}
+          placeholder={t('listingDetail.messagePlaceholder')}
+        />
       </label>
       {mutation.isError ? (
-        <p className="text-xs text-red-600">Could not submit — check your details and try again.</p>
+        <p className="text-xs text-red-600">{t('listingDetail.submitError')}</p>
       ) : null}
       <button type="submit" className="btn-primary" disabled={mutation.isPending}>
-        {mutation.isPending ? 'Sending…' : 'Send enquiry'}
+        {mutation.isPending ? t('listingDetail.sending') : t('listingDetail.sendEnquiry')}
       </button>
     </form>
   )

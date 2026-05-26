@@ -1,30 +1,68 @@
 import * as React from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 
 import { api } from '../api/client'
 import type { Paginated, PublicListingSummary } from '../api/types'
+import {
+  emptyListingFilters,
+  ListingFilters,
+  type ListingFiltersState,
+} from '../components/ListingFilters'
+import { ListingCard } from '../components/ListingCard'
+import { PartnerAyatSection } from '../components/PartnerAyatSection'
+import { useTranslation } from '../context/LocaleContext'
+import { AYAT_PARTNER } from '../content/partners'
 import { usePageTitle } from '../hooks/usePageTitle'
 
-type Filters = {
-  city: string
-  area: string
-  bedrooms: string
-  company_slug: string
-  unit_type_code: string
+const QUICK_FILTER_IDS = [
+  { id: 'ayat-area', key: 'listings.quickAyatArea' as const, values: { area: 'Ayat' } },
+  { id: 'cmc', key: 'listings.quickCmc' as const, values: { area: 'CMC' } },
+  { id: '2br', key: 'listings.quick2br' as const, values: { bedrooms: '2' } },
+  { id: '3br', key: 'listings.quick3br' as const, values: { bedrooms: '3' } },
+  {
+    id: 'ayat-co',
+    key: 'listings.quickAyatCo' as const,
+    values: { company_slug: 'ayat-real-estate' },
+  },
+]
+
+function ListingSkeleton() {
+  return (
+    <div className="surface overflow-hidden p-0">
+      <div className="aspect-[4/5] animate-pulse bg-surface-muted" />
+      <div className="h-16 animate-pulse bg-canvas" />
+    </div>
+  )
 }
 
-const emptyFilters: Filters = {
-  city: '',
-  area: '',
-  bedrooms: '',
-  company_slug: '',
-  unit_type_code: '',
+function filtersFromSearchParams(params: URLSearchParams): ListingFiltersState {
+  return {
+    city: params.get('city') ?? '',
+    area: params.get('area') ?? '',
+    bedrooms: params.get('bedrooms') ?? '',
+    company_slug: params.get('company_slug') ?? '',
+    unit_type_code: params.get('unit_type_code') ?? '',
+  }
 }
 
 export function ListingsPage() {
-  usePageTitle('Listings')
-  const [filters, setFilters] = React.useState<Filters>(emptyFilters)
+  const { t } = useTranslation()
+  usePageTitle(t('pageTitles.listings'))
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [filters, setFilters] = React.useState<ListingFiltersState>(() =>
+    filtersFromSearchParams(searchParams),
+  )
+
+  const quickFilters = QUICK_FILTER_IDS.map(({ id, key, values }) => ({
+    id,
+    label: t(key),
+    values: { ...emptyListingFilters, ...values },
+  }))
+
+  React.useEffect(() => {
+    setFilters(filtersFromSearchParams(searchParams))
+  }, [searchParams])
 
   const query = useQuery({
     queryKey: ['public-listings', filters],
@@ -40,112 +78,82 @@ export function ListingsPage() {
     },
   })
 
+  const applyFilters = (next: ListingFiltersState) => {
+    setFilters(next)
+    const params = new URLSearchParams()
+    if (next.city) params.set('city', next.city)
+    if (next.area) params.set('area', next.area)
+    if (next.bedrooms) params.set('bedrooms', next.bedrooms)
+    if (next.company_slug) params.set('company_slug', next.company_slug)
+    if (next.unit_type_code) params.set('unit_type_code', next.unit_type_code)
+    setSearchParams(params, { replace: true })
+  }
+
+  const total = query.data?.total ?? 0
+
   return (
-    <div className="space-y-8 text-left">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight text-stone-900 dark:text-stone-50">
-          Property listings
-        </h1>
-        <p className="mt-1 text-sm text-stone-600 dark:text-stone-400">
-          Showing published, available units only ({query.data?.total ?? '…'} total).
-        </p>
-      </div>
-
-      <form
-        className="grid gap-3 rounded-xl border border-stone-200 bg-white p-4 shadow-sm sm:grid-cols-2 lg:grid-cols-3 dark:border-stone-800 dark:bg-stone-950"
-        onSubmit={(e) => {
-          e.preventDefault()
-          const fd = new FormData(e.currentTarget)
-          setFilters({
-            city: String(fd.get('city') ?? ''),
-            area: String(fd.get('area') ?? ''),
-            bedrooms: String(fd.get('bedrooms') ?? ''),
-            company_slug: String(fd.get('company_slug') ?? ''),
-            unit_type_code: String(fd.get('unit_type_code') ?? ''),
-          })
-        }}
-      >
-        <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
-          City (contains)
-          <input name="city" defaultValue={filters.city} className="input" placeholder="Addis" />
-        </label>
-        <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
-          Area (contains)
-          <input name="area" defaultValue={filters.area} className="input" placeholder="Ayat" />
-        </label>
-        <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
-          Bedrooms
-          <input name="bedrooms" defaultValue={filters.bedrooms} className="input" placeholder="3" />
-        </label>
-        <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
-          Company slug
-          <input name="company_slug" defaultValue={filters.company_slug} className="input" />
-        </label>
-        <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
-          Unit type code
-          <input name="unit_type_code" defaultValue={filters.unit_type_code} className="input" />
-        </label>
-        <div className="flex flex-wrap items-end gap-2">
-          <button type="submit" className="btn-primary">
-            Apply filters
-          </button>
-          <button
-            type="button"
-            className="btn-secondary"
-            onClick={() => {
-              setFilters(emptyFilters)
-            }}
-          >
-            Reset
-          </button>
+    <div className="space-y-12 text-left">
+      <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-800 via-brand-700 to-brand-950 px-6 py-12 sm:px-10 sm:py-14">
+        <div className="pointer-events-none absolute -right-10 top-0 h-56 w-56 rounded-full bg-brand-400/20 blur-3xl" />
+        <div className="relative max-w-2xl">
+          <p className="text-eyebrow text-brand-200">{t('listings.heroEyebrow')}</p>
+          <h1 className="mt-3 text-h1 text-white">{t('listings.heroTitle')}</h1>
+          <p className="mt-4 text-body-sm text-slate-100/90 sm:text-base">
+            {t('listings.heroBody', { ayatBrand: AYAT_PARTNER.brandName })}
+          </p>
         </div>
-      </form>
+      </section>
 
-      {query.isLoading && <p className="text-sm text-stone-500">Loading…</p>}
+      <PartnerAyatSection compact />
+
+      <ListingFilters
+        filters={filters}
+        total={total}
+        isLoading={query.isLoading}
+        quickFilters={quickFilters}
+        onApply={applyFilters}
+        onReset={() => applyFilters(emptyListingFilters)}
+      />
+
       {query.isError && (
-        <p className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200">
-          Could not load listings. Is the API running at{' '}
-          <code className="rounded bg-red-100 px-1 dark:bg-red-900">
-            {import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000/api/v1'}
-          </code>
-          ? If the API is up but this persists, restart Docker after a CORS update, or check the
-          browser console for a blocked cross-origin request (Vite often uses port 5174).
+        <p className="surface border-red-300 bg-red-50 p-5 text-sm text-red-800 dark:border-red-900 dark:bg-red-950/50 dark:text-red-200">
+          {t('listings.loadError')}
         </p>
       )}
 
-      <ul className="grid gap-4 sm:grid-cols-2">
-        {query.data?.items.map((item) => (
-          <li key={item.id}>
-            <Link
-              to={`/listings/${item.slug}`}
-              className="block h-full rounded-xl border border-stone-200 bg-white p-4 shadow-sm transition hover:border-emerald-300 hover:shadow-md dark:border-stone-800 dark:bg-stone-950 dark:hover:border-emerald-800"
-            >
-              {item.primary_image_url ? (
-                <img
-                  src={item.primary_image_url}
-                  alt=""
-                  className="mb-3 h-36 w-full rounded-lg object-cover"
-                />
-              ) : (
-                <div className="mb-3 flex h-36 items-center justify-center rounded-lg bg-stone-100 text-xs text-stone-500 dark:bg-stone-900 dark:text-stone-500">
-                  No photo
-                </div>
-              )}
-              <h2 className="font-semibold text-stone-900 dark:text-stone-50">{item.title}</h2>
-              <p className="mt-1 text-xs text-stone-500">
-                {item.company_name} · {item.project_name}
-              </p>
-              <p className="mt-2 text-sm text-stone-600 dark:text-stone-300">
-                {[item.city, item.area].filter(Boolean).join(' · ') || 'Location TBC'}
-                {item.bedrooms != null ? ` · ${item.bedrooms} bed` : ''}
-              </p>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {query.isLoading && (
+        <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <li key={i}>
+              <ListingSkeleton />
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {!query.isLoading && query.data && query.data.items.length > 0 && (
+        <ul className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+          {query.data.items.map((item) => (
+            <li key={item.id} className="animate-fade-in">
+              <ListingCard item={item} />
+            </li>
+          ))}
+        </ul>
+      )}
 
       {query.data && query.data.items.length === 0 && !query.isLoading && (
-        <p className="text-sm text-stone-500">No listings match these filters yet.</p>
+        <div className="surface flex flex-col items-center px-6 py-20 text-center">
+          <p className="text-h2">{t('listings.emptyTitle')}</p>
+          <p className="mt-2 max-w-md text-body-sm">{t('listings.emptyDescription')}</p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <button type="button" className="btn-secondary" onClick={() => applyFilters(emptyListingFilters)}>
+              {t('listings.showAll')}
+            </button>
+            <Link to="/listings?company_slug=ayat-real-estate" className="btn-primary">
+              {t('listings.ayatHomesOnly')}
+            </Link>
+          </div>
+        </div>
       )}
     </div>
   )

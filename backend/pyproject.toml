@@ -22,6 +22,7 @@ dependencies = [
 [project.scripts]
 belay-create-admin = "app.scripts.create_admin:main"
 belay-seed-demo = "app.scripts.seed_demo_data:main"
+belay-seed-ayat = "app.scripts.seed_ayat_production:main"
 
 [project.optional-dependencies]
 dev = [

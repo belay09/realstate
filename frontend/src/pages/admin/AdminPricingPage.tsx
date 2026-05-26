@@ -182,7 +182,7 @@ export function AdminPricingPage() {
               Publish version (requires at least one price row)
             </button>
           ) : selectedVersion?.status === 'published' ? (
-            <p className="text-sm text-emerald-700 dark:text-emerald-400">This version is published and active by date.</p>
+            <p className="text-sm text-brand-700 dark:text-brand-400">This version is published and active by date.</p>
           ) : null}
 
           {selectedVersionId && selectedVersion?.status === 'draft' ? (
@@ -236,7 +236,7 @@ export function AdminPricingPage() {
             {rows.data?.map((r) => (
               <li key={r.id} className="rounded-lg bg-stone-100 px-3 py-2 dark:bg-stone-900">
                 {r.unit_type_code ?? 'any type'} · floor {r.floor_band ?? 'any'} ·{' '}
-                {r.price_per_sqm ? `${r.price_per_sqm}/sqm` : r.fixed_price ? `fixed ${r.fixed_price}` : '—'}
+                {r.price_per_sqm ? `${r.price_per_sqm}/sqm` : r.fixed_price ? `fixed ${r.fixed_price}` : '-'}
               </li>
             ))}
           </ul>

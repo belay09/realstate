@@ -1,0 +1,392 @@
+{
+  "_meta": {
+    "description": "Ayat Share Company production seed for Belay Properties. Per-sqm prices are VAT-inclusive estimates based on public CMC listings (~173k ETB/sqm for 110 m²) and Ayat floor-band rules (price decreases on higher floors). Replace with values from the latest official Ayat price list before treating as contractual.",
+    "reference_doc": "Ayat Share Company price list. Verify reference number and effective dates from your official PDF/photos",
+    "effective_from": "2026-01-01",
+    "currency": "ETB"
+  },
+  "remove_companies": ["sunshine-developers"],
+  "remove_listing_slugs": [
+    "ayat-hills-3br-floor-5",
+    "ayat-hills-2br-block-b",
+    "cmc-extension-2br-floor-2",
+    "ayat-hills-3br-sold-sample",
+    "ayat-hills-draft-internal",
+    "lebu-heights-studio"
+  ],
+  "company": {
+    "slug": "ayat-real-estate",
+    "name": "Ayat Share Company",
+    "phone": "+251115583838",
+    "website": "https://www.ayatshare.com",
+    "description": "Ethiopia's leading real estate developer. Belay Properties is an authorized sales partner for selected Ayat residential projects in Addis Ababa."
+  },
+  "projects": [
+    {
+      "slug": "ayat-hills",
+      "name": "Ayat Hills",
+      "city": "Addis Ababa",
+      "area": "Ayat",
+      "blocks": [
+        { "code": "A", "name": "Block A", "total_floors": 16 },
+        { "code": "B", "name": "Block B", "total_floors": 16 }
+      ]
+    },
+    {
+      "slug": "cmc-extension",
+      "name": "CMC Residential (CCE)",
+      "city": "Addis Ababa",
+      "area": "CMC",
+      "blocks": [
+        { "code": "T1", "name": "Tower 1", "total_floors": 17 },
+        { "code": "T2", "name": "Tower 2", "total_floors": 17 }
+      ]
+    }
+  ],
+  "unit_types": [
+    {
+      "code": "SFCA",
+      "name": "2BR semi-finished (Type A)",
+      "category": "residential",
+      "bedrooms": 2,
+      "finish_type": "semi-finished",
+      "default_area_sqm": "107.0"
+    },
+    {
+      "code": "SFCR",
+      "name": "3BR semi-finished (Type R)",
+      "category": "residential",
+      "bedrooms": 3,
+      "finish_type": "semi-finished",
+      "default_area_sqm": "110.0"
+    },
+    {
+      "code": "RFCA",
+      "name": "2BR regular finished (Type A)",
+      "category": "residential",
+      "bedrooms": 2,
+      "finish_type": "regular-finished",
+      "default_area_sqm": "107.0"
+    },
+    {
+      "code": "RFCR",
+      "name": "3BR regular finished (Type R)",
+      "category": "residential",
+      "bedrooms": 3,
+      "finish_type": "regular-finished",
+      "default_area_sqm": "115.0"
+    }
+  ],
+  "units": [
+    {
+      "project_slug": "ayat-hills",
+      "block_code": "A",
+      "unit_number": "501",
+      "unit_type_code": "SFCR",
+      "floor_number": 5,
+      "area_sqm": "110.5",
+      "status": "available",
+      "orientation": "east"
+    },
+    {
+      "project_slug": "ayat-hills",
+      "block_code": "A",
+      "unit_number": "1203",
+      "unit_type_code": "RFCR",
+      "floor_number": 12,
+      "area_sqm": "115.0",
+      "status": "available",
+      "orientation": "south"
+    },
+    {
+      "project_slug": "ayat-hills",
+      "block_code": "B",
+      "unit_number": "302",
+      "unit_type_code": "SFCA",
+      "floor_number": 3,
+      "area_sqm": "107.0",
+      "status": "available",
+      "orientation": "north"
+    },
+    {
+      "project_slug": "cmc-extension",
+      "block_code": "T1",
+      "unit_number": "201",
+      "unit_type_code": "SFCA",
+      "floor_number": 2,
+      "area_sqm": "107.0",
+      "status": "available",
+      "orientation": "east"
+    },
+    {
+      "project_slug": "cmc-extension",
+      "block_code": "T1",
+      "unit_number": "805",
+      "unit_type_code": "SFCR",
+      "floor_number": 8,
+      "area_sqm": "110.0",
+      "status": "available",
+      "orientation": "west"
+    },
+    {
+      "project_slug": "cmc-extension",
+      "block_code": "T2",
+      "unit_number": "1401",
+      "unit_type_code": "RFCA",
+      "floor_number": 14,
+      "area_sqm": "107.0",
+      "status": "available",
+      "orientation": "east"
+    }
+  ],
+  "listings": [
+    {
+      "unit_ref": { "project_slug": "ayat-hills", "block_code": "A", "unit_number": "501" },
+      "slug": "ayat-hills-3br-semi-finished-block-a",
+      "title": "3BR semi-finished apartment, Ayat Hills, Block A",
+      "description": "Three-bedroom semi-finished unit (SFCR) on floor 5 at Ayat Hills. East-facing corner layout. Prices are per official Ayat floor-band tables (VAT included). Contact Belay Properties for a formal quote and 60/40 payment plan options.",
+      "city": "Addis Ababa",
+      "area": "Ayat",
+      "is_public": true,
+      "is_featured": true,
+      "images": [
+        "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&q=80",
+        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&q=80"
+      ]
+    },
+    {
+      "unit_ref": { "project_slug": "ayat-hills", "block_code": "B", "unit_number": "302" },
+      "slug": "ayat-hills-2br-semi-finished-block-b",
+      "title": "2BR semi-finished apartment, Ayat Hills, Block B",
+      "description": "Two-bedroom semi-finished unit (SFCA) on floor 3. Ideal starter home in the Ayat corridor with Belay Properties verified sales support.",
+      "city": "Addis Ababa",
+      "area": "Ayat",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&q=80"
+      ]
+    },
+    {
+      "unit_ref": { "project_slug": "cmc-extension", "block_code": "T1", "unit_number": "201" },
+      "slug": "cmc-2br-semi-finished-tower-1",
+      "title": "2BR semi-finished, CMC Residential, Tower 1",
+      "description": "Two-bedroom semi-finished apartment near CMC / Yeka. Part of the Ayat CCE mixed-use development. Per-sqm pricing follows Ayat floor bands (VAT included).",
+      "city": "Addis Ababa",
+      "area": "CMC",
+      "is_public": true,
+      "is_featured": true,
+      "images": [
+        "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=80",
+        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&q=80"
+      ]
+    },
+    {
+      "unit_ref": { "project_slug": "cmc-extension", "block_code": "T1", "unit_number": "805" },
+      "slug": "cmc-3br-semi-finished-tower-1",
+      "title": "3BR semi-finished, CMC Residential, Tower 1",
+      "description": "Three-bedroom semi-finished unit on floor 8. Payment plans include full payment and 60/40 residential structure.",
+      "city": "Addis Ababa",
+      "area": "CMC",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&q=80"
+      ]
+    },
+    {
+      "unit_ref": { "project_slug": "ayat-hills", "block_code": "A", "unit_number": "1203" },
+      "slug": "ayat-hills-3br-regular-finished-penthouse",
+      "title": "3BR regular finished, Ayat Hills, high floor",
+      "description": "Regular-finished three-bedroom (RFCR) on floor 12. Higher floors benefit from Ayat's lower per-sqm band pricing.",
+      "city": "Addis Ababa",
+      "area": "Ayat",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&q=80"
+      ]
+    }
+  ],
+  "pricing": {
+    "document_title": "Ayat Share Company residential price list (Belay entry 2026-Q1)",
+    "version_name": "Ayat residential pricing Q1 2026",
+    "effective_from": "2026-01-01",
+    "includes_vat": true,
+    "archive_previous_versions": true,
+    "price_rows": [
+      {
+        "project_slug": "ayat-hills",
+        "unit_type_code": "SFCA",
+        "finish_type": "semi-finished",
+        "floor_band": "1-4",
+        "price_per_sqm": "188000"
+      },
+      {
+        "project_slug": "ayat-hills",
+        "unit_type_code": "SFCA",
+        "finish_type": "semi-finished",
+        "floor_band": "5-8",
+        "price_per_sqm": "181000"
+      },
+      {
+        "project_slug": "ayat-hills",
+        "unit_type_code": "SFCA",
+        "finish_type": "semi-finished",
+        "floor_band": "9-12",
+        "price_per_sqm": "175000"
+      },
+      {
+        "project_slug": "ayat-hills",
+        "unit_type_code": "SFCA",
+        "finish_type": "semi-finished",
+        "floor_band": "13-16",
+        "price_per_sqm": "169000"
+      },
+      {
+        "project_slug": "ayat-hills",
+        "unit_type_code": "SFCR",
+        "finish_type": "semi-finished",
+        "floor_band": "1-4",
+        "price_per_sqm": "192000"
+      },
+      {
+        "project_slug": "ayat-hills",
+        "unit_type_code": "SFCR",
+        "finish_type": "semi-finished",
+        "floor_band": "5-8",
+        "price_per_sqm": "185000"
+      },
+      {
+        "project_slug": "ayat-hills",
+        "unit_type_code": "SFCR",
+        "finish_type": "semi-finished",
+        "floor_band": "9-12",
+        "price_per_sqm": "178000"
+      },
+      {
+        "project_slug": "ayat-hills",
+        "unit_type_code": "RFCR",
+        "finish_type": "regular-finished",
+        "floor_band": "9-16",
+        "price_per_sqm": "198000"
+      },
+      {
+        "project_slug": "cmc-extension",
+        "unit_type_code": "SFCA",
+        "finish_type": "semi-finished",
+        "floor_band": "1-4",
+        "price_per_sqm": "185000"
+      },
+      {
+        "project_slug": "cmc-extension",
+        "unit_type_code": "SFCA",
+        "finish_type": "semi-finished",
+        "floor_band": "5-8",
+        "price_per_sqm": "178000"
+      },
+      {
+        "project_slug": "cmc-extension",
+        "unit_type_code": "SFCA",
+        "finish_type": "semi-finished",
+        "floor_band": "9-12",
+        "price_per_sqm": "172000"
+      },
+      {
+        "project_slug": "cmc-extension",
+        "unit_type_code": "SFCA",
+        "finish_type": "semi-finished",
+        "floor_band": "13-17",
+        "price_per_sqm": "165000"
+      },
+      {
+        "project_slug": "cmc-extension",
+        "unit_type_code": "SFCR",
+        "finish_type": "semi-finished",
+        "floor_band": "1-8",
+        "price_per_sqm": "180000"
+      },
+      {
+        "project_slug": "cmc-extension",
+        "unit_type_code": "SFCR",
+        "finish_type": "semi-finished",
+        "floor_band": "9-17",
+        "price_per_sqm": "173000"
+      },
+      {
+        "project_slug": "cmc-extension",
+        "unit_type_code": "RFCA",
+        "finish_type": "regular-finished",
+        "floor_band": "10-17",
+        "price_per_sqm": "190000"
+      }
+    ],
+    "discount_rules": [
+      {
+        "rule_type": "upfront_payment",
+        "priority": 10,
+        "discount_percent": "8",
+        "conditions": { "note": "100% upfront. Verify tier against latest Ayat discount table" }
+      },
+      {
+        "rule_type": "group_buyer",
+        "priority": 20,
+        "discount_percent": "5",
+        "conditions": { "min_buyers": 25, "note": "Group tier 25-50. Verify against Ayat group table" }
+      }
+    ]
+  },
+  "payment_plans": [
+    {
+      "code": "full",
+      "name": "Full payment (100%)",
+      "status": "published",
+      "effective_from": "2026-01-01",
+      "steps": [
+        { "step_order": 1, "trigger_type": "on_signing", "milestone_name": "Full payment on signing", "percentage": "100" }
+      ]
+    },
+    {
+      "code": "60_40",
+      "name": "60/40 plan (residential)",
+      "status": "published",
+      "effective_from": "2026-01-01",
+      "steps": [
+        {
+          "step_order": 1,
+          "trigger_type": "down_payment",
+          "milestone_name": "40% down payment",
+          "due_after_days": 30,
+          "percentage": "40"
+        },
+        {
+          "step_order": 2,
+          "trigger_type": "on_completion",
+          "milestone_name": "60% on handover",
+          "due_after_months": 18,
+          "percentage": "60"
+        }
+      ]
+    }
+  ],
+  "commission": {
+    "scheme_name": "Ayat sales commission Q1 2026",
+    "effective_from": "2026-01-01",
+    "rules": [
+      {
+        "sales_channel": "default",
+        "commission_percent": "3",
+        "conditions": { "payment_plan_codes": ["full", "60_40"] }
+      },
+      {
+        "sales_channel": "agent",
+        "commission_percent": "4",
+        "conditions": {}
+      }
+    ],
+    "sales_channels": [
+      { "code": "agent", "name": "Sales agent" },
+      { "code": "branch", "name": "Branch / office sales" }
+    ]
+  }
+}

@@ -44,7 +44,7 @@ export function AdminProjectsPage() {
       <h1 className="text-2xl font-semibold text-stone-900 dark:text-stone-50">Projects</h1>
       <p className="text-sm text-stone-600 dark:text-stone-400">
         Pick a company to list projects. Open from{' '}
-        <Link to="/admin/companies" className="text-emerald-700 underline dark:text-emerald-400">
+        <Link to="/admin/companies" className="text-brand-700 underline dark:text-brand-400">
           Companies
         </Link>{' '}
         or set <code className="rounded bg-stone-200 px-1 text-xs dark:bg-stone-800">?company_id=</code> in the URL.
@@ -125,11 +125,11 @@ export function AdminProjectsPage() {
                   <td className="px-3 py-2 font-medium">{p.name}</td>
                   <td className="px-3 py-2 text-stone-600 dark:text-stone-400">{p.slug}</td>
                   <td className="px-3 py-2 text-stone-600 dark:text-stone-400">
-                    {[p.city, p.area].filter(Boolean).join(' · ') || '—'}
+                    {[p.city, p.area].filter(Boolean).join(' · ') || '-'}
                   </td>
                   <td className="px-3 py-2">
                     <Link
-                      className="text-emerald-700 hover:underline dark:text-emerald-400"
+                      className="text-brand-700 hover:underline dark:text-brand-400"
                       to={`/admin/blocks?project_id=${p.id}`}
                     >
                       Blocks →

@@ -72,7 +72,7 @@ export function AdminCompaniesPage() {
                 <td className="px-3 py-2 text-stone-600 dark:text-stone-400">{c.slug}</td>
                 <td className="px-3 py-2">{c.is_active ? 'Yes' : 'No'}</td>
                 <td className="px-3 py-2">
-                  <Link className="text-emerald-700 hover:underline dark:text-emerald-400" to={`/admin/projects?company_id=${c.id}`}>
+                  <Link className="text-brand-700 hover:underline dark:text-brand-400" to={`/admin/projects?company_id=${c.id}`}>
                     Projects →
                   </Link>
                 </td>

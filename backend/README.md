@@ -70,6 +70,16 @@ docker compose run --rm api python -m app.scripts.seed_demo_data --reset
 docker compose run --rm api python -m app.scripts.seed_demo_data
 ```
 
+## Ayat production data
+
+Structured Ayat inventory and pricing for production (replaces demo Sunshine company, archives old pricing):
+
+```bash
+docker compose run --rm api python -m app.scripts.seed_ayat_production
+```
+
+Edit `backend/data/ayat_production.json` then re-run. See **`docs/AYAT_DATA_ENTRY.md`**.
+
 ### API surface (Phases 5–9)
 
 See `http://localhost:8000/docs`. Highlights:
