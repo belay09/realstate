@@ -74,19 +74,48 @@ docker compose -f docker-compose.prod.yml up -d --build
 |--------|---------|----------|
 | `EC2_HOST` | `13.51.237.118` or your Elastic IP | Yes |
 | `EC2_USER` | `ec2-user` (Amazon Linux) or `ubuntu` (Ubuntu) | Yes |
-| `EC2_SSH_KEY` | Full private key PEM (contents of `.pem` file) | Yes |
-| `EC2_PORT` | `22` | No (defaults to 22 if empty) |
+| `EC2_SSH_KEY` | **AWS EC2 `.pem` private key** (see below) | Yes |
+| `EC2_SSH_PASSPHRASE` | Only if your `.pem` file is passphrase-protected | No |
 | `EC2_APP_PATH` | `/home/ec2-user/realstate` | No (defaults to `/home/<EC2_USER>/realstate`) |
 
-### `EC2_SSH_KEY`
+### `EC2_SSH_KEY` (this fixes most deploy failures)
 
-Paste the entire file, including:
+Use the **same private key you use to SSH into the server from your laptop**, not the GitHub **deploy key** used for `git pull`.
+
+That is usually the **`.pem` file you downloaded when you created the EC2 instance** (key pair in AWS).
+
+1. On your laptop, confirm SSH works:
+
+```bash
+ssh -i /path/to/your-key.pem ec2-user@YOUR_EC2_IP
+# or: ubuntu@YOUR_EC2_IP  on Ubuntu AMIs
+```
+
+2. Copy the **entire** `.pem` file into the `EC2_SSH_KEY` secret, including the first and last lines:
 
 ```
 -----BEGIN RSA PRIVATE KEY-----
-...
+...all lines...
 -----END RSA PRIVATE KEY-----
 ```
+
+Or for newer keys:
+
+```
+-----BEGIN OPENSSH PRIVATE KEY-----
+...
+-----END OPENSSH PRIVATE KEY-----
+```
+
+3. Common mistakes:
+   - Pasting the **public** key (`.pub`) instead of the private `.pem`
+   - Pasting the **GitHub deploy key** (`github_deploy`) instead of the **EC2 key pair**
+   - Missing newlines (must be a multi-line secret, not one long line)
+   - Wrong `EC2_USER` (`ec2-user` for Amazon Linux, `ubuntu` for Ubuntu)
+
+4. If your `.pem` has a passphrase, add secret `EC2_SSH_PASSPHRASE` with that passphrase.
+
+5. Re-run **Actions → Deploy → Run workflow** after fixing secrets.
 
 ### Optional: `production` environment
 
@@ -111,8 +140,10 @@ Or in GitHub: **Actions → Deploy → Run workflow**.
 
 | Problem | Fix |
 |---------|-----|
+| `unable to authenticate` / `publickey` | Use AWS `.pem` in `EC2_SSH_KEY`, correct `EC2_USER`, test `ssh -i key.pem user@host` locally first |
+| `script_stop` warning | Fixed in workflow (removed invalid option) |
 | Deploy skipped | CI failed, or push was not to `main` |
-| `git pull` / permission denied | Fix deploy key on EC2 (see above) |
+| `git pull` / permission denied | Fix **deploy key** on EC2 for GitHub (separate from EC2 `.pem`) |
 | `Missing .env` | Create `.env` and `backend/.env.production` on server |
 | Old UI after deploy | Check Deploy workflow logs; hard-refresh browser (Ctrl+Shift+R) |
 | Build slow / timeout | First build can take 15–20 min on `t3.small`; workflow allows 45 min |

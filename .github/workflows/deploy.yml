@@ -31,6 +31,8 @@ jobs:
           test -n "${{ secrets.EC2_HOST }}" || (echo "Missing EC2_HOST secret" && exit 1)
           test -n "${{ secrets.EC2_USER }}" || (echo "Missing EC2_USER secret" && exit 1)
           test -n "${{ secrets.EC2_SSH_KEY }}" || (echo "Missing EC2_SSH_KEY secret" && exit 1)
+          echo "${{ secrets.EC2_SSH_KEY }}" | grep -q "BEGIN.*PRIVATE KEY" || \
+            (echo "EC2_SSH_KEY must include -----BEGIN ... PRIVATE KEY----- lines" && exit 1)
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.2.2
@@ -38,9 +40,10 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          port: ${{ secrets.EC2_PORT }}
+          passphrase: ${{ secrets.EC2_SSH_PASSPHRASE }}
+          port: 22
+          timeout: 60s
           command_timeout: 40m
-          script_stop: true
           script: |
             set -euo pipefail
             APP_DIR="${{ secrets.EC2_APP_PATH }}"
