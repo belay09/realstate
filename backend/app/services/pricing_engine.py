@@ -74,6 +74,7 @@ def row_matches_unit(
     unit_type: UnitType,
     project: Project,
     block: Block,
+    construction_state: str | None = "near_completion",
 ) -> bool:
     if row.project_id is not None and row.project_id != project.id:
         return False
@@ -83,6 +84,10 @@ def row_matches_unit(
         return False
     if row.finish_type is not None and row.finish_type != (unit_type.finish_type or ""):
         return False
+    if row.construction_state is not None:
+        state = construction_state or "near_completion"
+        if row.construction_state != state:
+            return False
     if not floor_in_band(unit.floor_number, row.floor_band):
         return False
     return True
@@ -116,6 +121,7 @@ def find_best_price_row(
     unit_type: UnitType,
     project: Project,
     block: Block,
+    construction_state: str | None = "near_completion",
 ) -> PriceTableRow | None:
     candidates = [
         row
@@ -126,6 +132,7 @@ def find_best_price_row(
             unit_type=unit_type,
             project=project,
             block=block,
+            construction_state=construction_state,
         )
     ]
     if not candidates:

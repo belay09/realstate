@@ -283,3 +283,16 @@ class PublicListingDetail(PublicListingSummary):
     floor_number: int | None
     area_sqm: Decimal | None
     unit_status: str
+
+
+class PublicFilterOption(BaseModel):
+    value: str
+    label: str
+
+
+class PublicListingFilterOptions(BaseModel):
+    areas: list[PublicFilterOption]
+    cities: list[PublicFilterOption]
+    bedrooms: list[PublicFilterOption]
+    companies: list[PublicFilterOption]
+    unit_types: list[PublicFilterOption]

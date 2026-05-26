@@ -11,11 +11,11 @@ import { usePageTitle } from '../hooks/usePageTitle'
 const HERO_IMAGE =
   'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1920&q=85'
 
-const CATEGORY_CARD_KEYS = ['residential', 'choice'] as const
+const CATEGORY_CARD_KEYS = ['residential', 'commercial'] as const
 
 const CATEGORY_IMAGES = {
   residential: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=900&q=80',
-  choice: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=900&q=80',
+  commercial: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=900&q=80',
 } as const
 
 export function HomePage() {
@@ -26,13 +26,14 @@ export function HomePage() {
   const categoryCards = CATEGORY_CARD_KEYS.map((key) => ({
     key,
     title:
-      key === 'residential' ? t('home.cardResidentialTitle') : t('home.cardChoiceTitle'),
+      key === 'residential' ? t('home.cardResidentialTitle') : t('home.cardCommercialTitle'),
     description:
       key === 'residential'
         ? t('home.cardResidentialDescription')
-        : t('home.cardChoiceDescription'),
-    tag: key === 'residential' ? t('home.cardTagHomes') : t('home.cardTagOpen'),
+        : t('home.cardCommercialDescription'),
+    tag: key === 'residential' ? t('home.cardTagHomes') : t('home.cardTagShops'),
     image: CATEGORY_IMAGES[key],
+    to: key === 'residential' ? '/listings' : '/calculator?kind=shop',
   }))
 
   const heroStats = [
@@ -102,7 +103,7 @@ export function HomePage() {
             {categoryCards.map((card) => (
               <li key={card.key}>
                 <Link
-                  to="/listings"
+                  to={card.to}
                   className="group surface block overflow-hidden transition hover:shadow-[0_20px_40px_-12px_rgba(2,132,199,0.2)]"
                 >
                   <div className="relative aspect-[16/9] overflow-hidden">
@@ -117,7 +118,7 @@ export function HomePage() {
                     <h3 className="text-h3">{card.title}</h3>
                     <p className="mt-2 text-body-sm">{card.description}</p>
                     <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-brand-700 dark:text-brand-300">
-                      {t('home.viewListings')}
+                      {card.key === 'residential' ? t('home.viewListings') : t('home.viewShopEstimate')}
                       <span className="transition group-hover:translate-x-1">→</span>
                     </span>
                   </div>

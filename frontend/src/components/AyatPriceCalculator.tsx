@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import {
@@ -9,6 +9,7 @@ import {
   COMMERCIAL_ZONES,
   DOWN_PAYMENT_TIERS,
   RESIDENTIAL_PROJECTS,
+  floorOptionsForProject,
   type CompletionKind,
   type FinishKind,
   type PropertyKind,
@@ -37,6 +38,55 @@ export type AyatPriceCalculatorProps = {
   variant?: 'page' | 'embedded'
   listingPreset?: ListingCalculatorPreset | null
   listingTitle?: string
+  /** Pre-select apartment or shop (e.g. from /calculator?kind=shop) */
+  initialKind?: PropertyKind | null
+}
+
+function PropertyKindTabs({
+  kind,
+  onSelect,
+}: {
+  kind: PropertyKind | null
+  onSelect: (next: PropertyKind) => void
+}) {
+  const { t } = useTranslation()
+  return (
+    <div
+      className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
+      role="tablist"
+      aria-label={t('calculator.propertyKindTabsLabel')}
+    >
+      <p className="text-sm font-medium text-fg">{t('calculator.propertyKindTabsLabel')}</p>
+      <div className="inline-flex rounded-xl border border-border bg-surface-muted p-1">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={kind === 'residential'}
+          className={`rounded-lg px-4 py-2.5 text-sm font-semibold transition ${
+            kind === 'residential'
+              ? 'bg-brand-600 text-white shadow'
+              : 'text-fg-muted hover:text-fg'
+          }`}
+          onClick={() => onSelect('residential')}
+        >
+          {t('calculator.apartmentTab')}
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={kind === 'commercial'}
+          className={`rounded-lg px-4 py-2.5 text-sm font-semibold transition ${
+            kind === 'commercial'
+              ? 'bg-brand-600 text-white shadow'
+              : 'text-fg-muted hover:text-fg'
+          }`}
+          onClick={() => onSelect('commercial')}
+        >
+          {t('calculator.shopTab')}
+        </button>
+      </div>
+    </div>
+  )
 }
 
 function StepBadge({ n, active, done }: { n: number; active: boolean; done: boolean }) {
@@ -58,20 +108,25 @@ function StepBadge({ n, active, done }: { n: number; active: boolean; done: bool
 function ChoiceButton({
   selected,
   onClick,
+  disabled,
   children,
 }: {
   selected: boolean
   onClick: () => void
+  disabled?: boolean
   children: React.ReactNode
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
+      disabled={disabled}
       className={`rounded-xl border px-4 py-3 text-left text-sm transition ${
-        selected
-          ? 'border-brand-500 bg-brand-50 font-semibold text-brand-900 ring-2 ring-brand-500/30 dark:bg-brand-950 dark:text-brand-100'
-          : 'border-border bg-surface hover:border-brand-300'
+        disabled
+          ? 'cursor-not-allowed border-border bg-surface-muted text-fg-muted opacity-50'
+          : selected
+            ? 'border-brand-500 bg-brand-50 font-semibold text-brand-900 ring-2 ring-brand-500/30 dark:bg-brand-950 dark:text-brand-100'
+            : 'border-border bg-surface hover:border-brand-300'
       }`}
     >
       {children}
@@ -231,16 +286,45 @@ function CalculatorResults({
   )
 }
 
+function selectKind(
+  next: PropertyKind,
+  setters: {
+    setKind: (k: PropertyKind) => void
+    setProjectId: (v: string | null) => void
+    setShopZoneId: (v: string | null) => void
+    setShopFloor: (v: ShopFloor | null) => void
+    setBedrooms: (v: 1 | 2 | 3 | null) => void
+    setFinish: (v: FinishKind | null) => void
+    setFloor: (v: number | null) => void
+    setAreaSqm: (v: number | null) => void
+  },
+) {
+  setters.setKind(next)
+  if (next === 'residential') {
+    setters.setShopZoneId(null)
+    setters.setShopFloor(null)
+  } else {
+    setters.setProjectId(null)
+    setters.setBedrooms(null)
+    setters.setFinish(null)
+    setters.setFloor(null)
+    setters.setAreaSqm(null)
+  }
+}
+
 export function AyatPriceCalculator({
   variant = 'page',
   listingPreset = null,
   listingTitle,
+  initialKind = null,
 }: AyatPriceCalculatorProps) {
   const { t } = useTranslation()
   const embedded = variant === 'embedded'
   const preset = listingPreset ?? undefined
 
-  const [kind, setKind] = useState<PropertyKind | null>(preset?.propertyKind ?? null)
+  const [kind, setKind] = useState<PropertyKind | null>(
+    preset?.propertyKind ?? initialKind ?? null,
+  )
   const [projectId, setProjectId] = useState<string | null>(preset?.projectId ?? null)
   const [completion, setCompletion] = useState<CompletionKind>(preset?.completion ?? 'unstarted')
   const [bedrooms, setBedrooms] = useState<1 | 2 | 3 | null>(preset?.bedrooms ?? null)
@@ -251,8 +335,18 @@ export function AyatPriceCalculator({
   const [shopFloor, setShopFloor] = useState<ShopFloor | null>(null)
   const [tierId, setTierId] = useState<string>('100')
 
+  useEffect(() => {
+    if (!preset && initialKind && kind == null) {
+      setKind(initialKind)
+    }
+  }, [preset, initialKind, kind])
+
   const project = RESIDENTIAL_PROJECTS.find((p) => p.id === projectId)
   const presetProject = preset ? RESIDENTIAL_PROJECTS.find((p) => p.id === preset.projectId) : null
+  const selectedShopZone = COMMERCIAL_ZONES.find((z) => z.id === shopZoneId)
+  const shopFloorsAvailable = SHOP_FLOORS.filter(
+    (f) => selectedShopZone && selectedShopZone.floors[f] > 0,
+  )
 
   const result = useMemo(() => {
     if (kind === 'residential') {
@@ -397,7 +491,7 @@ export function AyatPriceCalculator({
 
       <p className="mb-2 text-sm font-medium text-fg">{t('calculator.step5FloorTitle')}</p>
       <div className="flex flex-wrap gap-2">
-        {Array.from({ length: presetProject.maxFloor }, (_, i) => i + 1).map((f) => (
+        {floorOptionsForProject(presetProject).map((f) => (
           <ChoiceButton key={f} selected={floor === f} onClick={() => setFloor(f)}>
             {t('calculator.floorN', { n: f })}
           </ChoiceButton>
@@ -411,50 +505,40 @@ export function AyatPriceCalculator({
       {showFullWizard && (
         <>
           <section className="card p-6">
-            <div className="mb-4 flex items-center gap-3">
-              <StepBadge n={nextStep()} active={!step1Done} done={step1Done} />
-              <h2 className="text-lg font-bold text-fg">{t('calculator.step1Title')}</h2>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <ChoiceButton
-                selected={kind === 'residential'}
-                onClick={() => {
-                  setKind('residential')
-                  setShopZoneId(null)
-                  setShopFloor(null)
-                }}
-              >
-                <span className="block font-semibold">{t('calculator.kindHome')}</span>
-                <span className="mt-1 block text-xs font-normal text-fg-muted">
-                  {t('calculator.kindHomeHint')}
-                </span>
-              </ChoiceButton>
-              <ChoiceButton
-                selected={kind === 'commercial'}
-                onClick={() => {
-                  setKind('commercial')
-                  setProjectId(null)
-                  setBedrooms(null)
-                  setFinish(null)
-                  setFloor(null)
-                  setAreaSqm(null)
-                }}
-              >
-                <span className="block font-semibold">{t('calculator.kindShop')}</span>
-                <span className="mt-1 block text-xs font-normal text-fg-muted">
-                  {t('calculator.kindShopHint')}
-                </span>
-              </ChoiceButton>
-            </div>
+            <PropertyKindTabs
+              kind={kind}
+              onSelect={(next) =>
+                selectKind(next, {
+                  setKind,
+                  setProjectId,
+                  setShopZoneId,
+                  setShopFloor,
+                  setBedrooms,
+                  setFinish,
+                  setFloor,
+                  setAreaSqm,
+                })
+              }
+            />
+            <p className="mt-4 text-sm text-fg-muted">
+              {kind === 'commercial'
+                ? t('calculator.shopLocationsHint')
+                : kind === 'residential'
+                  ? t('calculator.apartmentLocationsHint')
+                  : t('calculator.propertyKindPickHint')}
+            </p>
           </section>
 
           {kind === 'residential' && (
             <section className="card p-6">
               <div className="mb-4 flex items-center gap-3">
                 <StepBadge n={nextStep()} active={step1Done && !step2Done} done={step2Done} />
-                <h2 className="text-lg font-bold text-fg">{t('calculator.step2AreaTitle')}</h2>
+                <div>
+                  <h2 className="text-lg font-bold text-fg">{t('calculator.step2AreaTitle')}</h2>
+                  <p className="mt-1 text-sm text-fg-muted">{t('calculator.apartmentLocationsHint')}</p>
+                </div>
               </div>
-              <div className="grid gap-3 sm:grid-cols-2">
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {RESIDENTIAL_PROJECTS.map((p) => (
                   <ChoiceButton
                     key={p.id}
@@ -498,14 +582,20 @@ export function AyatPriceCalculator({
             <section className="card p-6">
               <div className="mb-4 flex items-center gap-3">
                 <StepBadge n={nextStep()} active={step1Done && !step2Done} done={step2Done} />
-                <h2 className="text-lg font-bold text-fg">{t('calculator.step2ShopZoneTitle')}</h2>
+                <div>
+                  <h2 className="text-lg font-bold text-fg">{t('calculator.step2ShopZoneTitle')}</h2>
+                  <p className="mt-1 text-sm text-fg-muted">{t('calculator.shopLocationsHint')}</p>
+                </div>
               </div>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {COMMERCIAL_ZONES.map((z) => (
                   <ChoiceButton
                     key={z.id}
                     selected={shopZoneId === z.id}
-                    onClick={() => setShopZoneId(z.id)}
+                    onClick={() => {
+                      setShopZoneId(z.id)
+                      setShopFloor(null)
+                    }}
                   >
                     {t(z.labelKey)}
                   </ChoiceButton>
@@ -571,16 +661,20 @@ export function AyatPriceCalculator({
               </div>
               <p className="mb-3 text-sm text-fg-muted">{t('calculator.step3ShopFloorHint')}</p>
               <div className="flex flex-wrap gap-2">
-                {SHOP_FLOORS.map((f) => (
+                {(shopFloorsAvailable.length > 0 ? shopFloorsAvailable : SHOP_FLOORS).map((f) => (
                   <ChoiceButton
                     key={f}
                     selected={shopFloor === f}
                     onClick={() => setShopFloor(f)}
+                    disabled={selectedShopZone != null && selectedShopZone.floors[f] === 0}
                   >
                     {t(`calculator.shopFloor.${f}`)}
                   </ChoiceButton>
                 ))}
               </div>
+              {selectedShopZone?.id === 'bole-air' && (
+                <p className="mt-2 text-xs text-fg-muted">{t('calculator.boleAirGroundOnly')}</p>
+              )}
             </section>
           )}
 
@@ -636,7 +730,7 @@ export function AyatPriceCalculator({
               </div>
               <p className="mb-3 text-sm text-fg-muted">{t('calculator.step5FloorHint')}</p>
               <div className="flex flex-wrap gap-2">
-                {Array.from({ length: project.maxFloor }, (_, i) => i + 1).map((f) => (
+                {floorOptionsForProject(project).map((f) => (
                   <ChoiceButton key={f} selected={floor === f} onClick={() => setFloor(f)}>
                     {t('calculator.floorN', { n: f })}
                   </ChoiceButton>
@@ -661,10 +755,29 @@ export function AyatPriceCalculator({
       }
     >
       {!embedded && (
-        <header className="space-y-3">
-          <p className="text-eyebrow text-brand-700 dark:text-brand-300">{t('calculator.eyebrow')}</p>
-          <h1 className="text-display text-fg">{t('calculator.title')}</h1>
-          <p className="max-w-2xl text-body text-fg-muted">{t('calculator.intro')}</p>
+        <header className="space-y-5">
+          <div className="space-y-3">
+            <p className="text-eyebrow text-brand-700 dark:text-brand-300">{t('calculator.eyebrow')}</p>
+            <h1 className="text-display text-fg">{t('calculator.title')}</h1>
+            <p className="max-w-2xl text-body text-fg-muted">{t('calculator.intro')}</p>
+          </div>
+          <div className="card p-4 sm:p-5">
+            <PropertyKindTabs
+              kind={kind}
+              onSelect={(next) =>
+                selectKind(next, {
+                  setKind,
+                  setProjectId,
+                  setShopZoneId,
+                  setShopFloor,
+                  setBedrooms,
+                  setFinish,
+                  setFloor,
+                  setAreaSqm,
+                })
+              }
+            />
+          </div>
         </header>
       )}
 
@@ -703,12 +816,20 @@ export function AyatPriceCalculator({
               <dd className="font-medium text-fg">{t('calculator.floorN', { n: floor ?? preset.floor })}</dd>
             </div>
           </dl>
-          <Link
-            to="/calculator"
-            className="mt-4 inline-block text-sm font-semibold text-brand-700 underline dark:text-brand-300"
-          >
-            {t('calculator.openFullCalculator')}
-          </Link>
+          <div className="mt-4 flex flex-wrap gap-4 text-sm font-semibold">
+            <Link
+              to="/calculator"
+              className="text-brand-700 underline dark:text-brand-300"
+            >
+              {t('calculator.openFullCalculator')}
+            </Link>
+            <Link
+              to="/calculator?kind=shop"
+              className="text-brand-700 underline dark:text-brand-300"
+            >
+              {t('calculator.openShopCalculator')}
+            </Link>
+          </div>
         </div>
       )}
 

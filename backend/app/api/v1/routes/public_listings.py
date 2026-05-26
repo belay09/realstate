@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import date
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
+from sqlalchemy import distinct
 from sqlalchemy.orm import Session, selectinload
 
 from app.api.deps import get_db
@@ -11,7 +12,9 @@ from app.models.inventory import Block, Project, PropertyListing, PropertyUnit, 
 from app.models.payment import PaymentPlan
 from app.schemas.inventory import (
     Paginated,
+    PublicFilterOption,
     PublicListingDetail,
+    PublicListingFilterOptions,
     PublicListingImage,
     PublicListingSummary,
 )
@@ -133,6 +136,62 @@ def list_public_listings(
         .all()
     )
     return Paginated(items=[_to_summary(r) for r in rows], total=total)
+
+
+def _bedroom_label(count: int) -> str:
+    if count == 1:
+        return "1 bedroom"
+    return f"{count} bedrooms"
+
+
+@router.get("/listings/filter-options", response_model=PublicListingFilterOptions)
+def public_listing_filter_options(db: Session = Depends(get_db)) -> PublicListingFilterOptions:
+    base = _public_listing_base_query(db)
+
+    area_rows = (
+        base.with_entities(distinct(PropertyListing.area))
+        .filter(PropertyListing.area.isnot(None), PropertyListing.area != "")
+        .order_by(PropertyListing.area)
+        .all()
+    )
+    city_rows = (
+        base.with_entities(distinct(PropertyListing.city))
+        .filter(PropertyListing.city.isnot(None), PropertyListing.city != "")
+        .order_by(PropertyListing.city)
+        .all()
+    )
+    bedroom_rows = (
+        base.with_entities(distinct(UnitType.bedrooms))
+        .filter(UnitType.bedrooms.isnot(None))
+        .order_by(UnitType.bedrooms)
+        .all()
+    )
+    company_rows = (
+        base.with_entities(distinct(Company.slug), Company.name)
+        .order_by(Company.name)
+        .all()
+    )
+    unit_type_rows = (
+        base.with_entities(distinct(UnitType.code), UnitType.name)
+        .order_by(UnitType.name)
+        .all()
+    )
+
+    return PublicListingFilterOptions(
+        areas=[PublicFilterOption(value=r[0], label=r[0]) for r in area_rows if r[0]],
+        cities=[PublicFilterOption(value=r[0], label=r[0]) for r in city_rows if r[0]],
+        bedrooms=[
+            PublicFilterOption(value=str(r[0]), label=_bedroom_label(int(r[0])))
+            for r in bedroom_rows
+            if r[0] is not None
+        ],
+        companies=[
+            PublicFilterOption(value=slug, label=name) for slug, name in company_rows if slug and name
+        ],
+        unit_types=[
+            PublicFilterOption(value=code, label=name) for code, name in unit_type_rows if code and name
+        ],
+    )
 
 
 @router.get("/listings/{slug}", response_model=PublicListingDetail)

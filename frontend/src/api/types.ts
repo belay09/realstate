@@ -59,6 +59,19 @@ export type PropertyListing = {
   is_public: boolean
 }
 
+export type PublicFilterOption = {
+  value: string
+  label: string
+}
+
+export type PublicListingFilterOptions = {
+  areas: PublicFilterOption[]
+  cities: PublicFilterOption[]
+  bedrooms: PublicFilterOption[]
+  companies: PublicFilterOption[]
+  unit_types: PublicFilterOption[]
+}
+
 export type PublicListingSummary = {
   id: string
   title: string

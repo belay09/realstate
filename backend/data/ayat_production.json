@@ -1,8 +1,8 @@
 {
   "_meta": {
-    "description": "Ayat Share Company production seed for Belay Properties. Per-sqm prices are VAT-inclusive estimates based on public CMC listings (~173k ETB/sqm for 110 m²) and Ayat floor-band rules (price decreases on higher floors). Replace with values from the latest official Ayat price list before treating as contractual.",
-    "reference_doc": "Ayat Share Company price list. Verify reference number and effective dates from your official PDF/photos",
-    "effective_from": "2026-01-01",
+    "description": "Ayat Share Company inventory for Belay Properties. Pricing, discounts, commissions, and milestones are loaded from backend/data/ayat_official_2018.json when you run the seed script (official scanned strategy pages).",
+    "reference_doc": "Ayat/116/2018 — see ayat_official_2018.json",
+    "pricing_source": "ayat_official_2018.json",
     "currency": "ETB"
   },
   "remove_companies": ["sunshine-developers"],
@@ -26,7 +26,7 @@
       "slug": "ayat-hills",
       "name": "Ayat Hills",
       "city": "Addis Ababa",
-      "area": "Ayat",
+      "area": "Ayat (Main Village)",
       "blocks": [
         { "code": "A", "name": "Block A", "total_floors": 16 },
         { "code": "B", "name": "Block B", "total_floors": 16 }
@@ -46,7 +46,7 @@
   "unit_types": [
     {
       "code": "SFCA",
-      "name": "2BR semi-finished (Type A)",
+      "name": "Two-bedroom semi-finished apartment, Type A",
       "category": "residential",
       "bedrooms": 2,
       "finish_type": "semi-finished",
@@ -54,7 +54,7 @@
     },
     {
       "code": "SFCR",
-      "name": "3BR semi-finished (Type R)",
+      "name": "Three-bedroom semi-finished apartment, Type R",
       "category": "residential",
       "bedrooms": 3,
       "finish_type": "semi-finished",
@@ -62,7 +62,7 @@
     },
     {
       "code": "RFCA",
-      "name": "2BR regular finished (Type A)",
+      "name": "Two-bedroom regular finished apartment, Type A",
       "category": "residential",
       "bedrooms": 2,
       "finish_type": "regular-finished",
@@ -70,7 +70,7 @@
     },
     {
       "code": "RFCR",
-      "name": "3BR regular finished (Type R)",
+      "name": "Three-bedroom regular finished apartment, Type R",
       "category": "residential",
       "bedrooms": 3,
       "finish_type": "regular-finished",
@@ -143,10 +143,10 @@
     {
       "unit_ref": { "project_slug": "ayat-hills", "block_code": "A", "unit_number": "501" },
       "slug": "ayat-hills-3br-semi-finished-block-a",
-      "title": "3BR semi-finished apartment, Ayat Hills, Block A",
-      "description": "Three-bedroom semi-finished unit (SFCR) on floor 5 at Ayat Hills. East-facing corner layout. Prices are per official Ayat floor-band tables (VAT included). Contact Belay Properties for a formal quote and 60/40 payment plan options.",
+      "title": "Three-bedroom semi-finished apartment, Ayat Hills, Block A",
+      "description": "Three-bedroom semi-finished apartment on floor 5 at Ayat Hills in the Ayat (Main Village) zone. East-facing corner layout. Prices follow official Ayat floor-band tables including value added tax. Contact Belay Properties for a formal quote and payment plan options.",
       "city": "Addis Ababa",
-      "area": "Ayat",
+      "area": "Ayat (Main Village)",
       "is_public": true,
       "is_featured": true,
       "images": [
@@ -157,10 +157,10 @@
     {
       "unit_ref": { "project_slug": "ayat-hills", "block_code": "B", "unit_number": "302" },
       "slug": "ayat-hills-2br-semi-finished-block-b",
-      "title": "2BR semi-finished apartment, Ayat Hills, Block B",
-      "description": "Two-bedroom semi-finished unit (SFCA) on floor 3. Ideal starter home in the Ayat corridor with Belay Properties verified sales support.",
+      "title": "Two-bedroom semi-finished apartment, Ayat Hills, Block B",
+      "description": "Two-bedroom semi-finished apartment on floor 3 at Ayat Hills in the Ayat (Main Village) zone. Ideal starter home with Belay Properties sales support.",
       "city": "Addis Ababa",
-      "area": "Ayat",
+      "area": "Ayat (Main Village)",
       "is_public": true,
       "is_featured": false,
       "images": [
@@ -170,8 +170,8 @@
     {
       "unit_ref": { "project_slug": "cmc-extension", "block_code": "T1", "unit_number": "201" },
       "slug": "cmc-2br-semi-finished-tower-1",
-      "title": "2BR semi-finished, CMC Residential, Tower 1",
-      "description": "Two-bedroom semi-finished apartment near CMC / Yeka. Part of the Ayat CCE mixed-use development. Per-sqm pricing follows Ayat floor bands (VAT included).",
+      "title": "Two-bedroom semi-finished apartment, CMC Residential, Tower 1",
+      "description": "Two-bedroom semi-finished apartment in the CMC development zone near Yeka. Part of the Ayat CCE mixed-use project. Pricing follows Ayat floor bands including value added tax.",
       "city": "Addis Ababa",
       "area": "CMC",
       "is_public": true,
@@ -184,8 +184,8 @@
     {
       "unit_ref": { "project_slug": "cmc-extension", "block_code": "T1", "unit_number": "805" },
       "slug": "cmc-3br-semi-finished-tower-1",
-      "title": "3BR semi-finished, CMC Residential, Tower 1",
-      "description": "Three-bedroom semi-finished unit on floor 8. Payment plans include full payment and 60/40 residential structure.",
+      "title": "Three-bedroom semi-finished apartment, CMC Residential, Tower 1",
+      "description": "Three-bedroom semi-finished apartment on floor 8 in the CMC zone. Payment plans include full payment and sixty-forty residential structure.",
       "city": "Addis Ababa",
       "area": "CMC",
       "is_public": true,
@@ -197,10 +197,10 @@
     {
       "unit_ref": { "project_slug": "ayat-hills", "block_code": "A", "unit_number": "1203" },
       "slug": "ayat-hills-3br-regular-finished-penthouse",
-      "title": "3BR regular finished, Ayat Hills, high floor",
-      "description": "Regular-finished three-bedroom (RFCR) on floor 12. Higher floors benefit from Ayat's lower per-sqm band pricing.",
+      "title": "Three-bedroom regular finished apartment, Ayat Hills, high floor",
+      "description": "Three-bedroom regular finished apartment on floor 12 in the Ayat (Main Village) zone. Higher floors use Ayat's lower per square meter band.",
       "city": "Addis Ababa",
-      "area": "Ayat",
+      "area": "Ayat (Main Village)",
       "is_public": true,
       "is_featured": false,
       "images": [

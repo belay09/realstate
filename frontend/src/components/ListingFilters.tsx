@@ -1,6 +1,11 @@
 import * as React from 'react'
+import { useQuery } from '@tanstack/react-query'
 
+import { api } from '../api/client'
+import type { PublicListingFilterOptions } from '../api/types'
 import { useTranslation } from '../context/LocaleContext'
+import { AYAT_ZONE_FILTER_OPTIONS } from '../lib/listingDisplay'
+import { SearchableSelect, type SelectOption } from './SearchableSelect'
 
 export type ListingFiltersState = {
   city: string
@@ -39,6 +44,18 @@ function filtersMatch(a: ListingFiltersState, b: ListingFiltersState) {
   )
 }
 
+const FALLBACK_OPTIONS: PublicListingFilterOptions = {
+  areas: AYAT_ZONE_FILTER_OPTIONS,
+  cities: [{ value: 'Addis Ababa', label: 'Addis Ababa' }],
+  bedrooms: [
+    { value: '1', label: '1 bedroom' },
+    { value: '2', label: '2 bedrooms' },
+    { value: '3', label: '3 bedrooms' },
+  ],
+  companies: [{ value: 'ayat-real-estate', label: 'Ayat Share Company' }],
+  unit_types: [],
+}
+
 export function ListingFilters({
   filters,
   total,
@@ -48,14 +65,53 @@ export function ListingFilters({
   onReset,
 }: ListingFiltersProps) {
   const { t } = useTranslation()
-  const [expanded, setExpanded] = React.useState(
-    Boolean(filters.city || filters.company_slug || filters.unit_type_code),
-  )
-  const formRef = React.useRef<HTMLFormElement>(null)
+  const [draft, setDraft] = React.useState<ListingFiltersState>(filters)
+
+  React.useEffect(() => {
+    setDraft(filters)
+  }, [filters])
+
+  const optionsQuery = useQuery({
+    queryKey: ['public-listing-filter-options'],
+    queryFn: async () => {
+      const { data } = await api.get<PublicListingFilterOptions>('/public/listings/filter-options')
+      return data
+    },
+    staleTime: 60_000,
+  })
+
+  const opts = optionsQuery.data ?? FALLBACK_OPTIONS
 
   const countLabel = isLoading
     ? t('filters.loading')
     : `${total} ${total === 1 ? t('filters.property') : t('filters.properties')} ${t('filters.available')}`
+
+  const patch = (partial: Partial<ListingFiltersState>) => {
+    setDraft((prev) => ({ ...prev, ...partial }))
+  }
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault()
+    onApply(draft)
+  }
+
+  const field = (
+    key: keyof ListingFiltersState,
+    label: string,
+    options: SelectOption[],
+    placeholder: string,
+  ) => (
+    <SearchableSelect
+      id={`filter-${key}`}
+      name={key}
+      label={label}
+      value={draft[key]}
+      options={options}
+      placeholder={placeholder}
+      emptyLabel={t('filters.any')}
+      onChange={(value) => patch({ [key]: value })}
+    />
+  )
 
   return (
     <div className="surface overflow-hidden">
@@ -68,7 +124,10 @@ export function ListingFilters({
           <button
             type="button"
             className="text-xs font-semibold text-brand-700 hover:underline dark:text-brand-300"
-            onClick={onReset}
+            onClick={() => {
+              setDraft(emptyListingFilters)
+              onReset()
+            }}
           >
             {t('filters.clearAll')}
           </button>
@@ -80,97 +139,38 @@ export function ListingFilters({
               key={id}
               type="button"
               className={filtersMatch(filters, values) ? 'chip chip-active' : 'chip'}
-              onClick={() => onApply(values)}
+              onClick={() => {
+                setDraft(values)
+                onApply(values)
+              }}
             >
               {label}
             </button>
           ))}
         </div>
 
-        <form
-          ref={formRef}
-          className="mt-5 space-y-4"
-          onSubmit={(e) => {
-            e.preventDefault()
-            const fd = new FormData(e.currentTarget)
-            onApply({
-              city: String(fd.get('city') ?? ''),
-              area: String(fd.get('area') ?? ''),
-              bedrooms: String(fd.get('bedrooms') ?? ''),
-              company_slug: String(fd.get('company_slug') ?? ''),
-              unit_type_code: String(fd.get('unit_type_code') ?? ''),
-            })
-          }}
-        >
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-            <label className="block flex-1 text-xs font-medium text-fg-muted">
-              {t('filters.neighborhood')}
-              <input
-                key={`area-${filters.area}`}
-                name="area"
-                defaultValue={filters.area}
-                className="input"
-                placeholder={t('filters.neighborhoodPlaceholder')}
-              />
-            </label>
-            <label className="block w-full text-xs font-medium text-fg-muted sm:w-32">
-              {t('filters.bedrooms')}
-              <input
-                key={`bed-${filters.bedrooms}`}
-                name="bedrooms"
-                defaultValue={filters.bedrooms}
-                className="input"
-                placeholder={t('filters.bedroomsPlaceholder')}
-                inputMode="numeric"
-              />
-            </label>
-            <button type="submit" className="btn-primary w-full sm:w-auto sm:shrink-0">
-              {t('filters.search')}
-            </button>
+        <form className="mt-5 space-y-4" onSubmit={submit}>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {field('area', t('filters.neighborhood'), opts.areas, t('filters.neighborhoodPlaceholder'))}
+            {field('city', t('filters.city'), opts.cities, t('filters.cityPlaceholder'))}
+            {field('bedrooms', t('filters.bedrooms'), opts.bedrooms, t('filters.bedroomsPlaceholder'))}
+            {field('company_slug', t('filters.developer'), opts.companies, t('filters.developerPlaceholder'))}
+            {field(
+              'unit_type_code',
+              t('filters.unitType'),
+              opts.unit_types,
+              t('filters.unitTypePlaceholder'),
+            )}
           </div>
 
-          <button
-            type="button"
-            className="flex w-full items-center justify-center gap-1 text-xs font-semibold text-fg-muted hover:text-brand-700 dark:hover:text-brand-300"
-            onClick={() => setExpanded((v) => !v)}
-          >
-            {expanded ? t('filters.hideAdvanced') : t('filters.showAdvanced')}
-          </button>
-
-          {expanded ? (
-            <div className="grid gap-4 rounded-xl bg-surface-muted p-4 sm:grid-cols-3">
-              <label className="block text-xs font-medium text-fg-muted">
-                {t('filters.city')}
-                <input
-                  key={`city-${filters.city}`}
-                  name="city"
-                  defaultValue={filters.city}
-                  className="input"
-                  placeholder={t('filters.cityPlaceholder')}
-                />
-              </label>
-              <label className="block text-xs font-medium text-fg-muted">
-                {t('filters.developer')}
-                <input
-                  key={`co-${filters.company_slug}`}
-                  name="company_slug"
-                  defaultValue={filters.company_slug}
-                  className="input"
-                  placeholder={t('filters.developerPlaceholder')}
-                />
-              </label>
-              <label className="block text-xs font-medium text-fg-muted">
-                {t('filters.unitType')}
-                <input
-                  key={`ut-${filters.unit_type_code}`}
-                  name="unit_type_code"
-                  defaultValue={filters.unit_type_code}
-                  className="input"
-                  placeholder={t('filters.unitTypePlaceholder')}
-                />
-              </label>
-            </div>
-          ) : null}
+          <div className="flex flex-wrap items-center gap-3">
+            <button type="submit" className="btn-primary">
+              {t('filters.search')}
+            </button>
+            {optionsQuery.isLoading ? (
+              <span className="text-xs text-fg-muted">{t('filters.optionsLoading')}</span>
+            ) : null}
+          </div>
         </form>
       </div>
     </div>

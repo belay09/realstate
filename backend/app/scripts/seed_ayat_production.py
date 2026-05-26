@@ -18,6 +18,11 @@ from app.models.identity import User
 from app.models.inventory import Block, Project, PropertyListing, PropertyUnit, UnitType
 from app.models.payment import PaymentPlan, PaymentPlanStep
 from app.models.pricing import DiscountRule, PriceTableRow, PricingDocument, PricingVersion
+from app.data.ayat_official_loader import (
+    build_commission_block,
+    build_pricing_block,
+    load_official,
+)
 from app.scripts.seed_demo_data import (
     _get_company,
     _upsert_block,
@@ -113,6 +118,9 @@ def _remove_listings(db: Session, slugs: list[str]) -> None:
 
 
 def seed_from_data(db: Session, data: dict) -> None:
+    official = load_official()
+    data = {**data, "pricing": build_pricing_block(official), "commission": build_commission_block(official)}
+
     admin = db.query(User).filter(User.email == "admin@example.com").first()
 
     _cleanup_orphan_projects(db)
@@ -223,7 +231,8 @@ def seed_from_data(db: Session, data: dict) -> None:
     for listing in data.get("listings", []):
         if listing.get("is_public", True):
             print(f"  /listings/{listing['slug']}")
-    print("\nEdit prices in backend/data/ayat_production.json then re-run this script.\n")
+    print("\nEdit official prices in backend/data/ayat_official_2018.json")
+    print("Edit inventory in backend/data/ayat_production.json then re-run this script.\n")
 
 
 def _seed_pricing(
@@ -287,6 +296,7 @@ def _seed_pricing(
                 floor_band=row.get("floor_band"),
                 unit_type_code=row.get("unit_type_code"),
                 finish_type=row.get("finish_type"),
+                construction_state=row.get("construction_state"),
                 price_per_sqm=Decimal(row["price_per_sqm"]) if row.get("price_per_sqm") else None,
                 fixed_price=Decimal(row["fixed_price"]) if row.get("fixed_price") else None,
             )

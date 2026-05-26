@@ -14,6 +14,11 @@ import { AYAT_PARTNER } from '../content/partners'
 import { useTranslation } from '../context/LocaleContext'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { presetFromListing } from '../lib/listingCalculatorPreset'
+import {
+  formatListingBedrooms,
+  formatListingCardTitle,
+  formatListingLocation,
+} from '../lib/listingDisplay'
 import { formatMoney } from '../lib/format'
 
 const wa = import.meta.env.VITE_WHATSAPP_E164 as string | undefined
@@ -56,7 +61,8 @@ export function ListingDetailPage() {
     onSuccess: () => setLeadSent(true),
   })
 
-  usePageTitle(query.data?.title ?? t('pageTitles.listing'))
+  const pageTitle = query.data ? formatListingCardTitle(query.data, t) : t('pageTitles.listing')
+  usePageTitle(pageTitle)
 
   const priceOk = !priceQuery.isError && Boolean(priceQuery.data)
 
@@ -114,9 +120,10 @@ export function ListingDetailPage() {
   const ayatPreset = presetFromListing(listing)
   const isAyatListing = listing.company_slug === AYAT_PARTNER.slug
 
+  const bedroomLabel = formatListingBedrooms(listing, t)
   const locationLine = [
-    [listing.city, listing.area].filter(Boolean).join(' · ') || t('listingDetail.locationPending'),
-    listing.bedrooms != null ? `${listing.bedrooms} ${t('listingDetail.bedrooms')}` : null,
+    formatListingLocation(listing, t) || t('listingDetail.locationPending'),
+    bedroomLabel,
     `${t('listingDetail.unit')} ${listing.unit_number}`,
     listing.floor_number != null
       ? `${t('listingDetail.floor')} ${listing.floor_number}`
@@ -124,6 +131,8 @@ export function ListingDetailPage() {
   ]
     .filter(Boolean)
     .join(' · ')
+
+  const displayTitle = formatListingCardTitle(listing, t)
 
   return (
     <article
@@ -137,7 +146,7 @@ export function ListingDetailPage() {
         <p className="section-eyebrow">
           {listing.company_name} · {listing.project_name}
         </p>
-        <h1 className="text-h1">{listing.title}</h1>
+        <h1 className="text-h1">{displayTitle}</h1>
         <p className="text-body-sm">{locationLine}</p>
       </header>
 

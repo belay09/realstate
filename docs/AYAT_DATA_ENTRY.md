@@ -1,6 +1,20 @@
 # Ayat Share Company — data entry guide
 
-Production Ayat inventory and pricing is loaded from a **JSON file** so you can edit prices offline, re-run the seed, and keep the database in sync without clicking through dozens of admin forms.
+## Official pricing (Ayat/116/2018)
+
+**Source of truth:** `backend/data/ayat_official_2018.json` (from company strategy scans — not sample data).
+
+Includes Section 2 sizes, Section 3 locations, Section 6 discounts/commissions, Section 7 group tiers, Section 10 apartment per m² table, Section 11 shop per m² table, and Section 13 milestones. The calculator reads this file on the frontend; the seed script loads pricing and commission from it into PostgreSQL.
+
+Re-seed after any edit:
+
+```bash
+docker compose exec api python -m app.scripts.seed_ayat_production
+```
+
+---
+
+Production Ayat **inventory** (listings, units, projects) is in `backend/data/ayat_production.json` so you can edit offline, re-run the seed, and keep the database in sync without clicking through dozens of admin forms.
 
 ## Quick start (production server)
 
@@ -23,7 +37,7 @@ docker compose run --rm api python -m app.scripts.seed_ayat_production
 | Projects | Ayat Hills, CMC Residential (CCE) |
 | Unit types | SFCA, SFCR, RFCA, RFCR (Ayat finish/category codes) |
 | Units + public listings | 5 available units with images |
-| Pricing version | `Ayat residential pricing Q1 2026` (published) |
+| Pricing version | `Ayat official strategy (Ayat/116/2018)` (published) |
 | Payment plans | Full payment, 60/40 residential |
 | Commission scheme | Default + agent rules |
 

@@ -2,11 +2,11 @@ import { Link } from 'react-router-dom'
 
 import type { PublicListingSummary } from '../api/types'
 import { useTranslation } from '../context/LocaleContext'
-
-function formatLocation(item: PublicListingSummary, defaultCity: string) {
-  const parts = [item.area, item.city].filter(Boolean)
-  return parts.length > 0 ? parts.join(', ') : defaultCity
-}
+import {
+  formatListingBedrooms,
+  formatListingCardTitle,
+  formatListingLocation,
+} from '../lib/listingDisplay'
 
 type ListingCardProps = {
   item: PublicListingSummary
@@ -14,10 +14,9 @@ type ListingCardProps = {
 
 export function ListingCard({ item }: ListingCardProps) {
   const { t } = useTranslation()
-  const beds =
-    item.bedrooms != null
-      ? `${item.bedrooms} ${item.bedrooms === 1 ? t('listingCard.bed') : t('listingCard.beds')}`
-      : null
+  const title = formatListingCardTitle(item, t)
+  const location = formatListingLocation(item, t)
+  const beds = formatListingBedrooms(item, t)
 
   return (
     <Link
@@ -42,17 +41,14 @@ export function ListingCard({ item }: ListingCardProps) {
           </span>
         </div>
         <div className="absolute bottom-0 left-0 right-0 p-5">
-          <p className="text-xs font-medium text-slate-200">{item.project_name}</p>
-          <h2 className="mt-1 line-clamp-2 text-h3 text-white">{item.title}</h2>
+          <p className="text-xs font-medium text-slate-200">{item.company_name}</p>
+          <h2 className="mt-1 line-clamp-2 text-h3 text-white">{title}</h2>
         </div>
       </div>
 
       <div className="flex items-center justify-between gap-3 px-5 py-4">
         <div className="flex flex-wrap gap-2 text-body-sm font-medium">
-          <span className="inline-flex items-center gap-1.5">
-            <PinIcon />
-            {formatLocation(item, t('listingCard.defaultCity'))}
-          </span>
+          <span className="text-fg-muted">{t('listingCard.locatedIn', { place: location })}</span>
           {beds ? (
             <>
               <span className="text-fg-muted/40">·</span>
@@ -68,15 +64,6 @@ export function ListingCard({ item }: ListingCardProps) {
         </span>
       </div>
     </Link>
-  )
-}
-
-function PinIcon() {
-  return (
-    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-    </svg>
   )
 }
 

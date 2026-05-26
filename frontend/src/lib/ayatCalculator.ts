@@ -1,5 +1,5 @@
+import { resolveResidentialProjectId } from '../data/buildCalculatorFromOfficial'
 import {
-  CMC_NEAR_COMPLETION_PRICE_FACTOR,
   COMMERCIAL_ZONES,
   CURRENCY,
   DOWN_PAYMENT_TIERS,
@@ -125,8 +125,9 @@ export function calculateResidential(input: ResidentialCalcInput): CalculatorRes
   if (!project || !tier) return null
 
   const unitTypeCode = unitTypeForBedroomsFinish(input.bedrooms, input.finish)
+  const priceProjectId = resolveResidentialProjectId(input.projectId, input.completion)
   const row = findResidentialPriceRow(
-    input.projectId,
+    priceProjectId,
     unitTypeCode,
     input.finish,
     input.floor,
@@ -138,11 +139,7 @@ export function calculateResidential(input: ResidentialCalcInput): CalculatorRes
     return null
   }
 
-  let pricePerSqm = row.pricePerSqm
-  if (input.projectId === 'cmc-extension' && input.completion === 'near_completion') {
-    pricePerSqm = roundMoney(pricePerSqm * CMC_NEAR_COMPLETION_PRICE_FACTOR)
-  }
-
+  const pricePerSqm = row.pricePerSqm
   const listPrice = roundMoney(pricePerSqm * input.areaSqm)
   const clientDiscountPercent = tier.clientDiscountPercent
   const clientDiscountAmount = roundMoney((listPrice * clientDiscountPercent) / 100)
@@ -198,6 +195,7 @@ export function calculateCommercial(input: CommercialCalcInput): CalculatorResul
   if (!zone || !tier) return null
 
   const pricePerSqm = zone.floors[input.shopFloor]
+  if (!pricePerSqm) return null
   const listPrice = roundMoney(pricePerSqm * input.areaSqm)
   const clientDiscountPercent = tier.clientDiscountPercent
   const clientDiscountAmount = roundMoney((listPrice * clientDiscountPercent) / 100)

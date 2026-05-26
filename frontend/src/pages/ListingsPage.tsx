@@ -16,7 +16,7 @@ import { AYAT_PARTNER } from '../content/partners'
 import { usePageTitle } from '../hooks/usePageTitle'
 
 const QUICK_FILTER_IDS = [
-  { id: 'ayat-area', key: 'listings.quickAyatArea' as const, values: { area: 'Ayat' } },
+  { id: 'ayat-area', key: 'listings.quickAyatArea' as const, values: { area: 'Ayat (Main Village)' } },
   { id: 'cmc', key: 'listings.quickCmc' as const, values: { area: 'CMC' } },
   { id: '2br', key: 'listings.quick2br' as const, values: { bedrooms: '2' } },
   { id: '3br', key: 'listings.quick3br' as const, values: { bedrooms: '3' } },
@@ -103,6 +103,13 @@ export function ListingsPage() {
           </p>
         </div>
       </section>
+
+      <div className="surface flex flex-col gap-4 border-brand-200/60 bg-brand-50/50 p-5 sm:flex-row sm:items-center sm:justify-between dark:border-brand-800/40 dark:bg-brand-950/30">
+        <p className="text-sm text-fg-muted">{t('listings.shopsCalculatorNote')}</p>
+        <Link to="/calculator?kind=shop" className="btn-primary shrink-0">
+          {t('listings.estimateShop')}
+        </Link>
+      </div>
 
       <PartnerAyatSection compact />
 

@@ -1,10 +1,15 @@
 /**
- * Ayat indicative pricing for the public calculator.
- * Logic follows Ayat Share Company sales strategy (ref Ayat/SLe/116/2018).
- * Per-sqm figures for CMC and Ayat Hills align with backend/data/ayat_production.json.
- * Shop per-sqm values are from the strategy document Section 11.
- * Always verify with Ayat before signing a contract.
+ * Ayat pricing calculator — constants from official strategy (Ayat/116/2018).
+ * Source of truth: backend/data/ayat_official_2018.json (scanned company pages).
  */
+import official from '../../../backend/data/ayat_official_2018.json'
+import {
+  buildCommercialZones,
+  buildMilestoneSchedules,
+  buildResidentialPriceRows,
+  OFFICIAL_BEDROOM_AREA_OPTIONS,
+  OFFICIAL_RESIDENTIAL_PROJECTS,
+} from './buildCalculatorFromOfficial'
 
 export type PropertyKind = 'residential' | 'commercial'
 
@@ -41,7 +46,16 @@ export interface ResidentialProject {
   nameKey: string
   maxFloor: number
   supportsCompletionChoice: boolean
+  /** Section 10 strategy table uses floors 3–36; inventory projects use 1–maxFloor */
+  usesStrategyFloorTable?: boolean
 }
+
+/** Apartment pricing areas from Ayat strategy Section 10 (per square meter tables) */
+export const STRATEGY_RESIDENTIAL_PROJECT_IDS = [
+  'lideta-unstarted',
+  'kazanchis-started',
+  'bole-unstarted',
+] as const
 
 export interface CommercialZone {
   id: string
@@ -57,32 +71,17 @@ export interface MilestoneStep {
 
 export const CURRENCY = 'ETB'
 
-export const RESIDENTIAL_PROJECTS: ResidentialProject[] = [
-  {
-    id: 'cmc-extension',
-    areaLabelKey: 'calculator.zones.cmc',
-    nameKey: 'calculator.projects.cmc',
-    maxFloor: 17,
-    supportsCompletionChoice: true,
-  },
-  {
-    id: 'ayat-hills',
-    areaLabelKey: 'calculator.zones.ayat',
-    nameKey: 'calculator.projects.ayatHills',
-    maxFloor: 16,
-    supportsCompletionChoice: false,
-  },
-]
+export const RESIDENTIAL_PROJECTS: ResidentialProject[] = OFFICIAL_RESIDENTIAL_PROJECTS
 
-/** Bedroom count → allowed sizes (m²) per Ayat strategy Section 1 */
-export const BEDROOM_AREA_OPTIONS: Record<1 | 2 | 3, number[]> = {
-  1: [40, 45, 55, 60],
-  2: [75, 80, 107],
-  3: [90, 95, 105, 110, 115],
+export function floorOptionsForProject(project: ResidentialProject): number[] {
+  const min = project.usesStrategyFloorTable ? 3 : 1
+  return Array.from({ length: project.maxFloor - min + 1 }, (_, i) => i + min)
 }
 
-export const COMMERCIAL_AREA_MIN = 30
-export const COMMERCIAL_AREA_MAX = 240
+/** Bedroom count → allowed sizes (m²) per Ayat strategy Section 1 */
+/** Section 2 sizes; 107 m² kept for existing CMC inventory units */
+export const BEDROOM_AREA_OPTIONS: Record<1 | 2 | 3, number[]> = OFFICIAL_BEDROOM_AREA_OPTIONS
+
 export const COMMERCIAL_AREA_PRESETS = [30, 50, 75, 100, 150, 200, 240]
 
 /** Client discount by upfront / plan tier (Section 6) */
@@ -102,73 +101,12 @@ export const DOWN_PAYMENT_TIERS: DownPaymentTier[] = [
   },
 ]
 
-/** Per-sqm (ETB, VAT-inclusive estimates) from ayat_production.json */
-export const RESIDENTIAL_PRICE_ROWS: ResidentialPriceRow[] = [
-  { projectId: 'ayat-hills', unitTypeCode: 'SFCA', finishType: 'semi-finished', floorBand: { label: '1-4', floorMin: 1, floorMax: 4 }, pricePerSqm: 188000 },
-  { projectId: 'ayat-hills', unitTypeCode: 'SFCA', finishType: 'semi-finished', floorBand: { label: '5-8', floorMin: 5, floorMax: 8 }, pricePerSqm: 181000 },
-  { projectId: 'ayat-hills', unitTypeCode: 'SFCA', finishType: 'semi-finished', floorBand: { label: '9-12', floorMin: 9, floorMax: 12 }, pricePerSqm: 175000 },
-  { projectId: 'ayat-hills', unitTypeCode: 'SFCA', finishType: 'semi-finished', floorBand: { label: '13-16', floorMin: 13, floorMax: 16 }, pricePerSqm: 169000 },
-  { projectId: 'ayat-hills', unitTypeCode: 'SFCR', finishType: 'semi-finished', floorBand: { label: '1-4', floorMin: 1, floorMax: 4 }, pricePerSqm: 192000 },
-  { projectId: 'ayat-hills', unitTypeCode: 'SFCR', finishType: 'semi-finished', floorBand: { label: '5-8', floorMin: 5, floorMax: 8 }, pricePerSqm: 185000 },
-  { projectId: 'ayat-hills', unitTypeCode: 'SFCR', finishType: 'semi-finished', floorBand: { label: '9-12', floorMin: 9, floorMax: 12 }, pricePerSqm: 178000 },
-  { projectId: 'ayat-hills', unitTypeCode: 'RFCR', finishType: 'regular-finished', floorBand: { label: '9-16', floorMin: 9, floorMax: 16 }, pricePerSqm: 198000 },
-  { projectId: 'ayat-hills', unitTypeCode: 'RFCA', finishType: 'regular-finished', floorBand: { label: '9-16', floorMin: 9, floorMax: 16 }, pricePerSqm: 198000 },
-  { projectId: 'cmc-extension', unitTypeCode: 'SFCA', finishType: 'semi-finished', floorBand: { label: '1-4', floorMin: 1, floorMax: 4 }, pricePerSqm: 185000 },
-  { projectId: 'cmc-extension', unitTypeCode: 'SFCA', finishType: 'semi-finished', floorBand: { label: '5-8', floorMin: 5, floorMax: 8 }, pricePerSqm: 178000 },
-  { projectId: 'cmc-extension', unitTypeCode: 'SFCA', finishType: 'semi-finished', floorBand: { label: '9-12', floorMin: 9, floorMax: 12 }, pricePerSqm: 172000 },
-  { projectId: 'cmc-extension', unitTypeCode: 'SFCA', finishType: 'semi-finished', floorBand: { label: '13-17', floorMin: 13, floorMax: 17 }, pricePerSqm: 165000 },
-  { projectId: 'cmc-extension', unitTypeCode: 'SFCR', finishType: 'semi-finished', floorBand: { label: '1-8', floorMin: 1, floorMax: 8 }, pricePerSqm: 180000 },
-  { projectId: 'cmc-extension', unitTypeCode: 'SFCR', finishType: 'semi-finished', floorBand: { label: '9-17', floorMin: 9, floorMax: 17 }, pricePerSqm: 173000 },
-  { projectId: 'cmc-extension', unitTypeCode: 'RFCA', finishType: 'regular-finished', floorBand: { label: '10-17', floorMin: 10, floorMax: 17 }, pricePerSqm: 190000 },
-  { projectId: 'cmc-extension', unitTypeCode: 'RFCR', finishType: 'regular-finished', floorBand: { label: '10-17', floorMin: 10, floorMax: 17 }, pricePerSqm: 190000 },
-]
+export const RESIDENTIAL_PRICE_ROWS: ResidentialPriceRow[] = buildResidentialPriceRows()
 
-/** CMC near-completion uplift vs unstarted (Section 10, floors 3–10 SFCA sample ratio) */
-export const CMC_NEAR_COMPLETION_PRICE_FACTOR = 185449 / 146489
+export const COMMERCIAL_ZONES: CommercialZone[] = buildCommercialZones()
 
-/** Shop per-sqm from strategy Section 11 (ETB), all floor tiers */
-export const COMMERCIAL_ZONES: CommercialZone[] = [
-  {
-    id: 'ayat',
-    labelKey: 'calculator.shopZones.ayat',
-    floors: { GF: 195569, '1F': 188485, '2F': 181654, '3F': 174570 },
-  },
-  {
-    id: 'kazanchis',
-    labelKey: 'calculator.shopZones.kazanchis',
-    floors: { GF: 227953, '1F': 218592, '2F': 208978, '3F': 199617 },
-  },
-  {
-    id: 'bole-bulbula',
-    labelKey: 'calculator.shopZones.boleBulbula',
-    floors: { GF: 126564, '1F': 130245, '2F': 124324, '3F': 121364 },
-  },
-  {
-    id: 'zone-h2',
-    labelKey: 'calculator.shopZones.zoneH2',
-    floors: { GF: 136165, '1F': 130245, '2F': 124324, '3F': 121364 },
-  },
-  {
-    id: 'mert-1',
-    labelKey: 'calculator.shopZones.mert1',
-    floors: { GF: 129473, '1F': 123844, '2F': 118215, '3F': 115400 },
-  },
-  {
-    id: 'bole-zone-h3',
-    labelKey: 'calculator.shopZones.boleZoneH3',
-    floors: { GF: 136165, '1F': 130245, '2F': 124324, '3F': 121364 },
-  },
-  {
-    id: 'bole-zone-h3-uni',
-    labelKey: 'calculator.shopZones.boleZoneH3Uni',
-    floors: { GF: 129473, '1F': 123844, '2F': 118215, '3F': 115400 },
-  },
-  {
-    id: 'zone-h8-health',
-    labelKey: 'calculator.shopZones.zoneH8Health',
-    floors: { GF: 136165, '1F': 130245, '2F': 124324, '3F': 121364 },
-  },
-]
+export const COMMERCIAL_AREA_MIN = official.section11_shops.size_min_sqm
+export const COMMERCIAL_AREA_MAX = official.section11_shops.size_max_sqm
 
 export type MilestoneScheduleId =
   | 'apt_near_100'
@@ -176,40 +114,8 @@ export type MilestoneScheduleId =
   | 'apt_6040'
   | 'shop_unstarted_100'
 
-export const MILESTONE_SCHEDULES: Record<MilestoneScheduleId, MilestoneStep[]> = {
-  apt_near_100: [
-    { id: 'sign', labelKey: 'calculator.milestones.signing', percent: 20 },
-    { id: 'm4', labelKey: 'calculator.milestones.month4', percent: 25 },
-    { id: 'm8', labelKey: 'calculator.milestones.month8', percent: 25 },
-    { id: 'm12', labelKey: 'calculator.milestones.month12', percent: 20 },
-    { id: 'handover', labelKey: 'calculator.milestones.handover', percent: 10 },
-  ],
-  apt_unstarted_100: [
-    { id: 'sign', labelKey: 'calculator.milestones.signing', percent: 15 },
-    { id: 'm4', labelKey: 'calculator.milestones.month4', percent: 20 },
-    { id: 'm8', labelKey: 'calculator.milestones.month8', percent: 20 },
-    { id: 'm12', labelKey: 'calculator.milestones.month12', percent: 20 },
-    { id: 'm18', labelKey: 'calculator.milestones.month18', percent: 15 },
-    { id: 'm24', labelKey: 'calculator.milestones.month24', percent: 5 },
-    { id: 'handover', labelKey: 'calculator.milestones.handover', percent: 5 },
-  ],
-  apt_6040: [
-    { id: 'sign', labelKey: 'calculator.milestones.signing', percent: 15 },
-    { id: 'm4', labelKey: 'calculator.milestones.month4', percent: 20 },
-    { id: 'm8', labelKey: 'calculator.milestones.month8', percent: 10 },
-    { id: 'm12', labelKey: 'calculator.milestones.month12', percent: 5 },
-    { id: 'm18', labelKey: 'calculator.milestones.month18', percent: 5 },
-    { id: 'm24', labelKey: 'calculator.milestones.month24', percent: 3 },
-    { id: 'handover', labelKey: 'calculator.milestones.handover', percent: 2 },
-  ],
-  shop_unstarted_100: [
-    { id: 'sign', labelKey: 'calculator.milestones.signing', percent: 25 },
-    { id: 'm4', labelKey: 'calculator.milestones.month4', percent: 30 },
-    { id: 'm8', labelKey: 'calculator.milestones.month8', percent: 20 },
-    { id: 'structure', labelKey: 'calculator.milestones.structure', percent: 15 },
-    { id: 'handover', labelKey: 'calculator.milestones.handover', percent: 10 },
-  ],
-}
+export const MILESTONE_SCHEDULES: Record<MilestoneScheduleId, MilestoneStep[]> =
+  buildMilestoneSchedules()
 
 export function unitTypeForBedroomsFinish(
   bedrooms: 1 | 2 | 3,
