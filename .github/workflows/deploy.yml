@@ -31,6 +31,9 @@ jobs:
           test -n "${{ secrets.EC2_HOST }}" || (echo "Missing EC2_HOST" && exit 1)
           test -n "${{ secrets.EC2_USER }}" || (echo "Missing EC2_USER" && exit 1)
           test -n "${{ secrets.EC2_SSH_KEY }}" || (echo "Missing EC2_SSH_KEY" && exit 1)
+          if [ "${{ secrets.EC2_USER }}" != "ec2-user" ]; then
+            echo "Warning: this server uses ec2-user (Amazon Linux), not ubuntu."
+          fi
 
       - name: Prepare SSH key file
         env:
@@ -49,22 +52,20 @@ jobs:
           fi
 
       - name: Test SSH login
-        uses: appleboy/ssh-action@v1.2.2
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key_path: ~/.ssh/ec2_deploy_key
-          passphrase: ${{ secrets.EC2_SSH_PASSPHRASE }}
-          port: 22
-          timeout: 30s
-          script: echo "SSH OK"
+        run: |
+          ssh -i ~/.ssh/ec2_deploy_key \
+            -o StrictHostKeyChecking=no \
+            -o BatchMode=yes \
+            -o ConnectTimeout=20 \
+            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
+            'echo "SSH OK: $(whoami)@$(hostname)"'
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
-          key_path: ~/.ssh/ec2_deploy_key
+          key: ${{ secrets.EC2_SSH_KEY }}
           passphrase: ${{ secrets.EC2_SSH_PASSPHRASE }}
           port: 22
           timeout: 60s
