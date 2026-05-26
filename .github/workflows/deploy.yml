@@ -26,20 +26,45 @@ jobs:
     environment: production
     timeout-minutes: 45
     steps:
-      - name: Verify deploy secrets
+      - name: Check required secrets
         run: |
-          test -n "${{ secrets.EC2_HOST }}" || (echo "Missing EC2_HOST secret" && exit 1)
-          test -n "${{ secrets.EC2_USER }}" || (echo "Missing EC2_USER secret" && exit 1)
-          test -n "${{ secrets.EC2_SSH_KEY }}" || (echo "Missing EC2_SSH_KEY secret" && exit 1)
-          echo "${{ secrets.EC2_SSH_KEY }}" | grep -q "BEGIN.*PRIVATE KEY" || \
-            (echo "EC2_SSH_KEY must include -----BEGIN ... PRIVATE KEY----- lines" && exit 1)
+          test -n "${{ secrets.EC2_HOST }}" || (echo "Missing EC2_HOST" && exit 1)
+          test -n "${{ secrets.EC2_USER }}" || (echo "Missing EC2_USER" && exit 1)
+          test -n "${{ secrets.EC2_SSH_KEY }}" || (echo "Missing EC2_SSH_KEY" && exit 1)
+
+      - name: Prepare SSH key file
+        env:
+          SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/ec2_deploy_key
+          chmod 600 ~/.ssh/ec2_deploy_key
+          if ssh-keygen -y -f ~/.ssh/ec2_deploy_key >/dev/null 2>&1; then
+            echo "SSH private key format OK."
+          elif [ -n "${{ secrets.EC2_SSH_PASSPHRASE }}" ]; then
+            echo "Encrypted key; will use EC2_SSH_PASSPHRASE."
+          else
+            echo "EC2_SSH_KEY is invalid or encrypted. Re-paste the .pem or set EC2_SSH_PASSPHRASE."
+            exit 1
+          fi
+
+      - name: Test SSH login
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key_path: ~/.ssh/ec2_deploy_key
+          passphrase: ${{ secrets.EC2_SSH_PASSPHRASE }}
+          port: 22
+          timeout: 30s
+          script: echo "SSH OK"
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          key_path: ~/.ssh/ec2_deploy_key
           passphrase: ${{ secrets.EC2_SSH_PASSPHRASE }}
           port: 22
           timeout: 60s

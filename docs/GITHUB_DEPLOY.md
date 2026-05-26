@@ -117,6 +117,30 @@ Or for newer keys:
 
 5. Re-run **Actions → Deploy → Run workflow** after fixing secrets.
 
+### If Deploy still says `unable to authenticate`
+
+Work through this list **in order**:
+
+1. **Same key as your laptop** — open the `.pem` from AWS (EC2 → Key pairs). Not `id_ed25519`, not the GitHub deploy key.
+
+2. **Same user** — run locally:
+   ```bash
+   ssh -i YOUR.pem ubuntu@YOUR_IP
+   ```
+   If that fails, try `ec2-user@YOUR_IP`. Put the working name in `EC2_USER`.
+
+3. **Re-paste `EC2_SSH_KEY`** — delete the secret and create it again:
+   ```bash
+   cat YOUR.pem
+   ```
+   Copy everything including `-----BEGIN` and `-----END` lines. No quotes.
+
+4. **Passphrase** — if you set one when creating the `.pem`, add secret `EC2_SSH_PASSPHRASE`.
+
+5. **Security group** — port 22 open to GitHub Actions IPs (or `0.0.0.0/0` for testing).
+
+The workflow now has a **Test SSH login** step that fails with a clearer error before deploy runs.
+
 ### Optional: `production` environment
 
 The deploy job uses `environment: production`. You can add approval rules under **Settings → Environments → production** if you want a manual approve step before each deploy.
