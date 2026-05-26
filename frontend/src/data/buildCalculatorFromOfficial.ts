@@ -148,6 +148,13 @@ export const OFFICIAL_RESIDENTIAL_PROJECTS: ResidentialProject[] = [
   },
 ]
 
+const INVENTORY_TO_STRATEGY_LOCATION: Record<string, string> = {
+  'ayat-hills': 'lideta-unstarted',
+  'lideta-residential': 'lideta-unstarted',
+  'kazanchis-residential': 'kazanchis-started',
+  'bole-belair': 'bole-unstarted',
+}
+
 export function resolveResidentialProjectId(
   projectId: string,
   completion: 'unstarted' | 'near_completion',
@@ -155,9 +162,8 @@ export function resolveResidentialProjectId(
   if (projectId === 'cmc-extension') {
     return completion === 'near_completion' ? 'cmc-near-completion' : 'cmc-unstarted'
   }
-  if (projectId === 'ayat-hills') {
-    return 'lideta-unstarted'
-  }
+  const mapped = INVENTORY_TO_STRATEGY_LOCATION[projectId]
+  if (mapped) return mapped
   return projectId
 }
 

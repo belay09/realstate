@@ -12,7 +12,13 @@ export type ListingCalculatorPreset = {
 }
 
 const SEMI_FINISHED_CODES = new Set(['SFCA', 'SFCR'])
-const SUPPORTED_PROJECTS = new Set(['cmc-extension', 'ayat-hills'])
+const SUPPORTED_PROJECTS = new Set([
+  'ayat-hills',
+  'cmc-extension',
+  'lideta-residential',
+  'kazanchis-residential',
+  'bole-belair',
+])
 
 export function finishFromUnitTypeCode(code: string): FinishKind {
   return SEMI_FINISHED_CODES.has(code) ? 'semi-finished' : 'regular-finished'

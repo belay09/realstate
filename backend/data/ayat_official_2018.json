@@ -82,6 +82,9 @@
     },
     "listing_project_map": {
       "ayat-hills": { "source": "lideta-unstarted", "max_floor": 16 },
+      "lideta-residential": { "source": "lideta-unstarted", "max_floor": 36 },
+      "kazanchis-residential": { "source": "kazanchis-started", "max_floor": 36 },
+      "bole-belair": { "source": "bole-unstarted", "max_floor": 26 },
       "cmc-extension": {
         "unstarted": "cmc-unstarted",
         "near_completion": "cmc-near-completion",

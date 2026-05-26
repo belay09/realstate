@@ -60,61 +60,67 @@ def expand_section10_price_rows(official: dict[str, Any]) -> list[dict[str, Any]
     return rows
 
 
-def expand_listing_project_price_rows(official: dict[str, Any]) -> list[dict[str, Any]]:
-    """Rows attached to inventory projects (ayat-hills, cmc-extension)."""
-    s10 = official["section10_apartments"]
-    bands = s10["floor_bands"]
-    listing_map = s10["listing_project_map"]
-    rows: list[dict[str, Any]] = []
-
-    # Ayat Hills → Main village uses Lideta table, floors 3–16
-    hills = listing_map["ayat-hills"]
-    hills_source = s10["locations"][hills["source"]]
-    hills_max = hills["max_floor"]
+def _append_price_rows(
+    rows: list[dict[str, Any]],
+    *,
+    project_slug: str,
+    location_prices: dict,
+    bands: list[dict[str, Any]],
+    max_floor: int,
+    construction_state: str | None = None,
+) -> None:
     for unit_code in (*SEMI_FINISHED_TYPES, *REGULAR_FINISHED_TYPES):
         finish = FINISH_BY_CODE[unit_code]
         for band in bands:
-            if band["floor_min"] > hills_max:
+            if band["floor_min"] > max_floor:
                 continue
-            price = _band_price(hills_source, unit_code, band["label"])
+            price = _band_price(location_prices, unit_code, band["label"])
             if price is None:
                 continue
-            rows.append(
-                {
-                    "project_slug": "ayat-hills",
-                    "unit_type_code": unit_code,
-                    "finish_type": finish,
-                    "floor_band": band["label"],
-                    "price_per_sqm": str(price),
-                }
-            )
+            row: dict[str, Any] = {
+                "project_slug": project_slug,
+                "unit_type_code": unit_code,
+                "finish_type": finish,
+                "floor_band": band["label"],
+                "price_per_sqm": str(price),
+            }
+            if construction_state:
+                row["construction_state"] = construction_state
+            rows.append(row)
 
-    # CMC towers — near completion (default for public listing quotes)
-    cmc = listing_map["cmc-extension"]
-    cmc_max = cmc["max_floor"]
-    for state_key, source_id in (
-        ("near_completion", cmc["near_completion"]),
-        ("unstarted", cmc["unstarted"]),
-    ):
-        source = s10["locations"][source_id]
-        for unit_code in (*SEMI_FINISHED_TYPES, *REGULAR_FINISHED_TYPES):
-            finish = FINISH_BY_CODE[unit_code]
-            for band in bands:
-                if band["floor_min"] > cmc_max:
-                    continue
-                price = _band_price(source, unit_code, band["label"])
-                if price is None:
-                    continue
-                rows.append(
-                    {
-                        "project_slug": "cmc-extension",
-                        "unit_type_code": unit_code,
-                        "finish_type": finish,
-                        "floor_band": band["label"],
-                        "construction_state": state_key,
-                        "price_per_sqm": str(price),
-                    }
-                )
+
+def expand_listing_project_price_rows(official: dict[str, Any]) -> list[dict[str, Any]]:
+    """Rows for each inventory project slug in listing_project_map."""
+    s10 = official["section10_apartments"]
+    bands = s10["floor_bands"]
+    locations = s10["locations"]
+    listing_map = s10["listing_project_map"]
+    rows: list[dict[str, Any]] = []
+
+    for project_slug, config in listing_map.items():
+        if "source" in config:
+            source = locations[config["source"]]
+            _append_price_rows(
+                rows,
+                project_slug=project_slug,
+                location_prices=source,
+                bands=bands,
+                max_floor=config["max_floor"],
+            )
+            continue
+        max_floor = config["max_floor"]
+        for state_key, source_id in (
+            ("near_completion", config["near_completion"]),
+            ("unstarted", config["unstarted"]),
+        ):
+            _append_price_rows(
+                rows,
+                project_slug=project_slug,
+                location_prices=locations[source_id],
+                bands=bands,
+                max_floor=max_floor,
+                construction_state=state_key,
+            )
     return rows
 
 

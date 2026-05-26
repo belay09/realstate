@@ -41,6 +41,27 @@
         { "code": "T1", "name": "Tower 1", "total_floors": 17 },
         { "code": "T2", "name": "Tower 2", "total_floors": 17 }
       ]
+    },
+    {
+      "slug": "lideta-residential",
+      "name": "Lideta",
+      "city": "Addis Ababa",
+      "area": "Lideta",
+      "blocks": [{ "code": "T1", "name": "Tower 1", "total_floors": 36 }]
+    },
+    {
+      "slug": "kazanchis-residential",
+      "name": "Kazanchis",
+      "city": "Addis Ababa",
+      "area": "Kazanchis",
+      "blocks": [{ "code": "B1", "name": "Block 1", "total_floors": 36 }]
+    },
+    {
+      "slug": "bole-belair",
+      "name": "Bole (Belair)",
+      "city": "Addis Ababa",
+      "area": "Bole (Belair)",
+      "blocks": [{ "code": "A", "name": "Block A", "total_floors": 26 }]
     }
   ],
   "unit_types": [
@@ -137,6 +158,66 @@
       "area_sqm": "107.0",
       "status": "available",
       "orientation": "east"
+    },
+    {
+      "project_slug": "lideta-residential",
+      "block_code": "T1",
+      "unit_number": "804",
+      "unit_type_code": "SFCR",
+      "floor_number": 8,
+      "area_sqm": "110.0",
+      "status": "available",
+      "orientation": "south"
+    },
+    {
+      "project_slug": "lideta-residential",
+      "block_code": "T1",
+      "unit_number": "1502",
+      "unit_type_code": "SFCA",
+      "floor_number": 15,
+      "area_sqm": "80.0",
+      "status": "available",
+      "orientation": "west"
+    },
+    {
+      "project_slug": "kazanchis-residential",
+      "block_code": "B1",
+      "unit_number": "602",
+      "unit_type_code": "SFCR",
+      "floor_number": 6,
+      "area_sqm": "105.0",
+      "status": "available",
+      "orientation": "east"
+    },
+    {
+      "project_slug": "kazanchis-residential",
+      "block_code": "B1",
+      "unit_number": "1201",
+      "unit_type_code": "RFCA",
+      "floor_number": 12,
+      "area_sqm": "80.0",
+      "status": "available",
+      "orientation": "north"
+    },
+    {
+      "project_slug": "bole-belair",
+      "block_code": "A",
+      "unit_number": "405",
+      "unit_type_code": "SFCA",
+      "floor_number": 4,
+      "area_sqm": "80.0",
+      "status": "available",
+      "orientation": "east"
+    },
+    {
+      "project_slug": "bole-belair",
+      "block_code": "A",
+      "unit_number": "1103",
+      "unit_type_code": "RFCR",
+      "floor_number": 11,
+      "area_sqm": "115.0",
+      "status": "available",
+      "orientation": "south"
     }
   ],
   "listings": [
@@ -205,6 +286,84 @@
       "is_featured": false,
       "images": [
         "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&q=80"
+      ]
+    },
+    {
+      "unit_ref": { "project_slug": "lideta-residential", "block_code": "T1", "unit_number": "804" },
+      "slug": "lideta-3br-semi-finished-tower-1",
+      "title": "Three-bedroom semi-finished apartment, Lideta, Tower 1",
+      "description": "Three-bedroom semi-finished apartment on floor 8 in Lideta. Section 10 pricing: building not yet started.",
+      "city": "Addis Ababa",
+      "area": "Lideta",
+      "is_public": true,
+      "is_featured": true,
+      "images": [
+        "https://images.unsplash.com/photo-1516151164024-afa0636d978d?w=1200&q=80"
+      ]
+    },
+    {
+      "unit_ref": { "project_slug": "lideta-residential", "block_code": "T1", "unit_number": "1502" },
+      "slug": "lideta-2br-semi-finished-high-floor",
+      "title": "Two-bedroom semi-finished apartment, Lideta, high floor",
+      "description": "Two-bedroom semi-finished apartment on floor 15 in Lideta. Official Ayat floor-band pricing applies.",
+      "city": "Addis Ababa",
+      "area": "Lideta",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&q=80"
+      ]
+    },
+    {
+      "unit_ref": { "project_slug": "kazanchis-residential", "block_code": "B1", "unit_number": "602" },
+      "slug": "kazanchis-3br-semi-finished-block-1",
+      "title": "Three-bedroom semi-finished apartment, Kazanchis",
+      "description": "Three-bedroom semi-finished apartment on floor 6 in Kazanchis. Construction started — Section 10 started-column rates.",
+      "city": "Addis Ababa",
+      "area": "Kazanchis",
+      "is_public": true,
+      "is_featured": true,
+      "images": [
+        "https://images.unsplash.com/photo-1487956382158-bb2e088b12f0?w=1200&q=80"
+      ]
+    },
+    {
+      "unit_ref": { "project_slug": "kazanchis-residential", "block_code": "B1", "unit_number": "1201" },
+      "slug": "kazanchis-2br-regular-finished-floor-12",
+      "title": "Two-bedroom regular finished apartment, Kazanchis",
+      "description": "Two-bedroom regular finished apartment on floor 12 in Kazanchis. Pricing from Ayat strategy Section 10.",
+      "city": "Addis Ababa",
+      "area": "Kazanchis",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1200&q=80"
+      ]
+    },
+    {
+      "unit_ref": { "project_slug": "bole-belair", "block_code": "A", "unit_number": "405" },
+      "slug": "bole-belair-2br-semi-finished-block-a",
+      "title": "Two-bedroom semi-finished apartment, Bole (Belair)",
+      "description": "Two-bedroom semi-finished apartment on floor 4 in the Bole (Belair) zone. Section 10 not-started column rates.",
+      "city": "Addis Ababa",
+      "area": "Bole (Belair)",
+      "is_public": true,
+      "is_featured": true,
+      "images": [
+        "https://images.unsplash.com/photo-1448630367868-7c421e9c1805?w=1200&q=80"
+      ]
+    },
+    {
+      "unit_ref": { "project_slug": "bole-belair", "block_code": "A", "unit_number": "1103" },
+      "slug": "bole-belair-3br-regular-finished-floor-11",
+      "title": "Three-bedroom regular finished apartment, Bole (Belair)",
+      "description": "Three-bedroom regular finished apartment on floor 11 in Bole (Belair). Official Ayat per square meter bands.",
+      "city": "Addis Ababa",
+      "area": "Bole (Belair)",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1200&q=80"
       ]
     }
   ],

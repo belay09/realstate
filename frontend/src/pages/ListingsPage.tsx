@@ -17,6 +17,9 @@ import { usePageTitle } from '../hooks/usePageTitle'
 
 const QUICK_FILTER_IDS = [
   { id: 'ayat-area', key: 'listings.quickAyatArea' as const, values: { area: 'Ayat (Main Village)' } },
+  { id: 'lideta', key: 'listings.quickLideta' as const, values: { area: 'Lideta' } },
+  { id: 'kazanchis', key: 'listings.quickKazanchis' as const, values: { area: 'Kazanchis' } },
+  { id: 'bole', key: 'listings.quickBole' as const, values: { area: 'Bole (Belair)' } },
   { id: 'cmc', key: 'listings.quickCmc' as const, values: { area: 'CMC' } },
   { id: '2br', key: 'listings.quick2br' as const, values: { bedrooms: '2' } },
   { id: '3br', key: 'listings.quick3br' as const, values: { bedrooms: '3' } },

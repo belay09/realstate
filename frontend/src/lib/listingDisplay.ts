@@ -9,6 +9,9 @@ import { formatBedroomCount } from './ayatLabels'
 export const AYAT_DEVELOPMENT_ZONES: Record<string, string> = {
   'ayat-hills': 'Ayat (Main Village)',
   'cmc-extension': 'CMC',
+  'lideta-residential': 'Lideta',
+  'kazanchis-residential': 'Kazanchis',
+  'bole-belair': 'Bole (Belair)',
 }
 
 /** Section 3 apartment areas + common filter labels */
