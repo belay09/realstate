@@ -129,6 +129,25 @@ export const am = {
     quick2br: '2 መኝታ',
     quick3br: '3 መኝታ',
     quickAyatCo: 'አያት አክሲዮን ማኅበር',
+    browseByLocation:
+      'ቦታ በቦታ ያስሱ። በዚያ ቦታ የሚገኙትን ሁሉንም የመኝታ ብዛት እና የጨረታ አይነቶች ለማየት ይንኩ።',
+  },
+  projectBrowse: {
+    tapForLayouts: 'ሁሉንም የመኝታ አማራጮች ለማየት ይንኩ',
+    oneHome: '1 የምሳሌ ቤት',
+    homeCount: '{{count}} የምሳሌ ቤቶች',
+    bedroomCount: '{{count}} መኝታ',
+    chooseLayout:
+      'ከታች ያሉት እያንዳንዱ በዚህ ቦታ ያለው የምሳሌ ክፍል ነው። የሚፈልጉትን የመኝታ ብዛት እና ጨረታ ይምረጡ፤ ፎቶ፣ ዋጋ እና ጥያቄ ለመላክ ይክፈቱ።',
+    filterBedrooms: 'መኝታ',
+    priceEstimate: 'የዋጋ ቅድመ ስሌት',
+    backToLocations: 'ሁሉም ቦታዎች',
+    loading: 'ቤቶች በመጫን ላይ…',
+    missingProject: 'ቦታ አልተገኘም።',
+    notFoundTitle: 'ቦታ አልተገኘም',
+    notFoundBody: 'ይህ ፕሮጀክት ላይሰራ ሊሆን ይችላል። ሁሉንም ቦታዎች ይመልከቱ።',
+    noBedroomMatch: 'በዚህ ቦታ ወደዚህ የመኝታ ብዛት የሚስማማ ቤት የለም።',
+    showAllLayouts: 'ሁሉንም አማራጮች አሳይ',
   },
   filters: {
     findHome: 'ቤትዎን ያግኙ',
@@ -136,6 +155,7 @@ export const am = {
     property: 'ንብረት',
     properties: 'ንብረቶች',
     available: 'ይገኛል',
+    locationsAndHomes: '{{locations}} ቦታዎች · {{homes}} ቤቶች',
     clearAll: 'ሁሉን አጽዳ',
     any: 'ማንኛውም',
     optionsLoading: 'የማጣሪያ አማራጮች በመጫን ላይ…',

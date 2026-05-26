@@ -127,6 +127,25 @@ export const en = {
     quick2br: '2 bedrooms',
     quick3br: '3 bedrooms',
     quickAyatCo: 'Ayat Share Company',
+    browseByLocation:
+      'Browse by location first. Tap a place to see every bedroom layout and finish available there.',
+  },
+  projectBrowse: {
+    tapForLayouts: 'Tap to see all bedroom layouts',
+    oneHome: '1 example home',
+    homeCount: '{{count}} example homes',
+    bedroomCount: '{{count}} bedrooms',
+    chooseLayout:
+      'Each home below is one example unit at this location. Pick the bedroom count and finish that fits you, then open it for photos, pricing, and enquiry.',
+    filterBedrooms: 'Bedrooms',
+    priceEstimate: 'Price estimate',
+    backToLocations: 'All locations',
+    loading: 'Loading homes…',
+    missingProject: 'Missing location.',
+    notFoundTitle: 'Location not found',
+    notFoundBody: 'This development may no longer be listed. Browse all locations instead.',
+    noBedroomMatch: 'No homes match this bedroom count at this location.',
+    showAllLayouts: 'Show all layouts',
   },
   filters: {
     findHome: 'Find your home',
@@ -134,6 +153,7 @@ export const en = {
     property: 'property',
     properties: 'properties',
     available: 'available',
+    locationsAndHomes: '{{locations}} locations · {{homes}} homes',
     clearAll: 'Clear all',
     any: 'Any',
     optionsLoading: 'Loading filter options…',

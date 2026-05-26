@@ -9,7 +9,8 @@ import {
   ListingFilters,
   type ListingFiltersState,
 } from '../components/ListingFilters'
-import { ListingCard } from '../components/ListingCard'
+import { ProjectLocationCard } from '../components/ProjectLocationCard'
+import { groupListingsByProject } from '../lib/groupListingsByProject'
 import { PartnerAyatSection } from '../components/PartnerAyatSection'
 import { useTranslation } from '../context/LocaleContext'
 import { AYAT_PARTNER } from '../content/partners'
@@ -76,7 +77,9 @@ export function ListingsPage() {
       if (filters.bedrooms) params.bedrooms = filters.bedrooms
       if (filters.company_slug) params.company_slug = filters.company_slug
       if (filters.unit_type_code) params.unit_type_code = filters.unit_type_code
-      const { data } = await api.get<Paginated<PublicListingSummary>>('/public/listings', { params })
+      const { data } = await api.get<Paginated<PublicListingSummary>>('/public/listings', {
+        params: { ...params, limit: '100' },
+      })
       return data
     },
   })
@@ -93,6 +96,12 @@ export function ListingsPage() {
   }
 
   const total = query.data?.total ?? 0
+  const projectGroups = React.useMemo(
+    () => groupListingsByProject(query.data?.items ?? []),
+    [query.data?.items],
+  )
+  const listSearch = searchParams.toString()
+  const locationSearchSuffix = listSearch ? `?${listSearch}` : ''
 
   return (
     <div className="space-y-12 overflow-visible text-left">
@@ -119,6 +128,7 @@ export function ListingsPage() {
       <ListingFilters
         filters={filters}
         total={total}
+        locationCount={projectGroups.length}
         isLoading={query.isLoading}
         quickFilters={quickFilters}
         onApply={applyFilters}
@@ -142,13 +152,16 @@ export function ListingsPage() {
       )}
 
       {!query.isLoading && query.data && query.data.items.length > 0 && (
-        <ul className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
-          {query.data.items.map((item) => (
-            <li key={item.id} className="animate-fade-in">
-              <ListingCard item={item} />
-            </li>
-          ))}
-        </ul>
+        <section className="space-y-5">
+          <p className="text-body-sm text-fg-muted">{t('listings.browseByLocation')}</p>
+          <ul className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+            {projectGroups.map((group) => (
+              <li key={group.project_slug} className="animate-fade-in">
+                <ProjectLocationCard group={group} search={locationSearchSuffix} />
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
 
       {query.data && query.data.items.length === 0 && !query.isLoading && (

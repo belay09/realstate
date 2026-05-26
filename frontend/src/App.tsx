@@ -6,6 +6,7 @@ import { HomePage } from './pages/HomePage'
 import { ListingDetailPage } from './pages/ListingDetailPage'
 import { AyatCalculatorPage } from './pages/AyatCalculatorPage'
 import { ListingsPage } from './pages/ListingsPage'
+import { ProjectListingsPage } from './pages/ProjectListingsPage'
 import { AdminBlocksPage } from './pages/admin/AdminBlocksPage'
 import { AdminCompaniesPage } from './pages/admin/AdminCompaniesPage'
 import { AdminDashboardPage } from './pages/admin/AdminDashboardPage'
@@ -29,6 +30,7 @@ export default function App() {
       <Route element={<PublicLayout />}>
         <Route index element={<HomePage />} />
         <Route path="listings" element={<ListingsPage />} />
+        <Route path="listings/project/:projectSlug" element={<ProjectListingsPage />} />
         <Route path="listings/:slug" element={<ListingDetailPage />} />
         <Route path="calculator" element={<AyatCalculatorPage />} />
       </Route>

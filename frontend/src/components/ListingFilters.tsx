@@ -28,6 +28,7 @@ type QuickFilter = { id: string; label: string; values: ListingFiltersState }
 type ListingFiltersProps = {
   filters: ListingFiltersState
   total: number | string
+  locationCount?: number
   isLoading: boolean
   quickFilters: QuickFilter[]
   onApply: (filters: ListingFiltersState) => void
@@ -59,6 +60,7 @@ const FALLBACK_OPTIONS: PublicListingFilterOptions = {
 export function ListingFilters({
   filters,
   total,
+  locationCount,
   isLoading,
   quickFilters,
   onApply,
@@ -84,7 +86,12 @@ export function ListingFilters({
 
   const countLabel = isLoading
     ? t('filters.loading')
-    : `${total} ${total === 1 ? t('filters.property') : t('filters.properties')} ${t('filters.available')}`
+    : locationCount != null && locationCount > 0
+      ? t('filters.locationsAndHomes', {
+          locations: locationCount,
+          homes: total,
+        })
+      : `${total} ${total === 1 ? t('filters.property') : t('filters.properties')} ${t('filters.available')}`
 
   const patch = (partial: Partial<ListingFiltersState>) => {
     setDraft((prev) => ({ ...prev, ...partial }))
