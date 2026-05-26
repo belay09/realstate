@@ -1,4 +1,4 @@
-"""Load Ayat Share Company official 2018 strategy data and expand into seed/calculator structures."""
+"""Load Ayat official 2018 strategy data for seed and calculator."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from typing import Any
 
 OFFICIAL_PATH = Path(__file__).resolve().parents[2] / "data" / "ayat_official_2018.json"
 
-# Semi-finished three-bedroom uses SFCR code; Section 10 table leaves SFCR semi column blank — use SFCA band.
+# 3BR semi-finished uses SFCR; Section 10 has no SFCR semi column — fall back to SFCA band.
 SEMI_FINISHED_TYPES = ("SFCA", "SFCR")
 REGULAR_FINISHED_TYPES = ("RFCA", "RFCR")
 
@@ -119,7 +119,7 @@ def expand_listing_project_price_rows(official: dict[str, Any]) -> list[dict[str
 
 def build_pricing_block(official: dict[str, Any]) -> dict[str, Any]:
     meta = official["_meta"]
-    # Only rows for inventory projects in the DB (calculator uses full Section 10 via JSON on the frontend).
+    # DB rows for inventory projects only; calculator reads full Section 10 from JSON.
     rows = expand_listing_project_price_rows(official)
     tiers = official["section6_payment_tiers"]
     discount_rules: list[dict[str, Any]] = []

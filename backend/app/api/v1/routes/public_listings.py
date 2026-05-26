@@ -186,10 +186,14 @@ def public_listing_filter_options(db: Session = Depends(get_db)) -> PublicListin
             if r[0] is not None
         ],
         companies=[
-            PublicFilterOption(value=slug, label=name) for slug, name in company_rows if slug and name
+            PublicFilterOption(value=slug, label=name)
+            for slug, name in company_rows
+            if slug and name
         ],
         unit_types=[
-            PublicFilterOption(value=code, label=name) for code, name in unit_type_rows if code and name
+            PublicFilterOption(value=code, label=name)
+            for code, name in unit_type_rows
+            if code and name
         ],
     )
 

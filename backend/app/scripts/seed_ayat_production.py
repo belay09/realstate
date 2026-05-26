@@ -11,6 +11,11 @@ from pathlib import Path
 
 from sqlalchemy.orm import Session
 
+from app.data.ayat_official_loader import (
+    build_commission_block,
+    build_pricing_block,
+    load_official,
+)
 from app.db.session import SessionLocal
 from app.models.commission import CommissionRule, CommissionScheme
 from app.models.company import Company, SalesChannel
@@ -18,11 +23,6 @@ from app.models.identity import User
 from app.models.inventory import Block, Project, PropertyListing, PropertyUnit, UnitType
 from app.models.payment import PaymentPlan, PaymentPlanStep
 from app.models.pricing import DiscountRule, PriceTableRow, PricingDocument, PricingVersion
-from app.data.ayat_official_loader import (
-    build_commission_block,
-    build_pricing_block,
-    load_official,
-)
 from app.scripts.seed_demo_data import (
     _get_company,
     _upsert_block,
@@ -119,7 +119,11 @@ def _remove_listings(db: Session, slugs: list[str]) -> None:
 
 def seed_from_data(db: Session, data: dict) -> None:
     official = load_official()
-    data = {**data, "pricing": build_pricing_block(official), "commission": build_commission_block(official)}
+    data = {
+        **data,
+        "pricing": build_pricing_block(official),
+        "commission": build_commission_block(official),
+    }
 
     admin = db.query(User).filter(User.email == "admin@example.com").first()
 
