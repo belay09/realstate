@@ -9,8 +9,11 @@ import type {
   PublicPaymentPreview,
   PublicPricePreview,
 } from '../api/types'
+import { AyatPriceCalculator } from '../components/AyatPriceCalculator'
+import { AYAT_PARTNER } from '../content/partners'
 import { useTranslation } from '../context/LocaleContext'
 import { usePageTitle } from '../hooks/usePageTitle'
+import { presetFromListing } from '../lib/listingCalculatorPreset'
 import { formatMoney } from '../lib/format'
 
 const wa = import.meta.env.VITE_WHATSAPP_E164 as string | undefined
@@ -32,7 +35,7 @@ export function ListingDetailPage() {
 
   const priceQuery = useQuery({
     queryKey: ['public-listing-price', slug],
-    enabled: Boolean(slug),
+    enabled: Boolean(slug) && query.data?.company_slug !== AYAT_PARTNER.slug,
     queryFn: async () => {
       const { data } = await api.get<PublicPricePreview>(`/public/listings/${slug}/price-preview`)
       return data
@@ -108,6 +111,9 @@ export function ListingDetailPage() {
       `Hello, I am interested in: ${listing.title} (${listing.slug})`,
     )}`
 
+  const ayatPreset = presetFromListing(listing)
+  const isAyatListing = listing.company_slug === AYAT_PARTNER.slug
+
   const locationLine = [
     [listing.city, listing.area].filter(Boolean).join(' · ') || t('listingDetail.locationPending'),
     listing.bedrooms != null ? `${listing.bedrooms} ${t('listingDetail.bedrooms')}` : null,
@@ -120,7 +126,9 @@ export function ListingDetailPage() {
     .join(' · ')
 
   return (
-    <article className="mx-auto max-w-4xl space-y-8 text-left">
+    <article
+      className={`mx-auto space-y-8 text-left ${isAyatListing && ayatPreset ? 'max-w-5xl' : 'max-w-4xl'}`}
+    >
       <Link to="/listings" className="text-sm font-semibold text-brand-700 hover:underline dark:text-brand-300">
         {t('listingDetail.allListings')}
       </Link>
@@ -157,15 +165,24 @@ export function ListingDetailPage() {
         </div>
       ) : null}
 
-      <PricePreviewSection query={priceQuery} />
-
-      <PaymentPreviewSection
-        plansQuery={paymentPlansQuery}
-        previewQuery={paymentPreviewQuery}
-        planCode={planCode}
-        onPlanCodeChange={setPlanCode}
-        priceAvailable={!priceQuery.isError && Boolean(priceQuery.data)}
-      />
+      {isAyatListing && ayatPreset ? (
+        <AyatPriceCalculator
+          variant="embedded"
+          listingPreset={ayatPreset}
+          listingTitle={listing.title}
+        />
+      ) : (
+        <>
+          <PricePreviewSection query={priceQuery} />
+          <PaymentPreviewSection
+            plansQuery={paymentPlansQuery}
+            previewQuery={paymentPreviewQuery}
+            planCode={planCode}
+            onPlanCodeChange={setPlanCode}
+            priceAvailable={!priceQuery.isError && Boolean(priceQuery.data)}
+          />
+        </>
+      )}
 
       <div className="flex flex-wrap gap-3">
         {waHref ? (

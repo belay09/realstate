@@ -126,7 +126,7 @@ export const RESIDENTIAL_PRICE_ROWS: ResidentialPriceRow[] = [
 /** CMC near-completion uplift vs unstarted (Section 10, floors 3–10 SFCA sample ratio) */
 export const CMC_NEAR_COMPLETION_PRICE_FACTOR = 185449 / 146489
 
-/** Shop per-sqm from strategy Section 11 (ETB) */
+/** Shop per-sqm from strategy Section 11 (ETB), all floor tiers */
 export const COMMERCIAL_ZONES: CommercialZone[] = [
   {
     id: 'ayat',
@@ -142,6 +142,31 @@ export const COMMERCIAL_ZONES: CommercialZone[] = [
     id: 'bole-bulbula',
     labelKey: 'calculator.shopZones.boleBulbula',
     floors: { GF: 126564, '1F': 130245, '2F': 124324, '3F': 121364 },
+  },
+  {
+    id: 'zone-h2',
+    labelKey: 'calculator.shopZones.zoneH2',
+    floors: { GF: 136165, '1F': 130245, '2F': 124324, '3F': 121364 },
+  },
+  {
+    id: 'mert-1',
+    labelKey: 'calculator.shopZones.mert1',
+    floors: { GF: 129473, '1F': 123844, '2F': 118215, '3F': 115400 },
+  },
+  {
+    id: 'bole-zone-h3',
+    labelKey: 'calculator.shopZones.boleZoneH3',
+    floors: { GF: 136165, '1F': 130245, '2F': 124324, '3F': 121364 },
+  },
+  {
+    id: 'bole-zone-h3-uni',
+    labelKey: 'calculator.shopZones.boleZoneH3Uni',
+    floors: { GF: 129473, '1F': 123844, '2F': 118215, '3F': 115400 },
+  },
+  {
+    id: 'zone-h8-health',
+    labelKey: 'calculator.shopZones.zoneH8Health',
+    floors: { GF: 136165, '1F': 130245, '2F': 124324, '3F': 121364 },
   },
 ]
 
