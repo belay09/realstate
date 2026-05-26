@@ -71,6 +71,9 @@ export function HomePage() {
             >
               {t('home.ayatHomes')}
             </Link>
+            <Link to="/calculator" className="btn-ghost-light">
+              {t('home.priceCalculator')}
+            </Link>
           </div>
         </div>
       </section>

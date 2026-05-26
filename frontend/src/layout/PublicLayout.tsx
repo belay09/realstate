@@ -63,6 +63,18 @@ export function PublicLayout() {
             >
               {t('nav.listings')}
             </NavLink>
+            <NavLink
+              to="/calculator"
+              className={({ isActive }) =>
+                `hidden rounded-full px-4 py-2 md:inline-block ${
+                  isActive
+                    ? 'bg-brand-50 font-semibold text-brand-800 dark:bg-brand-950 dark:text-brand-200'
+                    : 'nav-link'
+                }`
+              }
+            >
+              {t('nav.calculator')}
+            </NavLink>
             <a
               href={AYAT_PARTNER.website}
               target="_blank"
@@ -111,6 +123,11 @@ export function PublicLayout() {
               <li>
                 <Link to="/listings?company_slug=ayat-real-estate" className="transition hover:text-white">
                   {t('footer.ayatHomes')}
+                </Link>
+              </li>
+              <li>
+                <Link to="/calculator" className="transition hover:text-white">
+                  {t('footer.calculator')}
                 </Link>
               </li>
               <li>

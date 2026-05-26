@@ -4,6 +4,7 @@ import { AdminLayout } from './layout/AdminLayout'
 import { PublicLayout } from './layout/PublicLayout'
 import { HomePage } from './pages/HomePage'
 import { ListingDetailPage } from './pages/ListingDetailPage'
+import { AyatCalculatorPage } from './pages/AyatCalculatorPage'
 import { ListingsPage } from './pages/ListingsPage'
 import { AdminBlocksPage } from './pages/admin/AdminBlocksPage'
 import { AdminCompaniesPage } from './pages/admin/AdminCompaniesPage'
@@ -29,6 +30,7 @@ export default function App() {
         <Route index element={<HomePage />} />
         <Route path="listings" element={<ListingsPage />} />
         <Route path="listings/:slug" element={<ListingDetailPage />} />
+        <Route path="calculator" element={<AyatCalculatorPage />} />
       </Route>
 
       <Route path="/admin" element={<ProtectedRoute />}>
