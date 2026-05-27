@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     refresh_token_expire_days: int = 7
     default_currency: str = "ETB"
     quote_expiry_days: int = 7
-    max_upload_size_mb: int = 5
+    max_upload_size_mb: int = 150
     enable_ocr_import: bool = False
     cloudinary_cloud_name: str = ""
     cloudinary_api_key: str = ""
