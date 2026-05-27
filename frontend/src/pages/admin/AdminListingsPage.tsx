@@ -358,6 +358,12 @@ export function AdminListingsPage() {
                 value={createForm.video_url}
                 onChange={(e) => setCreateForm((prev) => ({ ...prev, video_url: e.target.value }))}
               />
+              <InlineUploadToUrlField
+                accept="video/*"
+                buttonLabel="Upload video and fill URL"
+                helperText="Upload MP4/WebM from dashboard and auto-fill this URL."
+                onUploaded={(url) => setCreateForm((prev) => ({ ...prev, video_url: url }))}
+              />
             </label>
             <div className="md:col-span-2">
               <CardEditor
@@ -642,6 +648,12 @@ function LocationContentEditor({
             onChange={(e) => setForm((prev) => ({ ...prev, video_url: e.target.value }))}
             className="input mt-1"
           />
+          <InlineUploadToUrlField
+            accept="video/*"
+            buttonLabel="Upload video and fill URL"
+            helperText="Upload MP4/WebM from dashboard and auto-fill this URL."
+            onUploaded={(url) => setForm((prev) => ({ ...prev, video_url: url }))}
+          />
         </label>
         <div className="md:col-span-2">
           <CardEditor
@@ -832,6 +844,71 @@ function uploadErrorMessage(err: unknown): string {
   return err instanceof Error ? err.message : 'Upload failed'
 }
 
+function InlineUploadToUrlField({
+  accept,
+  buttonLabel,
+  helperText,
+  onUploaded,
+}: {
+  accept: string
+  buttonLabel: string
+  helperText: string
+  onUploaded: (url: string) => void
+}) {
+  const [file, setFile] = useState<File | null>(null)
+  const [uploading, setUploading] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const [error, setError] = useState<string | null>(null)
+
+  return (
+    <div className="mt-2 rounded border border-stone-200 p-2 dark:border-stone-800">
+      <p className="text-[11px] text-stone-500 dark:text-stone-400">{helperText}</p>
+      <div className="mt-1 flex flex-wrap items-center gap-2">
+        <label className="cursor-pointer rounded border border-stone-300 px-2 py-1 text-xs hover:bg-stone-50 dark:border-stone-700 dark:hover:bg-stone-900">
+          Choose file
+          <input
+            type="file"
+            accept={accept}
+            className="hidden"
+            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+          />
+        </label>
+        <span className="max-w-[18rem] truncate text-xs text-stone-600 dark:text-stone-400">
+          {file?.name ?? 'No file selected'}
+        </span>
+        <button
+          type="button"
+          className="btn-secondary"
+          disabled={uploading || !file}
+          onClick={async () => {
+            if (!file || !file.size) return
+            setError(null)
+            setUploading(true)
+            setProgress(0)
+            try {
+              const { secureUrl } = await uploadMediaViaApi(file, setProgress)
+              onUploaded(secureUrl)
+              setFile(null)
+            } catch (err) {
+              setError(uploadErrorMessage(err))
+            } finally {
+              setUploading(false)
+            }
+          }}
+        >
+          {uploading ? `${progress}%` : buttonLabel}
+        </button>
+      </div>
+      {uploading ? (
+        <div className="mt-2 h-1.5 w-full overflow-hidden rounded bg-stone-200 dark:bg-stone-800">
+          <div className="h-full bg-brand-600 transition-[width] duration-150" style={{ width: `${progress}%` }} />
+        </div>
+      ) : null}
+      {error ? <p className="mt-1 text-xs text-red-600">{error}</p> : null}
+    </div>
+  )
+}
+
 function ModalShell({
   title,
   onClose,
@@ -905,6 +982,16 @@ function CardEditor({
             onChange={(e) => {
               const next = [...safeCards]
               next[idx] = { ...next[idx], image_url: e.target.value }
+              onChange(next)
+            }}
+          />
+          <InlineUploadToUrlField
+            accept="image/*"
+            buttonLabel="Upload image and fill URL"
+            helperText="Upload image from dashboard and auto-fill this card URL."
+            onUploaded={(url) => {
+              const next = [...safeCards]
+              next[idx] = { ...next[idx], image_url: url }
               onChange(next)
             }}
           />
