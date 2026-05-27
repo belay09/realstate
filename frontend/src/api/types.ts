@@ -146,6 +146,28 @@ export type PublicLocationContent = {
   }[]
 }
 
+export type HomePageCard = {
+  id: string
+  card_key: string
+  title: string
+  description: string
+  tag: string | null
+  image_url: string | null
+  to_path: string
+  sort_order: number
+  is_active: boolean
+}
+
+export type PublicHomeCard = {
+  card_key: string
+  title: string
+  description: string
+  tag: string | null
+  image_url: string | null
+  to_path: string
+  sort_order: number
+}
+
 export type PublicPricePreview = {
   final_price: string
   currency: string

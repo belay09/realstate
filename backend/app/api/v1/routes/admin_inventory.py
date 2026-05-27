@@ -11,6 +11,7 @@ from app.models.company import Company
 from app.models.identity import User
 from app.models.inventory import (
     Block,
+    HomePageCard,
     LocationContent,
     LocationMedia,
     Project,
@@ -27,6 +28,8 @@ from app.schemas.inventory import (
     CompanyCreate,
     CompanyRead,
     CompanyUpdate,
+    HomePageCardRead,
+    HomePageCardUpsert,
     LocationContentCreate,
     LocationContentRead,
     LocationContentUpdate,
@@ -52,6 +55,27 @@ from app.schemas.inventory import (
 from app.shared.slug import slugify, unique_slug_candidate
 
 router = APIRouter(dependencies=[Depends(require_roles("admin"))])
+
+HOME_CARD_DEFAULTS: dict[str, dict[str, object]] = {
+    "residential": {
+        "title": "Residential",
+        "description": "Browse apartment locations and available options.",
+        "tag": "Homes",
+        "image_url": "",
+        "to_path": "/apartments",
+        "sort_order": 0,
+        "is_active": True,
+    },
+    "commercial": {
+        "title": "Commercial",
+        "description": "Browse shop zones and compare floor rates.",
+        "tag": "Shops",
+        "image_url": "",
+        "to_path": "/shops",
+        "sort_order": 1,
+        "is_active": True,
+    },
+}
 
 
 def _conflict(message: str) -> HTTPException:
@@ -901,3 +925,60 @@ def delete_location_media(
         raise _not_found("Location media")
     db.delete(row)
     db.commit()
+
+
+@router.get("/home-cards", response_model=list[HomePageCardRead])
+def list_home_cards(db: Session = Depends(get_db)) -> list[HomePageCardRead]:
+    rows = db.query(HomePageCard).order_by(HomePageCard.sort_order, HomePageCard.card_key).all()
+    return [HomePageCardRead.model_validate(r) for r in rows]
+
+
+@router.put("/home-cards/{card_key}", response_model=HomePageCardRead)
+def upsert_home_card(
+    card_key: str,
+    body: HomePageCardUpsert,
+    db: Session = Depends(get_db),
+) -> HomePageCardRead:
+    key = card_key.strip().lower()
+    if not key:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"code": "BAD_REQUEST", "message": "card_key is required"},
+        )
+    row = db.query(HomePageCard).filter(HomePageCard.card_key == key).first()
+    if row is None:
+        row = HomePageCard(card_key=key)
+        db.add(row)
+    row.title = body.title
+    row.description = body.description
+    row.tag = body.tag
+    row.image_url = body.image_url
+    row.to_path = body.to_path
+    row.sort_order = body.sort_order
+    row.is_active = body.is_active
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise _conflict("Could not save home page card") from None
+    db.refresh(row)
+    return HomePageCardRead.model_validate(row)
+
+
+@router.post("/home-cards/seed-defaults", response_model=list[HomePageCardRead])
+def seed_default_home_cards(db: Session = Depends(get_db)) -> list[HomePageCardRead]:
+    for key, payload in HOME_CARD_DEFAULTS.items():
+        row = db.query(HomePageCard).filter(HomePageCard.card_key == key).first()
+        if row is None:
+            row = HomePageCard(card_key=key)
+            db.add(row)
+        row.title = str(payload["title"])
+        row.description = str(payload["description"])
+        row.tag = str(payload["tag"]) if payload.get("tag") else None
+        row.image_url = str(payload["image_url"]) if payload.get("image_url") else None
+        row.to_path = str(payload["to_path"])
+        row.sort_order = int(payload["sort_order"])
+        row.is_active = bool(payload["is_active"])
+    db.commit()
+    rows = db.query(HomePageCard).order_by(HomePageCard.sort_order, HomePageCard.card_key).all()
+    return [HomePageCardRead.model_validate(r) for r in rows]

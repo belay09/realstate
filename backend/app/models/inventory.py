@@ -239,3 +239,19 @@ class LocationMedia(Base):
         "LocationContent",
         back_populates="media",
     )
+
+
+class HomePageCard(Base, TimestampMixin):
+    __tablename__ = "home_page_cards"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    card_key: Mapped[str] = mapped_column(String(64), nullable=False, unique=True, index=True)
+    title: Mapped[str] = mapped_column(String(255), nullable=False)
+    description: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    tag: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    image_url: Mapped[str | None] = mapped_column(String(2048), nullable=True)
+    to_path: Mapped[str] = mapped_column(String(255), nullable=False, default="/")
+    sort_order: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True, index=True)

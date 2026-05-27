@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { api } from '../../api/client'
 import type {
   AdminLocationContent,
+  HomePageCard,
   LocationCard,
   LocationMedia,
   Paginated,
@@ -33,6 +34,17 @@ type PendingMedia = {
   is_primary: boolean
 }
 
+type HomeCardFormState = {
+  card_key: string
+  title: string
+  description: string
+  tag: string
+  image_url: string
+  to_path: string
+  sort_order: number
+  is_active: boolean
+}
+
 type ToastLevel = 'success' | 'error'
 type ToastItem = { id: number; level: ToastLevel; message: string }
 
@@ -46,6 +58,7 @@ export function AdminListingsPage() {
   const [createSubmitError, setCreateSubmitError] = useState<string | null>(null)
   const [createPendingMedia, setCreatePendingMedia] = useState<PendingMedia[]>([])
   const [toasts, setToasts] = useState<ToastItem[]>([])
+  const [homeCardForms, setHomeCardForms] = useState<HomeCardFormState[]>([])
   const [createForm, setCreateForm] = useState<CreateFormState>({
     kind: 'apartment',
     location_id: '',
@@ -63,6 +76,13 @@ export function AdminListingsPage() {
       const { data } = await api.get<Paginated<AdminLocationContent>>('/admin/location-content', {
         params: { limit: 200 },
       })
+      return data
+    },
+  })
+  const homeCards = useQuery({
+    queryKey: ['admin', 'home-cards'],
+    queryFn: async () => {
+      const { data } = await api.get<HomePageCard[]>('/admin/home-cards')
       return data
     },
   })
@@ -178,6 +198,48 @@ export function AdminListingsPage() {
       pushToast('error', uploadErrorMessage(err))
     },
   })
+  const seedHomeCards = useMutation({
+    mutationFn: () => api.post<HomePageCard[]>('/admin/home-cards/seed-defaults'),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin', 'home-cards'] })
+      pushToast('success', 'Home cards seeded.')
+    },
+    onError: (err) => pushToast('error', uploadErrorMessage(err)),
+  })
+  const saveHomeCard = useMutation({
+    mutationFn: (body: HomeCardFormState) =>
+      api.put<HomePageCard>(`/admin/home-cards/${body.card_key}`, {
+        title: body.title,
+        description: body.description,
+        tag: body.tag || null,
+        image_url: body.image_url || null,
+        to_path: body.to_path,
+        sort_order: body.sort_order,
+        is_active: body.is_active,
+      }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin', 'home-cards'] })
+      pushToast('success', 'Home card saved.')
+    },
+    onError: (err) => pushToast('error', uploadErrorMessage(err)),
+  })
+
+  useEffect(() => {
+    const rows = homeCards.data ?? []
+    if (!rows.length) return
+    setHomeCardForms(
+      rows.map((r) => ({
+        card_key: r.card_key,
+        title: r.title,
+        description: r.description,
+        tag: r.tag ?? '',
+        image_url: r.image_url ?? '',
+        to_path: r.to_path,
+        sort_order: r.sort_order,
+        is_active: r.is_active,
+      })),
+    )
+  }, [homeCards.data])
 
   return (
     <div className="space-y-8 text-left">
@@ -186,6 +248,114 @@ export function AdminListingsPage() {
         Manage apartment and shop detail pages in one place: description, media (image/video), bedroom
         cards, and calculator context. Users see this immediately after clicking a location card.
       </p>
+
+      <section className="space-y-4 rounded-xl border border-stone-200 bg-white p-4 dark:border-stone-800 dark:bg-stone-950">
+        <h2 className="text-base font-semibold text-stone-900 dark:text-stone-50">Home page cards CMS</h2>
+        <p className="text-sm text-stone-600 dark:text-stone-400">
+          Edit only the residential/commercial cards shown on the home page.
+        </p>
+        <div>
+          <button
+            type="button"
+            className="btn-secondary"
+            onClick={() => seedHomeCards.mutate()}
+            disabled={seedHomeCards.isPending}
+          >
+            {seedHomeCards.isPending ? 'Seeding home cards...' : 'Seed home cards'}
+          </button>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          {homeCardForms.map((card, idx) => (
+            <form
+              key={card.card_key}
+              className="space-y-2 rounded-lg border border-stone-200 p-3 dark:border-stone-800"
+              onSubmit={(e) => {
+                e.preventDefault()
+                saveHomeCard.mutate(card)
+              }}
+            >
+              <p className="text-xs font-semibold text-stone-700 dark:text-stone-300">{card.card_key}</p>
+              <input
+                className="input"
+                placeholder="Title"
+                value={card.title}
+                onChange={(e) =>
+                  setHomeCardForms((prev) =>
+                    prev.map((x, i) => (i === idx ? { ...x, title: e.target.value } : x)),
+                  )
+                }
+              />
+              <textarea
+                className="input min-h-[80px]"
+                placeholder="Description"
+                value={card.description}
+                onChange={(e) =>
+                  setHomeCardForms((prev) =>
+                    prev.map((x, i) => (i === idx ? { ...x, description: e.target.value } : x)),
+                  )
+                }
+              />
+              <input
+                className="input"
+                placeholder="Tag"
+                value={card.tag}
+                onChange={(e) =>
+                  setHomeCardForms((prev) =>
+                    prev.map((x, i) => (i === idx ? { ...x, tag: e.target.value } : x)),
+                  )
+                }
+              />
+              <input
+                className="input"
+                placeholder="/apartments or /shops"
+                value={card.to_path}
+                onChange={(e) =>
+                  setHomeCardForms((prev) =>
+                    prev.map((x, i) => (i === idx ? { ...x, to_path: e.target.value } : x)),
+                  )
+                }
+              />
+              <input
+                className="input"
+                placeholder="Image URL"
+                value={card.image_url}
+                onChange={(e) =>
+                  setHomeCardForms((prev) =>
+                    prev.map((x, i) => (i === idx ? { ...x, image_url: e.target.value } : x)),
+                  )
+                }
+              />
+              <InlineUploadToUrlField
+                accept="image/*"
+                buttonLabel="Upload image and fill URL"
+                helperText="Uploads image and updates this home card image."
+                onNotify={pushToast}
+                currentUrl={card.image_url}
+                onUploaded={(url) =>
+                  setHomeCardForms((prev) =>
+                    prev.map((x, i) => (i === idx ? { ...x, image_url: url } : x)),
+                  )
+                }
+              />
+              <label className="flex items-center gap-2 text-xs text-stone-600 dark:text-stone-400">
+                <input
+                  type="checkbox"
+                  checked={card.is_active}
+                  onChange={(e) =>
+                    setHomeCardForms((prev) =>
+                      prev.map((x, i) => (i === idx ? { ...x, is_active: e.target.checked } : x)),
+                    )
+                  }
+                />
+                Active on home page
+              </label>
+              <button className="btn-primary" type="submit" disabled={saveHomeCard.isPending}>
+                Save home card
+              </button>
+            </form>
+          ))}
+        </div>
+      </section>
 
       <section className="space-y-4 rounded-xl border border-stone-200 bg-white p-4 dark:border-stone-800 dark:bg-stone-950">
         <h2 className="text-base font-semibold text-stone-900 dark:text-stone-50">
@@ -349,6 +519,7 @@ export function AdminListingsPage() {
                 buttonLabel="Upload cover image"
                 helperText="This controls the top location card image."
                 onNotify={pushToast}
+                currentUrl={createPrimaryImageUrl}
                 onUploaded={(url) =>
                   setCreatePendingMedia((prev) => {
                     const next = prev.map((m) => ({ ...m, is_primary: false }))
@@ -399,6 +570,7 @@ export function AdminListingsPage() {
                 buttonLabel="Upload video and fill URL"
                 helperText="Upload MP4/WebM from dashboard and auto-fill this URL."
                 onNotify={pushToast}
+                currentUrl={createForm.video_url}
                 onUploaded={(url) => setCreateForm((prev) => ({ ...prev, video_url: url }))}
               />
             </label>
@@ -526,6 +698,10 @@ function LocationContentEditor({
 
   if (!content) return null
   const detectedType: 'image' | 'video' = uploadFile?.type.startsWith('video/') ? 'video' : 'image'
+  const currentCoverUrl =
+    media.data?.find((m) => m.media_type === 'image' && m.is_primary)?.url ??
+    media.data?.find((m) => m.media_type === 'image')?.url ??
+    ''
 
   return (
     <div className="space-y-3 rounded-xl border border-stone-200 p-4 dark:border-stone-800">
@@ -577,6 +753,7 @@ function LocationContentEditor({
             buttonLabel="Upload cover image"
             helperText="Uploads image and sets it as primary location media."
             onNotify={onNotify}
+            currentUrl={currentCoverUrl}
             onUploaded={async (url) => {
               await addMedia.mutateAsync({
                 url,
@@ -611,6 +788,7 @@ function LocationContentEditor({
             buttonLabel="Upload video and fill URL"
             helperText="Upload MP4/WebM from dashboard and auto-fill this URL."
             onNotify={onNotify}
+            currentUrl={form.video_url}
             onUploaded={(url) => setForm((prev) => ({ ...prev, video_url: url }))}
           />
         </label>
@@ -826,60 +1004,79 @@ function InlineUploadToUrlField({
   buttonLabel,
   helperText,
   onNotify,
+  currentUrl,
   onUploaded,
 }: {
   accept: string
   buttonLabel: string
   helperText: string
   onNotify: (level: ToastLevel, message: string) => void
+  currentUrl?: string
   onUploaded: (url: string) => void | Promise<void>
 }) {
   const [file, setFile] = useState<File | null>(null)
   const [uploading, setUploading] = useState(false)
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState<string | null>(null)
+  const [uploadedUrl, setUploadedUrl] = useState('')
+  const previewUrl = uploadedUrl || currentUrl || ''
+  const isVideoPreview = previewUrl
+    ? /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(previewUrl) || accept.startsWith('video/')
+    : false
 
   return (
     <div className="mt-2 rounded border border-stone-200 p-2 dark:border-stone-800">
       <p className="text-[11px] text-stone-500 dark:text-stone-400">{helperText}</p>
-      <div className="mt-1 flex flex-wrap items-center gap-2">
-        <label className="cursor-pointer rounded border border-stone-300 px-2 py-1 text-xs hover:bg-stone-50 dark:border-stone-700 dark:hover:bg-stone-900">
-          Choose file
-          <input
-            type="file"
-            accept={accept}
-            className="hidden"
-            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-          />
-        </label>
-        <span className="max-w-[18rem] truncate text-xs text-stone-600 dark:text-stone-400">
-          {file?.name ?? 'No file selected'}
-        </span>
-        <button
-          type="button"
-          className="btn-secondary"
-          disabled={uploading || !file}
-          onClick={async () => {
-            if (!file || !file.size) return
-            setError(null)
-            setUploading(true)
-            setProgress(0)
-            try {
-              const { secureUrl } = await uploadMediaViaApi(file, setProgress)
-              await onUploaded(secureUrl)
-              setFile(null)
-              onNotify('success', 'Upload completed.')
-            } catch (err) {
-              const message = uploadErrorMessage(err)
-              setError(message)
-              onNotify('error', message)
-            } finally {
-              setUploading(false)
-            }
-          }}
-        >
-          {uploading ? `${progress}%` : buttonLabel}
-        </button>
+      <div className="mt-1 grid gap-2 md:grid-cols-[1fr_10rem] md:items-start">
+        <div className="flex flex-wrap items-center gap-2">
+          <label className="cursor-pointer rounded border border-stone-300 px-2 py-1 text-xs hover:bg-stone-50 dark:border-stone-700 dark:hover:bg-stone-900">
+            Choose file
+            <input
+              type="file"
+              accept={accept}
+              className="hidden"
+              onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+            />
+          </label>
+          <span className="max-w-[18rem] truncate text-xs text-stone-600 dark:text-stone-400">
+            {file?.name ?? 'No file selected'}
+          </span>
+          <button
+            type="button"
+            className="btn-secondary"
+            disabled={uploading || !file}
+            onClick={async () => {
+              if (!file || !file.size) return
+              setError(null)
+              setUploading(true)
+              setProgress(0)
+              try {
+                const { secureUrl } = await uploadMediaViaApi(file, setProgress)
+                await onUploaded(secureUrl)
+                setUploadedUrl(secureUrl)
+                setFile(null)
+                onNotify('success', 'Upload completed.')
+              } catch (err) {
+                const message = uploadErrorMessage(err)
+                setError(message)
+                onNotify('error', message)
+              } finally {
+                setUploading(false)
+              }
+            }}
+          >
+            {uploading ? `${progress}%` : buttonLabel}
+          </button>
+        </div>
+        {previewUrl ? (
+          <div className="overflow-hidden rounded border border-stone-200 dark:border-stone-700">
+            {isVideoPreview ? (
+              <video src={previewUrl} controls className="h-24 w-full bg-black object-cover" />
+            ) : (
+              <img src={previewUrl} alt="Uploaded preview" className="h-24 w-full object-cover" />
+            )}
+          </div>
+        ) : null}
       </div>
       {uploading ? (
         <div className="mt-2 h-1.5 w-full overflow-hidden rounded bg-stone-200 dark:bg-stone-800">
@@ -992,6 +1189,7 @@ function CardEditor({
             buttonLabel="Upload image and fill URL"
             helperText="Upload image from dashboard and auto-fill this card URL."
             onNotify={onNotify}
+            currentUrl={card.image_url ?? ''}
             onUploaded={(url) => {
               const next = [...safeCards]
               next[idx] = { ...next[idx], image_url: url }

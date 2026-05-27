@@ -317,6 +317,32 @@ class LocationContentRead(BaseModel):
     updated_at: datetime
 
 
+class HomePageCardUpsert(BaseModel):
+    title: str = Field(min_length=1, max_length=255)
+    description: str = Field(default="", max_length=4000)
+    tag: str | None = Field(default=None, max_length=64)
+    image_url: str | None = Field(default=None, max_length=2048)
+    to_path: str = Field(default="/", max_length=255)
+    sort_order: int = 0
+    is_active: bool = True
+
+
+class HomePageCardRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    card_key: str
+    title: str
+    description: str
+    tag: str | None
+    image_url: str | None
+    to_path: str
+    sort_order: int
+    is_active: bool
+    created_at: datetime
+    updated_at: datetime
+
+
 # --- Public ---
 
 
@@ -373,3 +399,13 @@ class PublicLocationContent(BaseModel):
     video_url: str | None
     cards: list[LocationCard]
     media: list[dict[str, object]]
+
+
+class PublicHomeCard(BaseModel):
+    card_key: str
+    title: str
+    description: str
+    tag: str | None
+    image_url: str | None
+    to_path: str
+    sort_order: int

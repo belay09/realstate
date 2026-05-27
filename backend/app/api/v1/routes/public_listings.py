@@ -10,6 +10,7 @@ from app.api.deps import get_db
 from app.models.company import Company
 from app.models.inventory import (
     Block,
+    HomePageCard,
     LocationContent,
     Project,
     PropertyListing,
@@ -20,6 +21,7 @@ from app.models.payment import PaymentPlan
 from app.schemas.inventory import (
     Paginated,
     PublicFilterOption,
+    PublicHomeCard,
     PublicListingDetail,
     PublicListingFilterOptions,
     PublicListingImage,
@@ -431,4 +433,26 @@ def public_listing_payment_preview(
         down_payment_amount=down,
         items=items,
     )
+
+
+@router.get("/home-cards", response_model=list[PublicHomeCard])
+def get_public_home_cards(db: Session = Depends(get_db)) -> list[PublicHomeCard]:
+    rows = (
+        db.query(HomePageCard)
+        .filter(HomePageCard.is_active.is_(True))
+        .order_by(HomePageCard.sort_order, HomePageCard.card_key)
+        .all()
+    )
+    return [
+        PublicHomeCard(
+            card_key=r.card_key,
+            title=r.title,
+            description=r.description,
+            tag=r.tag,
+            image_url=r.image_url,
+            to_path=r.to_path,
+            sort_order=r.sort_order,
+        )
+        for r in rows
+    ]
 

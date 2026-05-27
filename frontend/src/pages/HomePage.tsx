@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
 
+import { api } from '../api/client'
+import type { PublicHomeCard } from '../api/types'
 import { BelayRoleSection } from '../components/BelayRoleSection'
 import { PartnerAyatSection } from '../components/PartnerAyatSection'
 import { SectionHeader } from '../components/SectionHeader'
@@ -22,8 +25,15 @@ export function HomePage() {
   const { t, messages } = useTranslation()
   usePageTitle(t('pageTitles.home'))
   const adminPath = useAdminEntryPath()
+  const homeCardsQuery = useQuery({
+    queryKey: ['public-home-cards'],
+    queryFn: async () => {
+      const { data } = await api.get<PublicHomeCard[]>('/public/home-cards')
+      return data
+    },
+  })
 
-  const categoryCards = CATEGORY_CARD_KEYS.map((key) => ({
+  const fallbackCards = CATEGORY_CARD_KEYS.map((key) => ({
     key,
     title:
       key === 'residential' ? t('home.cardResidentialTitle') : t('home.cardCommercialTitle'),
@@ -35,6 +45,23 @@ export function HomePage() {
     image: CATEGORY_IMAGES[key],
     to: key === 'residential' ? '/apartments' : '/shops',
   }))
+  const categoryCards =
+    homeCardsQuery.data && homeCardsQuery.data.length > 0
+      ? homeCardsQuery.data.map((card) => ({
+          key: card.card_key,
+          title: card.title,
+          description: card.description,
+          tag:
+            card.tag ??
+            (card.card_key === 'residential' ? t('home.cardTagHomes') : t('home.cardTagShops')),
+          image:
+            card.image_url ||
+            CATEGORY_IMAGES[
+              card.card_key === 'commercial' ? 'commercial' : 'residential'
+            ],
+          to: card.to_path || (card.card_key === 'commercial' ? '/shops' : '/apartments'),
+        }))
+      : fallbackCards
 
   const heroStats = [
     { value: AYAT_PARTNER.yearsEstablished, label: t('home.statYears') },
