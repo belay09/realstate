@@ -1,26 +1,25 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, useParams } from 'react-router-dom'
 
 import { AdminLayout } from './layout/AdminLayout'
 import { PublicLayout } from './layout/PublicLayout'
 import { HomePage } from './pages/HomePage'
 import { ListingDetailPage } from './pages/ListingDetailPage'
 import { AyatCalculatorPage } from './pages/AyatCalculatorPage'
-import { ListingsPage } from './pages/ListingsPage'
+import { ApartmentsPage } from './pages/ApartmentsPage'
 import { ProjectListingsPage } from './pages/ProjectListingsPage'
-import { AdminBlocksPage } from './pages/admin/AdminBlocksPage'
-import { AdminCompaniesPage } from './pages/admin/AdminCompaniesPage'
+import { ShopLocationsPage } from './pages/ShopLocationsPage'
+import { ShopLocationPage } from './pages/ShopLocationPage'
 import { AdminDashboardPage } from './pages/admin/AdminDashboardPage'
-import { AdminContractsPage } from './pages/admin/AdminContractsPage'
 import { AdminLeadsPage } from './pages/admin/AdminLeadsPage'
 import { AdminListingsPage } from './pages/admin/AdminListingsPage'
 import { AdminPricingPage } from './pages/admin/AdminPricingPage'
 import { AdminLoginPage } from './pages/admin/AdminLoginPage'
-import { AdminPaymentPlansPage } from './pages/admin/AdminPaymentPlansPage'
-import { AdminQuotesPage } from './pages/admin/AdminQuotesPage'
-import { AdminProjectsPage } from './pages/admin/AdminProjectsPage'
-import { AdminUnitTypesPage } from './pages/admin/AdminUnitTypesPage'
-import { AdminUnitsPage } from './pages/admin/AdminUnitsPage'
 import { ProtectedRoute } from './routes/ProtectedRoute'
+
+function LegacyProjectRedirect() {
+  const { projectSlug } = useParams<{ projectSlug: string }>()
+  return <Navigate to={`/apartments/${projectSlug ?? ''}`} replace />
+}
 
 export default function App() {
   return (
@@ -29,8 +28,12 @@ export default function App() {
 
       <Route element={<PublicLayout />}>
         <Route index element={<HomePage />} />
-        <Route path="listings" element={<ListingsPage />} />
-        <Route path="listings/project/:projectSlug" element={<ProjectListingsPage />} />
+        <Route path="apartments" element={<ApartmentsPage />} />
+        <Route path="apartments/:projectSlug" element={<ProjectListingsPage />} />
+        <Route path="shops" element={<ShopLocationsPage />} />
+        <Route path="shops/:zoneId" element={<ShopLocationPage />} />
+        <Route path="listings" element={<Navigate to="/apartments" replace />} />
+        <Route path="listings/project/:projectSlug" element={<LegacyProjectRedirect />} />
         <Route path="listings/:slug" element={<ListingDetailPage />} />
         <Route path="calculator" element={<AyatCalculatorPage />} />
       </Route>
@@ -38,17 +41,10 @@ export default function App() {
       <Route path="/admin" element={<ProtectedRoute />}>
         <Route element={<AdminLayout />}>
           <Route index element={<AdminDashboardPage />} />
-          <Route path="companies" element={<AdminCompaniesPage />} />
-          <Route path="projects" element={<AdminProjectsPage />} />
-          <Route path="blocks" element={<AdminBlocksPage />} />
-          <Route path="unit-types" element={<AdminUnitTypesPage />} />
-          <Route path="units" element={<AdminUnitsPage />} />
           <Route path="listings" element={<AdminListingsPage />} />
-          <Route path="payment-plans" element={<AdminPaymentPlansPage />} />
-          <Route path="quotes" element={<AdminQuotesPage />} />
           <Route path="leads" element={<AdminLeadsPage />} />
           <Route path="pricing" element={<AdminPricingPage />} />
-          <Route path="contracts" element={<AdminContractsPage />} />
+          <Route path="*" element={<Navigate to="/admin" replace />} />
         </Route>
       </Route>
 

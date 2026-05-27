@@ -20,7 +20,14 @@ from app.db.session import SessionLocal
 from app.models.commission import CommissionRule, CommissionScheme
 from app.models.company import Company, SalesChannel
 from app.models.identity import User
-from app.models.inventory import Block, Project, PropertyListing, PropertyUnit, UnitType
+from app.models.inventory import (
+    Block,
+    LocationContent,
+    Project,
+    PropertyListing,
+    PropertyUnit,
+    UnitType,
+)
 from app.models.payment import PaymentPlan, PaymentPlanStep
 from app.models.pricing import DiscountRule, PriceTableRow, PricingDocument, PricingVersion
 from app.scripts.seed_demo_data import (
@@ -34,6 +41,12 @@ from app.scripts.seed_demo_data import (
 )
 
 DEFAULT_DATA_PATH = Path(__file__).resolve().parents[2] / "data" / "ayat_production.json"
+REFERENCE_IMAGE_FILES = [
+    "photo_2026-05-12_15-54-55.jpg",
+    "photo_2026-05-12_15-59-35.jpg",
+    "photo_2026-05-12_15-59-40.jpg",
+    "photo_2026-05-12_15-59-45.jpg",
+]
 
 
 def _load_data(path: Path) -> dict:
@@ -223,6 +236,7 @@ def seed_from_data(db: Session, data: dict) -> None:
     _seed_pricing(db, company=company, project_by_slug=project_by_slug, pricing=data["pricing"])
     _seed_payment_plans(db, company=company, plans=data.get("payment_plans") or [])
     _seed_commission(db, company=company, commission=data.get("commission") or {})
+    _seed_location_content(db, project_by_slug=project_by_slug, official=official)
 
     db.commit()
 
@@ -231,6 +245,7 @@ def seed_from_data(db: Session, data: dict) -> None:
     print(f"Projects: {', '.join(project_by_slug.keys())}")
     print(f"Public listings: {len(data.get('listings', []))}")
     print(f"Pricing version: {data['pricing']['version_name']}")
+    print("Location CMS content: seeded from official Ayat reference")
     print("\nPublic URLs (examples):")
     for listing in data.get("listings", []):
         if listing.get("is_public", True):
@@ -400,6 +415,131 @@ def _seed_commission(db: Session, *, company: Company, commission: dict) -> None
                 name=channel["name"],
                 is_active=True,
             )
+        )
+
+
+def _upsert_location_content(
+    db: Session,
+    *,
+    kind: str,
+    location_id: str,
+    title: str,
+    subtitle: str,
+    description: str,
+    cards: list[dict[str, str | None]],
+) -> None:
+    row = (
+        db.query(LocationContent)
+        .filter(LocationContent.kind == kind, LocationContent.location_id == location_id)
+        .first()
+    )
+    payload_cards = [
+        {
+            "title": c.get("title") or "",
+            "body": c.get("body"),
+            "image_url": c.get("image_url"),
+        }
+        for c in cards
+    ]
+    if row:
+        row.title = title
+        row.subtitle = subtitle
+        row.description = description
+        row.cards = payload_cards
+        row.is_public = True
+        return
+    db.add(
+        LocationContent(
+            kind=kind,
+            location_id=location_id,
+            title=title,
+            subtitle=subtitle,
+            description=description,
+            cards=payload_cards,
+            is_public=True,
+        )
+    )
+
+
+def _seed_location_content(db: Session, *, project_by_slug: dict[str, Project], official) -> None:
+    pricing_map = official["section10_apartments"]["listing_project_map"]
+    locations = official["section10_apartments"]["locations"]
+    bedroom_sizes = official["section2_bedroom_sizes_sqm"]
+    refs = ", ".join(REFERENCE_IMAGE_FILES)
+
+    for slug, project in project_by_slug.items():
+        source_key = pricing_map.get(slug, {}).get("source")
+        if not source_key:
+            source_key = "cmc-unstarted"
+        src = locations.get(source_key) or {}
+        cards = [
+            {
+                "title": "2 bedroom (semi-finished)",
+                "body": (
+                    f"Sizes {bedroom_sizes['2'][0]}-{bedroom_sizes['2'][1]} m². "
+                    f"From {src.get('SFCA', {}).get('3-10', '-'):,} ETB/m² (3-10 floor band)."
+                    if src.get("SFCA", {}).get("3-10")
+                    else "Sizes and prices follow official Ayat Section 10."
+                ),
+                "image_url": None,
+            },
+            {
+                "title": "3 bedroom (regular-finished)",
+                "body": (
+                    f"Sizes {bedroom_sizes['3'][0]}-{bedroom_sizes['3'][-1]} m². "
+                    f"From {src.get('RFCR', {}).get('3-10', '-'):,} ETB/m² (3-10 floor band)."
+                    if src.get("RFCR", {}).get("3-10")
+                    else "Sizes and prices follow official Ayat Section 10."
+                ),
+                "image_url": None,
+            },
+            {
+                "title": "Official source reference",
+                "body": f"Ayat/116/2018 scanned pages used as reference: {refs}",
+                "image_url": None,
+            },
+        ]
+        _upsert_location_content(
+            db,
+            kind="apartment",
+            location_id=slug,
+            title=project.area or project.name,
+            subtitle=project.name,
+            description=(
+                "Official Ayat apartment location page. Configure video/images and update cards from admin."
+            ),
+            cards=cards,
+        )
+
+    for zone in official["section11_shops"]["zones"]:
+        floor_cards = []
+        for floor in ("GF", "1F", "2F", "3F"):
+            val = zone["floors"].get(floor)
+            if val:
+                floor_cards.append(
+                    {
+                        "title": f"{floor} floor",
+                        "body": f"{val:,} ETB per m²",
+                        "image_url": None,
+                    }
+                )
+        floor_cards.append(
+            {
+                "title": "Official source reference",
+                "body": f"Ayat/116/2018 scanned pages used as reference: {refs}",
+                "image_url": None,
+            }
+        )
+        _upsert_location_content(
+            db,
+            kind="shop",
+            location_id=zone["id"],
+            title=zone["label"],
+            subtitle="Ayat commercial shops (Section 11)",
+            description=(
+                "Official shop rates and payment terms. Configure location media/video from admin dashboard."
+            ),
+            cards=floor_cards,
         )
 
 

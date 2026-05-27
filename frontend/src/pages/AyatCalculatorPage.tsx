@@ -16,5 +16,13 @@ export function AyatCalculatorPage() {
   const { t } = useTranslation()
   const [searchParams] = useSearchParams()
   usePageTitle(t('pageTitles.calculator'))
-  return <AyatPriceCalculator variant="page" initialKind={initialKindFromSearch(searchParams)} />
+  const kind = initialKindFromSearch(searchParams)
+  const zone = searchParams.get('zone') ?? searchParams.get('shop_zone')
+  return (
+    <AyatPriceCalculator
+      variant="page"
+      initialKind={kind}
+      initialShopZoneId={kind === 'commercial' ? zone : null}
+    />
+  )
 }

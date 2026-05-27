@@ -251,6 +251,72 @@ class PropertyImageRead(BaseModel):
     created_at: datetime
 
 
+# --- Location content (admin + public) ---
+
+
+class LocationMediaCreate(BaseModel):
+    url: str = Field(min_length=1, max_length=2048)
+    media_type: str = Field(default="image", pattern="^(image|video)$")
+    caption: str | None = Field(default=None, max_length=512)
+    sort_order: int = 0
+    is_primary: bool = False
+
+
+class LocationMediaRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    location_content_id: UUID
+    url: str
+    media_type: str
+    caption: str | None
+    sort_order: int
+    is_primary: bool
+    created_at: datetime
+
+
+class LocationCard(BaseModel):
+    title: str = Field(min_length=1, max_length=255)
+    body: str | None = None
+    image_url: str | None = Field(default=None, max_length=2048)
+
+
+class LocationContentCreate(BaseModel):
+    kind: str = Field(pattern="^(apartment|shop)$")
+    location_id: str = Field(min_length=1, max_length=255)
+    title: str = Field(min_length=1, max_length=255)
+    subtitle: str | None = Field(default=None, max_length=255)
+    description: str | None = None
+    video_url: str | None = Field(default=None, max_length=2048)
+    cards: list[LocationCard] = []
+    is_public: bool = True
+
+
+class LocationContentUpdate(BaseModel):
+    title: str | None = Field(default=None, min_length=1, max_length=255)
+    subtitle: str | None = Field(default=None, max_length=255)
+    description: str | None = None
+    video_url: str | None = Field(default=None, max_length=2048)
+    cards: list[LocationCard] | None = None
+    is_public: bool | None = None
+
+
+class LocationContentRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    kind: str
+    location_id: str
+    title: str
+    subtitle: str | None
+    description: str | None
+    video_url: str | None
+    cards: list[LocationCard]
+    is_public: bool
+    created_at: datetime
+    updated_at: datetime
+
+
 # --- Public ---
 
 
@@ -296,3 +362,14 @@ class PublicListingFilterOptions(BaseModel):
     bedrooms: list[PublicFilterOption]
     companies: list[PublicFilterOption]
     unit_types: list[PublicFilterOption]
+
+
+class PublicLocationContent(BaseModel):
+    kind: str
+    location_id: str
+    title: str | None
+    subtitle: str | None
+    description: str | None
+    video_url: str | None
+    cards: list[LocationCard]
+    media: list[dict[str, object]]

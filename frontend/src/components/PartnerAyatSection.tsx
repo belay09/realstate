@@ -52,7 +52,7 @@ export function PartnerAyatSection({ compact = false }: PartnerAyatSectionProps)
             ))}
           </ul>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Link to="/listings?company_slug=ayat-real-estate" className="btn-primary">
+            <Link to="/apartments" className="btn-primary">
               {t('ayat.browseAyat')}
             </Link>
             <a

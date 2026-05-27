@@ -11,6 +11,8 @@ from app.models.company import Company
 from app.models.identity import User
 from app.models.inventory import (
     Block,
+    LocationContent,
+    LocationMedia,
     Project,
     PropertyImage,
     PropertyListing,
@@ -25,6 +27,11 @@ from app.schemas.inventory import (
     CompanyCreate,
     CompanyRead,
     CompanyUpdate,
+    LocationContentCreate,
+    LocationContentRead,
+    LocationContentUpdate,
+    LocationMediaCreate,
+    LocationMediaRead,
     Paginated,
     ProjectCreate,
     ProjectRead,
@@ -744,4 +751,149 @@ def delete_listing_image(
     if image is None:
         raise _not_found("Image")
     db.delete(image)
+    db.commit()
+
+
+# --- Location content ---
+
+
+@router.get("/location-content", response_model=Paginated[LocationContentRead])
+def list_location_content(
+    db: Session = Depends(get_db),
+    kind: str | None = Query(default=None),
+    skip: int = Query(0, ge=0),
+    limit: int = Query(100, ge=1, le=200),
+) -> Paginated[LocationContentRead]:
+    q = db.query(LocationContent)
+    if kind in {"apartment", "shop"}:
+        q = q.filter(LocationContent.kind == kind)
+    total = q.count()
+    rows = (
+        q.order_by(LocationContent.kind, LocationContent.location_id)
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+    return Paginated(items=[LocationContentRead.model_validate(r) for r in rows], total=total)
+
+
+@router.post("/location-content", response_model=LocationContentRead, status_code=status.HTTP_201_CREATED)
+def create_location_content(
+    body: LocationContentCreate,
+    db: Session = Depends(get_db),
+) -> LocationContentRead:
+    row = LocationContent(
+        kind=body.kind,
+        location_id=body.location_id,
+        title=body.title,
+        subtitle=body.subtitle,
+        description=body.description,
+        video_url=body.video_url,
+        cards=[c.model_dump() for c in body.cards],
+        is_public=body.is_public,
+    )
+    db.add(row)
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise _conflict("Location content already exists for this location") from None
+    db.refresh(row)
+    return LocationContentRead.model_validate(row)
+
+
+@router.patch("/location-content/{content_id}", response_model=LocationContentRead)
+def update_location_content(
+    content_id: UUID,
+    body: LocationContentUpdate,
+    db: Session = Depends(get_db),
+) -> LocationContentRead:
+    row = db.query(LocationContent).filter(LocationContent.id == content_id).first()
+    if row is None:
+        raise _not_found("Location content")
+    data = body.model_dump(exclude_unset=True)
+    if "cards" in data and data["cards"] is not None:
+        data["cards"] = [c.model_dump() for c in body.cards or []]
+    for k, v in data.items():
+        setattr(row, k, v)
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise _conflict("Could not update location content") from None
+    db.refresh(row)
+    return LocationContentRead.model_validate(row)
+
+
+@router.delete("/location-content/{content_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_location_content(
+    content_id: UUID,
+    db: Session = Depends(get_db),
+) -> None:
+    row = db.query(LocationContent).filter(LocationContent.id == content_id).first()
+    if row is None:
+        raise _not_found("Location content")
+    db.delete(row)
+    db.commit()
+
+
+@router.get("/location-content/{content_id}/media", response_model=list[LocationMediaRead])
+def list_location_media(content_id: UUID, db: Session = Depends(get_db)) -> list[LocationMediaRead]:
+    row = db.query(LocationContent).filter(LocationContent.id == content_id).first()
+    if row is None:
+        raise _not_found("Location content")
+    media = sorted(row.media, key=lambda m: (not m.is_primary, m.sort_order, m.id))
+    return [LocationMediaRead.model_validate(m) for m in media]
+
+
+@router.post(
+    "/location-content/{content_id}/media",
+    response_model=LocationMediaRead,
+    status_code=status.HTTP_201_CREATED,
+)
+def add_location_media(
+    content_id: UUID,
+    body: LocationMediaCreate,
+    db: Session = Depends(get_db),
+) -> LocationMediaRead:
+    row = db.query(LocationContent).filter(LocationContent.id == content_id).first()
+    if row is None:
+        raise _not_found("Location content")
+    if body.is_primary:
+        for m in row.media:
+            m.is_primary = False
+    media = LocationMedia(
+        location_content_id=content_id,
+        url=body.url,
+        media_type=body.media_type,
+        caption=body.caption,
+        sort_order=body.sort_order,
+        is_primary=body.is_primary,
+    )
+    db.add(media)
+    db.commit()
+    db.refresh(media)
+    return LocationMediaRead.model_validate(media)
+
+
+@router.delete(
+    "/location-content/{content_id}/media/{media_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def delete_location_media(
+    content_id: UUID,
+    media_id: UUID,
+    db: Session = Depends(get_db),
+) -> None:
+    row = (
+        db.query(LocationMedia)
+        .filter(
+            LocationMedia.id == media_id,
+            LocationMedia.location_content_id == content_id,
+        )
+        .first()
+    )
+    if row is None:
+        raise _not_found("Location media")
+    db.delete(row)
     db.commit()

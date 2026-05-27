@@ -103,8 +103,8 @@ export function ListingDetailPage() {
     return (
       <div className="space-y-4 text-left">
         <p className="text-sm text-red-700 dark:text-red-400">{t('listingDetail.notFound')}</p>
-        <Link to="/listings" className="text-sm font-semibold text-brand-700 underline dark:text-brand-300">
-          {t('listingDetail.backToListings')}
+        <Link to="/apartments" className="text-sm font-semibold text-brand-700 underline dark:text-brand-300">
+          {t('listingDetail.backToApartments')}
         </Link>
       </div>
     )
@@ -138,9 +138,18 @@ export function ListingDetailPage() {
     <article
       className={`mx-auto space-y-8 text-left ${isAyatListing && ayatPreset ? 'max-w-5xl' : 'max-w-4xl'}`}
     >
-      <Link to="/listings" className="text-sm font-semibold text-brand-700 hover:underline dark:text-brand-300">
-        {t('listingDetail.allListings')}
-      </Link>
+      <nav className="flex flex-wrap items-center gap-2 text-sm text-fg-muted">
+        <Link to="/apartments" className="font-semibold text-brand-700 hover:underline dark:text-brand-300">
+          {t('listingDetail.backToApartments')}
+        </Link>
+        <span aria-hidden>·</span>
+        <Link
+          to={`/apartments/${listing.project_slug}`}
+          className="font-semibold text-brand-700 hover:underline dark:text-brand-300"
+        >
+          {t('listingDetail.backToLocation')}
+        </Link>
+      </nav>
 
       <header className="space-y-3">
         <p className="section-eyebrow">

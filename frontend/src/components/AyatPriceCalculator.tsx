@@ -40,6 +40,8 @@ export type AyatPriceCalculatorProps = {
   listingTitle?: string
   /** Pre-select apartment or shop (e.g. from /calculator?kind=shop) */
   initialKind?: PropertyKind | null
+  /** Pre-select shop zone (e.g. from /shops/ledeta) */
+  initialShopZoneId?: string | null
 }
 
 function PropertyKindTabs({
@@ -317,6 +319,7 @@ export function AyatPriceCalculator({
   listingPreset = null,
   listingTitle,
   initialKind = null,
+  initialShopZoneId = null,
 }: AyatPriceCalculatorProps) {
   const { t } = useTranslation()
   const embedded = variant === 'embedded'
@@ -340,6 +343,18 @@ export function AyatPriceCalculator({
       setKind(initialKind)
     }
   }, [preset, initialKind, kind])
+
+  useEffect(() => {
+    if (!preset && initialShopZoneId) {
+      setKind('commercial')
+      setShopZoneId(initialShopZoneId)
+      const zone = COMMERCIAL_ZONES.find((z) => z.id === initialShopZoneId)
+      if (zone) {
+        const first = SHOP_FLOORS.find((f) => zone.floors[f] > 0)
+        if (first) setShopFloor(first)
+      }
+    }
+  }, [preset, initialShopZoneId])
 
   const project = RESIDENTIAL_PROJECTS.find((p) => p.id === projectId)
   const presetProject = preset ? RESIDENTIAL_PROJECTS.find((p) => p.id === preset.projectId) : null

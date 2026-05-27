@@ -1,208 +1,619 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useMemo, useState } from 'react'
 
 import { api } from '../../api/client'
-import type { Paginated, PropertyListing } from '../../api/types'
+import type {
+  AdminLocationContent,
+  LocationCard,
+  LocationMedia,
+  Paginated,
+} from '../../api/types'
+import { AYAT_DEVELOPMENT_ZONES } from '../../lib/listingDisplay'
+import { getShopLocations } from '../../lib/shopLocations'
+
+type LocationKind = 'apartment' | 'shop'
+
+type CreateFormState = {
+  kind: LocationKind
+  location_id: string
+  title: string
+  subtitle: string
+  description: string
+  video_url: string
+  is_public: boolean
+  cards: LocationCard[]
+}
+
+const EMPTY_CARD: LocationCard = { title: '', body: '', image_url: '' }
 
 export function AdminListingsPage() {
   const qc = useQueryClient()
-  const [imageListingId, setImageListingId] = useState('')
+  const [selectedContentId, setSelectedContentId] = useState('')
+  const [createForm, setCreateForm] = useState<CreateFormState>({
+    kind: 'apartment',
+    location_id: '',
+    title: '',
+    subtitle: '',
+    description: '',
+    video_url: '',
+    is_public: true,
+    cards: [{ ...EMPTY_CARD }],
+  })
 
-  const listings = useQuery({
-    queryKey: ['admin', 'listings'],
+  const locationContent = useQuery({
+    queryKey: ['admin', 'location-content'],
     queryFn: async () => {
-      const { data } = await api.get<Paginated<PropertyListing>>('/admin/listings', {
-        params: { limit: 100 },
+      const { data } = await api.get<Paginated<AdminLocationContent>>('/admin/location-content', {
+        params: { limit: 200 },
       })
       return data
     },
   })
 
-  const create = useMutation({
+  const createLocationContent = useMutation({
     mutationFn: (body: {
-      unit_id: string
+      kind: 'apartment' | 'shop'
+      location_id: string
       title: string
-      description: string
-      city: string
-      area: string
+      subtitle?: string
+      description?: string
+      video_url?: string
+      cards: LocationCard[]
       is_public: boolean
-    }) => api.post('/admin/listings', body),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin', 'listings'] }),
+    }) => api.post('/admin/location-content', body),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin', 'location-content'] }),
   })
+  const apartmentOptions = useMemo(
+    () => Object.entries(AYAT_DEVELOPMENT_ZONES).map(([value, label]) => ({ value, label })),
+    [],
+  )
+  const shopOptions = useMemo(
+    () =>
+      getShopLocations().map((z) => ({
+        value: z.id,
+        label: z.labelKey.replace('calculator.shopZones.', ''),
+      })),
+    [],
+  )
+  const locationOptions = createForm.kind === 'apartment' ? apartmentOptions : shopOptions
 
-  const patch = useMutation({
-    mutationFn: ({ id, is_public }: { id: string; is_public: boolean }) =>
-      api.patch(`/admin/listings/${id}`, { is_public }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin', 'listings'] }),
+  useEffect(() => {
+    if (locationOptions.length === 0) return
+    setCreateForm((prev) => {
+      if (prev.location_id && locationOptions.some((o) => o.value === prev.location_id)) return prev
+      return {
+        ...prev,
+        location_id: locationOptions[0].value,
+        title: locationOptions[0].label,
+      }
+    })
+  }, [createForm.kind, locationOptions])
+
+  const updateLocationContent = useMutation({
+    mutationFn: ({
+      id,
+      body,
+    }: {
+      id: string
+      body: Partial<{
+        title: string
+        subtitle: string
+        description: string
+        video_url: string
+        is_public: boolean
+        cards: LocationCard[]
+      }>
+    }) => api.patch(`/admin/location-content/${id}`, body),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin', 'location-content'] }),
+  })
+  const seedDefaults = useMutation({
+    mutationFn: async () => {
+      const apartmentPayloads = apartmentOptions.map((o) => ({
+        kind: 'apartment' as const,
+        location_id: o.value,
+        title: o.label,
+        subtitle: o.label,
+        description: 'Default apartment location content. Edit details, media, and cards.',
+        video_url: '',
+        cards: [
+          { title: '2 bedrooms', body: 'Add sizes and details', image_url: '' },
+          { title: '3 bedrooms', body: 'Add sizes and details', image_url: '' },
+        ],
+        is_public: true,
+      }))
+      const shopPayloads = shopOptions.map((o) => ({
+        kind: 'shop' as const,
+        location_id: o.value,
+        title: o.label,
+        subtitle: 'Ayat commercial shops',
+        description: 'Default shop location content. Add floor rate context, media, and cards.',
+        video_url: '',
+        cards: [{ title: 'Floor rates', body: 'Add floor-by-floor details', image_url: '' }],
+        is_public: true,
+      }))
+      for (const payload of [...apartmentPayloads, ...shopPayloads]) {
+        try {
+          await api.post('/admin/location-content', payload)
+        } catch {
+          // Ignore duplicates/conflicts; this is an idempotent helper button.
+        }
+      }
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin', 'location-content'] }),
   })
 
   return (
     <div className="space-y-8 text-left">
-      <h1 className="text-2xl font-semibold text-stone-900 dark:text-stone-50">Listings</h1>
+      <h1 className="text-2xl font-semibold text-stone-900 dark:text-stone-50">Location details CMS</h1>
       <p className="text-sm text-stone-600 dark:text-stone-400">
-        Create a listing for a unit, then mark it <strong>public</strong> and ensure the unit is{' '}
-        <strong>available</strong> so it appears on the public site.
+        Manage apartment and shop detail pages in one place: description, media (image/video), bedroom
+        cards, and calculator context. Users see this immediately after clicking a location card.
       </p>
 
-      <form
-        className="space-y-3 rounded-xl border border-stone-200 bg-white p-4 dark:border-stone-800 dark:bg-stone-950"
-        onSubmit={(e) => {
-          e.preventDefault()
-          const fd = new FormData(e.currentTarget)
-          create.mutate({
-            unit_id: String(fd.get('unit_id')),
-            title: String(fd.get('title')),
-            description: String(fd.get('description') ?? ''),
-            city: String(fd.get('city') ?? ''),
-            area: String(fd.get('area') ?? ''),
-            is_public: fd.get('is_public') === 'on',
-          })
-          e.currentTarget.reset()
-        }}
-      >
-        <h2 className="text-sm font-semibold text-stone-800 dark:text-stone-200">New listing</h2>
-        <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
-          Unit ID (UUID)
-          <input name="unit_id" required className="input font-mono text-xs" />
-        </label>
-        <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
-          Title
-          <input name="title" required className="input" />
-        </label>
-        <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
-          Description
-          <textarea name="description" className="input min-h-[80px]" rows={3} />
-        </label>
-        <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
-          City
-          <input name="city" className="input" />
-        </label>
-        <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
-          Area
-          <input name="area" className="input" />
-        </label>
-        <label className="flex items-center gap-2 text-sm text-stone-700 dark:text-stone-300">
-          <input name="is_public" type="checkbox" className="rounded border-stone-400" />
-          Public on website
-        </label>
-        <button type="submit" className="btn-primary" disabled={create.isPending}>
-          Create listing
-        </button>
-      </form>
-
-      {listings.isLoading && <p className="text-sm text-stone-500">Loading…</p>}
-
-      {listings.data && (
-        <div className="overflow-x-auto rounded-xl border border-stone-200 dark:border-stone-800">
-          <table className="min-w-full divide-y divide-stone-200 text-sm dark:divide-stone-800">
-            <thead className="bg-stone-100 dark:bg-stone-900">
-              <tr>
-                <th className="px-3 py-2 text-left font-medium">Title</th>
-                <th className="px-3 py-2 text-left font-medium">Slug</th>
-                <th className="px-3 py-2 text-left font-medium">Public</th>
-                <th className="px-3 py-2 text-left font-medium"> </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-stone-100 bg-white dark:divide-stone-800 dark:bg-stone-950">
-              {listings.data.items.map((L) => (
-                <tr key={L.id}>
-                  <td className="px-3 py-2 font-medium">{L.title}</td>
-                  <td className="px-3 py-2 font-mono text-xs text-stone-600 dark:text-stone-400">{L.slug}</td>
-                  <td className="px-3 py-2">{L.is_public ? 'Yes' : 'No'}</td>
-                  <td className="space-x-2 px-3 py-2">
-                    <button
-                      type="button"
-                      className="text-xs text-brand-700 hover:underline dark:text-brand-400"
-                      onClick={() => patch.mutate({ id: L.id, is_public: !L.is_public })}
-                    >
-                      Toggle public
-                    </button>
-                    <Link
-                      to={`/listings/${L.slug}`}
-                      className="text-xs text-stone-600 hover:underline dark:text-stone-400"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      View
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <section className="space-y-4 rounded-xl border border-stone-200 bg-white p-4 dark:border-stone-800 dark:bg-stone-950">
+        <h2 className="text-base font-semibold text-stone-900 dark:text-stone-50">
+          Location detail pages (apartments + shops)
+        </h2>
+        <p className="text-sm text-stone-600 dark:text-stone-400">
+          Configure the content users see after clicking a location: title, description, video, photos,
+          and highlight cards.
+        </p>
+        <div>
+          <button
+            type="button"
+            className="btn-secondary"
+            onClick={() => seedDefaults.mutate()}
+            disabled={seedDefaults.isPending}
+          >
+            {seedDefaults.isPending ? 'Seeding defaults...' : 'Seed default content'}
+          </button>
         </div>
-      )}
-
-      {listings.data && listings.data.items.length > 0 ? (
-        <div className="space-y-2">
-          <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
-            Manage images for listing
+        <form
+          className="grid gap-3 md:grid-cols-2"
+          onSubmit={(e) => {
+            e.preventDefault()
+            createLocationContent.mutate({
+              kind: createForm.kind,
+              location_id: createForm.location_id,
+              title: createForm.title,
+              subtitle: createForm.subtitle,
+              description: createForm.description,
+              video_url: createForm.video_url,
+              cards: createForm.cards.filter((c) => c.title.trim().length > 0),
+              is_public: createForm.is_public,
+            })
+            setCreateForm({
+              kind: createForm.kind,
+              location_id: createForm.location_id,
+              title: createForm.title,
+              subtitle: '',
+              description: '',
+              video_url: '',
+              is_public: true,
+              cards: [{ ...EMPTY_CARD }],
+            })
+          }}
+        >
+          <label className="text-xs font-medium text-stone-600 dark:text-stone-400">
+            Kind
             <select
-              className="input mt-1 max-w-lg"
-              value={imageListingId || listings.data.items[0]?.id || ''}
-              onChange={(e) => setImageListingId(e.target.value)}
+              name="kind"
+              className="input mt-1"
+              value={createForm.kind}
+              onChange={(e) =>
+                setCreateForm((prev) => ({ ...prev, kind: e.target.value as LocationKind }))
+              }
             >
-              {listings.data.items.map((L) => (
-                <option key={L.id} value={L.id}>
-                  {L.title}
+              <option value="apartment">Apartment</option>
+              <option value="shop">Shop</option>
+            </select>
+          </label>
+          <label className="text-xs font-medium text-stone-600 dark:text-stone-400">
+            Location
+            <select
+              name="location_id"
+              required
+              className="input mt-1"
+              value={createForm.location_id}
+              onChange={(e) => {
+                const nextId = e.target.value
+                const next = locationOptions.find((o) => o.value === nextId)
+                setCreateForm((prev) => ({
+                  ...prev,
+                  location_id: nextId,
+                  title: prev.title.trim() ? prev.title : (next?.label ?? ''),
+                }))
+              }}
+            >
+              {locationOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label} ({opt.value})
                 </option>
               ))}
             </select>
           </label>
-          {(() => {
-            const id = imageListingId || listings.data.items[0]?.id
-            const L = listings.data.items.find((x) => x.id === id)
-            return id && L ? <ListingImagesPanel listingId={id} title={L.title} /> : null
-          })()}
+          <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
+            Title
+            <input
+              name="title"
+              required
+              className="input mt-1"
+              value={createForm.title}
+              onChange={(e) => setCreateForm((prev) => ({ ...prev, title: e.target.value }))}
+            />
+          </label>
+          <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
+            Subtitle
+            <input
+              name="subtitle"
+              className="input mt-1"
+              value={createForm.subtitle}
+              onChange={(e) => setCreateForm((prev) => ({ ...prev, subtitle: e.target.value }))}
+            />
+          </label>
+          <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
+            Description
+            <textarea
+              name="description"
+              className="input mt-1 min-h-[90px]"
+              rows={3}
+              value={createForm.description}
+              onChange={(e) => setCreateForm((prev) => ({ ...prev, description: e.target.value }))}
+            />
+          </label>
+          <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
+            Video URL (YouTube embed link)
+            <input
+              name="video_url"
+              className="input mt-1"
+              placeholder="https://www.youtube.com/embed/..."
+              value={createForm.video_url}
+              onChange={(e) => setCreateForm((prev) => ({ ...prev, video_url: e.target.value }))}
+            />
+          </label>
+          <div className="md:col-span-2">
+            <CardEditor
+              cards={createForm.cards}
+              onChange={(cards) => setCreateForm((prev) => ({ ...prev, cards }))}
+            />
+          </div>
+          <label className="flex items-center gap-2 text-sm text-stone-700 dark:text-stone-300 md:col-span-2">
+            <input
+              name="is_public"
+              type="checkbox"
+              className="rounded border-stone-400"
+              checked={createForm.is_public}
+              onChange={(e) => setCreateForm((prev) => ({ ...prev, is_public: e.target.checked }))}
+            />
+            Public on location page
+          </label>
+          <button type="submit" className="btn-primary md:col-span-2" disabled={createLocationContent.isPending}>
+            Create location content
+          </button>
+        </form>
+
+        <div className="rounded-xl border border-stone-200 dark:border-stone-800">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-stone-200 text-sm dark:divide-stone-800">
+              <thead className="bg-stone-100 dark:bg-stone-900">
+                <tr>
+                  <th className="px-3 py-2 text-left font-medium">Kind</th>
+                  <th className="px-3 py-2 text-left font-medium">Location ID</th>
+                  <th className="px-3 py-2 text-left font-medium">Title</th>
+                  <th className="px-3 py-2 text-left font-medium">Public</th>
+                  <th className="px-3 py-2 text-left font-medium">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-stone-100 bg-white dark:divide-stone-800 dark:bg-stone-950">
+                {locationContent.data?.items.map((row) => (
+                  <tr key={row.id}>
+                    <td className="px-3 py-2">{row.kind}</td>
+                    <td className="px-3 py-2 font-mono text-xs">{row.location_id}</td>
+                    <td className="px-3 py-2">{row.title}</td>
+                    <td className="px-3 py-2">{row.is_public ? 'Yes' : 'No'}</td>
+                    <td className="px-3 py-2">
+                      <button
+                        type="button"
+                        className="text-xs text-brand-700 hover:underline dark:text-brand-400"
+                        onClick={() => setSelectedContentId(row.id)}
+                      >
+                        Edit media/details
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      ) : null}
+
+        {selectedContentId ? (
+          <LocationContentEditor
+            content={locationContent.data?.items.find((x) => x.id === selectedContentId) ?? null}
+            onSave={(id, body) => updateLocationContent.mutate({ id, body })}
+          />
+        ) : null}
+      </section>
     </div>
   )
 }
 
-function ListingImagesPanel({ listingId, title }: { listingId: string; title: string }) {
+function LocationContentEditor({
+  content,
+  onSave,
+}: {
+  content: AdminLocationContent | null
+  onSave: (
+    id: string,
+    body: Partial<{
+      title: string
+      subtitle: string
+      description: string
+      video_url: string
+      is_public: boolean
+      cards: LocationCard[]
+    }>,
+  ) => void
+}) {
   const qc = useQueryClient()
-  const images = useQuery({
-    queryKey: ['admin', 'listing-images', listingId],
+  const [form, setForm] = useState<{
+    title: string
+    subtitle: string
+    description: string
+    video_url: string
+    is_public: boolean
+    cards: LocationCard[]
+  }>({
+    title: '',
+    subtitle: '',
+    description: '',
+    video_url: '',
+    is_public: true,
+    cards: [{ ...EMPTY_CARD }],
+  })
+  useEffect(() => {
+    if (!content) return
+    setForm({
+      title: content.title,
+      subtitle: content.subtitle ?? '',
+      description: content.description ?? '',
+      video_url: content.video_url ?? '',
+      is_public: content.is_public,
+      cards: (content.cards?.length ? content.cards : [{ ...EMPTY_CARD }]).map((c) => ({
+        title: c.title ?? '',
+        body: c.body ?? '',
+        image_url: c.image_url ?? '',
+      })),
+    })
+  }, [content?.id])
+  const media = useQuery({
+    queryKey: ['admin', 'location-media', content?.id],
+    enabled: Boolean(content?.id),
     queryFn: async () => {
-      const { data } = await api.get<{ id: string; url: string; is_primary: boolean; sort_order: number }[]>(
-        `/admin/listings/${listingId}/images`,
-      )
+      const { data } = await api.get<LocationMedia[]>(`/admin/location-content/${content!.id}/media`)
       return data
     },
   })
-
-  const addImage = useMutation({
-    mutationFn: (url: string) =>
-      api.post(`/admin/listings/${listingId}/images`, { url, is_primary: images.data?.length === 0, sort_order: 0 }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin', 'listing-images', listingId] }),
+  const addMedia = useMutation({
+    mutationFn: (body: {
+      url: string
+      media_type: 'image' | 'video'
+      caption: string
+      is_primary: boolean
+      sort_order: number
+    }) => api.post(`/admin/location-content/${content!.id}/media`, body),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin', 'location-media', content?.id] }),
+  })
+  const deleteMedia = useMutation({
+    mutationFn: (mediaId: string) => api.delete(`/admin/location-content/${content!.id}/media/${mediaId}`),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin', 'location-media', content?.id] }),
   })
 
+  if (!content) return null
+
   return (
-    <div className="rounded-xl border border-stone-200 bg-white p-4 dark:border-stone-800 dark:bg-stone-950">
-      <h2 className="text-sm font-semibold text-stone-800 dark:text-stone-200">Images for {title}</h2>
+    <div className="space-y-3 rounded-xl border border-stone-200 p-4 dark:border-stone-800">
+      <h3 className="font-semibold text-stone-900 dark:text-stone-50">
+        Edit {content.kind}: {content.location_id}
+      </h3>
       <form
-        className="mt-2 flex flex-wrap gap-2"
+        className="grid gap-3 md:grid-cols-2"
         onSubmit={(e) => {
           e.preventDefault()
-          const fd = new FormData(e.currentTarget)
-          addImage.mutate(String(fd.get('url')))
-          e.currentTarget.reset()
+          onSave(content.id, {
+            title: form.title,
+            subtitle: form.subtitle,
+            description: form.description,
+            video_url: form.video_url,
+            is_public: form.is_public,
+            cards: form.cards.filter((c) => c.title.trim().length > 0),
+          })
         }}
       >
-        <input name="url" required className="input min-w-[16rem] flex-1" placeholder="https://… image URL" />
-        <button type="submit" className="btn-secondary" disabled={addImage.isPending}>
-          Add image URL
+        <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
+          Title
+          <input
+            name="title"
+            value={form.title}
+            onChange={(e) => setForm((prev) => ({ ...prev, title: e.target.value }))}
+            className="input mt-1"
+          />
+        </label>
+        <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
+          Subtitle
+          <input
+            name="subtitle"
+            value={form.subtitle}
+            onChange={(e) => setForm((prev) => ({ ...prev, subtitle: e.target.value }))}
+            className="input mt-1"
+          />
+        </label>
+        <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
+          Description
+          <textarea
+            name="description"
+            value={form.description}
+            onChange={(e) => setForm((prev) => ({ ...prev, description: e.target.value }))}
+            className="input mt-1 min-h-[80px]"
+            rows={3}
+          />
+        </label>
+        <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
+          Video URL
+          <input
+            name="video_url"
+            value={form.video_url}
+            onChange={(e) => setForm((prev) => ({ ...prev, video_url: e.target.value }))}
+            className="input mt-1"
+          />
+        </label>
+        <div className="md:col-span-2">
+          <CardEditor
+            cards={form.cards}
+            onChange={(cards) => setForm((prev) => ({ ...prev, cards }))}
+          />
+        </div>
+        <label className="flex items-center gap-2 text-sm text-stone-700 dark:text-stone-300 md:col-span-2">
+          <input
+            name="is_public"
+            type="checkbox"
+            className="rounded border-stone-400"
+            checked={form.is_public}
+            onChange={(e) => setForm((prev) => ({ ...prev, is_public: e.target.checked }))}
+          />
+          Public on location page
+        </label>
+        <button type="submit" className="btn-secondary md:col-span-2">
+          Save location details
         </button>
       </form>
-      <ul className="mt-3 flex flex-wrap gap-2">
-        {images.data?.map((img) => (
-          <li key={img.id}>
-            <img src={img.url} alt="" className="h-20 w-28 rounded-lg object-cover" />
-          </li>
-        ))}
-      </ul>
+
+      <div className="space-y-2">
+        <h4 className="text-sm font-semibold text-stone-800 dark:text-stone-200">Media gallery</h4>
+        <form
+          className="flex flex-wrap gap-2"
+          onSubmit={(e) => {
+            e.preventDefault()
+            const fd = new FormData(e.currentTarget)
+            addMedia.mutate({
+              url: String(fd.get('url') ?? ''),
+              media_type: String(fd.get('media_type') ?? 'image') as 'image' | 'video',
+              caption: String(fd.get('caption') ?? ''),
+              is_primary: fd.get('is_primary') === 'on',
+              sort_order: Number(fd.get('sort_order') ?? '0'),
+            })
+            e.currentTarget.reset()
+          }}
+        >
+          <select name="media_type" className="input w-32">
+            <option value="image">Image</option>
+            <option value="video">Video</option>
+          </select>
+          <input name="url" required className="input min-w-[16rem] flex-1" placeholder="https://... media URL" />
+          <input name="caption" className="input min-w-[12rem]" placeholder="Caption" />
+          <input name="sort_order" type="number" defaultValue={0} className="input w-24" />
+          <label className="flex items-center gap-1 text-xs text-stone-600">
+            <input name="is_primary" type="checkbox" className="rounded border-stone-400" />
+            Primary
+          </label>
+          <button type="submit" className="btn-secondary" disabled={addMedia.isPending}>
+            Add media
+          </button>
+        </form>
+        <ul className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          {media.data?.map((m) => (
+            <li key={m.id} className="rounded-lg border border-stone-200 p-2 dark:border-stone-800">
+              {m.media_type === 'video' ? (
+                <video src={m.url} controls className="aspect-video w-full rounded bg-black" />
+              ) : (
+                <img src={m.url} alt={m.caption ?? ''} className="aspect-video w-full rounded object-cover" />
+              )}
+              <div className="mt-1 flex items-center justify-between gap-2">
+                <p className="line-clamp-1 text-xs text-stone-500">{m.caption || m.media_type}</p>
+                <button
+                  type="button"
+                  className="text-xs text-red-600 hover:underline"
+                  onClick={() => deleteMedia.mutate(m.id)}
+                >
+                  Delete
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <p className="text-xs text-stone-500">
+        Known shop IDs: {getShopLocations().map((z) => z.id).join(', ')}
+      </p>
     </div>
   )
 }
+
+function CardEditor({
+  cards,
+  onChange,
+}: {
+  cards: LocationCard[]
+  onChange: (cards: LocationCard[]) => void
+}) {
+  const safeCards = cards.length ? cards : [{ ...EMPTY_CARD }]
+  return (
+    <div className="space-y-2 rounded-xl border border-stone-200 p-3 dark:border-stone-800">
+      <div className="flex items-center justify-between">
+        <p className="text-xs font-medium text-stone-600 dark:text-stone-400">Cards</p>
+        <button
+          type="button"
+          className="text-xs text-brand-700 hover:underline dark:text-brand-300"
+          onClick={() => onChange([...safeCards, { ...EMPTY_CARD }])}
+        >
+          + Add card
+        </button>
+      </div>
+      {safeCards.map((card, idx) => (
+        <div key={idx} className="grid gap-2 rounded-lg border border-stone-200 p-3 dark:border-stone-800">
+          <input
+            className="input"
+            placeholder="Card title"
+            value={card.title ?? ''}
+            onChange={(e) => {
+              const next = [...safeCards]
+              next[idx] = { ...next[idx], title: e.target.value }
+              onChange(next)
+            }}
+          />
+          <textarea
+            className="input min-h-[70px]"
+            placeholder="Card body"
+            value={card.body ?? ''}
+            onChange={(e) => {
+              const next = [...safeCards]
+              next[idx] = { ...next[idx], body: e.target.value }
+              onChange(next)
+            }}
+          />
+          <input
+            className="input"
+            placeholder="Card image URL (optional)"
+            value={card.image_url ?? ''}
+            onChange={(e) => {
+              const next = [...safeCards]
+              next[idx] = { ...next[idx], image_url: e.target.value }
+              onChange(next)
+            }}
+          />
+          <div className="text-right">
+            <button
+              type="button"
+              className="text-xs text-red-600 hover:underline"
+              onClick={() => onChange(safeCards.filter((_, i) => i !== idx))}
+            >
+              Remove card
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+

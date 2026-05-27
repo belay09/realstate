@@ -39,58 +39,10 @@ export function AdminLayout() {
             Dashboard
           </NavLink>
           <NavLink
-            to="/admin/companies"
-            className={({ isActive }) => `${navCls} ${isActive ? activeCls : ''}`}
-          >
-            Companies
-          </NavLink>
-          <NavLink
-            to="/admin/projects"
-            className={({ isActive }) => `${navCls} ${isActive ? activeCls : ''}`}
-          >
-            Projects
-          </NavLink>
-          <NavLink
-            to="/admin/blocks"
-            className={({ isActive }) => `${navCls} ${isActive ? activeCls : ''}`}
-          >
-            Blocks
-          </NavLink>
-          <NavLink
-            to="/admin/unit-types"
-            className={({ isActive }) => `${navCls} ${isActive ? activeCls : ''}`}
-          >
-            Unit types
-          </NavLink>
-          <NavLink
-            to="/admin/units"
-            className={({ isActive }) => `${navCls} ${isActive ? activeCls : ''}`}
-          >
-            Units
-          </NavLink>
-          <NavLink
             to="/admin/listings"
             className={({ isActive }) => `${navCls} ${isActive ? activeCls : ''}`}
           >
             Listings
-          </NavLink>
-          <NavLink
-            to="/admin/pricing"
-            className={({ isActive }) => `${navCls} ${isActive ? activeCls : ''}`}
-          >
-            Pricing
-          </NavLink>
-          <NavLink
-            to="/admin/payment-plans"
-            className={({ isActive }) => `${navCls} ${isActive ? activeCls : ''}`}
-          >
-            Payment plans
-          </NavLink>
-          <NavLink
-            to="/admin/quotes"
-            className={({ isActive }) => `${navCls} ${isActive ? activeCls : ''}`}
-          >
-            Quotes
           </NavLink>
           <NavLink
             to="/admin/leads"
@@ -99,12 +51,12 @@ export function AdminLayout() {
             Leads
           </NavLink>
           <NavLink
-            to="/admin/contracts"
+            to="/admin/pricing"
             className={({ isActive }) => `${navCls} ${isActive ? activeCls : ''}`}
           >
-            Contracts
+            Pricing
           </NavLink>
-          <NavLink to="/listings" className={navCls}>
+          <NavLink to="/apartments" className={navCls}>
             View public site
           </NavLink>
         </nav>

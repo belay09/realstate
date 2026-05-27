@@ -7,10 +7,9 @@ import { formatListingLocation, resolveDevelopmentZone } from '../lib/listingDis
 
 type ProjectLocationCardProps = {
   group: ProjectListingGroup
-  search: string
 }
 
-export function ProjectLocationCard({ group, search }: ProjectLocationCardProps) {
+export function ProjectLocationCard({ group }: ProjectLocationCardProps) {
   const { t } = useTranslation()
   const zone = resolveDevelopmentZone(group.project_slug, group.area)
   const location = formatListingLocation(group.listings[0], t)
@@ -18,7 +17,7 @@ export function ProjectLocationCard({ group, search }: ProjectLocationCardProps)
   const subtitle =
     group.project_name && zone && group.project_name !== zone ? group.project_name : null
   const homeCount = group.listings.length
-  const href = `/listings/project/${group.project_slug}${search}`
+  const href = `/apartments/${group.project_slug}`
 
   return (
     <Link

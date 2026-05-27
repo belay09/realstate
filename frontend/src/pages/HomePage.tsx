@@ -33,7 +33,7 @@ export function HomePage() {
         : t('home.cardCommercialDescription'),
     tag: key === 'residential' ? t('home.cardTagHomes') : t('home.cardTagShops'),
     image: CATEGORY_IMAGES[key],
-    to: key === 'residential' ? '/listings' : '/calculator?kind=shop',
+    to: key === 'residential' ? '/apartments' : '/shops',
   }))
 
   const heroStats = [
@@ -63,14 +63,11 @@ export function HomePage() {
             })}
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
-            <Link to="/listings" className="btn-accent">
+            <Link to="/apartments" className="btn-accent">
               {t('home.exploreListings')}
             </Link>
-            <Link
-              to={`/listings?company_slug=${AYAT_PARTNER.slug}`}
-              className="btn-ghost-light"
-            >
-              {t('home.ayatHomes')}
+            <Link to="/shops" className="btn-ghost-light">
+              {t('nav.shops')}
             </Link>
             <Link to="/calculator" className="btn-ghost-light">
               {t('home.priceCalculator')}
@@ -154,7 +151,7 @@ export function HomePage() {
             {t('home.ctaDescription')}
           </p>
           <div className="relative mt-8 flex flex-wrap justify-center gap-3">
-            <Link to="/listings" className="btn-accent">
+            <Link to="/apartments" className="btn-accent">
               {t('home.browseListings')}
             </Link>
             <Link to={adminPath} className="btn-ghost-light">

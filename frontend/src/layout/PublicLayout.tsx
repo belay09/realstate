@@ -6,12 +6,17 @@ import { useTranslation } from '../context/LocaleContext'
 import { AYAT_PARTNER } from '../content/partners'
 import { useAdminEntryPath } from '../hooks/useAuth'
 
+function navActive(pathname: string, base: string) {
+  return pathname === base || pathname.startsWith(`${base}/`)
+}
+
 export function PublicLayout() {
   const { t, messages } = useTranslation()
   const adminPath = useAdminEntryPath()
   const location = useLocation()
   const isHome = location.pathname === '/'
   const brand = messages.brand
+  const path = location.pathname
 
   return (
     <div className="flex min-h-dvh flex-col bg-canvas">
@@ -52,16 +57,28 @@ export function PublicLayout() {
               {t('nav.home')}
             </NavLink>
             <NavLink
-              to="/listings"
-              className={({ isActive }) =>
+              to="/apartments"
+              className={() =>
                 `rounded-full px-4 py-2 ${
-                  isActive
+                  navActive(path, '/apartments')
                     ? 'bg-brand-50 font-semibold text-brand-800 dark:bg-brand-950 dark:text-brand-200'
                     : 'nav-link'
                 }`
               }
             >
-              {t('nav.listings')}
+              {t('nav.apartments')}
+            </NavLink>
+            <NavLink
+              to="/shops"
+              className={() =>
+                `hidden rounded-full px-4 py-2 sm:inline-block ${
+                  navActive(path, '/shops')
+                    ? 'bg-brand-50 font-semibold text-brand-800 dark:bg-brand-950 dark:text-brand-200'
+                    : 'nav-link'
+                }`
+              }
+            >
+              {t('nav.shops')}
             </NavLink>
             <NavLink
               to="/calculator"
@@ -88,8 +105,8 @@ export function PublicLayout() {
             </Link>
             <LanguageSwitcher className="hidden sm:inline-flex" />
             <ThemeToggle />
-            <Link to="/listings" className="btn-primary ml-1 hidden py-2.5 text-xs md:inline-flex">
-              {t('nav.compareHomes')}
+            <Link to="/apartments" className="btn-primary ml-1 hidden py-2.5 text-xs md:inline-flex">
+              {t('nav.browseHomes')}
             </Link>
           </nav>
         </div>
@@ -116,13 +133,13 @@ export function PublicLayout() {
             </p>
             <ul className="mt-4 space-y-2.5 text-sm">
               <li>
-                <Link to="/listings" className="transition hover:text-white">
-                  {t('footer.allListings')}
+                <Link to="/apartments" className="transition hover:text-white">
+                  {t('footer.apartments')}
                 </Link>
               </li>
               <li>
-                <Link to="/listings?company_slug=ayat-real-estate" className="transition hover:text-white">
-                  {t('footer.ayatHomes')}
+                <Link to="/shops" className="transition hover:text-white">
+                  {t('footer.shops')}
                 </Link>
               </li>
               <li>

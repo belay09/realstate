@@ -8,11 +8,19 @@ from sqlalchemy.orm import Session, selectinload
 
 from app.api.deps import get_db
 from app.models.company import Company
-from app.models.inventory import Block, Project, PropertyListing, PropertyUnit, UnitType
+from app.models.inventory import (
+    Block,
+    LocationContent,
+    Project,
+    PropertyListing,
+    PropertyUnit,
+    UnitType,
+)
 from app.models.payment import PaymentPlan
 from app.schemas.inventory import (
     Paginated,
     PublicFilterOption,
+    PublicLocationContent,
     PublicListingDetail,
     PublicListingFilterOptions,
     PublicListingImage,
@@ -54,6 +62,21 @@ def _sorted_images(listing: PropertyListing) -> list[PublicListingImage]:
     return [
         PublicListingImage(url=i.url, sort_order=i.sort_order, is_primary=i.is_primary)
         for i in ims
+    ]
+
+
+def _sorted_location_media(content: LocationContent) -> list[dict[str, object]]:
+    rows = sorted(content.media, key=lambda m: (not m.is_primary, m.sort_order, m.id))
+    return [
+        {
+            "id": m.id,
+            "url": m.url,
+            "media_type": m.media_type,
+            "caption": m.caption,
+            "sort_order": m.sort_order,
+            "is_primary": m.is_primary,
+        }
+        for m in rows
     ]
 
 
@@ -217,6 +240,52 @@ def get_public_listing(slug: str, db: Session = Depends(get_db)) -> PublicListin
         floor_number=unit.floor_number,
         area_sqm=unit.area_sqm,
         unit_status=unit.status,
+    )
+
+
+@router.get(
+    "/location-content/{kind}/{location_id}",
+    response_model=PublicLocationContent,
+)
+def get_public_location_content(
+    kind: str,
+    location_id: str,
+    db: Session = Depends(get_db),
+) -> PublicLocationContent:
+    if kind not in {"apartment", "shop"}:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"code": "BAD_REQUEST", "message": "kind must be apartment or shop"},
+        )
+    row = (
+        db.query(LocationContent)
+        .filter(
+            LocationContent.kind == kind,
+            LocationContent.location_id == location_id,
+            LocationContent.is_public.is_(True),
+        )
+        .first()
+    )
+    if row is None:
+        return PublicLocationContent(
+            kind=kind,
+            location_id=location_id,
+            title=None,
+            subtitle=None,
+            description=None,
+            video_url=None,
+            cards=[],
+            media=[],
+        )
+    return PublicLocationContent(
+        kind=row.kind,
+        location_id=row.location_id,
+        title=row.title,
+        subtitle=row.subtitle,
+        description=row.description,
+        video_url=row.video_url,
+        cards=row.cards or [],
+        media=_sorted_location_media(row),
     )
 
 

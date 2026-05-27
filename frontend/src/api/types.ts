@@ -56,7 +56,38 @@ export type PropertyListing = {
   description: string | null
   city: string | null
   area: string | null
+  is_featured?: boolean
   is_public: boolean
+}
+
+export type LocationCard = {
+  title: string
+  body: string | null
+  image_url: string | null
+}
+
+export type AdminLocationContent = {
+  id: string
+  kind: 'apartment' | 'shop'
+  location_id: string
+  title: string
+  subtitle: string | null
+  description: string | null
+  video_url: string | null
+  cards: LocationCard[]
+  is_public: boolean
+  created_at: string
+  updated_at: string
+}
+
+export type LocationMedia = {
+  id: string
+  location_content_id: string
+  url: string
+  media_type: 'image' | 'video'
+  caption: string | null
+  sort_order: number
+  is_primary: boolean
 }
 
 export type PublicFilterOption = {
@@ -95,6 +126,24 @@ export type PublicListingDetail = PublicListingSummary & {
   floor_number: number | null
   area_sqm: string | null
   unit_status: string
+}
+
+export type PublicLocationContent = {
+  kind: 'apartment' | 'shop'
+  location_id: string
+  title: string | null
+  subtitle: string | null
+  description: string | null
+  video_url: string | null
+  cards: LocationCard[]
+  media: {
+    id: string
+    url: string
+    media_type: 'image' | 'video'
+    caption: string | null
+    sort_order: number
+    is_primary: boolean
+  }[]
 }
 
 export type PublicPricePreview = {

@@ -9,6 +9,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     Integer,
+    JSON,
     Numeric,
     String,
     Text,
@@ -187,3 +188,54 @@ class PropertyImage(Base):
     )
 
     listing: Mapped[PropertyListing] = relationship("PropertyListing", back_populates="images")
+
+
+class LocationContent(Base, TimestampMixin):
+    __tablename__ = "location_content"
+    __table_args__ = (
+        UniqueConstraint("kind", "location_id", name="uq_location_content_kind_location"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    kind: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    location_id: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
+    title: Mapped[str] = mapped_column(String(255), nullable=False)
+    subtitle: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    description: Mapped[str | None] = mapped_column(Text, nullable=True)
+    video_url: Mapped[str | None] = mapped_column(String(2048), nullable=True)
+    cards: Mapped[list[dict]] = mapped_column(JSON, nullable=False, default=list)
+    is_public: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False, index=True)
+
+    media: Mapped[list["LocationMedia"]] = relationship(
+        "LocationMedia",
+        back_populates="location_content",
+        cascade="all, delete-orphan",
+    )
+
+
+class LocationMedia(Base):
+    __tablename__ = "location_media"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    location_content_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("location_content.id", ondelete="CASCADE"),
+        index=True,
+    )
+    url: Mapped[str] = mapped_column(String(2048), nullable=False)
+    media_type: Mapped[str] = mapped_column(String(16), nullable=False, default="image")
+    caption: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    sort_order: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    is_primary: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    location_content: Mapped[LocationContent] = relationship(
+        "LocationContent",
+        back_populates="media",
+    )
