@@ -24,13 +24,30 @@ type CreateFormState = {
   cards: LocationCard[]
 }
 
+type PendingMedia = {
+  url: string
+  media_type: 'image' | 'video'
+  caption: string
+  sort_order: number
+  is_primary: boolean
+}
+
 const EMPTY_CARD: LocationCard = { title: '', body: '', image_url: '' }
-const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
 
 export function AdminListingsPage() {
   const qc = useQueryClient()
   const [selectedContentId, setSelectedContentId] = useState('')
+  const [showCreateModal, setShowCreateModal] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [createUploading, setCreateUploading] = useState(false)
+  const [createUploadProgress, setCreateUploadProgress] = useState(0)
+  const [createUploadFile, setCreateUploadFile] = useState<File | null>(null)
+  const [createUploadCaption, setCreateUploadCaption] = useState('')
+  const [createUploadSortOrder, setCreateUploadSortOrder] = useState(0)
+  const [createUploadIsPrimary, setCreateUploadIsPrimary] = useState(false)
+  const [createUploadError, setCreateUploadError] = useState<string | null>(null)
+  const [createSubmitError, setCreateSubmitError] = useState<string | null>(null)
+  const [createPendingMedia, setCreatePendingMedia] = useState<PendingMedia[]>([])
   const [createForm, setCreateForm] = useState<CreateFormState>({
     kind: 'apartment',
     location_id: '',
@@ -62,7 +79,8 @@ export function AdminListingsPage() {
       video_url?: string
       cards: LocationCard[]
       is_public: boolean
-    }) => api.post('/admin/location-content', body),
+    }) =>
+      api.post<AdminLocationContent>('/admin/location-content', body).then((res) => res.data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['admin', 'location-content'] }),
   })
   const apartmentOptions = useMemo(
@@ -78,6 +96,17 @@ export function AdminListingsPage() {
     [],
   )
   const locationOptions = createForm.kind === 'apartment' ? apartmentOptions : shopOptions
+  const closeCreateModal = () => {
+    setShowCreateModal(false)
+    setCreateSubmitError(null)
+    setCreateUploadError(null)
+    setCreatePendingMedia([])
+    setCreateUploadFile(null)
+    setCreateUploadCaption('')
+    setCreateUploadSortOrder(0)
+    setCreateUploadIsPrimary(false)
+    setCreateUploadProgress(0)
+  }
 
   useEffect(() => {
     if (locationOptions.length === 0) return
@@ -90,7 +119,6 @@ export function AdminListingsPage() {
       }
     })
   }, [createForm.kind, locationOptions])
-
   const updateLocationContent = useMutation({
     mutationFn: ({
       id,
@@ -160,6 +188,11 @@ export function AdminListingsPage() {
           Configure the content users see after clicking a location: title, description, video, photos,
           and highlight cards.
         </p>
+        {!selectedContentId ? (
+          <p className="text-xs text-brand-700 dark:text-brand-300">
+            Tip: click “Edit media/details” in the table below to open the upload section.
+          </p>
+        ) : null}
         <div>
           <button
             type="button"
@@ -169,130 +202,14 @@ export function AdminListingsPage() {
           >
             {seedDefaults.isPending ? 'Seeding defaults...' : 'Seed default content'}
           </button>
-        </div>
-        <form
-          className="grid gap-3 md:grid-cols-2"
-          onSubmit={(e) => {
-            e.preventDefault()
-            createLocationContent.mutate({
-              kind: createForm.kind,
-              location_id: createForm.location_id,
-              title: createForm.title,
-              subtitle: createForm.subtitle,
-              description: createForm.description,
-              video_url: createForm.video_url,
-              cards: createForm.cards.filter((c) => c.title.trim().length > 0),
-              is_public: createForm.is_public,
-            })
-            setCreateForm({
-              kind: createForm.kind,
-              location_id: createForm.location_id,
-              title: createForm.title,
-              subtitle: '',
-              description: '',
-              video_url: '',
-              is_public: true,
-              cards: [{ ...EMPTY_CARD }],
-            })
-          }}
-        >
-          <label className="text-xs font-medium text-stone-600 dark:text-stone-400">
-            Kind
-            <select
-              name="kind"
-              className="input mt-1"
-              value={createForm.kind}
-              onChange={(e) =>
-                setCreateForm((prev) => ({ ...prev, kind: e.target.value as LocationKind }))
-              }
-            >
-              <option value="apartment">Apartment</option>
-              <option value="shop">Shop</option>
-            </select>
-          </label>
-          <label className="text-xs font-medium text-stone-600 dark:text-stone-400">
-            Location
-            <select
-              name="location_id"
-              required
-              className="input mt-1"
-              value={createForm.location_id}
-              onChange={(e) => {
-                const nextId = e.target.value
-                const next = locationOptions.find((o) => o.value === nextId)
-                setCreateForm((prev) => ({
-                  ...prev,
-                  location_id: nextId,
-                  title: prev.title.trim() ? prev.title : (next?.label ?? ''),
-                }))
-              }}
-            >
-              {locationOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label} ({opt.value})
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
-            Title
-            <input
-              name="title"
-              required
-              className="input mt-1"
-              value={createForm.title}
-              onChange={(e) => setCreateForm((prev) => ({ ...prev, title: e.target.value }))}
-            />
-          </label>
-          <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
-            Subtitle
-            <input
-              name="subtitle"
-              className="input mt-1"
-              value={createForm.subtitle}
-              onChange={(e) => setCreateForm((prev) => ({ ...prev, subtitle: e.target.value }))}
-            />
-          </label>
-          <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
-            Description
-            <textarea
-              name="description"
-              className="input mt-1 min-h-[90px]"
-              rows={3}
-              value={createForm.description}
-              onChange={(e) => setCreateForm((prev) => ({ ...prev, description: e.target.value }))}
-            />
-          </label>
-          <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
-            Video URL (YouTube embed link)
-            <input
-              name="video_url"
-              className="input mt-1"
-              placeholder="https://www.youtube.com/embed/..."
-              value={createForm.video_url}
-              onChange={(e) => setCreateForm((prev) => ({ ...prev, video_url: e.target.value }))}
-            />
-          </label>
-          <div className="md:col-span-2">
-            <CardEditor
-              cards={createForm.cards}
-              onChange={(cards) => setCreateForm((prev) => ({ ...prev, cards }))}
-            />
-          </div>
-          <label className="flex items-center gap-2 text-sm text-stone-700 dark:text-stone-300 md:col-span-2">
-            <input
-              name="is_public"
-              type="checkbox"
-              className="rounded border-stone-400"
-              checked={createForm.is_public}
-              onChange={(e) => setCreateForm((prev) => ({ ...prev, is_public: e.target.checked }))}
-            />
-            Public on location page
-          </label>
-          <button type="submit" className="btn-primary md:col-span-2" disabled={createLocationContent.isPending}>
+          <button
+            type="button"
+            className="btn-primary ml-2"
+            onClick={() => setShowCreateModal(true)}
+          >
             Create location content
           </button>
-        </form>
+        </div>
 
         <div className="rounded-xl border border-stone-200 dark:border-stone-800">
           <div className="overflow-x-auto">
@@ -317,7 +234,10 @@ export function AdminListingsPage() {
                       <button
                         type="button"
                         className="text-xs text-brand-700 hover:underline dark:text-brand-400"
-                        onClick={() => setSelectedContentId(row.id)}
+                        onClick={() => {
+                          setSelectedContentId(row.id)
+                          setShowEditModal(true)
+                        }}
                       >
                         Edit media/details
                       </button>
@@ -329,13 +249,258 @@ export function AdminListingsPage() {
           </div>
         </div>
 
-        {selectedContentId ? (
+      </section>
+      {showCreateModal ? (
+        <ModalShell title="Create location content" onClose={closeCreateModal}>
+          <form
+            className="grid gap-3 md:grid-cols-2"
+            onSubmit={async (e) => {
+              e.preventDefault()
+              setCreateSubmitError(null)
+              try {
+                const created = await createLocationContent.mutateAsync({
+                  kind: createForm.kind,
+                  location_id: createForm.location_id,
+                  title: createForm.title,
+                  subtitle: createForm.subtitle,
+                  description: createForm.description,
+                  video_url: createForm.video_url,
+                  cards: createForm.cards.filter((c) => c.title.trim().length > 0),
+                  is_public: createForm.is_public,
+                })
+                for (const media of createPendingMedia) {
+                  await api.post(`/admin/location-content/${created.id}/media`, media)
+                }
+                setCreatePendingMedia([])
+                setCreateUploadFile(null)
+                setCreateUploadCaption('')
+                setCreateUploadSortOrder(0)
+                setCreateUploadIsPrimary(false)
+                closeCreateModal()
+              } catch (err) {
+                setCreateSubmitError(err instanceof Error ? err.message : 'Failed to create location content')
+              }
+            }}
+          >
+            <label className="text-xs font-medium text-stone-600 dark:text-stone-400">
+              Kind
+              <select
+                name="kind"
+                className="input mt-1"
+                value={createForm.kind}
+                onChange={(e) =>
+                  setCreateForm((prev) => ({ ...prev, kind: e.target.value as LocationKind }))
+                }
+              >
+                <option value="apartment">Apartment</option>
+                <option value="shop">Shop</option>
+              </select>
+            </label>
+            <label className="text-xs font-medium text-stone-600 dark:text-stone-400">
+              Location
+              <select
+                name="location_id"
+                required
+                className="input mt-1"
+                value={createForm.location_id}
+                onChange={(e) => {
+                  const nextId = e.target.value
+                  const next = locationOptions.find((o) => o.value === nextId)
+                  setCreateForm((prev) => ({
+                    ...prev,
+                    location_id: nextId,
+                    title: prev.title.trim() ? prev.title : (next?.label ?? ''),
+                  }))
+                }}
+              >
+                {locationOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label} ({opt.value})
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
+              Title
+              <input
+                name="title"
+                required
+                className="input mt-1"
+                value={createForm.title}
+                onChange={(e) => setCreateForm((prev) => ({ ...prev, title: e.target.value }))}
+              />
+            </label>
+            <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
+              Subtitle
+              <input
+                name="subtitle"
+                className="input mt-1"
+                value={createForm.subtitle}
+                onChange={(e) => setCreateForm((prev) => ({ ...prev, subtitle: e.target.value }))}
+              />
+            </label>
+            <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
+              Description
+              <textarea
+                name="description"
+                className="input mt-1 min-h-[90px]"
+                rows={3}
+                value={createForm.description}
+                onChange={(e) => setCreateForm((prev) => ({ ...prev, description: e.target.value }))}
+              />
+            </label>
+            <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
+              Video URL (YouTube embed link)
+              <input
+                name="video_url"
+                className="input mt-1"
+                placeholder="https://www.youtube.com/embed/..."
+                value={createForm.video_url}
+                onChange={(e) => setCreateForm((prev) => ({ ...prev, video_url: e.target.value }))}
+              />
+            </label>
+            <div className="md:col-span-2">
+              <CardEditor
+                cards={createForm.cards}
+                onChange={(cards) => setCreateForm((prev) => ({ ...prev, cards }))}
+              />
+            </div>
+            <div className="space-y-2 rounded-lg border border-stone-200 p-3 dark:border-stone-800 md:col-span-2">
+              <p className="text-xs text-stone-600 dark:text-stone-400">
+                Upload media from your machine (saved immediately after create)
+              </p>
+              <p className="text-[11px] text-stone-500 dark:text-stone-400">
+                Uploads go through the API (signed Cloudinary). Set{' '}
+                <span className="font-mono">CLOUDINARY_*</span> in backend <span className="font-mono">.env</span>{' '}
+                and restart the API.
+              </p>
+              <div className="space-y-2">
+                <label className="block rounded-lg border-2 border-dashed border-stone-300 p-4 text-center text-sm">
+                  <input
+                    type="file"
+                    className="hidden"
+                    onChange={(evt) => setCreateUploadFile(evt.target.files?.[0] ?? null)}
+                  />
+                  <span className="cursor-pointer">
+                    {createUploadFile
+                      ? `Selected: ${createUploadFile.name}`
+                      : 'Click to choose image/video file'}
+                  </span>
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  <input
+                    value={createUploadCaption}
+                    onChange={(evt) => setCreateUploadCaption(evt.target.value)}
+                    className="input min-w-[12rem]"
+                    placeholder="Caption"
+                  />
+                  <input
+                    type="number"
+                    value={createUploadSortOrder}
+                    onChange={(evt) => setCreateUploadSortOrder(Number(evt.target.value || '0'))}
+                    className="input w-24"
+                  />
+                  <label className="flex items-center gap-1 text-xs text-stone-600">
+                    <input
+                      type="checkbox"
+                      className="rounded border-stone-400"
+                      checked={createUploadIsPrimary}
+                      onChange={(evt) => setCreateUploadIsPrimary(evt.target.checked)}
+                    />
+                    Primary
+                  </label>
+                  <button
+                    type="button"
+                    className="btn-secondary"
+                    disabled={createUploading || !createUploadFile}
+                    onClick={async () => {
+                      if (!createUploadFile || !createUploadFile.size) return
+                      setCreateUploadError(null)
+                      setCreateUploading(true)
+                      setCreateUploadProgress(0)
+                      try {
+                        const { secureUrl, mediaType } = await uploadMediaViaApi(
+                          createUploadFile,
+                          setCreateUploadProgress,
+                        )
+                        setCreatePendingMedia((prev) => [
+                          ...prev,
+                          {
+                            url: secureUrl,
+                            media_type: mediaType,
+                            caption: createUploadCaption,
+                            sort_order: createUploadSortOrder,
+                            is_primary: createUploadIsPrimary,
+                          },
+                        ])
+                        setCreateUploadFile(null)
+                        setCreateUploadCaption('')
+                        setCreateUploadSortOrder(0)
+                        setCreateUploadIsPrimary(false)
+                      } catch (err) {
+                        setCreateUploadError(uploadErrorMessage(err))
+                      } finally {
+                        setCreateUploading(false)
+                      }
+                    }}
+                  >
+                    {createUploading ? `Uploading… ${createUploadProgress}%` : 'Upload file'}
+                  </button>
+                </div>
+                {createUploading ? (
+                  <div className="h-2 w-full overflow-hidden rounded bg-stone-200 dark:bg-stone-800">
+                    <div
+                      className="h-full bg-brand-600 transition-[width] duration-150"
+                      style={{ width: `${createUploadProgress}%` }}
+                    />
+                  </div>
+                ) : null}
+                {createUploadError ? <p className="text-xs text-red-600">{createUploadError}</p> : null}
+              </div>
+              {createPendingMedia.length > 0 ? (
+                <ul className="grid gap-2 sm:grid-cols-2">
+                  {createPendingMedia.map((m, idx) => (
+                    <li key={`${m.url}-${idx}`} className="rounded border border-stone-200 p-2 text-xs">
+                      <p className="truncate">{m.media_type.toUpperCase()} · {m.caption || 'No caption'}</p>
+                      <button
+                        type="button"
+                        className="mt-1 text-red-600 hover:underline"
+                        onClick={() =>
+                          setCreatePendingMedia((prev) => prev.filter((_, i) => i !== idx))
+                        }
+                      >
+                        Remove
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+            {createSubmitError ? <p className="text-xs text-red-600 md:col-span-2">{createSubmitError}</p> : null}
+            <label className="flex items-center gap-2 text-sm text-stone-700 dark:text-stone-300 md:col-span-2">
+              <input
+                name="is_public"
+                type="checkbox"
+                className="rounded border-stone-400"
+                checked={createForm.is_public}
+                onChange={(e) => setCreateForm((prev) => ({ ...prev, is_public: e.target.checked }))}
+              />
+              Public on location page
+            </label>
+            <button type="submit" className="btn-primary md:col-span-2" disabled={createLocationContent.isPending}>
+              Create location content
+            </button>
+          </form>
+        </ModalShell>
+      ) : null}
+      {showEditModal ? (
+        <ModalShell title="Edit media/details" onClose={() => setShowEditModal(false)}>
           <LocationContentEditor
             content={locationContent.data?.items.find((x) => x.id === selectedContentId) ?? null}
             onSave={(id, body) => updateLocationContent.mutate({ id, body })}
           />
-        ) : null}
-      </section>
+        </ModalShell>
+      ) : null}
     </div>
   )
 }
@@ -505,31 +670,23 @@ function LocationContentEditor({
           <p className="text-xs text-stone-600 dark:text-stone-400">
             Upload from your machine (Cloudinary)
           </p>
-          {!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET ? (
-            <p className="mt-2 text-xs text-amber-700 dark:text-amber-300">
-              Missing env config: set `VITE_CLOUDINARY_CLOUD_NAME` and
-              `VITE_CLOUDINARY_UPLOAD_PRESET`, then restart frontend.
-            </p>
-          ) : null}
+          <p className="mt-1 text-[11px] text-stone-500 dark:text-stone-400">
+            Uploads go through the API (signed Cloudinary). Set{' '}
+            <span className="font-mono">CLOUDINARY_*</span> in backend <span className="font-mono">.env</span>.
+          </p>
           <form
             className="mt-2 space-y-2"
             onSubmit={async (e) => {
               e.preventDefault()
-              if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET) return
               if (!uploadFile || !uploadFile.size) return
               setUploadError(null)
               setUploading(true)
               setUploadProgress(0)
               try {
-                const secureUrl = await uploadFileToCloudinary({
-                  cloudName: CLOUDINARY_CLOUD_NAME,
-                  uploadPreset: CLOUDINARY_UPLOAD_PRESET,
-                  file: uploadFile,
-                  onProgress: setUploadProgress,
-                })
+                const { secureUrl, mediaType } = await uploadMediaViaApi(uploadFile, setUploadProgress)
                 await addMedia.mutateAsync({
                   url: secureUrl,
-                  media_type: detectedType,
+                  media_type: mediaType,
                   caption: uploadCaption,
                   sort_order: uploadSortOrder,
                   is_primary: uploadIsPrimary,
@@ -539,7 +696,7 @@ function LocationContentEditor({
                 setUploadSortOrder(0)
                 setUploadIsPrimary(false)
               } catch (err) {
-                setUploadError(err instanceof Error ? err.message : 'Upload failed')
+                setUploadError(uploadErrorMessage(err))
               } finally {
                 setUploading(false)
               }
@@ -597,7 +754,7 @@ function LocationContentEditor({
               <button
                 type="submit"
                 className="btn-secondary"
-                disabled={uploading || !uploadFile || !CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET}
+                disabled={uploading || !uploadFile}
               >
                 {uploading ? `Uploading… ${uploadProgress}%` : 'Upload file'}
               </button>
@@ -613,36 +770,6 @@ function LocationContentEditor({
           </form>
           {uploadError ? <p className="mt-2 text-xs text-red-600">{uploadError}</p> : null}
         </div>
-        <form
-          className="flex flex-wrap gap-2"
-          onSubmit={(e) => {
-            e.preventDefault()
-            const fd = new FormData(e.currentTarget)
-            addMedia.mutate({
-              url: String(fd.get('url') ?? ''),
-              media_type: String(fd.get('media_type') ?? 'image') as 'image' | 'video',
-              caption: String(fd.get('caption') ?? ''),
-              is_primary: fd.get('is_primary') === 'on',
-              sort_order: Number(fd.get('sort_order') ?? '0'),
-            })
-            e.currentTarget.reset()
-          }}
-        >
-          <select name="media_type" className="input w-32">
-            <option value="image">Image</option>
-            <option value="video">Video</option>
-          </select>
-          <input name="url" required className="input min-w-[16rem] flex-1" placeholder="https://... media URL" />
-          <input name="caption" className="input min-w-[12rem]" placeholder="Caption" />
-          <input name="sort_order" type="number" defaultValue={0} className="input w-24" />
-          <label className="flex items-center gap-1 text-xs text-stone-600">
-            <input name="is_primary" type="checkbox" className="rounded border-stone-400" />
-            Primary
-          </label>
-          <button type="submit" className="btn-secondary" disabled={addMedia.isPending}>
-            Add media
-          </button>
-        </form>
         <ul className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {media.data?.map((m) => (
             <li key={m.id} className="rounded-lg border border-stone-200 p-2 dark:border-stone-800">
@@ -673,47 +800,60 @@ function LocationContentEditor({
   )
 }
 
-async function uploadFileToCloudinary({
-  cloudName,
-  uploadPreset,
-  file,
-  onProgress,
+async function uploadMediaViaApi(
+  file: File,
+  onProgress: (value: number) => void,
+): Promise<{ secureUrl: string; mediaType: 'image' | 'video' }> {
+  const form = new FormData()
+  form.append('file', file)
+  const { data } = await api.post<{ secure_url: string; media_type: 'image' | 'video' }>(
+    '/admin/media/upload',
+    form,
+    {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      onUploadProgress: (evt) => {
+        if (evt.total) onProgress(Math.round((evt.loaded / evt.total) * 100))
+      },
+    },
+  )
+  return { secureUrl: data.secure_url, mediaType: data.media_type }
+}
+
+function uploadErrorMessage(err: unknown): string {
+  if (err && typeof err === 'object' && 'response' in err) {
+    const response = (err as { response?: { data?: { detail?: { message?: string } | string } } })
+      .response
+    const detail = response?.data?.detail
+    if (detail && typeof detail === 'object' && 'message' in detail) {
+      return String(detail.message)
+    }
+    if (typeof detail === 'string') return detail
+  }
+  return err instanceof Error ? err.message : 'Upload failed'
+}
+
+function ModalShell({
+  title,
+  onClose,
+  children,
 }: {
-  cloudName: string
-  uploadPreset: string
-  file: File
-  onProgress: (value: number) => void
-}): Promise<string> {
-  return await new Promise<string>((resolve, reject) => {
-    const xhr = new XMLHttpRequest()
-    xhr.open('POST', `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`)
-    xhr.upload.onprogress = (evt) => {
-      if (!evt.lengthComputable) return
-      onProgress(Math.round((evt.loaded / evt.total) * 100))
-    }
-    xhr.onerror = () => reject(new Error('Cloudinary upload failed'))
-    xhr.onload = () => {
-      if (xhr.status < 200 || xhr.status >= 300) {
-        reject(new Error(xhr.responseText || 'Cloudinary upload failed'))
-        return
-      }
-      try {
-        const json = JSON.parse(xhr.responseText) as { secure_url?: string }
-        if (!json.secure_url) {
-          reject(new Error('No secure_url returned from Cloudinary'))
-          return
-        }
-        resolve(json.secure_url)
-      } catch {
-        reject(new Error('Invalid Cloudinary response'))
-      }
-    }
-    const payload = new FormData()
-    payload.set('file', file)
-    payload.set('upload_preset', uploadPreset)
-    payload.set('folder', 'belay/location-media')
-    xhr.send(payload)
-  })
+  title: string
+  onClose: () => void
+  children: import('react').ReactNode
+}) {
+  return (
+    <div className="fixed inset-0 z-[250] flex items-center justify-center bg-slate-900/50 p-4">
+      <div className="max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-2xl border border-border bg-surface p-5">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <h3 className="text-lg font-semibold text-fg">{title}</h3>
+          <button type="button" className="btn-secondary" onClick={onClose}>
+            Close
+          </button>
+        </div>
+        {children}
+      </div>
+    </div>
+  )
 }
 
 function CardEditor({
