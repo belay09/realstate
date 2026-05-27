@@ -25,6 +25,8 @@ type CreateFormState = {
 }
 
 const EMPTY_CARD: LocationCard = { title: '', body: '', image_url: '' }
+const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
 
 export function AdminListingsPage() {
   const qc = useQueryClient()
@@ -356,6 +358,14 @@ function LocationContentEditor({
   ) => void
 }) {
   const qc = useQueryClient()
+  const [uploading, setUploading] = useState(false)
+  const [uploadError, setUploadError] = useState<string | null>(null)
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [uploadDrag, setUploadDrag] = useState(false)
+  const [uploadFile, setUploadFile] = useState<File | null>(null)
+  const [uploadCaption, setUploadCaption] = useState('')
+  const [uploadSortOrder, setUploadSortOrder] = useState(0)
+  const [uploadIsPrimary, setUploadIsPrimary] = useState(false)
   const [form, setForm] = useState<{
     title: string
     subtitle: string
@@ -410,6 +420,7 @@ function LocationContentEditor({
   })
 
   if (!content) return null
+  const detectedType: 'image' | 'video' = uploadFile?.type.startsWith('video/') ? 'video' : 'image'
 
   return (
     <div className="space-y-3 rounded-xl border border-stone-200 p-4 dark:border-stone-800">
@@ -490,6 +501,118 @@ function LocationContentEditor({
 
       <div className="space-y-2">
         <h4 className="text-sm font-semibold text-stone-800 dark:text-stone-200">Media gallery</h4>
+        <div className="rounded-lg border border-stone-200 p-3 dark:border-stone-800">
+          <p className="text-xs text-stone-600 dark:text-stone-400">
+            Upload from your machine (Cloudinary)
+          </p>
+          {!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET ? (
+            <p className="mt-2 text-xs text-amber-700 dark:text-amber-300">
+              Missing env config: set `VITE_CLOUDINARY_CLOUD_NAME` and
+              `VITE_CLOUDINARY_UPLOAD_PRESET`, then restart frontend.
+            </p>
+          ) : null}
+          <form
+            className="mt-2 space-y-2"
+            onSubmit={async (e) => {
+              e.preventDefault()
+              if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET) return
+              if (!uploadFile || !uploadFile.size) return
+              setUploadError(null)
+              setUploading(true)
+              setUploadProgress(0)
+              try {
+                const secureUrl = await uploadFileToCloudinary({
+                  cloudName: CLOUDINARY_CLOUD_NAME,
+                  uploadPreset: CLOUDINARY_UPLOAD_PRESET,
+                  file: uploadFile,
+                  onProgress: setUploadProgress,
+                })
+                await addMedia.mutateAsync({
+                  url: secureUrl,
+                  media_type: detectedType,
+                  caption: uploadCaption,
+                  sort_order: uploadSortOrder,
+                  is_primary: uploadIsPrimary,
+                })
+                setUploadFile(null)
+                setUploadCaption('')
+                setUploadSortOrder(0)
+                setUploadIsPrimary(false)
+              } catch (err) {
+                setUploadError(err instanceof Error ? err.message : 'Upload failed')
+              } finally {
+                setUploading(false)
+              }
+            }}
+          >
+            <label
+              className={`block rounded-lg border-2 border-dashed p-4 text-center text-sm ${
+                uploadDrag ? 'border-brand-500 bg-brand-50/40 dark:bg-brand-950/30' : 'border-stone-300'
+              }`}
+              onDragOver={(e) => {
+                e.preventDefault()
+                setUploadDrag(true)
+              }}
+              onDragLeave={() => setUploadDrag(false)}
+              onDrop={(e) => {
+                e.preventDefault()
+                setUploadDrag(false)
+                const file = e.dataTransfer.files?.[0]
+                if (file) setUploadFile(file)
+              }}
+            >
+              <input
+                type="file"
+                className="hidden"
+                onChange={(e) => setUploadFile(e.target.files?.[0] ?? null)}
+              />
+              <span className="cursor-pointer">
+                {uploadFile
+                  ? `Selected: ${uploadFile.name} (${detectedType})`
+                  : 'Drag & drop image/video here, or click to choose file'}
+              </span>
+            </label>
+            <div className="flex flex-wrap gap-2">
+              <input
+                value={uploadCaption}
+                onChange={(e) => setUploadCaption(e.target.value)}
+                className="input min-w-[12rem]"
+                placeholder="Caption"
+              />
+              <input
+                type="number"
+                value={uploadSortOrder}
+                onChange={(e) => setUploadSortOrder(Number(e.target.value || '0'))}
+                className="input w-24"
+              />
+              <label className="flex items-center gap-1 text-xs text-stone-600">
+                <input
+                  type="checkbox"
+                  className="rounded border-stone-400"
+                  checked={uploadIsPrimary}
+                  onChange={(e) => setUploadIsPrimary(e.target.checked)}
+                />
+                Primary
+              </label>
+              <button
+                type="submit"
+                className="btn-secondary"
+                disabled={uploading || !uploadFile || !CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET}
+              >
+                {uploading ? `Uploading… ${uploadProgress}%` : 'Upload file'}
+              </button>
+            </div>
+            {uploading ? (
+              <div className="h-2 w-full overflow-hidden rounded bg-stone-200 dark:bg-stone-800">
+                <div
+                  className="h-full bg-brand-600 transition-[width] duration-150"
+                  style={{ width: `${uploadProgress}%` }}
+                />
+              </div>
+            ) : null}
+          </form>
+          {uploadError ? <p className="mt-2 text-xs text-red-600">{uploadError}</p> : null}
+        </div>
         <form
           className="flex flex-wrap gap-2"
           onSubmit={(e) => {
@@ -548,6 +671,49 @@ function LocationContentEditor({
       </p>
     </div>
   )
+}
+
+async function uploadFileToCloudinary({
+  cloudName,
+  uploadPreset,
+  file,
+  onProgress,
+}: {
+  cloudName: string
+  uploadPreset: string
+  file: File
+  onProgress: (value: number) => void
+}): Promise<string> {
+  return await new Promise<string>((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    xhr.open('POST', `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`)
+    xhr.upload.onprogress = (evt) => {
+      if (!evt.lengthComputable) return
+      onProgress(Math.round((evt.loaded / evt.total) * 100))
+    }
+    xhr.onerror = () => reject(new Error('Cloudinary upload failed'))
+    xhr.onload = () => {
+      if (xhr.status < 200 || xhr.status >= 300) {
+        reject(new Error(xhr.responseText || 'Cloudinary upload failed'))
+        return
+      }
+      try {
+        const json = JSON.parse(xhr.responseText) as { secure_url?: string }
+        if (!json.secure_url) {
+          reject(new Error('No secure_url returned from Cloudinary'))
+          return
+        }
+        resolve(json.secure_url)
+      } catch {
+        reject(new Error('Invalid Cloudinary response'))
+      }
+    }
+    const payload = new FormData()
+    payload.set('file', file)
+    payload.set('upload_preset', uploadPreset)
+    payload.set('folder', 'belay/location-media')
+    xhr.send(payload)
+  })
 }
 
 function CardEditor({
