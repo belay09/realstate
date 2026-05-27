@@ -8,6 +8,7 @@ import type {
   LocationMedia,
   Paginated,
 } from '../../api/types'
+import { getAccessToken } from '../../lib/auth'
 import { AYAT_DEVELOPMENT_ZONES } from '../../lib/listingDisplay'
 import { getShopLocations } from '../../lib/shopLocations'
 
@@ -816,13 +817,17 @@ async function uploadMediaViaApi(
   file: File,
   onProgress: (value: number) => void,
 ): Promise<{ secureUrl: string; mediaType: 'image' | 'video' }> {
+  const token = getAccessToken()
+  if (!token) {
+    throw new Error('Your admin session expired. Please log in again.')
+  }
   const form = new FormData()
   form.append('file', file)
   const { data } = await api.post<{ secure_url: string; media_type: 'image' | 'video' }>(
     '/admin/media/upload',
     form,
     {
-      headers: { 'Content-Type': 'multipart/form-data' },
+      headers: { Authorization: `Bearer ${token}` },
       onUploadProgress: (evt) => {
         if (evt.total) onProgress(Math.round((evt.loaded / evt.total) * 100))
       },
