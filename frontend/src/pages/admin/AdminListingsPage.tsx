@@ -796,7 +796,10 @@ async function uploadMediaViaApi(
     '/admin/media/upload',
     form,
     {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
       onUploadProgress: (evt) => {
         if (evt.total) onProgress(Math.round((evt.loaded / evt.total) * 100))
       },
