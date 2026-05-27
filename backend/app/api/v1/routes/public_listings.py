@@ -20,11 +20,11 @@ from app.models.payment import PaymentPlan
 from app.schemas.inventory import (
     Paginated,
     PublicFilterOption,
-    PublicLocationContent,
     PublicListingDetail,
     PublicListingFilterOptions,
     PublicListingImage,
     PublicListingSummary,
+    PublicLocationContent,
 )
 from app.schemas.payment import (
     InstallmentItemRead,

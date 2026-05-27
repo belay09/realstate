@@ -506,7 +506,8 @@ def _seed_location_content(db: Session, *, project_by_slug: dict[str, Project], 
             title=project.area or project.name,
             subtitle=project.name,
             description=(
-                "Official Ayat apartment location page. Configure video/images and update cards from admin."
+                "Official Ayat apartment location page. Configure video/images "
+                "and update cards from admin."
             ),
             cards=cards,
         )
@@ -537,7 +538,8 @@ def _seed_location_content(db: Session, *, project_by_slug: dict[str, Project], 
             title=zone["label"],
             subtitle="Ayat commercial shops (Section 11)",
             description=(
-                "Official shop rates and payment terms. Configure location media/video from admin dashboard."
+                "Official shop rates and payment terms. Configure location "
+                "media/video from admin dashboard."
             ),
             cards=floor_cards,
         )

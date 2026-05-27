@@ -777,7 +777,11 @@ def list_location_content(
     return Paginated(items=[LocationContentRead.model_validate(r) for r in rows], total=total)
 
 
-@router.post("/location-content", response_model=LocationContentRead, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/location-content",
+    response_model=LocationContentRead,
+    status_code=status.HTTP_201_CREATED,
+)
 def create_location_content(
     body: LocationContentCreate,
     db: Session = Depends(get_db),
