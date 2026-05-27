@@ -33,6 +33,9 @@ type PendingMedia = {
   is_primary: boolean
 }
 
+type ToastLevel = 'success' | 'error'
+type ToastItem = { id: number; level: ToastLevel; message: string }
+
 const EMPTY_CARD: LocationCard = { title: '', body: '', image_url: '' }
 
 export function AdminListingsPage() {
@@ -40,15 +43,9 @@ export function AdminListingsPage() {
   const [selectedContentId, setSelectedContentId] = useState('')
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
-  const [createUploading, setCreateUploading] = useState(false)
-  const [createUploadProgress, setCreateUploadProgress] = useState(0)
-  const [createUploadFile, setCreateUploadFile] = useState<File | null>(null)
-  const [createUploadCaption, setCreateUploadCaption] = useState('')
-  const [createUploadSortOrder, setCreateUploadSortOrder] = useState(0)
-  const [createUploadIsPrimary, setCreateUploadIsPrimary] = useState(false)
-  const [createUploadError, setCreateUploadError] = useState<string | null>(null)
   const [createSubmitError, setCreateSubmitError] = useState<string | null>(null)
   const [createPendingMedia, setCreatePendingMedia] = useState<PendingMedia[]>([])
+  const [toasts, setToasts] = useState<ToastItem[]>([])
   const [createForm, setCreateForm] = useState<CreateFormState>({
     kind: 'apartment',
     location_id: '',
@@ -97,16 +94,19 @@ export function AdminListingsPage() {
     [],
   )
   const locationOptions = createForm.kind === 'apartment' ? apartmentOptions : shopOptions
+  const createPrimaryImageUrl =
+    createPendingMedia.find((m) => m.is_primary && m.media_type === 'image')?.url ?? ''
   const closeCreateModal = () => {
     setShowCreateModal(false)
     setCreateSubmitError(null)
-    setCreateUploadError(null)
     setCreatePendingMedia([])
-    setCreateUploadFile(null)
-    setCreateUploadCaption('')
-    setCreateUploadSortOrder(0)
-    setCreateUploadIsPrimary(false)
-    setCreateUploadProgress(0)
+  }
+  const pushToast = (level: ToastLevel, message: string) => {
+    const id = Date.now() + Math.floor(Math.random() * 1000)
+    setToasts((prev) => [...prev, { id, level, message }])
+    window.setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id))
+    }, 3200)
   }
 
   useEffect(() => {
@@ -170,7 +170,13 @@ export function AdminListingsPage() {
         }
       }
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin', 'location-content'] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin', 'location-content'] })
+      pushToast('success', 'Default location content seeded.')
+    },
+    onError: (err) => {
+      pushToast('error', uploadErrorMessage(err))
+    },
   })
 
   return (
@@ -272,14 +278,12 @@ export function AdminListingsPage() {
                 for (const media of createPendingMedia) {
                   await api.post(`/admin/location-content/${created.id}/media`, media)
                 }
-                setCreatePendingMedia([])
-                setCreateUploadFile(null)
-                setCreateUploadCaption('')
-                setCreateUploadSortOrder(0)
-                setCreateUploadIsPrimary(false)
+                pushToast('success', 'Location content created successfully.')
                 closeCreateModal()
               } catch (err) {
-                setCreateSubmitError(err instanceof Error ? err.message : 'Failed to create location content')
+                const message = uploadErrorMessage(err)
+                setCreateSubmitError(message)
+                pushToast('error', message)
               }
             }}
           >
@@ -331,6 +335,37 @@ export function AdminListingsPage() {
                 onChange={(e) => setCreateForm((prev) => ({ ...prev, title: e.target.value }))}
               />
             </label>
+            <div className="rounded border border-stone-200 p-2 dark:border-stone-800 md:col-span-2">
+              <p className="text-xs font-medium text-stone-700 dark:text-stone-300">
+                Top location card image (shown on `/apartments`)
+              </p>
+              {createPrimaryImageUrl ? (
+                <p className="mt-1 truncate text-[11px] text-stone-500 dark:text-stone-400">
+                  Current cover: {createPrimaryImageUrl}
+                </p>
+              ) : null}
+              <InlineUploadToUrlField
+                accept="image/*"
+                buttonLabel="Upload cover image"
+                helperText="This controls the top location card image."
+                onNotify={pushToast}
+                onUploaded={(url) =>
+                  setCreatePendingMedia((prev) => {
+                    const next = prev.map((m) => ({ ...m, is_primary: false }))
+                    return [
+                      {
+                        url,
+                        media_type: 'image',
+                        caption: 'Location cover',
+                        sort_order: 0,
+                        is_primary: true,
+                      },
+                      ...next,
+                    ]
+                  })
+                }
+              />
+            </div>
             <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
               Subtitle
               <input
@@ -363,6 +398,7 @@ export function AdminListingsPage() {
                 accept="video/*"
                 buttonLabel="Upload video and fill URL"
                 helperText="Upload MP4/WebM from dashboard and auto-fill this URL."
+                onNotify={pushToast}
                 onUploaded={(url) => setCreateForm((prev) => ({ ...prev, video_url: url }))}
               />
             </label>
@@ -370,118 +406,8 @@ export function AdminListingsPage() {
               <CardEditor
                 cards={createForm.cards}
                 onChange={(cards) => setCreateForm((prev) => ({ ...prev, cards }))}
+                onNotify={pushToast}
               />
-            </div>
-            <div className="space-y-2 rounded-lg border border-stone-200 p-3 dark:border-stone-800 md:col-span-2">
-              <p className="text-xs text-stone-600 dark:text-stone-400">
-                Upload media from your machine (saved immediately after create)
-              </p>
-              <p className="text-[11px] text-stone-500 dark:text-stone-400">
-                Uploads go through the API (signed Cloudinary). Set{' '}
-                <span className="font-mono">CLOUDINARY_*</span> in backend <span className="font-mono">.env</span>{' '}
-                and restart the API.
-              </p>
-              <div className="space-y-2">
-                <label className="block rounded-lg border-2 border-dashed border-stone-300 p-4 text-center text-sm">
-                  <input
-                    type="file"
-                    className="hidden"
-                    onChange={(evt) => setCreateUploadFile(evt.target.files?.[0] ?? null)}
-                  />
-                  <span className="cursor-pointer">
-                    {createUploadFile
-                      ? `Selected: ${createUploadFile.name}`
-                      : 'Click to choose image/video file'}
-                  </span>
-                </label>
-                <div className="flex flex-wrap gap-2">
-                  <input
-                    value={createUploadCaption}
-                    onChange={(evt) => setCreateUploadCaption(evt.target.value)}
-                    className="input min-w-[12rem]"
-                    placeholder="Caption"
-                  />
-                  <input
-                    type="number"
-                    value={createUploadSortOrder}
-                    onChange={(evt) => setCreateUploadSortOrder(Number(evt.target.value || '0'))}
-                    className="input w-24"
-                  />
-                  <label className="flex items-center gap-1 text-xs text-stone-600">
-                    <input
-                      type="checkbox"
-                      className="rounded border-stone-400"
-                      checked={createUploadIsPrimary}
-                      onChange={(evt) => setCreateUploadIsPrimary(evt.target.checked)}
-                    />
-                    Primary
-                  </label>
-                  <button
-                    type="button"
-                    className="btn-secondary"
-                    disabled={createUploading || !createUploadFile}
-                    onClick={async () => {
-                      if (!createUploadFile || !createUploadFile.size) return
-                      setCreateUploadError(null)
-                      setCreateUploading(true)
-                      setCreateUploadProgress(0)
-                      try {
-                        const { secureUrl, mediaType } = await uploadMediaViaApi(
-                          createUploadFile,
-                          setCreateUploadProgress,
-                        )
-                        setCreatePendingMedia((prev) => [
-                          ...prev,
-                          {
-                            url: secureUrl,
-                            media_type: mediaType,
-                            caption: createUploadCaption,
-                            sort_order: createUploadSortOrder,
-                            is_primary: createUploadIsPrimary,
-                          },
-                        ])
-                        setCreateUploadFile(null)
-                        setCreateUploadCaption('')
-                        setCreateUploadSortOrder(0)
-                        setCreateUploadIsPrimary(false)
-                      } catch (err) {
-                        setCreateUploadError(uploadErrorMessage(err))
-                      } finally {
-                        setCreateUploading(false)
-                      }
-                    }}
-                  >
-                    {createUploading ? `Uploading… ${createUploadProgress}%` : 'Upload file'}
-                  </button>
-                </div>
-                {createUploading ? (
-                  <div className="h-2 w-full overflow-hidden rounded bg-stone-200 dark:bg-stone-800">
-                    <div
-                      className="h-full bg-brand-600 transition-[width] duration-150"
-                      style={{ width: `${createUploadProgress}%` }}
-                    />
-                  </div>
-                ) : null}
-                {createUploadError ? <p className="text-xs text-red-600">{createUploadError}</p> : null}
-              </div>
-              {createPendingMedia.length > 0 ? (
-                <ul className="grid gap-2 sm:grid-cols-2">
-                  {createPendingMedia.map((m, idx) => (
-                    <li key={`${m.url}-${idx}`} className="rounded border border-stone-200 p-2 text-xs">
-                      <p className="truncate">{m.media_type.toUpperCase()} · {m.caption || 'No caption'}</p>
-                      <button
-                        type="button"
-                        className="mt-1 text-red-600 hover:underline"
-                        onClick={() =>
-                          setCreatePendingMedia((prev) => prev.filter((_, i) => i !== idx))
-                        }
-                      >
-                        Remove
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
             </div>
             {createSubmitError ? <p className="text-xs text-red-600 md:col-span-2">{createSubmitError}</p> : null}
             <label className="flex items-center gap-2 text-sm text-stone-700 dark:text-stone-300 md:col-span-2">
@@ -504,10 +430,15 @@ export function AdminListingsPage() {
         <ModalShell title="Edit media/details" onClose={() => setShowEditModal(false)}>
           <LocationContentEditor
             content={locationContent.data?.items.find((x) => x.id === selectedContentId) ?? null}
-            onSave={(id, body) => updateLocationContent.mutate({ id, body })}
+            onSave={async (id, body) => {
+              await updateLocationContent.mutateAsync({ id, body })
+              pushToast('success', 'Location details saved.')
+            }}
+            onNotify={pushToast}
           />
         </ModalShell>
       ) : null}
+      <ToastViewport toasts={toasts} />
     </div>
   )
 }
@@ -515,6 +446,7 @@ export function AdminListingsPage() {
 function LocationContentEditor({
   content,
   onSave,
+  onNotify,
 }: {
   content: AdminLocationContent | null
   onSave: (
@@ -527,7 +459,8 @@ function LocationContentEditor({
       is_public: boolean
       cards: LocationCard[]
     }>,
-  ) => void
+  ) => Promise<void>
+  onNotify: (level: ToastLevel, message: string) => void
 }) {
   const qc = useQueryClient()
   const [uploading, setUploading] = useState(false)
@@ -601,16 +534,20 @@ function LocationContentEditor({
       </h3>
       <form
         className="grid gap-3 md:grid-cols-2"
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault()
-          onSave(content.id, {
-            title: form.title,
-            subtitle: form.subtitle,
-            description: form.description,
-            video_url: form.video_url,
-            is_public: form.is_public,
-            cards: form.cards.filter((c) => c.title.trim().length > 0),
-          })
+          try {
+            await onSave(content.id, {
+              title: form.title,
+              subtitle: form.subtitle,
+              description: form.description,
+              video_url: form.video_url,
+              is_public: form.is_public,
+              cards: form.cards.filter((c) => c.title.trim().length > 0),
+            })
+          } catch (err) {
+            onNotify('error', uploadErrorMessage(err))
+          }
         }}
       >
         <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
@@ -631,6 +568,26 @@ function LocationContentEditor({
             className="input mt-1"
           />
         </label>
+        <div className="rounded border border-stone-200 p-2 dark:border-stone-800 md:col-span-2">
+          <p className="text-xs font-medium text-stone-700 dark:text-stone-300">
+            Top location card image (shown on `/apartments`)
+          </p>
+          <InlineUploadToUrlField
+            accept="image/*"
+            buttonLabel="Upload cover image"
+            helperText="Uploads image and sets it as primary location media."
+            onNotify={onNotify}
+            onUploaded={async (url) => {
+              await addMedia.mutateAsync({
+                url,
+                media_type: 'image',
+                caption: 'Location cover',
+                sort_order: 0,
+                is_primary: true,
+              })
+            }}
+          />
+        </div>
         <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
           Description
           <textarea
@@ -653,6 +610,7 @@ function LocationContentEditor({
             accept="video/*"
             buttonLabel="Upload video and fill URL"
             helperText="Upload MP4/WebM from dashboard and auto-fill this URL."
+            onNotify={onNotify}
             onUploaded={(url) => setForm((prev) => ({ ...prev, video_url: url }))}
           />
         </label>
@@ -660,6 +618,7 @@ function LocationContentEditor({
           <CardEditor
             cards={form.cards}
             onChange={(cards) => setForm((prev) => ({ ...prev, cards }))}
+            onNotify={onNotify}
           />
         </div>
         <label className="flex items-center gap-2 text-sm text-stone-700 dark:text-stone-300 md:col-span-2">
@@ -708,8 +667,11 @@ function LocationContentEditor({
                 setUploadCaption('')
                 setUploadSortOrder(0)
                 setUploadIsPrimary(false)
+                onNotify('success', 'Media uploaded.')
               } catch (err) {
-                setUploadError(uploadErrorMessage(err))
+                const message = uploadErrorMessage(err)
+                setUploadError(message)
+                onNotify('error', message)
               } finally {
                 setUploading(false)
               }
@@ -796,7 +758,14 @@ function LocationContentEditor({
                 <button
                   type="button"
                   className="text-xs text-red-600 hover:underline"
-                  onClick={() => deleteMedia.mutate(m.id)}
+                  onClick={async () => {
+                    try {
+                      await deleteMedia.mutateAsync(m.id)
+                      onNotify('success', 'Media deleted.')
+                    } catch (err) {
+                      onNotify('error', uploadErrorMessage(err))
+                    }
+                  }}
                 >
                   Delete
                 </button>
@@ -853,12 +822,14 @@ function InlineUploadToUrlField({
   accept,
   buttonLabel,
   helperText,
+  onNotify,
   onUploaded,
 }: {
   accept: string
   buttonLabel: string
   helperText: string
-  onUploaded: (url: string) => void
+  onNotify: (level: ToastLevel, message: string) => void
+  onUploaded: (url: string) => void | Promise<void>
 }) {
   const [file, setFile] = useState<File | null>(null)
   const [uploading, setUploading] = useState(false)
@@ -892,10 +863,13 @@ function InlineUploadToUrlField({
             setProgress(0)
             try {
               const { secureUrl } = await uploadMediaViaApi(file, setProgress)
-              onUploaded(secureUrl)
+              await onUploaded(secureUrl)
               setFile(null)
+              onNotify('success', 'Upload completed.')
             } catch (err) {
-              setError(uploadErrorMessage(err))
+              const message = uploadErrorMessage(err)
+              setError(message)
+              onNotify('error', message)
             } finally {
               setUploading(false)
             }
@@ -910,6 +884,24 @@ function InlineUploadToUrlField({
         </div>
       ) : null}
       {error ? <p className="mt-1 text-xs text-red-600">{error}</p> : null}
+    </div>
+  )
+}
+
+function ToastViewport({ toasts }: { toasts: ToastItem[] }) {
+  if (!toasts.length) return null
+  return (
+    <div className="pointer-events-none fixed right-4 top-4 z-[300] space-y-2">
+      {toasts.map((toast) => (
+        <div
+          key={toast.id}
+          className={`rounded-lg px-3 py-2 text-sm text-white shadow ${
+            toast.level === 'success' ? 'bg-emerald-600' : 'bg-red-600'
+          }`}
+        >
+          {toast.message}
+        </div>
+      ))}
     </div>
   )
 }
@@ -941,9 +933,11 @@ function ModalShell({
 function CardEditor({
   cards,
   onChange,
+  onNotify,
 }: {
   cards: LocationCard[]
   onChange: (cards: LocationCard[]) => void
+  onNotify: (level: ToastLevel, message: string) => void
 }) {
   const safeCards = cards.length ? cards : [{ ...EMPTY_CARD }]
   return (
@@ -994,6 +988,7 @@ function CardEditor({
             accept="image/*"
             buttonLabel="Upload image and fill URL"
             helperText="Upload image from dashboard and auto-fill this card URL."
+            onNotify={onNotify}
             onUploaded={(url) => {
               const next = [...safeCards]
               next[idx] = { ...next[idx], image_url: url }

@@ -80,12 +80,18 @@ def _sorted_location_media(content: LocationContent) -> list[dict[str, object]]:
     ]
 
 
-def _to_summary(listing: PropertyListing) -> PublicListingSummary:
+def _to_summary(
+    listing: PropertyListing,
+    location_cover_map: dict[str, str] | None = None,
+) -> PublicListingSummary:
     unit = listing.unit
     ut = unit.unit_type
     block = unit.block
     project = block.project
     company = project.company
+    project_cover = None
+    if location_cover_map:
+        project_cover = location_cover_map.get(project.slug)
     return PublicListingSummary(
         id=listing.id,
         title=listing.title,
@@ -99,7 +105,7 @@ def _to_summary(listing: PropertyListing) -> PublicListingSummary:
         company_slug=company.slug,
         project_name=project.name,
         project_slug=project.slug,
-        primary_image_url=_primary_image_url(listing),
+        primary_image_url=project_cover or _primary_image_url(listing),
     )
 
 
@@ -158,7 +164,31 @@ def list_public_listings(
         .limit(limit)
         .all()
     )
-    return Paginated(items=[_to_summary(r) for r in rows], total=total)
+    project_slugs = {r.unit.block.project.slug for r in rows}
+    location_cover_map: dict[str, str] = {}
+    if project_slugs:
+        content_rows = (
+            db.query(LocationContent)
+            .options(selectinload(LocationContent.media))
+            .filter(
+                LocationContent.kind == "apartment",
+                LocationContent.location_id.in_(project_slugs),
+                LocationContent.is_public.is_(True),
+            )
+            .all()
+        )
+        for content in content_rows:
+            sorted_media = sorted(
+                content.media,
+                key=lambda m: (not m.is_primary, m.sort_order, m.id),
+            )
+            cover = next((m.url for m in sorted_media if m.media_type == "image"), None)
+            if not cover and sorted_media:
+                cover = sorted_media[0].url
+            if cover:
+                location_cover_map[content.location_id] = cover
+
+    return Paginated(items=[_to_summary(r, location_cover_map) for r in rows], total=total)
 
 
 def _bedroom_label(count: int) -> str:
