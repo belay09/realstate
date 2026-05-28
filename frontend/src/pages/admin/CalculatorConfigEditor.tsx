@@ -34,10 +34,8 @@ export function CalculatorConfigEditor({ companyId, initialConfig }: Props) {
   const [dirty, setDirty] = useState(false)
 
   useEffect(() => {
-    const cfg = initialConfig
-    if (!cfg) return
-    setZones(cfg.commercial_zones ?? [])
-    setTiers(cfg.down_payment_tiers ?? [])
+    setZones(initialConfig?.commercial_zones ?? [])
+    setTiers(initialConfig?.down_payment_tiers ?? [])
     setDirty(false)
   }, [initialConfig])
 

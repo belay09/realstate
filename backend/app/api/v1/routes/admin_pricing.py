@@ -106,6 +106,8 @@ def get_live_pricing(
     db: Session = Depends(get_db),
 ) -> LivePricingRead:
     version = get_or_create_live_pricing_version(db, company_id=company_id)
+    if not version.calculator_config:
+        version.calculator_config = build_calculator_config_snapshot(load_official())
     db.commit()
     db.refresh(version)
     return _live_pricing_read(db, version)

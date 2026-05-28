@@ -168,9 +168,9 @@ export function AdminPricingPage() {
                   <span>
                     {r.unit_type_code ?? 'any type'} · floor {r.floor_band ?? 'any'} ·{' '}
                     {r.price_per_sqm
-                      ? `${r.price_per_sqm}/sqm`
+                      ? `${Number(r.price_per_sqm).toLocaleString('en-ET')}/sqm`
                       : r.fixed_price
-                        ? `fixed ${r.fixed_price}`
+                        ? `fixed ${Number(r.fixed_price).toLocaleString('en-ET')}`
                         : '-'}
                   </span>
                   <button
