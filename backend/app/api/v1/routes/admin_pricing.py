@@ -17,9 +17,13 @@ from app.models.pricing import (
     UnitPriceQuote,
 )
 from app.schemas.inventory import Paginated
+from app.data.ayat_official_loader import build_calculator_config_snapshot, load_official
 from app.schemas.pricing import (
+    CalculatorConfigRead,
+    CalculatorConfigUpdate,
     DiscountRuleCreate,
     DiscountRuleRead,
+    LivePricingRead,
     PriceCalculateRequest,
     PriceCalculationBreakdown,
     PriceTableRowCreate,
@@ -31,6 +35,8 @@ from app.schemas.pricing import (
     PricingVersionUpdate,
     UnitPriceQuoteRead,
 )
+from app.services.calculator_config import merge_calculator_config_update
+from app.services.live_pricing import get_or_create_live_pricing_version, touch_live_pricing
 from app.schemas.quote import FullQuoteRequest, FullQuoteResponse
 from app.services.commission_service import CommissionError as CommErr
 from app.services.payment_service import PaymentError as PayErr
@@ -72,6 +78,118 @@ def _get_version(db: Session, version_id: UUID) -> PricingVersion:
 def _require_draft(version: PricingVersion) -> None:
     if version.status != "draft":
         raise _bad_request("VERSION_NOT_DRAFT", "Only draft pricing versions can be edited")
+
+
+# --- Live pricing (one editable config per company; versions are internal) ---
+
+
+def _live_pricing_read(db: Session, version: PricingVersion) -> LivePricingRead:
+    rows = (
+        db.query(PriceTableRow)
+        .filter(PriceTableRow.pricing_version_id == version.id)
+        .order_by(PriceTableRow.created_at)
+        .all()
+    )
+    return LivePricingRead(
+        id=version.id,
+        company_id=version.company_id,
+        currency=version.currency,
+        includes_vat=version.includes_vat,
+        calculator_config=version.calculator_config,
+        price_rows=[PriceTableRowRead.model_validate(r) for r in rows],
+    )
+
+
+@router.get("/pricing/live", response_model=LivePricingRead)
+def get_live_pricing(
+    company_id: UUID = Query(...),
+    db: Session = Depends(get_db),
+) -> LivePricingRead:
+    version = get_or_create_live_pricing_version(db, company_id=company_id)
+    db.commit()
+    db.refresh(version)
+    return _live_pricing_read(db, version)
+
+
+@router.patch("/pricing/live/calculator-config", response_model=CalculatorConfigRead)
+def update_live_calculator_config(
+    company_id: UUID = Query(...),
+    body: CalculatorConfigUpdate = ...,
+    db: Session = Depends(get_db),
+    admin: User = Depends(get_current_active_user),
+) -> CalculatorConfigRead:
+    version = get_or_create_live_pricing_version(db, company_id=company_id)
+    patch = body.model_dump(exclude_unset=True)
+    version.calculator_config = merge_calculator_config_update(version.calculator_config, patch)
+    if version.status != "published":
+        version.status = "published"
+        version.published_at = version.published_at or datetime.now(UTC)
+    touch_live_pricing(db, version, user_id=admin.id)
+    db.commit()
+    db.refresh(version)
+    return CalculatorConfigRead(calculator_config=version.calculator_config, status=version.status)
+
+
+@router.post(
+    "/pricing/live/price-rows",
+    response_model=PriceTableRowRead,
+    status_code=status.HTTP_201_CREATED,
+)
+def create_live_price_row(
+    company_id: UUID = Query(...),
+    body: PriceTableRowCreate = ...,
+    db: Session = Depends(get_db),
+    admin: User = Depends(get_current_active_user),
+) -> PriceTableRowRead:
+    version = get_or_create_live_pricing_version(db, company_id=company_id)
+    if body.price_per_sqm is None and body.fixed_price is None:
+        raise _bad_request(
+            "INVALID_ROW",
+            "Provide price_per_sqm or fixed_price",
+        )
+    row = PriceTableRow(
+        pricing_version_id=version.id,
+        project_id=body.project_id,
+        block_id=body.block_id,
+        floor_band=body.floor_band,
+        unit_type_code=body.unit_type_code,
+        finish_type=body.finish_type,
+        construction_state=body.construction_state,
+        price_per_sqm=body.price_per_sqm,
+        fixed_price=body.fixed_price,
+        conditions=body.conditions,
+    )
+    db.add(row)
+    if version.status != "published":
+        version.status = "published"
+        version.published_at = version.published_at or datetime.now(UTC)
+    touch_live_pricing(db, version, user_id=admin.id)
+    db.commit()
+    db.refresh(row)
+    return PriceTableRowRead.model_validate(row)
+
+
+@router.delete("/pricing/live/price-rows/{row_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_live_price_row(
+    row_id: UUID,
+    company_id: UUID = Query(...),
+    db: Session = Depends(get_db),
+    admin: User = Depends(get_current_active_user),
+) -> None:
+    version = get_or_create_live_pricing_version(db, company_id=company_id)
+    row = (
+        db.query(PriceTableRow)
+        .filter(
+            PriceTableRow.id == row_id,
+            PriceTableRow.pricing_version_id == version.id,
+        )
+        .first()
+    )
+    if row is None:
+        raise _not_found("Price row")
+    db.delete(row)
+    touch_live_pricing(db, version, user_id=admin.id)
+    db.commit()
 
 
 # --- Documents ---
@@ -157,6 +275,7 @@ def create_pricing_version(
         effective_to=body.effective_to,
         currency=body.currency,
         includes_vat=body.includes_vat,
+        calculator_config=build_calculator_config_snapshot(load_official()),
     )
     db.add(row)
     db.commit()
@@ -195,6 +314,8 @@ def publish_pricing_version(
         raise _bad_request("ALREADY_PUBLISHED", "Version is already published")
     if not row.price_rows:
         raise _bad_request("NO_PRICE_ROWS", "Add at least one price table row before publishing")
+    if not row.calculator_config:
+        row.calculator_config = build_calculator_config_snapshot(load_official())
     row.status = "published"
     row.published_at = datetime.now(UTC)
     db.add(
@@ -208,6 +329,36 @@ def publish_pricing_version(
     db.commit()
     db.refresh(row)
     return PricingVersionRead.model_validate(row)
+
+
+# --- Calculator config (shops, tiers, milestones; apartment rates = price rows) ---
+
+
+@router.get(
+    "/pricing-versions/{version_id}/calculator-config",
+    response_model=CalculatorConfigRead,
+)
+def get_calculator_config(version_id: UUID, db: Session = Depends(get_db)) -> CalculatorConfigRead:
+    row = _get_version(db, version_id)
+    return CalculatorConfigRead(calculator_config=row.calculator_config, status=row.status)
+
+
+@router.patch(
+    "/pricing-versions/{version_id}/calculator-config",
+    response_model=CalculatorConfigRead,
+)
+def update_calculator_config(
+    version_id: UUID,
+    body: CalculatorConfigUpdate,
+    db: Session = Depends(get_db),
+) -> CalculatorConfigRead:
+    row = _get_version(db, version_id)
+    _require_draft(row)
+    patch = body.model_dump(exclude_unset=True)
+    row.calculator_config = merge_calculator_config_update(row.calculator_config, patch)
+    db.commit()
+    db.refresh(row)
+    return CalculatorConfigRead(calculator_config=row.calculator_config, status=row.status)
 
 
 # --- Price rows ---

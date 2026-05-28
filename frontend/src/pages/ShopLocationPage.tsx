@@ -8,12 +8,15 @@ import { useTranslation } from '../context/LocaleContext'
 import { formatMoney } from '../lib/format'
 import { formatShopFloorLabel } from '../lib/ayatLabels'
 import { usePageTitle } from '../hooks/usePageTitle'
-import { getShopLocationById, shopFloorKeys } from '../lib/shopLocations'
+import { useCalculatorConfig } from '../hooks/useCalculatorConfig'
+import { getShopLocationById, shopFloorKeys, shopLocationsFromConfig } from '../lib/shopLocations'
 
 export function ShopLocationPage() {
   const { t } = useTranslation()
   const { zoneId } = useParams<{ zoneId: string }>()
-  const location = zoneId ? getShopLocationById(zoneId) : undefined
+  const { data: config } = useCalculatorConfig()
+  const shopLocations = shopLocationsFromConfig(config)
+  const location = zoneId ? getShopLocationById(zoneId, shopLocations) : undefined
 
   const title = location
     ? t(location.labelKey as Parameters<typeof t>[0])

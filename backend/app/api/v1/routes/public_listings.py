@@ -33,7 +33,12 @@ from app.schemas.payment import (
     PublicPaymentPlanOption,
     PublicPaymentPreview,
 )
-from app.schemas.pricing import PublicPricePreview
+from app.schemas.pricing import PublicCalculatorConfig, PublicPricePreview
+from app.services.calculator_config import (
+    CalculatorConfigError,
+    build_public_calculator_config,
+    get_company_by_slug,
+)
 from app.services.payment_service import (
     PaymentError,
     check_plan_eligibility,
@@ -319,6 +324,27 @@ def get_public_location_content(
         cards=row.cards or [],
         media=_sorted_location_media(row),
     )
+
+
+@router.get("/calculator-config", response_model=PublicCalculatorConfig)
+def get_public_calculator_config(
+    company_slug: str = Query("ayat-real-estate"),
+    db: Session = Depends(get_db),
+) -> PublicCalculatorConfig:
+    company = get_company_by_slug(db, company_slug)
+    if company is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"code": "COMPANY_NOT_FOUND", "message": "Company not found"},
+        )
+    try:
+        payload = build_public_calculator_config(db, company_id=company.id)
+    except CalculatorConfigError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"code": exc.code, "message": exc.message},
+        ) from exc
+    return PublicCalculatorConfig.model_validate(payload)
 
 
 @router.get("/listings/{slug}/price-preview", response_model=PublicPricePreview)

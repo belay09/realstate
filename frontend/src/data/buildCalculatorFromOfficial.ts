@@ -148,7 +148,7 @@ export const OFFICIAL_RESIDENTIAL_PROJECTS: ResidentialProject[] = [
   },
 ]
 
-const INVENTORY_TO_STRATEGY_LOCATION: Record<string, string> = {
+export const INVENTORY_TO_STRATEGY_LOCATION: Record<string, string> = {
   'ayat-hills': 'lideta-unstarted',
   'lideta-residential': 'lideta-unstarted',
   'kazanchis-residential': 'kazanchis-started',

@@ -5,6 +5,7 @@ from decimal import Decimal
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
+from pydantic.alias_generators import to_camel
 
 
 class PricingDocumentCreate(BaseModel):
@@ -132,6 +133,55 @@ class PriceCalculationBreakdown(BaseModel):
     includes_vat: bool
     applied_discounts: list[dict]
     snapshot: dict
+
+
+class CalculatorConfigUpdate(BaseModel):
+    """Patch calculator metadata on a draft pricing version (snake_case keys)."""
+
+    residential_projects: list[dict] | None = None
+    commercial_zones: list[dict] | None = None
+    down_payment_tiers: list[dict] | None = None
+    milestone_schedules: dict[str, list[dict]] | None = None
+    bedroom_area_options: dict[str, list[int]] | None = None
+    commercial_area_min: int | None = None
+    commercial_area_max: int | None = None
+    commercial_area_presets: list[int] | None = None
+    inventory_to_strategy_location: dict[str, str] | None = None
+
+
+class CalculatorConfigRead(BaseModel):
+    calculator_config: dict | None
+    status: str
+
+
+class LivePricingRead(BaseModel):
+    """Single editable pricing for a company (no draft/publish in admin UI)."""
+
+    id: UUID
+    company_id: UUID
+    currency: str
+    includes_vat: bool
+    calculator_config: dict | None
+    price_rows: list[PriceTableRowRead]
+
+
+class PublicCalculatorConfig(BaseModel):
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
+
+    currency: str
+    includes_vat: bool
+    pricing_version_id: str
+    pricing_version_name: str
+    residential_projects: list[dict]
+    residential_price_rows: list[dict]
+    commercial_zones: list[dict]
+    down_payment_tiers: list[dict]
+    milestone_schedules: dict[str, list[dict]]
+    bedroom_area_options: dict[str, list[int]]
+    commercial_area_min: int
+    commercial_area_max: int
+    commercial_area_presets: list[int]
+    inventory_to_strategy_location: dict[str, str] = Field(default_factory=dict)
 
 
 class PublicPricePreview(BaseModel):

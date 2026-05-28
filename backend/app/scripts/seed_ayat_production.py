@@ -300,14 +300,19 @@ def _seed_pricing(
         currency=pricing.get("currency", "ETB"),
         includes_vat=pricing.get("includes_vat", True),
         published_at=datetime.now(UTC),
+        calculator_config=pricing.get("calculator_config"),
     )
     db.add(version)
     db.flush()
 
     for row in pricing.get("price_rows") or []:
         project_id = None
-        if row.get("project_slug"):
-            project_id = project_by_slug[row["project_slug"]].id
+        conditions = row.get("conditions")
+        slug = row.get("project_slug")
+        if slug and slug in project_by_slug:
+            project_id = project_by_slug[slug].id
+        elif slug and not conditions:
+            conditions = {"calculator_project_id": slug}
         db.add(
             PriceTableRow(
                 pricing_version_id=version.id,
@@ -318,6 +323,7 @@ def _seed_pricing(
                 construction_state=row.get("construction_state"),
                 price_per_sqm=Decimal(row["price_per_sqm"]) if row.get("price_per_sqm") else None,
                 fixed_price=Decimal(row["fixed_price"]) if row.get("fixed_price") else None,
+                conditions=conditions,
             )
         )
 

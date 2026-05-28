@@ -126,8 +126,8 @@ def expand_listing_project_price_rows(official: dict[str, Any]) -> list[dict[str
 
 def build_pricing_block(official: dict[str, Any]) -> dict[str, Any]:
     meta = official["_meta"]
-    # DB rows for inventory projects only; calculator reads full Section 10 from JSON.
-    rows = expand_listing_project_price_rows(official)
+    # Strategy location rows (calculator) + inventory project rows (listings / quotes).
+    rows = expand_section10_price_rows(official) + expand_listing_project_price_rows(official)
     tiers = official["section6_payment_tiers"]
     discount_rules: list[dict[str, Any]] = []
     for i, tier in enumerate(tiers):
@@ -163,8 +163,165 @@ def build_pricing_block(official: dict[str, Any]) -> dict[str, Any]:
         "effective_from": "2018-05-15",
         "includes_vat": meta.get("includes_vat", True),
         "archive_previous_versions": True,
+        "calculator_config": build_calculator_config_snapshot(official),
         "price_rows": rows,
         "discount_rules": discount_rules,
+    }
+
+
+SHOP_LABEL_KEYS: dict[str, str] = {
+    "ledeta": "calculator.shopZones.ledeta",
+    "kazanchis": "calculator.shopZones.kazanchis",
+    "bole-air": "calculator.shopZones.boleAir",
+    "zone-2": "calculator.shopZones.zone2",
+    "meri-luke-1": "calculator.shopZones.meriLuke1",
+    "summit": "calculator.shopZones.summit",
+    "zone-3-university": "calculator.shopZones.zone3University",
+    "zone-8-linda": "calculator.shopZones.zone8Linda",
+}
+
+MILESTONE_LABEL_KEYS: dict[str, str] = {
+    "sign": "calculator.milestones.signing",
+    "m4": "calculator.milestones.month4",
+    "m8": "calculator.milestones.month8",
+    "m12": "calculator.milestones.month12",
+    "m18": "calculator.milestones.month18",
+    "m24": "calculator.milestones.month24",
+    "structure": "calculator.milestones.structure",
+    "handover": "calculator.milestones.handover",
+}
+
+TIER_LABEL_KEYS: dict[str, str] = {
+    "100": "calculator.tiers.t100",
+    "85": "calculator.tiers.t85",
+    "70": "calculator.tiers.t70",
+    "55": "calculator.tiers.t55",
+    "40": "calculator.tiers.t40",
+    "35": "calculator.tiers.t35",
+    "60_40": "calculator.tiers.t6040",
+}
+
+
+def build_calculator_config_snapshot(official: dict[str, Any]) -> dict[str, Any]:
+    """Static calculator metadata (shops, tiers, milestones) stored on PricingVersion."""
+    s2 = official["section2_bedroom_sizes_sqm"]
+    s6 = official["section6_payment_tiers"]
+    s11 = official["section11_shops"]
+    s13 = official["section13_milestones"]
+
+    residential_projects = [
+        {
+            "id": "lideta-unstarted",
+            "area_label_key": "calculator.zones.lideta",
+            "name_key": "calculator.projects.lideta",
+            "max_floor": 36,
+            "supports_completion_choice": False,
+            "uses_strategy_floor_table": True,
+        },
+        {
+            "id": "kazanchis-started",
+            "area_label_key": "calculator.zones.kazanchis",
+            "name_key": "calculator.projects.kazanchis",
+            "max_floor": 36,
+            "supports_completion_choice": False,
+            "uses_strategy_floor_table": True,
+        },
+        {
+            "id": "bole-unstarted",
+            "area_label_key": "calculator.zones.bole",
+            "name_key": "calculator.projects.bole",
+            "max_floor": 36,
+            "supports_completion_choice": False,
+            "uses_strategy_floor_table": True,
+        },
+        {
+            "id": "cmc-unstarted",
+            "area_label_key": "calculator.zones.cmc",
+            "name_key": "calculator.projects.cmcUnstarted",
+            "max_floor": 36,
+            "supports_completion_choice": False,
+            "uses_strategy_floor_table": True,
+        },
+        {
+            "id": "cmc-near-completion",
+            "area_label_key": "calculator.zones.cmc",
+            "name_key": "calculator.projects.cmcNearCompletion",
+            "max_floor": 36,
+            "supports_completion_choice": False,
+            "uses_strategy_floor_table": True,
+        },
+        {
+            "id": "cmc-extension",
+            "area_label_key": "calculator.zones.cmc",
+            "name_key": "calculator.projects.cmc",
+            "max_floor": 17,
+            "supports_completion_choice": True,
+        },
+        {
+            "id": "ayat-hills",
+            "area_label_key": "calculator.zones.ayatMainVillage",
+            "name_key": "calculator.projects.ayatHills",
+            "max_floor": 16,
+            "supports_completion_choice": False,
+            "uses_strategy_floor_table": True,
+        },
+    ]
+
+    commercial_zones = []
+    for zone in s11["zones"]:
+        commercial_zones.append(
+            {
+                "id": zone["id"],
+                "label_key": SHOP_LABEL_KEYS.get(zone["id"], f"calculator.shopZones.{zone['id']}"),
+                "floors": zone["floors"],
+            }
+        )
+
+    down_payment_tiers = [
+        {
+            "id": tier["id"],
+            "down_payment_percent": tier["down_payment_percent"],
+            "client_discount_percent": tier["client_discount_percent"],
+            "label_key": TIER_LABEL_KEYS.get(tier["id"], f"calculator.tiers.t{tier['id']}"),
+            "is_6040": tier.get("is_6040", False),
+        }
+        for tier in s6
+    ]
+
+    milestone_schedules: dict[str, list[dict[str, Any]]] = {}
+    for schedule_id, steps in s13.items():
+        milestone_schedules[schedule_id] = [
+            {
+                "id": step["id"],
+                "label_key": MILESTONE_LABEL_KEYS.get(step["id"], step["id"]),
+                "percent": step["percent"],
+            }
+            for step in steps
+        ]
+
+    bedroom_three = list(s2["3"])
+    if 107 not in bedroom_three:
+        bedroom_three.append(107)
+
+    return {
+        "residential_projects": residential_projects,
+        "commercial_zones": commercial_zones,
+        "down_payment_tiers": down_payment_tiers,
+        "milestone_schedules": milestone_schedules,
+        "bedroom_area_options": {
+            "1": list(s2["1"]),
+            "2": list(s2["2"]),
+            "3": bedroom_three,
+        },
+        "commercial_area_min": s11["size_min_sqm"],
+        "commercial_area_max": s11["size_max_sqm"],
+        "commercial_area_presets": [30, 50, 75, 100, 150, 200, 240],
+        "inventory_to_strategy_location": {
+            "ayat-hills": "lideta-unstarted",
+            "lideta-residential": "lideta-unstarted",
+            "kazanchis-residential": "kazanchis-started",
+            "bole-belair": "bole-unstarted",
+        },
     }
 
 

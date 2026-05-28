@@ -1,19 +1,14 @@
-import { resolveResidentialProjectId } from '../data/buildCalculatorFromOfficial'
-import {
-  COMMERCIAL_ZONES,
-  CURRENCY,
-  DOWN_PAYMENT_TIERS,
-  MILESTONE_SCHEDULES,
-  RESIDENTIAL_PRICE_ROWS,
-  RESIDENTIAL_PROJECTS,
-  type CommercialZone,
-  type CompletionKind,
-  type DownPaymentTier,
-  type FinishKind,
-  type MilestoneScheduleId,
-  type PropertyKind,
-  unitTypeForBedroomsFinish,
+import type {
+  CommercialZone,
+  CompletionKind,
+  DownPaymentTier,
+  FinishKind,
+  MilestoneScheduleId,
+  PropertyKind,
 } from '../data/ayatCalculatorConfig'
+import { unitTypeForBedroomsFinish } from '../data/ayatCalculatorConfig'
+import type { CalculatorRuntimeConfig } from './calculatorRuntime'
+import { resolveResidentialProjectId } from './calculatorRuntime'
 
 export interface ResidentialCalcInput {
   projectId: string
@@ -50,7 +45,6 @@ export interface CalculatorResult {
   clientDiscountAmount: number
   priceAfterDiscount: number
   tier: DownPaymentTier
-  /** Cash due now if paying selected upfront % of discounted price (not used for pure milestone 100% flows) */
   upfrontCashDue: number
   remainingAfterUpfront: number
   milestoneScheduleId: MilestoneScheduleId | null
@@ -63,12 +57,13 @@ function roundMoney(n: number): number {
 }
 
 export function findResidentialPriceRow(
+  config: CalculatorRuntimeConfig,
   projectId: string,
   unitTypeCode: string,
   finish: FinishKind,
   floor: number,
 ) {
-  const matches = RESIDENTIAL_PRICE_ROWS.filter(
+  const matches = config.residentialPriceRows.filter(
     (r) =>
       r.projectId === projectId &&
       r.unitTypeCode === unitTypeCode &&
@@ -79,16 +74,19 @@ export function findResidentialPriceRow(
   return matches[0] ?? null
 }
 
-export function getTier(tierId: string): DownPaymentTier | undefined {
-  return DOWN_PAYMENT_TIERS.find((t) => t.id === tierId)
+export function getTier(config: CalculatorRuntimeConfig, tierId: string): DownPaymentTier | undefined {
+  return config.downPaymentTiers.find((t) => t.id === tierId)
 }
 
-export function getProject(projectId: string) {
-  return RESIDENTIAL_PROJECTS.find((p) => p.id === projectId)
+export function getProject(config: CalculatorRuntimeConfig, projectId: string) {
+  return config.residentialProjects.find((p) => p.id === projectId)
 }
 
-export function getCommercialZone(zoneId: string): CommercialZone | undefined {
-  return COMMERCIAL_ZONES.find((z) => z.id === zoneId)
+export function getCommercialZone(
+  config: CalculatorRuntimeConfig,
+  zoneId: string,
+): CommercialZone | undefined {
+  return config.commercialZones.find((z) => z.id === zoneId)
 }
 
 function resolveMilestoneSchedule(
@@ -107,10 +105,12 @@ function resolveMilestoneSchedule(
 }
 
 function buildMilestones(
+  config: CalculatorRuntimeConfig,
   scheduleId: MilestoneScheduleId,
   priceAfterDiscount: number,
 ): MilestoneLine[] {
-  const steps = MILESTONE_SCHEDULES[scheduleId]
+  const steps = config.milestoneSchedules[scheduleId]
+  if (!steps) return []
   return steps.map((s) => ({
     id: s.id,
     labelKey: s.labelKey,
@@ -119,19 +119,19 @@ function buildMilestones(
   }))
 }
 
-export function calculateResidential(input: ResidentialCalcInput): CalculatorResult | null {
-  const project = getProject(input.projectId)
-  const tier = getTier(input.tierId)
+export function calculateResidential(
+  config: CalculatorRuntimeConfig,
+  input: ResidentialCalcInput,
+): CalculatorResult | null {
+  const project = getProject(config, input.projectId)
+  const tier = getTier(config, input.tierId)
   if (!project || !tier) return null
 
   const unitTypeCode = unitTypeForBedroomsFinish(input.bedrooms, input.finish)
-  const priceProjectId = resolveResidentialProjectId(input.projectId, input.completion)
-  const row = findResidentialPriceRow(
-    priceProjectId,
-    unitTypeCode,
-    input.finish,
-    input.floor,
-  )
+  const priceProjectId = resolveResidentialProjectId(input.projectId, input.completion, config)
+  const row =
+    findResidentialPriceRow(config, input.projectId, unitTypeCode, input.finish, input.floor) ??
+    findResidentialPriceRow(config, priceProjectId, unitTypeCode, input.finish, input.floor)
 
   const notes: string[] = []
   if (!row) {
@@ -147,7 +147,7 @@ export function calculateResidential(input: ResidentialCalcInput): CalculatorRes
 
   const milestoneScheduleId = resolveMilestoneSchedule('residential', tier, input.completion)
   const milestones = milestoneScheduleId
-    ? buildMilestones(milestoneScheduleId, priceAfterDiscount)
+    ? buildMilestones(config, milestoneScheduleId, priceAfterDiscount)
     : []
 
   let upfrontCashDue: number
@@ -171,7 +171,7 @@ export function calculateResidential(input: ResidentialCalcInput): CalculatorRes
   }
 
   return {
-    currency: CURRENCY,
+    currency: config.currency,
     propertyKind: 'residential',
     pricePerSqm,
     floorBandLabel: row.floorBand.label,
@@ -189,9 +189,12 @@ export function calculateResidential(input: ResidentialCalcInput): CalculatorRes
   }
 }
 
-export function calculateCommercial(input: CommercialCalcInput): CalculatorResult | null {
-  const zone = getCommercialZone(input.zoneId)
-  const tier = getTier(input.tierId)
+export function calculateCommercial(
+  config: CalculatorRuntimeConfig,
+  input: CommercialCalcInput,
+): CalculatorResult | null {
+  const zone = getCommercialZone(config, input.zoneId)
+  const tier = getTier(config, input.tierId)
   if (!zone || !tier) return null
 
   const pricePerSqm = zone.floors[input.shopFloor]
@@ -202,13 +205,13 @@ export function calculateCommercial(input: CommercialCalcInput): CalculatorResul
   const priceAfterDiscount = listPrice - clientDiscountAmount
 
   const milestoneScheduleId: MilestoneScheduleId = 'shop_unstarted_100'
-  const milestones = buildMilestones(milestoneScheduleId, priceAfterDiscount)
+  const milestones = buildMilestones(config, milestoneScheduleId, priceAfterDiscount)
 
   const upfrontCashDue = milestones[0]?.amount ?? priceAfterDiscount
   const remainingAfterUpfront = priceAfterDiscount - upfrontCashDue
 
   return {
-    currency: CURRENCY,
+    currency: config.currency,
     propertyKind: 'commercial',
     pricePerSqm,
     floorBandLabel: input.shopFloor,

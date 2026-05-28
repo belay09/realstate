@@ -2,19 +2,13 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import {
-  BEDROOM_AREA_OPTIONS,
-  COMMERCIAL_AREA_MAX,
-  COMMERCIAL_AREA_MIN,
-  COMMERCIAL_AREA_PRESETS,
-  COMMERCIAL_ZONES,
-  DOWN_PAYMENT_TIERS,
-  RESIDENTIAL_PROJECTS,
   floorOptionsForProject,
   type CompletionKind,
   type FinishKind,
   type PropertyKind,
 } from '../data/ayatCalculatorConfig'
 import { useTranslation } from '../context/LocaleContext'
+import { useCalculatorConfig } from '../hooks/useCalculatorConfig'
 import type { ListingCalculatorPreset } from '../lib/listingCalculatorPreset'
 import {
   calculateCommercial,
@@ -322,6 +316,7 @@ export function AyatPriceCalculator({
   initialShopZoneId = null,
 }: AyatPriceCalculatorProps) {
   const { t } = useTranslation()
+  const { data: config, isLoading: configLoading, isError: configError } = useCalculatorConfig()
   const embedded = variant === 'embedded'
   const preset = listingPreset ?? undefined
 
@@ -348,17 +343,19 @@ export function AyatPriceCalculator({
     if (!preset && initialShopZoneId) {
       setKind('commercial')
       setShopZoneId(initialShopZoneId)
-      const zone = COMMERCIAL_ZONES.find((z) => z.id === initialShopZoneId)
+      const zone = config.commercialZones.find((z) => z.id === initialShopZoneId)
       if (zone) {
         const first = SHOP_FLOORS.find((f) => zone.floors[f] > 0)
         if (first) setShopFloor(first)
       }
     }
-  }, [preset, initialShopZoneId])
+  }, [preset, initialShopZoneId, config.commercialZones])
 
-  const project = RESIDENTIAL_PROJECTS.find((p) => p.id === projectId)
-  const presetProject = preset ? RESIDENTIAL_PROJECTS.find((p) => p.id === preset.projectId) : null
-  const selectedShopZone = COMMERCIAL_ZONES.find((z) => z.id === shopZoneId)
+  const project = config.residentialProjects.find((p) => p.id === projectId)
+  const presetProject = preset
+    ? config.residentialProjects.find((p) => p.id === preset.projectId)
+    : null
+  const selectedShopZone = config.commercialZones.find((z) => z.id === shopZoneId)
   const shopFloorsAvailable = SHOP_FLOORS.filter(
     (f) => selectedShopZone && selectedShopZone.floors[f] > 0,
   )
@@ -368,7 +365,7 @@ export function AyatPriceCalculator({
       if (!projectId || bedrooms == null || !finish || areaSqm == null || floor == null) {
         return null
       }
-      return calculateResidential({
+      return calculateResidential(config, {
         projectId,
         bedrooms,
         finish,
@@ -380,10 +377,11 @@ export function AyatPriceCalculator({
     }
     if (kind === 'commercial') {
       if (!shopZoneId || !shopFloor || areaSqm == null) return null
-      return calculateCommercial({ zoneId: shopZoneId, shopFloor, areaSqm, tierId })
+      return calculateCommercial(config, { zoneId: shopZoneId, shopFloor, areaSqm, tierId })
     }
     return null
   }, [
+    config,
     kind,
     projectId,
     bedrooms,
@@ -412,7 +410,7 @@ export function AyatPriceCalculator({
   const canShowResult = step1Done && step2Done && step3Done && step4Done && step5Done && result
 
   const areaOptions =
-    bedrooms != null ? BEDROOM_AREA_OPTIONS[bedrooms] : COMMERCIAL_AREA_PRESETS
+    bedrooms != null ? config.bedroomAreaOptions[bedrooms] : config.commercialAreaPresets
 
   const showFullWizard = !embedded
   let stepCounter = 0
@@ -439,7 +437,7 @@ export function AyatPriceCalculator({
         <p className="mb-4 text-sm text-fg-muted">{t('calculator.step6PaymentHint')}</p>
       )}
       <div className="space-y-2">
-        {DOWN_PAYMENT_TIERS.map((tier) => (
+        {config.downPaymentTiers.map((tier) => (
           <label
             key={tier.id}
             className={`flex cursor-pointer items-start gap-3 rounded-xl border px-4 py-3 ${
@@ -497,7 +495,7 @@ export function AyatPriceCalculator({
 
       <p className="mb-2 text-sm font-medium text-fg">{t('calculator.step4SizeTitle')}</p>
       <div className="mb-5 flex flex-wrap gap-2">
-        {BEDROOM_AREA_OPTIONS[preset.bedrooms].map((a) => (
+        {config.bedroomAreaOptions[preset.bedrooms].map((a) => (
           <ChoiceButton key={a} selected={areaSqm === a} onClick={() => setAreaSqm(a)}>
             {formatSquareMeters(a, t)}
           </ChoiceButton>
@@ -554,7 +552,7 @@ export function AyatPriceCalculator({
                 </div>
               </div>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {RESIDENTIAL_PROJECTS.map((p) => (
+                {config.residentialProjects.map((p) => (
                   <ChoiceButton
                     key={p.id}
                     selected={projectId === p.id}
@@ -603,7 +601,7 @@ export function AyatPriceCalculator({
                 </div>
               </div>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {COMMERCIAL_ZONES.map((z) => (
+                {config.commercialZones.map((z) => (
                   <ChoiceButton
                     key={z.id}
                     selected={shopZoneId === z.id}
@@ -717,8 +715,8 @@ export function AyatPriceCalculator({
                     <input
                       id="shop-area"
                       type="number"
-                      min={COMMERCIAL_AREA_MIN}
-                      max={COMMERCIAL_AREA_MAX}
+                      min={config.commercialAreaMin}
+                      max={config.commercialAreaMax}
                       value={areaSqm ?? ''}
                       onChange={(e) => {
                         const v = Number(e.target.value)
@@ -728,8 +726,8 @@ export function AyatPriceCalculator({
                     />
                     <p className="mt-1 text-xs text-fg-muted">
                       {t('calculator.shopSizeRange', {
-                        min: COMMERCIAL_AREA_MIN,
-                        max: COMMERCIAL_AREA_MAX,
+                        min: config.commercialAreaMin,
+                        max: config.commercialAreaMax,
                       })}
                     </p>
                   </div>
@@ -847,6 +845,15 @@ export function AyatPriceCalculator({
           </div>
         </div>
       )}
+
+      {configError ? (
+        <p className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-950 dark:border-amber-800 dark:bg-amber-950/50 dark:text-amber-100">
+          Live pricing could not be loaded; showing last known rates. Check that a pricing version is
+          published in admin.
+        </p>
+      ) : !configLoading ? (
+        <p className="text-xs text-fg-muted">{t('calculator.liveRatesNote')}</p>
+      ) : null}
 
       <p className="rounded-lg border border-amber-200/80 bg-amber-50 px-4 py-3 text-sm text-amber-950 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-100">
         {t('calculator.disclaimer')}

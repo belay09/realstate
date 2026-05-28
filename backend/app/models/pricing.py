@@ -55,6 +55,7 @@ class PricingVersion(Base, TimestampMixin):
     currency: Mapped[str] = mapped_column(String(8), default="ETB", nullable=False)
     includes_vat: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    calculator_config: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
 
     document: Mapped[PricingDocument | None] = relationship(
         "PricingDocument",

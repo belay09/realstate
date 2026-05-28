@@ -11,7 +11,8 @@ import type {
 } from '../../api/types'
 import { getAccessToken } from '../../lib/auth'
 import { AYAT_DEVELOPMENT_ZONES } from '../../lib/listingDisplay'
-import { getShopLocations } from '../../lib/shopLocations'
+import { useCalculatorConfig } from '../../hooks/useCalculatorConfig'
+import { shopLocationsFromConfig } from '../../lib/shopLocations'
 
 type LocationKind = 'apartment' | 'shop'
 
@@ -79,6 +80,7 @@ export function AdminListingsPage() {
       return data
     },
   })
+  const { data: calculatorConfig } = useCalculatorConfig()
   const homeCards = useQuery({
     queryKey: ['admin', 'home-cards'],
     queryFn: async () => {
@@ -107,11 +109,11 @@ export function AdminListingsPage() {
   )
   const shopOptions = useMemo(
     () =>
-      getShopLocations().map((z) => ({
+      shopLocationsFromConfig(calculatorConfig).map((z) => ({
         value: z.id,
         label: z.labelKey.replace('calculator.shopZones.', ''),
       })),
-    [],
+    [calculatorConfig],
   )
   const locationOptions = createForm.kind === 'apartment' ? apartmentOptions : shopOptions
   const createPrimaryImageUrl =
@@ -635,6 +637,7 @@ function LocationContentEditor({
   onNotify: (level: ToastLevel, message: string) => void
 }) {
   const qc = useQueryClient()
+  const { data: calculatorConfig } = useCalculatorConfig()
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const [uploadProgress, setUploadProgress] = useState(0)
@@ -954,7 +957,7 @@ function LocationContentEditor({
       </div>
 
       <p className="text-xs text-stone-500">
-        Known shop IDs: {getShopLocations().map((z) => z.id).join(', ')}
+        Known shop IDs: {shopLocationsFromConfig(calculatorConfig).map((z) => z.id).join(', ')}
       </p>
     </div>
   )

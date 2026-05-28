@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom'
 import { ShopLocationCard } from '../components/ShopLocationCard'
 import { useTranslation } from '../context/LocaleContext'
 import { usePageTitle } from '../hooks/usePageTitle'
-import { getShopLocations } from '../lib/shopLocations'
+import { useCalculatorConfig } from '../hooks/useCalculatorConfig'
+import { shopLocationsFromConfig } from '../lib/shopLocations'
 
 export function ShopLocationsPage() {
   const { t } = useTranslation()
   usePageTitle(t('pageTitles.shops'))
-  const locations = getShopLocations()
+  const { data: config } = useCalculatorConfig()
+  const locations = shopLocationsFromConfig(config)
 
   return (
     <div className="space-y-10 text-left">
