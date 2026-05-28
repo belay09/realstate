@@ -3,13 +3,16 @@
 from __future__ import annotations
 
 from datetime import date
-from decimal import Decimal
 from typing import Any
 from uuid import UUID
 
 from sqlalchemy.orm import Session, selectinload
 
-from app.data.ayat_official_loader import FINISH_BY_CODE, build_calculator_config_snapshot, load_official
+from app.data.ayat_official_loader import (
+    FINISH_BY_CODE,
+    build_calculator_config_snapshot,
+    load_official,
+)
 from app.models.company import Company
 from app.models.inventory import Project
 from app.models.pricing import PriceTableRow, PricingVersion
@@ -217,7 +220,10 @@ def build_public_calculator_config(
     return base
 
 
-def merge_calculator_config_update(current: dict[str, Any] | None, patch: dict[str, Any]) -> dict[str, Any]:
+def merge_calculator_config_update(
+    current: dict[str, Any] | None,
+    patch: dict[str, Any],
+) -> dict[str, Any]:
     merged = dict(current or {})
     for key, value in patch.items():
         if value is not None:

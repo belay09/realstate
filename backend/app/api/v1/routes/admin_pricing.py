@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_active_user, get_db, require_roles
+from app.data.ayat_official_loader import build_calculator_config_snapshot, load_official
 from app.models.identity import User
 from app.models.pricing import (
     DiscountRule,
@@ -17,7 +18,6 @@ from app.models.pricing import (
     UnitPriceQuote,
 )
 from app.schemas.inventory import Paginated
-from app.data.ayat_official_loader import build_calculator_config_snapshot, load_official
 from app.schemas.pricing import (
     CalculatorConfigRead,
     CalculatorConfigUpdate,
@@ -35,10 +35,10 @@ from app.schemas.pricing import (
     PricingVersionUpdate,
     UnitPriceQuoteRead,
 )
-from app.services.calculator_config import merge_calculator_config_update
-from app.services.live_pricing import get_or_create_live_pricing_version, touch_live_pricing
 from app.schemas.quote import FullQuoteRequest, FullQuoteResponse
+from app.services.calculator_config import merge_calculator_config_update
 from app.services.commission_service import CommissionError as CommErr
+from app.services.live_pricing import get_or_create_live_pricing_version, touch_live_pricing
 from app.services.payment_service import PaymentError as PayErr
 from app.services.payment_service import attach_plan_to_quote
 from app.services.pricing_engine import PricingError, calculate_unit_price, persist_quote

@@ -8,7 +8,7 @@ from uuid import UUID
 from sqlalchemy.orm import Session
 
 from app.data.ayat_official_loader import build_calculator_config_snapshot, load_official
-from app.models.pricing import PriceTableRow, PricingVersion
+from app.models.pricing import PricingVersion
 from app.services.pricing_engine import get_active_published_version
 
 
@@ -58,7 +58,12 @@ def get_or_create_live_pricing_version(db: Session, *, company_id: UUID) -> Pric
     return version
 
 
-def touch_live_pricing(db: Session, version: PricingVersion, *, user_id: UUID | None = None) -> None:
+def touch_live_pricing(
+    db: Session,
+    version: PricingVersion,
+    *,
+    user_id: UUID | None = None,
+) -> None:
     """Mark pricing as updated (keeps published; bumps updated_at via ORM)."""
     version.updated_at = datetime.now(UTC)
     if user_id is not None:
