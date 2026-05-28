@@ -194,6 +194,45 @@ def delete_live_price_row(
     db.commit()
 
 
+@router.patch("/pricing/live/price-rows/{row_id}", response_model=PriceTableRowRead)
+def update_live_price_row(
+    row_id: UUID,
+    body: PriceTableRowCreate,
+    company_id: UUID = Query(...),
+    db: Session = Depends(get_db),
+    admin: User = Depends(get_current_active_user),
+) -> PriceTableRowRead:
+    version = get_or_create_live_pricing_version(db, company_id=company_id)
+    row = (
+        db.query(PriceTableRow)
+        .filter(
+            PriceTableRow.id == row_id,
+            PriceTableRow.pricing_version_id == version.id,
+        )
+        .first()
+    )
+    if row is None:
+        raise _not_found("Price row")
+    if body.price_per_sqm is None and body.fixed_price is None:
+        raise _bad_request(
+            "INVALID_ROW",
+            "Provide price_per_sqm or fixed_price",
+        )
+    row.project_id = body.project_id
+    row.block_id = body.block_id
+    row.floor_band = body.floor_band
+    row.unit_type_code = body.unit_type_code
+    row.finish_type = body.finish_type
+    row.construction_state = body.construction_state
+    row.price_per_sqm = body.price_per_sqm
+    row.fixed_price = body.fixed_price
+    row.conditions = body.conditions
+    touch_live_pricing(db, version, user_id=admin.id)
+    db.commit()
+    db.refresh(row)
+    return PriceTableRowRead.model_validate(row)
+
+
 # --- Documents ---
 
 

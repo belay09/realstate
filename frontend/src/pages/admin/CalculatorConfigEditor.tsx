@@ -1,5 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import axios from 'axios'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 import { api } from '../../api/client'
 
@@ -39,6 +41,15 @@ export function CalculatorConfigEditor({ companyId, initialConfig }: Props) {
     setDirty(false)
   }, [initialConfig])
 
+  const saveErrorMessage = (err: unknown) => {
+    if (axios.isAxiosError(err)) {
+      const message = err.response?.data?.detail?.message
+      if (typeof message === 'string' && message.trim()) return message
+    }
+    if (err instanceof Error && err.message.trim()) return err.message
+    return 'Could not save calculator settings.'
+  }
+
   const save = useMutation({
     mutationFn: () =>
       api.patch(
@@ -50,7 +61,9 @@ export function CalculatorConfigEditor({ companyId, initialConfig }: Props) {
       setDirty(false)
       qc.invalidateQueries({ queryKey: ['admin', 'pricing-live', companyId] })
       qc.invalidateQueries({ queryKey: ['public', 'calculator-config'] })
+      toast.success('Calculator settings updated.')
     },
+    onError: (err) => toast.error(saveErrorMessage(err)),
   })
 
   if (!companyId) return null
@@ -176,9 +189,6 @@ export function CalculatorConfigEditor({ companyId, initialConfig }: Props) {
       >
         {save.isPending ? 'Saving…' : 'Save calculator settings'}
       </button>
-      {save.isError ? (
-        <p className="text-sm text-red-600">Could not save calculator settings.</p>
-      ) : null}
     </section>
   )
 }

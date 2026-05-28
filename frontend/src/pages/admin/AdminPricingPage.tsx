@@ -1,4 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import axios from 'axios'
+import { toast } from 'sonner'
 
 import { api } from '../../api/client'
 import { AdminCompanySelect } from '../../components/AdminCompanySelect'
@@ -14,10 +16,12 @@ type LivePricing = {
   calculator_config: Record<string, unknown> | null
   price_rows: Array<{
     id: string
+    project_id: string | null
     unit_type_code: string | null
     floor_band: string | null
     price_per_sqm: string | null
     fixed_price: string | null
+    conditions: Record<string, unknown> | null
   }>
 }
 
@@ -31,6 +35,7 @@ const UNIT_TYPE_OPTIONS = [
 export function AdminPricingPage() {
   const qc = useQueryClient()
   const [companyId, setCompanyId] = useState('')
+  const [editingRowId, setEditingRowId] = useState<string | null>(null)
 
   const livePricing = useQuery({
     queryKey: ['admin', 'pricing-live', companyId],
@@ -54,6 +59,15 @@ export function AdminPricingPage() {
     },
   })
 
+  const actionError = (err: unknown, fallback: string) => {
+    if (axios.isAxiosError(err)) {
+      const message = err.response?.data?.detail?.message
+      if (typeof message === 'string' && message.trim()) return message
+    }
+    if (err instanceof Error && err.message.trim()) return err.message
+    return fallback
+  }
+
   const addRow = useMutation({
     mutationFn: (body: {
       unit_type_code: string
@@ -74,7 +88,9 @@ export function AdminPricingPage() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin', 'pricing-live', companyId] })
       qc.invalidateQueries({ queryKey: ['public', 'calculator-config'] })
+      toast.success('Price row added.')
     },
+    onError: (err) => toast.error(actionError(err, 'Could not add price row.')),
   })
 
   const deleteRow = useMutation({
@@ -85,7 +101,36 @@ export function AdminPricingPage() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin', 'pricing-live', companyId] })
       qc.invalidateQueries({ queryKey: ['public', 'calculator-config'] })
+      toast.success('Price row deleted.')
     },
+    onError: (err) => toast.error(actionError(err, 'Could not delete price row.')),
+  })
+
+  const updateRow = useMutation({
+    mutationFn: (body: {
+      row_id: string
+      unit_type_code: string
+      floor_band: string
+      price_per_sqm: string
+      project_id: string
+    }) =>
+      api.patch(
+        `/admin/pricing/live/price-rows/${body.row_id}`,
+        {
+          project_id: body.project_id || undefined,
+          unit_type_code: body.unit_type_code || undefined,
+          floor_band: body.floor_band || undefined,
+          price_per_sqm: body.price_per_sqm,
+        },
+        { params: { company_id: companyId } },
+      ),
+    onSuccess: () => {
+      setEditingRowId(null)
+      qc.invalidateQueries({ queryKey: ['admin', 'pricing-live', companyId] })
+      qc.invalidateQueries({ queryKey: ['public', 'calculator-config'] })
+      toast.success('Price row updated.')
+    },
+    onError: (err) => toast.error(actionError(err, 'Could not update price row.')),
   })
 
   return (
@@ -176,24 +221,115 @@ export function AdminPricingPage() {
               livePricing.data.price_rows.map((r) => (
                 <li
                   key={r.id}
-                  className="flex items-center justify-between gap-3 rounded-lg bg-stone-100 px-3 py-2 dark:bg-stone-900"
+                  className="rounded-lg bg-stone-100 px-3 py-3 dark:bg-stone-900"
                 >
-                  <span>
-                    {r.unit_type_code ?? 'any type'} · floor {r.floor_band ?? 'any'} ·{' '}
-                    {r.price_per_sqm
-                      ? `${Number(r.price_per_sqm).toLocaleString('en-ET')}/sqm`
-                      : r.fixed_price
-                        ? `fixed ${Number(r.fixed_price).toLocaleString('en-ET')}`
-                        : '-'}
-                  </span>
-                  <button
-                    type="button"
-                    className="text-xs text-red-600 hover:underline"
-                    disabled={deleteRow.isPending}
-                    onClick={() => deleteRow.mutate(r.id)}
-                  >
-                    Remove
-                  </button>
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="font-medium text-stone-800 dark:text-stone-100">
+                        {r.unit_type_code ?? 'any type'} · floor {r.floor_band ?? 'any'} ·{' '}
+                        {r.price_per_sqm
+                          ? `${Number(r.price_per_sqm).toLocaleString('en-ET')}/sqm`
+                          : r.fixed_price
+                            ? `fixed ${Number(r.fixed_price).toLocaleString('en-ET')}`
+                            : '-'}
+                      </p>
+                      <p className="mt-1 text-xs text-stone-600 dark:text-stone-400">
+                        Location: {projects.data?.items.find((p) => p.id === r.project_id)?.name ?? 'Strategy location only'}
+                        {typeof r.conditions?.calculator_project_id === 'string'
+                          ? ` (${r.conditions.calculator_project_id})`
+                          : ''}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      {editingRowId === r.id ? (
+                        <button
+                          type="button"
+                          className="text-xs text-stone-500 hover:underline"
+                          onClick={() => setEditingRowId(null)}
+                        >
+                          Cancel
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="text-xs text-brand-700 hover:underline"
+                          onClick={() => setEditingRowId(r.id)}
+                        >
+                          Edit
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        className="text-xs text-red-600 hover:underline"
+                        disabled={deleteRow.isPending}
+                        onClick={() => deleteRow.mutate(r.id)}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                  {editingRowId === r.id ? (
+                    <form
+                      className="mt-3 grid gap-2 sm:grid-cols-4"
+                      onSubmit={(e) => {
+                        e.preventDefault()
+                        const fd = new FormData(e.currentTarget)
+                        updateRow.mutate({
+                          row_id: r.id,
+                          project_id: String(fd.get('project_id')),
+                          unit_type_code: String(fd.get('unit_type_code')),
+                          floor_band: String(fd.get('floor_band')),
+                          price_per_sqm: String(fd.get('price_per_sqm')),
+                        })
+                      }}
+                    >
+                      <select
+                        name="project_id"
+                        className="input"
+                        defaultValue={r.project_id ?? ''}
+                      >
+                        <option value="">Strategy location only</option>
+                        {projects.data?.items.map((p) => (
+                          <option key={p.id} value={p.id}>
+                            {p.name}
+                          </option>
+                        ))}
+                      </select>
+                      <select
+                        name="unit_type_code"
+                        required
+                        className="input"
+                        defaultValue={r.unit_type_code ?? 'SFCA'}
+                      >
+                        {UNIT_TYPE_OPTIONS.map((opt) => (
+                          <option key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </option>
+                        ))}
+                      </select>
+                      <input
+                        name="floor_band"
+                        required
+                        className="input"
+                        defaultValue={r.floor_band ?? ''}
+                      />
+                      <div className="flex gap-2">
+                        <input
+                          name="price_per_sqm"
+                          required
+                          className="input"
+                          defaultValue={r.price_per_sqm ?? ''}
+                        />
+                        <button
+                          type="submit"
+                          className="btn-secondary whitespace-nowrap"
+                          disabled={updateRow.isPending}
+                        >
+                          Save
+                        </button>
+                      </div>
+                    </form>
+                  ) : null}
                 </li>
               ))
             )}

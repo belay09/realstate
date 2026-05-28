@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useMemo, useState } from 'react'
+import { toast } from 'sonner'
 
 import { api } from '../../api/client'
 import type {
@@ -46,8 +47,7 @@ type HomeCardFormState = {
   is_active: boolean
 }
 
-type ToastLevel = 'success' | 'error'
-type ToastItem = { id: number; level: ToastLevel; message: string }
+type NotifyLevel = 'success' | 'error'
 
 const EMPTY_CARD: LocationCard = { title: '', body: '', image_url: '' }
 
@@ -58,7 +58,6 @@ export function AdminListingsPage() {
   const [showEditModal, setShowEditModal] = useState(false)
   const [createSubmitError, setCreateSubmitError] = useState<string | null>(null)
   const [createPendingMedia, setCreatePendingMedia] = useState<PendingMedia[]>([])
-  const [toasts, setToasts] = useState<ToastItem[]>([])
   const [homeCardForms, setHomeCardForms] = useState<HomeCardFormState[]>([])
   const [createForm, setCreateForm] = useState<CreateFormState>({
     kind: 'apartment',
@@ -123,12 +122,12 @@ export function AdminListingsPage() {
     setCreateSubmitError(null)
     setCreatePendingMedia([])
   }
-  const pushToast = (level: ToastLevel, message: string) => {
-    const id = Date.now() + Math.floor(Math.random() * 1000)
-    setToasts((prev) => [...prev, { id, level, message }])
-    window.setTimeout(() => {
-      setToasts((prev) => prev.filter((t) => t.id !== id))
-    }, 3200)
+  const pushToast = (level: NotifyLevel, message: string) => {
+    if (level === 'success') {
+      toast.success(message)
+      return
+    }
+    toast.error(message)
   }
 
   useEffect(() => {
@@ -612,7 +611,6 @@ export function AdminListingsPage() {
           />
         </ModalShell>
       ) : null}
-      <ToastViewport toasts={toasts} />
     </div>
   )
 }
@@ -634,7 +632,7 @@ function LocationContentEditor({
       cards: LocationCard[]
     }>,
   ) => Promise<void>
-  onNotify: (level: ToastLevel, message: string) => void
+  onNotify: (level: NotifyLevel, message: string) => void
 }) {
   const qc = useQueryClient()
   const { data: calculatorConfig } = useCalculatorConfig()
@@ -1013,7 +1011,7 @@ function InlineUploadToUrlField({
   accept: string
   buttonLabel: string
   helperText: string
-  onNotify: (level: ToastLevel, message: string) => void
+  onNotify: (level: NotifyLevel, message: string) => void
   currentUrl?: string
   onUploaded: (url: string) => void | Promise<void>
 }) {
@@ -1091,24 +1089,6 @@ function InlineUploadToUrlField({
   )
 }
 
-function ToastViewport({ toasts }: { toasts: ToastItem[] }) {
-  if (!toasts.length) return null
-  return (
-    <div className="pointer-events-none fixed right-4 top-4 z-[300] space-y-2">
-      {toasts.map((toast) => (
-        <div
-          key={toast.id}
-          className={`rounded-lg px-3 py-2 text-sm text-white shadow ${
-            toast.level === 'success' ? 'bg-emerald-600' : 'bg-red-600'
-          }`}
-        >
-          {toast.message}
-        </div>
-      ))}
-    </div>
-  )
-}
-
 function ModalShell({
   title,
   onClose,
@@ -1140,7 +1120,7 @@ function CardEditor({
 }: {
   cards: LocationCard[]
   onChange: (cards: LocationCard[]) => void
-  onNotify: (level: ToastLevel, message: string) => void
+  onNotify: (level: NotifyLevel, message: string) => void
 }) {
   const safeCards = cards.length ? cards : [{ ...EMPTY_CARD }]
   return (
