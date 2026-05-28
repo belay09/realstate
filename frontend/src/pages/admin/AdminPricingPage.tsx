@@ -21,6 +21,13 @@ type LivePricing = {
   }>
 }
 
+const UNIT_TYPE_OPTIONS = [
+  { value: 'SFCA', label: 'SFCA (semi-finished)' },
+  { value: 'SFCR', label: 'SFCR (semi-finished)' },
+  { value: 'RFCA', label: 'RFCA (regular-finished)' },
+  { value: 'RFCR', label: 'RFCR (regular-finished)' },
+] as const
+
 export function AdminPricingPage() {
   const qc = useQueryClient()
   const [companyId, setCompanyId] = useState('')
@@ -140,7 +147,13 @@ export function AdminPricingPage() {
               </label>
               <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
                 Unit type code
-                <input name="unit_type_code" required className="input" placeholder="SFCA" />
+                <select name="unit_type_code" required className="input">
+                  {UNIT_TYPE_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
               </label>
               <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
                 Floor band
