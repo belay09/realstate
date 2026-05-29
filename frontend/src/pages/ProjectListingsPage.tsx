@@ -2,15 +2,28 @@ import { useQuery } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
 
 import { api } from '../api/client'
-import type { PublicLocationContent } from '../api/types'
+import type { Paginated, PublicListingSummary, PublicLocationContent } from '../api/types'
 import { AyatPriceCalculator } from '../components/AyatPriceCalculator'
 import { useTranslation } from '../context/LocaleContext'
+import { AYAT_PARTNER, TEMER_PARTNER } from '../content/partners'
 import { usePageTitle } from '../hooks/usePageTitle'
-import { resolveDevelopmentZone } from '../lib/listingDisplay'
+import { formatListingCardTitle, resolveDevelopmentZone } from '../lib/listingDisplay'
 
 export function ProjectListingsPage() {
   const { t } = useTranslation()
   const { projectSlug } = useParams<{ projectSlug: string }>()
+
+  const listingsQuery = useQuery({
+    queryKey: ['public-listings-project', projectSlug],
+    enabled: Boolean(projectSlug),
+    queryFn: async () => {
+      const { data } = await api.get<Paginated<PublicListingSummary>>('/public/listings', {
+        params: { project_slug: projectSlug!, limit: '100' },
+      })
+      return data
+    },
+  })
+
   const contentQuery = useQuery({
     queryKey: ['public-location-content', 'apartment', projectSlug],
     enabled: Boolean(projectSlug),
@@ -21,8 +34,16 @@ export function ProjectListingsPage() {
       return data
     },
   })
-  const zone = projectSlug ? resolveDevelopmentZone(projectSlug, null) : ''
-  const pageTitle = contentQuery.data?.title || zone || t('pageTitles.apartments')
+
+  const firstListing = listingsQuery.data?.items[0]
+  const companyName = firstListing?.company_name ?? 'Developer'
+  const companySlug = firstListing?.company_slug
+  const isAyat = companySlug === AYAT_PARTNER.slug
+  const isTemer = companySlug === TEMER_PARTNER.slug
+
+  const zone = projectSlug ? resolveDevelopmentZone(projectSlug, firstListing?.area ?? null) : ''
+  const pageTitle =
+    contentQuery.data?.title || firstListing?.project_name || zone || t('pageTitles.apartments')
   usePageTitle(pageTitle)
 
   const backTo = '/apartments'
@@ -31,11 +52,11 @@ export function ProjectListingsPage() {
     return <p className="text-sm text-red-600">{t('projectBrowse.missingProject')}</p>
   }
 
-  if (contentQuery.isLoading) {
+  if (listingsQuery.isLoading && contentQuery.isLoading) {
     return <p className="text-body-sm">{t('projectBrowse.loading')}</p>
   }
 
-  if (contentQuery.isError) {
+  if (listingsQuery.isSuccess && (listingsQuery.data?.items.length ?? 0) === 0) {
     return (
       <div className="surface p-6 text-center">
         <p className="text-h3">{t('projectBrowse.notFoundTitle')}</p>
@@ -56,17 +77,15 @@ export function ProjectListingsPage() {
           {t('projectBrowse.backToLocations')}
         </Link>
         <span className="mx-2">/</span>
-        <span className="text-fg">{content?.title || zone || projectSlug}</span>
+        <span className="text-fg">{content?.title || firstListing?.project_name || zone || projectSlug}</span>
       </nav>
 
       <header className="max-w-2xl">
-        <p className="text-eyebrow text-brand-700 dark:text-brand-300">Ayat apartments</p>
-        <h1 className="mt-2 text-h1">{content?.title || zone || projectSlug}</h1>
-        {content?.subtitle ? (
-          <p className="mt-1 text-lg text-fg-muted">
-            {content.subtitle}
-          </p>
-        ) : null}
+        <p className="text-eyebrow text-brand-700 dark:text-brand-300">
+          {t('projectBrowse.developerApartments', { developer: companyName })}
+        </p>
+        <h1 className="mt-2 text-h1">{content?.title || firstListing?.project_name || zone || projectSlug}</h1>
+        {content?.subtitle ? <p className="mt-1 text-lg text-fg-muted">{content.subtitle}</p> : null}
         <p className="mt-4 text-body-sm">
           {content?.description || t('projectBrowse.chooseLayout')}
         </p>
@@ -103,28 +122,51 @@ export function ProjectListingsPage() {
         </section>
       )}
 
-      {(content?.cards?.length ?? 0) > 0 && (
+      {(listingsQuery.data?.items.length ?? 0) > 0 && (
         <section className="space-y-4">
-          <h2 className="text-h3">Highlights</h2>
-          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {content?.cards.map((card, idx) => (
-              <li key={`${card.title}-${idx}`} className="surface p-0 overflow-hidden">
-                {card.image_url ? (
-                  <img src={card.image_url} alt="" className="h-36 w-full object-cover" />
-                ) : null}
-                <div className="p-4">
-                  <h3 className="text-base font-semibold text-fg">{card.title}</h3>
-                  {card.body ? <p className="mt-2 text-sm text-fg-muted">{card.body}</p> : null}
-                </div>
+          <h2 className="text-h3">{t('projectBrowse.homesHere')}</h2>
+          <ul className="grid gap-4 sm:grid-cols-2">
+            {listingsQuery.data!.items.map((item) => (
+              <li key={item.slug}>
+                <Link
+                  to={`/listings/${item.slug}`}
+                  className="surface block p-5 transition hover:border-brand-300"
+                >
+                  <p className="text-xs font-semibold uppercase tracking-wide text-brand-700 dark:text-brand-300">
+                    {item.company_name}
+                  </p>
+                  <h3 className="mt-1 text-lg font-bold text-fg">{formatListingCardTitle(item, t)}</h3>
+                  <p className="mt-2 text-body-sm text-fg-muted">
+                    {item.bedrooms != null
+                      ? t('projectBrowse.bedroomCount', { count: item.bedrooms })
+                      : null}
+                  </p>
+                </Link>
               </li>
             ))}
           </ul>
         </section>
       )}
-      <section className="space-y-4">
-        <h2 className="text-h3">{t('projectBrowse.priceEstimate')}</h2>
-        <AyatPriceCalculator variant="page" initialKind="residential" />
-      </section>
+
+      {isAyat ? (
+        <section className="space-y-4">
+          <h2 className="text-h3">{t('projectBrowse.priceEstimate')}</h2>
+          <AyatPriceCalculator variant="page" initialKind="residential" />
+        </section>
+      ) : isTemer ? (
+        <section className="surface-muted space-y-3 p-6">
+          <p className="section-eyebrow">{t('temer.priceOnRequestTitle')}</p>
+          <p className="text-body-sm">{t('temer.priceOnRequestBody')}</p>
+          <a
+            href="https://temerproperties.com/price-calculator/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex text-sm font-semibold text-brand-700 underline dark:text-brand-300"
+          >
+            {t('temer.temerCalculatorLink')}
+          </a>
+        </section>
+      ) : null}
     </div>
   )
 }

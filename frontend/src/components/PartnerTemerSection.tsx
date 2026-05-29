@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom'
 
 import { useTranslation } from '../context/LocaleContext'
-import { AYAT_PARTNER } from '../content/partners'
+import { TEMER_PARTNER } from '../content/partners'
 import { PartnerLogo } from './PartnerLogo'
 
-type PartnerAyatSectionProps = {
+type PartnerTemerSectionProps = {
   compact?: boolean
 }
 
-export function PartnerAyatSection({ compact = false }: PartnerAyatSectionProps) {
+export function PartnerTemerSection({ compact = false }: PartnerTemerSectionProps) {
   const { t, messages } = useTranslation()
 
   return (
@@ -16,25 +16,28 @@ export function PartnerAyatSection({ compact = false }: PartnerAyatSectionProps)
       className={`surface-luxury relative overflow-hidden ${compact ? 'h-full p-6 sm:p-8' : 'p-8 sm:p-10 lg:p-12'}`}
     >
       <div
-        className="pointer-events-none absolute -right-16 top-0 h-48 w-48 rounded-full bg-brand-400/15 blur-3xl"
+        className="pointer-events-none absolute -left-16 bottom-0 h-48 w-48 rounded-full bg-emerald-500/10 blur-3xl"
         aria-hidden
       />
       <div className={`relative flex flex-col gap-8 ${compact ? '' : 'lg:flex-row lg:items-center'}`}>
         <div className="flex shrink-0 flex-col items-center">
-          <PartnerLogo companySlug={AYAT_PARTNER.slug} size="lg" />
+          <PartnerLogo companySlug={TEMER_PARTNER.slug} size="lg" />
           <p className="mt-3 text-center text-xs font-semibold text-brand-700 dark:text-brand-300">
-            {AYAT_PARTNER.brandName}
+            {TEMER_PARTNER.brandName}
+          </p>
+          <p className="text-center text-xs text-fg-muted">
+            {t('temer.hotline', { hotline: TEMER_PARTNER.hotline })}
           </p>
         </div>
 
         <div className="min-w-0 flex-1">
-          <p className="section-eyebrow">{t('ayat.featuredEyebrow')}</p>
-          <h2 className={`mt-2 text-h2 ${compact ? 'text-xl sm:text-2xl' : ''}`}>{AYAT_PARTNER.brandName}</h2>
-          <p className="mt-4 text-body-sm sm:text-base">
-            {t('ayat.body', { reputation: t('ayat.reputation') })}
-          </p>
+          <p className="section-eyebrow">{t('temer.featuredEyebrow')}</p>
+          <h2 className={`mt-2 text-h2 ${compact ? 'text-xl sm:text-2xl' : ''}`}>
+            {TEMER_PARTNER.brandName}
+          </h2>
+          <p className="mt-4 text-body-sm sm:text-base">{t('temer.body')}</p>
           <ul className="mt-5 flex flex-wrap gap-2">
-            {messages.ayat.highlights.map((item) => (
+            {messages.temer.highlights.map((item) => (
               <li
                 key={item}
                 className="rounded-full border border-border bg-surface px-3.5 py-1.5 text-xs font-semibold text-fg"
@@ -44,19 +47,19 @@ export function PartnerAyatSection({ compact = false }: PartnerAyatSectionProps)
             ))}
           </ul>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Link to={`/apartments?company_slug=${AYAT_PARTNER.slug}`} className="btn-primary">
-              {t('ayat.browseAyat')}
-            </Link>
-            <Link to="/shops" className="btn-secondary">
-              {t('home.cardCommercialTitle')}
+            <Link
+              to={`/apartments?company_slug=${TEMER_PARTNER.slug}`}
+              className="btn-primary"
+            >
+              {t('temer.browseTemer')}
             </Link>
             <a
-              href={AYAT_PARTNER.website}
+              href={TEMER_PARTNER.website}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-secondary"
             >
-              {t('ayat.officialSite')}
+              {t('temer.officialSite')}
             </a>
           </div>
         </div>

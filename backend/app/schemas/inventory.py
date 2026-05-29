@@ -368,6 +368,27 @@ class PublicListingSummary(BaseModel):
     primary_image_url: str | None
 
 
+class ListingFeatureGroups(BaseModel):
+    interior: list[str] = Field(default_factory=list)
+    outdoor: list[str] = Field(default_factory=list)
+    utilities: list[str] = Field(default_factory=list)
+    other: list[str] = Field(default_factory=list)
+
+
+class ListingMapPoint(BaseModel):
+    latitude: float
+    longitude: float
+    label: str | None = None
+
+
+class ListingMetadataPublic(BaseModel):
+    property_kind: str = "residential"
+    external_property_id: str | None = None
+    specs: dict[str, str] = Field(default_factory=dict)
+    features: ListingFeatureGroups = Field(default_factory=ListingFeatureGroups)
+    map: ListingMapPoint | None = None
+
+
 class PublicListingDetail(PublicListingSummary):
     description: str | None
     images: list[PublicListingImage]
@@ -375,6 +396,7 @@ class PublicListingDetail(PublicListingSummary):
     floor_number: int | None
     area_sqm: Decimal | None
     unit_status: str
+    listing_metadata: ListingMetadataPublic | None = None
 
 
 class PublicFilterOption(BaseModel):

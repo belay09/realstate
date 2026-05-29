@@ -16,7 +16,7 @@ from sqlalchemy import (
     UniqueConstraint,
     func,
 )
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -161,6 +161,7 @@ class PropertyListing(Base, TimestampMixin):
     area: Mapped[str | None] = mapped_column(String(128), nullable=True, index=True)
     is_featured: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     is_public: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False, index=True)
+    listing_metadata: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
 
     unit: Mapped[PropertyUnit] = relationship("PropertyUnit", back_populates="listings")
     images: Mapped[list[PropertyImage]] = relationship(

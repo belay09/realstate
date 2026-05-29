@@ -1,6 +1,7 @@
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 
 import { ThemeToggle } from '../components/ThemeToggle'
+import { SITE_CONTACT } from '../content/siteContact'
 import { clearAccessToken } from '../lib/auth'
 
 const navCls =
@@ -18,7 +19,7 @@ export function AdminLayout() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-canvas md:flex-row">
-      <aside className="border-b border-border bg-surface md:w-56 md:border-b-0 md:border-r">
+      <aside className="flex flex-col border-b border-border bg-surface md:w-56 md:min-h-dvh md:border-b-0 md:border-r">
         <div className="flex items-center justify-between gap-2 px-4 py-4 md:block">
           <Link to="/admin" className="text-sm font-semibold text-brand-700 dark:text-brand-300">
             Admin
@@ -60,6 +61,11 @@ export function AdminLayout() {
             View public site
           </NavLink>
         </nav>
+        <p className="mt-auto hidden px-4 pb-4 text-xs text-fg-muted md:block">
+          <a href={SITE_CONTACT.telHref} className="font-semibold text-brand-700 dark:text-brand-300">
+            {SITE_CONTACT.phoneDisplay}
+          </a>
+        </p>
       </aside>
       <div className="flex-1 bg-canvas">
         <div className="mx-auto max-w-4xl px-4 py-8">

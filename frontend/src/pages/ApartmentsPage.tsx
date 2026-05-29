@@ -1,13 +1,14 @@
 import * as React from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 
 import { api } from '../api/client'
 import type { Paginated, PublicListingSummary } from '../api/types'
 import { ProjectLocationCard } from '../components/ProjectLocationCard'
+import { SiteContactBanner } from '../components/SiteContactStrip'
+import { AYAT_PARTNER, TEMER_PARTNER } from '../content/partners'
 import { groupListingsByProject } from '../lib/groupListingsByProject'
 import { useTranslation } from '../context/LocaleContext'
-import { AYAT_PARTNER } from '../content/partners'
 import { usePageTitle } from '../hooks/usePageTitle'
 
 function LocationSkeleton() {
@@ -19,15 +20,33 @@ function LocationSkeleton() {
   )
 }
 
+type DeveloperFilter = '' | typeof AYAT_PARTNER.slug | typeof TEMER_PARTNER.slug
+
 export function ApartmentsPage() {
   const { t } = useTranslation()
   usePageTitle(t('pageTitles.apartments'))
+  const [searchParams, setSearchParams] = useSearchParams()
+  const companySlug = (searchParams.get('company_slug') || '') as DeveloperFilter
+
+  const setDeveloperFilter = (slug: DeveloperFilter) => {
+    const next = new URLSearchParams(searchParams)
+    if (slug) {
+      next.set('company_slug', slug)
+    } else {
+      next.delete('company_slug')
+    }
+    setSearchParams(next, { replace: true })
+  }
 
   const query = useQuery({
-    queryKey: ['public-listings-apartments'],
+    queryKey: ['public-listings-apartments', companySlug],
     queryFn: async () => {
+      const params: Record<string, string> = { limit: '100' }
+      if (companySlug) {
+        params.company_slug = companySlug
+      }
       const { data } = await api.get<Paginated<PublicListingSummary>>('/public/listings', {
-        params: { limit: '100' },
+        params,
       })
       return data
     },
@@ -38,16 +57,47 @@ export function ApartmentsPage() {
     [query.data?.items],
   )
 
+  const filterChipClass = (active: boolean) =>
+    `rounded-full px-4 py-2 text-sm font-semibold transition ${
+      active
+        ? 'bg-brand-700 text-white shadow dark:bg-brand-500'
+        : 'border border-border bg-surface text-fg-muted hover:border-brand-300 hover:text-fg'
+    }`
+
   return (
     <div className="space-y-10 overflow-visible text-left">
-      <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-800 via-brand-700 to-brand-950 px-6 py-12 sm:px-10 sm:py-14">
-        <div className="pointer-events-none absolute -right-10 top-0 h-56 w-56 rounded-full bg-brand-400/20 blur-3xl" />
+      <section className="relative overflow-hidden rounded-3xl bg-slate-950 px-6 py-14 sm:px-12 sm:py-16">
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-1/2 opacity-40">
+          <div className="h-full w-full bg-gradient-to-l from-brand-600/30 to-transparent" />
+        </div>
         <div className="relative max-w-2xl">
-          <p className="text-eyebrow text-brand-200">{t('apartments.heroEyebrow')}</p>
-          <h1 className="mt-3 text-h1 text-white">{t('apartments.heroTitle')}</h1>
-          <p className="mt-4 text-body-sm text-slate-100/90 sm:text-base">{t('apartments.heroBody')}</p>
+          <p className="text-eyebrow text-brand-300">{t('apartments.heroEyebrow')}</p>
+          <h1 className="mt-4 text-h1 text-white">{t('apartments.heroTitle')}</h1>
+          <p className="text-lead mt-5 text-slate-400">{t('apartments.heroBody')}</p>
         </div>
       </section>
+
+      <SiteContactBanner />
+
+      <div className="flex flex-wrap items-center gap-2">
+        <button type="button" className={filterChipClass(!companySlug)} onClick={() => setDeveloperFilter('')}>
+          {t('apartments.filterAll')}
+        </button>
+        <button
+          type="button"
+          className={filterChipClass(companySlug === AYAT_PARTNER.slug)}
+          onClick={() => setDeveloperFilter(AYAT_PARTNER.slug)}
+        >
+          {t('apartments.filterAyat')}
+        </button>
+        <button
+          type="button"
+          className={filterChipClass(companySlug === TEMER_PARTNER.slug)}
+          onClick={() => setDeveloperFilter(TEMER_PARTNER.slug)}
+        >
+          {t('apartments.filterTemer')}
+        </button>
+      </div>
 
       <p className="text-body-sm text-fg-muted">{t('apartments.pickLocation')}</p>
 
@@ -70,7 +120,7 @@ export function ApartmentsPage() {
       {!query.isLoading && projectGroups.length > 0 && (
         <ul className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
           {projectGroups.map((group) => (
-            <li key={group.project_slug} className="animate-fade-in">
+            <li key={`${group.company_slug}-${group.project_slug}`} className="animate-fade-in">
               <ProjectLocationCard group={group} />
             </li>
           ))}
@@ -81,11 +131,8 @@ export function ApartmentsPage() {
         <div className="surface flex flex-col items-center px-6 py-20 text-center">
           <p className="text-h2">{t('listings.emptyTitle')}</p>
           <p className="mt-2 max-w-md text-body-sm">{t('listings.emptyDescription')}</p>
-          <Link
-            to={`/apartments?company_slug=${AYAT_PARTNER.slug}`}
-            className="btn-primary mt-8"
-          >
-            {t('listings.ayatHomesOnly')}
+          <Link to="/apartments" className="btn-primary mt-8">
+            {t('apartments.filterAll')}
           </Link>
         </div>
       )}

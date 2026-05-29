@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { api } from '../api/client'
 import type { PublicListingFilterOptions } from '../api/types'
 import { useTranslation } from '../context/LocaleContext'
+import { AYAT_PARTNER, TEMER_PARTNER } from '../content/partners'
 import { AYAT_ZONE_FILTER_OPTIONS } from '../lib/listingDisplay'
 import { SearchableSelect, type SelectOption } from './SearchableSelect'
 
@@ -45,15 +46,32 @@ function filtersMatch(a: ListingFiltersState, b: ListingFiltersState) {
   )
 }
 
+const TEMER_AREA_OPTIONS = [
+  { value: 'Sarbet', label: 'Sarbet' },
+  { value: 'Aware', label: 'Aware' },
+  { value: 'Ayat', label: 'Ayat' },
+  { value: 'Gelan', label: 'Gelan' },
+  { value: 'Garment', label: 'Garment' },
+  { value: 'Piyassa', label: 'Piyassa' },
+]
+
 const FALLBACK_OPTIONS: PublicListingFilterOptions = {
-  areas: AYAT_ZONE_FILTER_OPTIONS,
+  areas: [
+    ...AYAT_ZONE_FILTER_OPTIONS,
+    ...TEMER_AREA_OPTIONS.filter(
+      (opt) => !AYAT_ZONE_FILTER_OPTIONS.some((a) => a.value === opt.value),
+    ),
+  ],
   cities: [{ value: 'Addis Ababa', label: 'Addis Ababa' }],
   bedrooms: [
     { value: '1', label: '1 bedroom' },
     { value: '2', label: '2 bedrooms' },
     { value: '3', label: '3 bedrooms' },
   ],
-  companies: [{ value: 'ayat-real-estate', label: 'Ayat Share Company' }],
+  companies: [
+    { value: AYAT_PARTNER.slug, label: AYAT_PARTNER.legalName },
+    { value: TEMER_PARTNER.slug, label: TEMER_PARTNER.brandName },
+  ],
   unit_types: [],
 }
 

@@ -206,6 +206,7 @@ def _upsert_listing(
     is_featured: bool,
     admin: User | None,
     image_urls: list[str],
+    listing_metadata: dict | None = None,
 ) -> PropertyListing:
     row = db.query(PropertyListing).filter(PropertyListing.slug == slug).first()
     if row is None:
@@ -230,6 +231,7 @@ def _upsert_listing(
         row.area = area
         row.is_public = is_public
         row.is_featured = is_featured
+    row.listing_metadata = listing_metadata
 
     if image_urls:
         existing = {img.url for img in row.images}

@@ -1,190 +1,116 @@
-import { Link } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
-
-import { api } from '../api/client'
-import type { PublicHomeCard } from '../api/types'
 import { BelayRoleSection } from '../components/BelayRoleSection'
-import { PartnerAyatSection } from '../components/PartnerAyatSection'
+import { ButtonArrow } from '../components/ButtonArrow'
+import { HomeDevelopersSection } from '../components/HomeDevelopersSection'
+import { PartnerMarquee } from '../components/PartnerMarquee'
 import { SectionHeader } from '../components/SectionHeader'
 import { useTranslation } from '../context/LocaleContext'
-import { AYAT_PARTNER } from '../content/partners'
-import { useAdminEntryPath } from '../hooks/useAuth'
+import { AYAT_PARTNER, TEMER_PARTNER } from '../content/partners'
+import { SITE_CONTACT } from '../content/siteContact'
 import { usePageTitle } from '../hooks/usePageTitle'
 
 const HERO_IMAGE =
-  'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1920&q=85'
-
-const CATEGORY_CARD_KEYS = ['residential', 'commercial'] as const
-
-const CATEGORY_IMAGES = {
-  residential: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=900&q=80',
-  commercial: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=900&q=80',
-} as const
+  'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=85'
 
 export function HomePage() {
   const { t, messages } = useTranslation()
   usePageTitle(t('pageTitles.home'))
-  const adminPath = useAdminEntryPath()
-  const homeCardsQuery = useQuery({
-    queryKey: ['public-home-cards'],
-    queryFn: async () => {
-      const { data } = await api.get<PublicHomeCard[]>('/public/home-cards')
-      return data
-    },
-  })
-
-  const fallbackCards = CATEGORY_CARD_KEYS.map((key) => ({
-    key,
-    title:
-      key === 'residential' ? t('home.cardResidentialTitle') : t('home.cardCommercialTitle'),
-    description:
-      key === 'residential'
-        ? t('home.cardResidentialDescription')
-        : t('home.cardCommercialDescription'),
-    tag: key === 'residential' ? t('home.cardTagHomes') : t('home.cardTagShops'),
-    image: CATEGORY_IMAGES[key],
-    to: key === 'residential' ? '/apartments' : '/shops',
-  }))
-  const categoryCards =
-    homeCardsQuery.data && homeCardsQuery.data.length > 0
-      ? homeCardsQuery.data.map((card) => ({
-          key: card.card_key,
-          title: card.title,
-          description: card.description,
-          tag:
-            card.tag ??
-            (card.card_key === 'residential' ? t('home.cardTagHomes') : t('home.cardTagShops')),
-          image:
-            card.image_url ||
-            CATEGORY_IMAGES[
-              card.card_key === 'commercial' ? 'commercial' : 'residential'
-            ],
-          to: card.to_path || (card.card_key === 'commercial' ? '/shops' : '/apartments'),
-        }))
-      : fallbackCards
 
   const heroStats = [
-    { value: AYAT_PARTNER.yearsEstablished, label: t('home.statYears') },
-    { value: 'Multi', label: t('home.statMulti') },
+    { value: '2+', label: t('home.statDevelopers') },
+    { value: String(messages.ayat.stats[0]?.value ?? '25+'), label: t('home.statExperience') },
     { value: 'You', label: t('home.statYou') },
+  ]
+
+  const credibilityStats = [
+    ...messages.ayat.stats.map((stat) => ({ ...stat, partner: AYAT_PARTNER.brandName })),
+    {
+      value: SITE_CONTACT.phoneDisplay,
+      label: t('contact.label'),
+      partner: messages.brand.name,
+    },
   ]
 
   return (
     <div className="text-left">
-      <section className="relative min-h-[min(88vh,820px)] overflow-hidden">
-        <img src={HERO_IMAGE} alt="" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-brand-950/85 to-brand-900/40" />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
+      <section className="relative min-h-[min(94vh,900px)] overflow-hidden bg-surface">
+        <div className="absolute inset-y-0 right-0 w-full lg:w-[62%]">
+          <img
+            src={HERO_IMAGE}
+            alt=""
+            className="hero-image-mask h-full w-full object-cover object-center"
+          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-surface via-surface/70 to-transparent lg:from-surface lg:via-surface/40 lg:to-transparent" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent lg:hidden" />
+        </div>
 
-        <div className="relative mx-auto flex min-h-[min(88vh,820px)] max-w-[90rem] flex-col justify-center px-4 pb-36 pt-28 sm:px-8 sm:pb-40">
-          <p className="animate-fade-in text-eyebrow text-brand-200">{t('home.heroEyebrow')}</p>
-          <h1 className="mt-4 max-w-3xl text-display text-white">
-            {t('home.heroTitle')}
-            <span className="text-brand-300"> {t('home.heroTitleAccent')}</span> {t('home.heroTitleEnd')}
-          </h1>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-100/90 sm:text-lg">
-            {t('home.heroBody', {
-              ayatBrand: AYAT_PARTNER.brandName,
-              years: AYAT_PARTNER.yearsEstablished,
-              belayNotAyat: t('home.belayNotAyat'),
-            })}
-          </p>
-          <div className="mt-10 flex flex-wrap gap-4">
-            <Link to="/apartments" className="btn-accent">
-              {t('home.exploreListings')}
-            </Link>
-            <Link to="/shops" className="btn-ghost-light">
-              {t('nav.shops')}
-            </Link>
-            <Link to="/calculator" className="btn-ghost-light">
-              {t('home.priceCalculator')}
-            </Link>
+        <PartnerMarquee variant="hero-overlay" heroImage={HERO_IMAGE} />
+
+        <div className="relative mx-auto flex min-h-[min(94vh,900px)] max-w-[90rem] flex-col justify-center px-4 pb-28 pt-24 sm:px-8 sm:pb-32 lg:pb-20">
+          <div className="max-w-xl animate-fade-in lg:max-w-2xl">
+            <p className="text-eyebrow">{t('home.heroEyebrow')}</p>
+            <h1 className="text-hero mt-5">
+              {t('home.heroTitle')}
+              <span className="text-brand-700 dark:text-brand-400"> {t('home.heroTitleAccent')}</span>
+              {t('home.heroTitleEnd') ? ` ${t('home.heroTitleEnd')}` : ''}
+            </h1>
+            <p className="text-lead mt-6 max-w-lg">
+              {t('home.heroBody', {
+                ayatBrand: AYAT_PARTNER.brandName,
+                temerBrand: TEMER_PARTNER.brandName,
+                belayNotAyat: t('home.belayNotAyat'),
+              })}
+            </p>
+            <div className="mt-10 flex flex-wrap gap-4">
+              <ButtonArrow to="/apartments">{t('home.exploreListings')}</ButtonArrow>
+              <ButtonArrow to={`/apartments?company_slug=${TEMER_PARTNER.slug}`} variant="outline">
+                {t('temer.browseTemer')}
+              </ButtonArrow>
+            </div>
+
+            <ul className="mt-14 grid gap-8 sm:grid-cols-3">
+              {heroStats.map((stat) => (
+                <li key={stat.label} className="stat-inline">
+                  <p className="stat-inline-value">{stat.value}</p>
+                  <p className="stat-inline-label">{stat.label}</p>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
 
-      <div className="relative z-20 mx-auto -mt-20 max-w-[90rem] px-4 sm:-mt-24 sm:px-8">
-        <div className="grid gap-3 sm:grid-cols-3">
-          {heroStats.map((stat) => (
-            <div key={stat.label} className="surface flex items-center gap-4 px-5 py-5 sm:px-6">
-              <span className="text-stat shrink-0">{stat.value}</span>
-              <span className="text-body-sm font-medium leading-snug">{stat.label}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="mx-auto max-w-[90rem] space-y-20 px-4 pb-20 pt-14 sm:px-8 sm:pt-16">
-        <PartnerAyatSection />
-
-        <section>
+      <div className="mx-auto max-w-[90rem] space-y-24 px-4 pb-24 pt-20 sm:px-8 sm:pt-28">
+        <section className="space-y-6">
           <SectionHeader
-            eyebrow={t('home.inventoryEyebrow')}
-            title={t('home.inventoryTitle')}
-            description={t('home.inventoryDescription')}
+            eyebrow={t('home.partnersEyebrow')}
+            title={t('home.partnersTitle')}
+            description={t('home.partnersDescription')}
+            large
           />
-          <ul className="mt-10 grid gap-6 lg:grid-cols-2">
-            {categoryCards.map((card) => (
-              <li key={card.key}>
-                <Link
-                  to={card.to}
-                  className="group surface block overflow-hidden transition hover:shadow-[0_20px_40px_-12px_rgba(2,132,199,0.2)]"
-                >
-                  <div className="relative aspect-[16/9] overflow-hidden">
-                    <img
-                      src={card.image}
-                      alt=""
-                      className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
-                    />
-                    <span className="badge-sale absolute left-4 top-4">{card.tag}</span>
-                  </div>
-                  <div className="p-6 sm:p-8">
-                    <h3 className="text-h3">{card.title}</h3>
-                    <p className="mt-2 text-body-sm">{card.description}</p>
-                    <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-brand-700 dark:text-brand-300">
-                      {card.key === 'residential' ? t('home.viewListings') : t('home.viewShopEstimate')}
-                      <span className="transition group-hover:translate-x-1">→</span>
-                    </span>
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <HomeDevelopersSection />
         </section>
 
         <BelayRoleSection />
 
-        <section className="surface-muted px-6 py-12 sm:px-10 sm:py-14">
+        <section className="rounded-3xl border border-border bg-surface-muted px-6 py-14 sm:px-12 sm:py-16">
           <SectionHeader
             align="center"
             eyebrow={t('home.credibilityEyebrow')}
             title={t('home.credibilityTitle')}
             description={t('home.credibilityDescription')}
+            large
           />
-          <ul className="mx-auto mt-10 grid max-w-3xl gap-4 sm:grid-cols-3">
-            {messages.ayat.stats.map((stat) => (
-              <li key={stat.label} className="surface px-4 py-8 text-center">
-                <p className="text-stat">{stat.value}</p>
+          <ul className="mx-auto mt-12 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {credibilityStats.map((stat) => (
+              <li key={`${stat.partner}-${stat.label}`} className="surface px-5 py-10 text-center">
+                <p className="stat-inline-value text-3xl sm:text-4xl">{stat.value}</p>
                 <p className="mt-2 text-xs font-medium leading-snug text-fg-muted">{stat.label}</p>
+                <p className="mt-2 text-[0.65rem] font-semibold uppercase tracking-[0.15em] text-brand-700 dark:text-brand-300">
+                  {stat.partner}
+                </p>
               </li>
             ))}
           </ul>
-        </section>
-
-        <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-700 to-brand-950 px-8 py-12 text-center sm:py-16">
-          <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand-400/20 blur-3xl" />
-          <h2 className="relative text-h2 text-white">{t('home.ctaTitle')}</h2>
-          <p className="relative mx-auto mt-3 max-w-md text-body-sm text-slate-200">
-            {t('home.ctaDescription')}
-          </p>
-          <div className="relative mt-8 flex flex-wrap justify-center gap-3">
-            <Link to="/apartments" className="btn-accent">
-              {t('home.browseListings')}
-            </Link>
-            <Link to={adminPath} className="btn-ghost-light">
-              {t('home.staffLogin')}
-            </Link>
-          </div>
         </section>
       </div>
     </div>

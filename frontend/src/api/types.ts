@@ -119,6 +119,27 @@ export type PublicListingSummary = {
   primary_image_url: string | null
 }
 
+export type ListingFeatureGroups = {
+  interior: string[]
+  outdoor: string[]
+  utilities: string[]
+  other: string[]
+}
+
+export type ListingMapPoint = {
+  latitude: number
+  longitude: number
+  label: string | null
+}
+
+export type ListingMetadataPublic = {
+  property_kind: 'residential' | 'commercial' | string
+  external_property_id: string | null
+  specs: Record<string, string>
+  features: ListingFeatureGroups
+  map: ListingMapPoint | null
+}
+
 export type PublicListingDetail = PublicListingSummary & {
   description: string | null
   images: { url: string; sort_order: number; is_primary: boolean }[]
@@ -126,6 +147,7 @@ export type PublicListingDetail = PublicListingSummary & {
   floor_number: number | null
   area_sqm: string | null
   unit_status: string
+  listing_metadata: ListingMetadataPublic | null
 }
 
 export type PublicLocationContent = {

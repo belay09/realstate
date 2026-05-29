@@ -1,0 +1,2671 @@
+{
+  "_meta": {
+    "description": "Full Temer inventory generated from temer_scraped.json",
+    "source": "https://temerproperties.com",
+    "generated_at": "2026-05-29T10:12:29.775809+00:00",
+    "scraped_at": "2026-05-29T10:07:40.195890+00:00",
+    "listings_count": 32,
+    "currency": "ETB"
+  },
+  "company": {
+    "slug": "temer-properties",
+    "name": "Temer Properties",
+    "phone": "+251975666699",
+    "website": "https://temerproperties.com/",
+    "description": "Addis Ababa real estate developer. Belay Properties lists Temer apartments and commercial units; purchase and contracts are with Temer Properties."
+  },
+  "projects": [
+    {
+      "slug": "aware-site",
+      "name": "Aware Site",
+      "city": "Addis Ababa",
+      "area": "Aware",
+      "blocks": [
+        {
+          "code": "T1",
+          "name": "Tower 1",
+          "total_floors": 18
+        }
+      ]
+    },
+    {
+      "slug": "sumaletera",
+      "name": "Sumaletera",
+      "city": "Addis Ababa",
+      "area": "Piyassa",
+      "blocks": [
+        {
+          "code": "T1",
+          "name": "Tower 1",
+          "total_floors": 18
+        }
+      ]
+    },
+    {
+      "slug": "lycee-burat",
+      "name": "Lycee Burat",
+      "city": "Addis Ababa",
+      "area": "Piyassa",
+      "blocks": [
+        {
+          "code": "T1",
+          "name": "Tower 1",
+          "total_floors": 18
+        }
+      ]
+    },
+    {
+      "slug": "lycee-new-road",
+      "name": "Lycee New Road",
+      "city": "Addis Ababa",
+      "area": "Piyassa",
+      "blocks": [
+        {
+          "code": "T1",
+          "name": "Tower 1",
+          "total_floors": 18
+        }
+      ]
+    },
+    {
+      "slug": "lycee-seken",
+      "name": "Lycee Seken",
+      "city": "Addis Ababa",
+      "area": "Piyassa",
+      "blocks": [
+        {
+          "code": "T1",
+          "name": "Tower 1",
+          "total_floors": 18
+        }
+      ]
+    },
+    {
+      "slug": "sarbet-blue-point",
+      "name": "Sarbet Blue Point",
+      "city": "Addis Ababa",
+      "area": "Sarbet",
+      "blocks": [
+        {
+          "code": "T1",
+          "name": "Tower 1",
+          "total_floors": 23
+        }
+      ]
+    },
+    {
+      "slug": "sarbet-au-seken",
+      "name": "Sarbet Au / Seken",
+      "city": "Addis Ababa",
+      "area": "Sarbet",
+      "blocks": [
+        {
+          "code": "T1",
+          "name": "Tower 1",
+          "total_floors": 23
+        }
+      ]
+    },
+    {
+      "slug": "ayat-to-center",
+      "name": "Ayat To Center",
+      "city": "Addis Ababa",
+      "area": "Ayat",
+      "blocks": [
+        {
+          "code": "T1",
+          "name": "Tower 1",
+          "total_floors": 18
+        }
+      ]
+    },
+    {
+      "slug": "arada-site",
+      "name": "Arada Site",
+      "city": "Addis Ababa",
+      "area": "Piyassa",
+      "blocks": [
+        {
+          "code": "C1",
+          "name": "Commercial block",
+          "total_floors": 18
+        }
+      ]
+    },
+    {
+      "slug": "adwa-empire",
+      "name": "Adwa Empire",
+      "city": "Addis Ababa",
+      "area": "Piyassa",
+      "blocks": [
+        {
+          "code": "C1",
+          "name": "Commercial block",
+          "total_floors": 18
+        }
+      ]
+    },
+    {
+      "slug": "adwa-ewket",
+      "name": "Adwa Ewket",
+      "city": "Addis Ababa",
+      "area": "Piyassa",
+      "blocks": [
+        {
+          "code": "C1",
+          "name": "Commercial block",
+          "total_floors": 18
+        }
+      ]
+    },
+    {
+      "slug": "achantan",
+      "name": "Achantan",
+      "city": "Addis Ababa",
+      "area": "Ayat",
+      "blocks": [
+        {
+          "code": "T1",
+          "name": "Tower 1",
+          "total_floors": 18
+        }
+      ]
+    },
+    {
+      "slug": "ayat-feres-bet",
+      "name": "Ayat Feres Bet",
+      "city": "Addis Ababa",
+      "area": "Ayat",
+      "blocks": [
+        {
+          "code": "T1",
+          "name": "Tower 1",
+          "total_floors": 18
+        }
+      ]
+    },
+    {
+      "slug": "ayat-lomiyad",
+      "name": "Ayat Lomiyad",
+      "city": "Addis Ababa",
+      "area": "Ayat",
+      "blocks": [
+        {
+          "code": "T1",
+          "name": "Tower 1",
+          "total_floors": 18
+        }
+      ]
+    },
+    {
+      "slug": "haile-garment",
+      "name": "Haile Garment",
+      "city": "Addis Ababa",
+      "area": "Garment",
+      "blocks": [
+        {
+          "code": "T1",
+          "name": "Tower 1",
+          "total_floors": 18
+        }
+      ]
+    },
+    {
+      "slug": "gelan-shopping-center",
+      "name": "Gelan Shopping Center",
+      "city": "Addis Ababa",
+      "area": "Gelan",
+      "blocks": [
+        {
+          "code": "C1",
+          "name": "Commercial block",
+          "total_floors": 7
+        }
+      ]
+    },
+    {
+      "slug": "sarbet-city-plus",
+      "name": "Sarbet City Plus",
+      "city": "Addis Ababa",
+      "area": "Sarbet",
+      "blocks": [
+        {
+          "code": "T1",
+          "name": "Tower 1",
+          "total_floors": 23
+        }
+      ]
+    }
+  ],
+  "unit_types": [
+    {
+      "code": "T1BR",
+      "name": "One-bedroom apartment",
+      "category": "residential",
+      "bedrooms": 1,
+      "default_area_sqm": "80.0"
+    },
+    {
+      "code": "T3BR",
+      "name": "Three-bedroom apartment",
+      "category": "residential",
+      "bedrooms": 3,
+      "default_area_sqm": "123.0"
+    },
+    {
+      "code": "T2BR",
+      "name": "Two-bedroom apartment",
+      "category": "residential",
+      "bedrooms": 2,
+      "default_area_sqm": "116.0"
+    },
+    {
+      "code": "TSHOP",
+      "name": "Commercial shop / unit",
+      "category": "commercial",
+      "bedrooms": null,
+      "default_area_sqm": "20.0"
+    }
+  ],
+  "units": [
+    {
+      "project_slug": "aware-site",
+      "block_code": "T1",
+      "unit_number": "T25920",
+      "unit_type_code": "T1BR",
+      "floor_number": 1,
+      "area_sqm": "80.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "sumaletera",
+      "block_code": "T1",
+      "unit_number": "T21248",
+      "unit_type_code": "T3BR",
+      "floor_number": 1,
+      "area_sqm": "123.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "lycee-burat",
+      "block_code": "T1",
+      "unit_number": "T21234",
+      "unit_type_code": "T1BR",
+      "floor_number": 1,
+      "area_sqm": "75.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "lycee-burat",
+      "block_code": "T1",
+      "unit_number": "T21236",
+      "unit_type_code": "T2BR",
+      "floor_number": 1,
+      "area_sqm": "116.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "lycee-burat",
+      "block_code": "T1",
+      "unit_number": "T21237",
+      "unit_type_code": "T3BR",
+      "floor_number": 1,
+      "area_sqm": "116.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "lycee-new-road",
+      "block_code": "T1",
+      "unit_number": "T21238",
+      "unit_type_code": "T2BR",
+      "floor_number": 1,
+      "area_sqm": "99.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "lycee-seken",
+      "block_code": "T1",
+      "unit_number": "T22257",
+      "unit_type_code": "T1BR",
+      "floor_number": 1,
+      "area_sqm": "86.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "lycee-seken",
+      "block_code": "T1",
+      "unit_number": "T22250",
+      "unit_type_code": "T2BR",
+      "floor_number": 1,
+      "area_sqm": "86.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "lycee-seken",
+      "block_code": "T1",
+      "unit_number": "T22236",
+      "unit_type_code": "T3BR",
+      "floor_number": 1,
+      "area_sqm": "146.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "sarbet-blue-point",
+      "block_code": "T1",
+      "unit_number": "T25947",
+      "unit_type_code": "T3BR",
+      "floor_number": 1,
+      "area_sqm": "145.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "aware-site",
+      "block_code": "T1",
+      "unit_number": "T25934",
+      "unit_type_code": "T3BR",
+      "floor_number": 1,
+      "area_sqm": "145.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "sarbet-au-seken",
+      "block_code": "T1",
+      "unit_number": "T21653",
+      "unit_type_code": "T3BR",
+      "floor_number": 1,
+      "area_sqm": "130.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "sarbet-au-seken",
+      "block_code": "T1",
+      "unit_number": "T21654",
+      "unit_type_code": "T3BR",
+      "floor_number": 1,
+      "area_sqm": "130.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "ayat-to-center",
+      "block_code": "T1",
+      "unit_number": "T21349",
+      "unit_type_code": "T3BR",
+      "floor_number": 1,
+      "area_sqm": "137.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "arada-site",
+      "block_code": "C1",
+      "unit_number": "T21356",
+      "unit_type_code": "TSHOP",
+      "floor_number": 1,
+      "area_sqm": "20.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "adwa-empire",
+      "block_code": "C1",
+      "unit_number": "T21355",
+      "unit_type_code": "TSHOP",
+      "floor_number": 1,
+      "area_sqm": "20.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "adwa-ewket",
+      "block_code": "C1",
+      "unit_number": "T21354",
+      "unit_type_code": "TSHOP",
+      "floor_number": 1,
+      "area_sqm": "20.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "achantan",
+      "block_code": "T1",
+      "unit_number": "T21263",
+      "unit_type_code": "T3BR",
+      "floor_number": 1,
+      "area_sqm": "214.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "ayat-feres-bet",
+      "block_code": "T1",
+      "unit_number": "T21261",
+      "unit_type_code": "T2BR",
+      "floor_number": 1,
+      "area_sqm": "86.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "ayat-feres-bet",
+      "block_code": "T1",
+      "unit_number": "T21259",
+      "unit_type_code": "T3BR",
+      "floor_number": 1,
+      "area_sqm": "120.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "ayat-lomiyad",
+      "block_code": "T1",
+      "unit_number": "T21247",
+      "unit_type_code": "T3BR",
+      "floor_number": 1,
+      "area_sqm": "154.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "ayat-lomiyad",
+      "block_code": "T1",
+      "unit_number": "T21246",
+      "unit_type_code": "T3BR",
+      "floor_number": 1,
+      "area_sqm": "154.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "ayat-lomiyad",
+      "block_code": "T1",
+      "unit_number": "T21245",
+      "unit_type_code": "T2BR",
+      "floor_number": 1,
+      "area_sqm": "129.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "aware-site",
+      "block_code": "T1",
+      "unit_number": "T21244",
+      "unit_type_code": "T2BR",
+      "floor_number": 1,
+      "area_sqm": "120.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "aware-site",
+      "block_code": "T1",
+      "unit_number": "T21243",
+      "unit_type_code": "T3BR",
+      "floor_number": 1,
+      "area_sqm": "146.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "lycee-seken",
+      "block_code": "T1",
+      "unit_number": "T21242",
+      "unit_type_code": "T3BR",
+      "floor_number": 1,
+      "area_sqm": "133.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "haile-garment",
+      "block_code": "T1",
+      "unit_number": "T21240",
+      "unit_type_code": "T3BR",
+      "floor_number": 1,
+      "area_sqm": "139.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "lycee-new-road",
+      "block_code": "T1",
+      "unit_number": "T21239",
+      "unit_type_code": "T3BR",
+      "floor_number": 1,
+      "area_sqm": "139.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "gelan-shopping-center",
+      "block_code": "C1",
+      "unit_number": "T25918",
+      "unit_type_code": "TSHOP",
+      "floor_number": 1,
+      "area_sqm": "2835.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "sarbet-city-plus",
+      "block_code": "T1",
+      "unit_number": "T28802",
+      "unit_type_code": "T3BR",
+      "floor_number": 1,
+      "area_sqm": "151.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "sarbet-city-plus",
+      "block_code": "T1",
+      "unit_number": "T28893",
+      "unit_type_code": "T2BR",
+      "floor_number": 1,
+      "area_sqm": "100.0",
+      "status": "available"
+    },
+    {
+      "project_slug": "sarbet-city-plus",
+      "block_code": "T1",
+      "unit_number": "T28908",
+      "unit_type_code": "T1BR",
+      "floor_number": 1,
+      "area_sqm": "76.0",
+      "status": "available"
+    }
+  ],
+  "listings": [
+    {
+      "unit_ref": {
+        "project_slug": "aware-site",
+        "block_code": "T1",
+        "unit_number": "T25920"
+      },
+      "slug": "temer-aware-one-bedroom-apartment-3",
+      "title": "Aware – One BedRoom Apartment",
+      "description": "Aware – One BedRoom Apartment — Temer Properties, Aware, Addis Ababa. Delivery: 36 Months. Building type: Residential. Temer listing ref. 25920. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Aware",
+      "is_public": true,
+      "is_featured": true,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-04.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-04-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-04-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/5.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/5-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/6.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/6-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/10.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/10-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/5-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/5-1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/10-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/10-1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/5-2.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/5-2-835x467.jpg"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "25920",
+      "specs": {
+        "Property Id": "25920",
+        "Property Size": "80 m 2",
+        "Property Lot Size": "1,110 m 2",
+        "Bedrooms": "1",
+        "Delivery Time": "36 Months",
+        "Parking Type": "Private Parking",
+        "Location": "Aware",
+        "Garage Size": "1 car",
+        "Basement": "Yes",
+        "Building Size": "2B+G+20+T",
+        "Building Type": "Residential"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "sumaletera",
+        "block_code": "T1",
+        "unit_number": "T21248"
+      },
+      "slug": "temer-sumaletera-three-bedroom-apartment",
+      "title": "SumaleTera,Three BedRoom Apartment",
+      "description": "SumaleTera,Three BedRoom Apartment — Temer Properties, Piyassa, Addis Ababa. Temer listing ref. 21248. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Piyassa",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2026/02/sumale-tera3.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/sumale-tera3-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/sumale-tera3-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/00020-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/00020-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-2-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0003-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0003-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0002-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0002-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0001-6.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0001-6-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0022-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0022-2-835x467.png"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "21248",
+      "specs": {
+        "Property Id": "21248",
+        "Property Size": "123 m 2",
+        "Property Lot Size": "1,110 m 2",
+        "Rooms": "8",
+        "Bedrooms": "3",
+        "Bathrooms": "2",
+        "Parking Type": "Private Parking",
+        "Garage Size": "1 car"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Laundry"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "lycee-burat",
+        "block_code": "T1",
+        "unit_number": "T21234"
+      },
+      "slug": "temer-lycee-burat-one-bedroom-apartment",
+      "title": "Lycee Burat,One BedRoom Apartment",
+      "description": "Lycee Burat,One BedRoom Apartment — Temer Properties, Piyassa, Addis Ababa. Temer listing ref. 21234. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Piyassa",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2025/05/LYCEEBURAT1-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/LYCEEBURAT1-1-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/LYCEEBURAT1-1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-2-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0003-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0003-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0002-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0002-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Shower.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Shower-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/LYCEEBURAT1-1-143x83.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-2-143x83.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0003-3-143x83.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0002-3-143x83.png"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "21234",
+      "specs": {
+        "Property Id": "21234",
+        "Property Size": "75 m 2",
+        "Property Lot Size": "1,110 m 2",
+        "Rooms": "5",
+        "Bedrooms": "1",
+        "Bathrooms": "1",
+        "Parking Type": "Private Parking",
+        "Garage Size": "1 car",
+        "Basement": "cement"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "lycee-burat",
+        "block_code": "T1",
+        "unit_number": "T21236"
+      },
+      "slug": "temer-lycee-burat-two-bedroom-apartment",
+      "title": "Lycee Burat,Two BedRoom Apartment",
+      "description": "Lycee Burat,Two BedRoom Apartment — Temer Properties, Piyassa, Addis Ababa. Temer listing ref. 21236. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Piyassa",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2025/05/LYCEBURAT2.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/LYCEBURAT2-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/LYCEBURAT2-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Shower.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Shower-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0022-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0022-2-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Livingroom-3.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Livingroom-3-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/3-2-1-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/3-2-1-1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1-835x467.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-2-835x467.png"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "21236",
+      "specs": {
+        "Property Id": "21236",
+        "Property Size": "116 m 2",
+        "Property Lot Size": "1,110 m 2",
+        "Rooms": "7",
+        "Bedrooms": "2",
+        "Bathrooms": "1",
+        "Parking Type": "Private Parking",
+        "Garage Size": "1 car",
+        "Basement": "cement"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "lycee-burat",
+        "block_code": "T1",
+        "unit_number": "T21237"
+      },
+      "slug": "temer-lycee-burat-three-bedroom-apartment",
+      "title": "Lycee Burat,Three BedRoom Apartment",
+      "description": "Lycee Burat,Three BedRoom Apartment — Temer Properties, Piyassa, Addis Ababa. Temer listing ref. 21237. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Piyassa",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2025/05/jjio.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/jjio-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/jjio-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/00020-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/00020-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0001-6.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0001-6-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-2-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0022-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0022-2-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Livingroom-3.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Livingroom-3-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/5-7-1-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/5-7-1-1-835x467.jpg"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "21237",
+      "specs": {
+        "Property Id": "21237",
+        "Property Size": "116 m 2",
+        "Property Lot Size": "1,110 m 2",
+        "Rooms": "8",
+        "Bedrooms": "3",
+        "Bathrooms": "2",
+        "Parking Type": "Private Parking",
+        "Garage Size": "1 car",
+        "Basement": "cement"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "lycee-new-road",
+        "block_code": "T1",
+        "unit_number": "T21238"
+      },
+      "slug": "temer-lycee-newroad-three-bedroom-apartment-2",
+      "title": "Lycee NewRoad,Two BedRoom Apartment",
+      "description": "Lycee NewRoad,Two BedRoom Apartment — Temer Properties, Piyassa, Addis Ababa. Temer listing ref. 21238. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Piyassa",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2025/05/newroad2-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/newroad2-1-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/newroad2-1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/bedroom-800-2-3-1.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/bedroom-800-2-3-1-835x467.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1-835x467.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Shower.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Shower-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0001-6.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0001-6-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/newroad2-1-143x83.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/bedroom-800-2-3-1-143x83.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1-143x83.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Shower-143x83.jpg"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "21238",
+      "specs": {
+        "Property Id": "21238",
+        "Property Size": "99 m 2",
+        "Property Lot Size": "1,110 m 2",
+        "Rooms": "5",
+        "Bedrooms": "2",
+        "Bathrooms": "1",
+        "Parking Type": "Private Parking",
+        "Garage Size": "1 car",
+        "Basement": "cement"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "lycee-seken",
+        "block_code": "T1",
+        "unit_number": "T22257"
+      },
+      "slug": "temer-lycee-003-one-bedroom-apartment",
+      "title": "LYCEE Seken- One BedRoom Apartment",
+      "description": "LYCEE Seken- One BedRoom Apartment — Temer Properties, Piyassa, Addis Ababa. Delivery: 30 Months. Building type: Residential. Temer listing ref. 22257. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Piyassa",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-59.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-59-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-59-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0008.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0008-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0002.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0002-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0001.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0001-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0022.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0022-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0054.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0054-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-59-143x83.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0008-143x83.png"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "22257",
+      "specs": {
+        "Property Id": "22257",
+        "Property Size": "86 m 2",
+        "Property Lot Size": "1,110 m 2",
+        "Rooms": "6",
+        "Bedrooms": "1",
+        "Bathrooms": "1",
+        "Delivery Time": "30 Months",
+        "Parking Type": "Private Parking",
+        "Location": "Piyassa",
+        "Garage Size": "1 car",
+        "Basement": "Yes",
+        "Building Size": "B+G+19+ T",
+        "Building Type": "Residential"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "lycee-seken",
+        "block_code": "T1",
+        "unit_number": "T22250"
+      },
+      "slug": "temer-lycee-003-seken-three-bedroom",
+      "title": "LYCEE Seken- Two BedRoom Apartment",
+      "description": "LYCEE Seken- Two BedRoom Apartment — Temer Properties, Piyassa, Addis Ababa. Delivery: 30 Months. Building type: Residential. Temer listing ref. 22250. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Piyassa",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-33-05.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-33-05-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-33-05-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/06/00020.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/00020-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0008.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0008-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0002.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0002-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0001.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0001-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0022.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0022-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0054.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0054-835x467.png"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "22250",
+      "specs": {
+        "Property Id": "22250",
+        "Property Size": "86 m 2",
+        "Property Lot Size": "1,110 m 2",
+        "Rooms": "6",
+        "Bedrooms": "2",
+        "Bathrooms": "1",
+        "Delivery Time": "30 Months",
+        "Parking Type": "Private Parking",
+        "Location": "Piyassa",
+        "Garage Size": "1 car",
+        "Basement": "Yes",
+        "Building Size": "B+G+19+ T",
+        "Building Type": "Residential"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "lycee-seken",
+        "block_code": "T1",
+        "unit_number": "T22236"
+      },
+      "slug": "temer-lycee-seken-seken-three-bedroom-2",
+      "title": "LYCEE Seken- Three BedRoom Apartment",
+      "description": "LYCEE Seken- Three BedRoom Apartment — Temer Properties, Piyassa, Addis Ababa. Delivery: 30 Months. Building type: Residential. Temer listing ref. 22236. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Piyassa",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-33-02.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-33-02-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-33-02-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/06/00020.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/00020-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0008.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0008-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0002.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0002-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0054.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0054-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0001.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0001-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0022.png",
+        "https://temerproperties.com/wp-content/uploads/2025/06/0022-835x467.png"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "22236",
+      "specs": {
+        "Property Id": "22236",
+        "Property Size": "146 m 2",
+        "Property Lot Size": "1,110 m 2",
+        "Rooms": "8",
+        "Bedrooms": "3",
+        "Bathrooms": "2",
+        "Delivery Time": "30 Months",
+        "Parking Type": "Private Parking",
+        "Location": "Piyassa",
+        "Garage Size": "1 car",
+        "Basement": "Yes",
+        "Building Size": "B+G+19+ T",
+        "Building Type": "Residential"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "sarbet-blue-point",
+        "block_code": "T1",
+        "unit_number": "T25947"
+      },
+      "slug": "temer-sarbet-blue-point-three-bedroom-apartment",
+      "title": "Sarbet -Blue Point Three BedRoom Apartment",
+      "description": "Sarbet -Blue Point Three BedRoom Apartment — Temer Properties, Sarbet, Addis Ababa. Delivery: 36 Months. Building type: Residential. Temer listing ref. 25947. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Sarbet",
+      "is_public": true,
+      "is_featured": true,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2025/11/photo_2026-02-10_15-33-15.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/photo_2026-02-10_15-33-15-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/photo_2026-02-10_15-33-15-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/4s.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/4s-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/2s.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/2s-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/1s.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/1s-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/4s-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/4s-1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/2s-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/2s-1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/1s-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/1s-1-835x467.jpg"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "25947",
+      "specs": {
+        "Property Id": "25947",
+        "Property Size": "145 m 2",
+        "Property Lot Size": "783 m 2",
+        "Bedrooms": "3",
+        "Bathrooms": "2",
+        "Delivery Time": "36 Months",
+        "Parking Type": "Private Parking",
+        "Location": "Sarbet",
+        "Garage Size": "1 car",
+        "Basement": "No",
+        "Building Size": "B+G+21+T",
+        "Building Type": "Residential"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "aware-site",
+        "block_code": "T1",
+        "unit_number": "T25934"
+      },
+      "slug": "temer-aware-three-bedroom-apartment",
+      "title": "Aware – Three BedRoom Apartment",
+      "description": "Aware – Three BedRoom Apartment — Temer Properties, Aware, Addis Ababa. Delivery: 36 Months. Building type: Residential. Temer listing ref. 25934. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Aware",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-24.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-24-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-24-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/6.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/6-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/5-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/5-1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/5-2.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/5-2-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/10-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/10-1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/10.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/10-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/5.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/5-835x467.jpg"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "25934",
+      "specs": {
+        "Property Id": "25934",
+        "Property Size": "145 m 2",
+        "Property Lot Size": "673 m 2",
+        "Bedrooms": "3",
+        "Bathrooms": "2",
+        "Delivery Time": "36 Months",
+        "Parking Type": "Private Parking",
+        "Location": "Aware",
+        "Garage Size": "1 car",
+        "Basement": "Yes",
+        "Building Size": "2B+G+20+T",
+        "Building Type": "Residential"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "sarbet-au-seken",
+        "block_code": "T1",
+        "unit_number": "T21653"
+      },
+      "slug": "temer-sarbet-au-three-bedroom-apartment",
+      "title": "Sarbet -Au,Three BedRoom Apartment",
+      "description": "Sarbet -Au,Three BedRoom Apartment — Temer Properties, Sarbet, Addis Ababa. Delivery: 30 months. Building type: Residential. Temer listing ref. 21653. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Sarbet",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-33-08.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-33-08-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-33-08-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Livingroom-3.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Livingroom-3-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Livingroom2-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Livingroom2-1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/5-7-1-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/5-7-1-1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Shower.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Shower-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0022-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0022-2-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-2-835x467.png"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "21653",
+      "specs": {
+        "Property Id": "21653",
+        "Property Size": "130 m 2",
+        "Property Lot Size": "1,110 m 2",
+        "Rooms": "8",
+        "Bedrooms": "3",
+        "Bathrooms": "2",
+        "Delivery Time": "30 months",
+        "Parking Type": "Private Parking",
+        "Location": "sarbet",
+        "Garage Size": "1 car",
+        "Basement": "yes",
+        "Building Type": "Residential"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "sarbet-au-seken",
+        "block_code": "T1",
+        "unit_number": "T21654"
+      },
+      "slug": "temer-sarbet-au-two-bedroom-apartment",
+      "title": "Sarbet -Au,Two BedRoom Apartment",
+      "description": "Sarbet -Au,Two BedRoom Apartment — Temer Properties, Sarbet, Addis Ababa. Delivery: 30 Months. Building type: Residential. Temer listing ref. 21654. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Sarbet",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-33-11.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-33-11-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-33-11-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Livingroom-3.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Livingroom-3-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Livingroom2-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Livingroom2-1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1-835x467.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern-2-1-1.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern-2-1-1-835x467.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/bedroom-800-2-3-1.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/bedroom-800-2-3-1-835x467.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/5-7-1-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/5-7-1-1-835x467.jpg"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "21654",
+      "specs": {
+        "Property Id": "21654",
+        "Property Size": "130 m 2",
+        "Property Lot Size": "1,110 m 2",
+        "Rooms": "8",
+        "Bedrooms": "3",
+        "Bathrooms": "2",
+        "Delivery Time": "30 Months",
+        "Parking Type": "Private Parking",
+        "Location": "Sarbet",
+        "Garage Size": "1 car",
+        "Basement": "Yes",
+        "Building Size": "2B+G+20+T",
+        "Building Type": "Residential"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "ayat-to-center",
+        "block_code": "T1",
+        "unit_number": "T21349"
+      },
+      "slug": "temer-ayat-to-center-three-bedroom-apartment-2",
+      "title": "Ayat To Center,Three BedRoom Apartment",
+      "description": "Ayat To Center,Three BedRoom Apartment — Temer Properties, Ayat, Addis Ababa. Delivery: 30 Months. Building type: Residential. Temer listing ref. 21349. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Ayat",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2026/02/t-cenetr-3.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/t-cenetr-3-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/t-cenetr-3-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Livingroom-3.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Livingroom-3-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Livingroom2-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Livingroom2-1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1-1.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1-1-835x467.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0030-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0030-2-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-2-835x467.png"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "21349",
+      "specs": {
+        "Property Id": "21349",
+        "Property Size": "137 m 2",
+        "Rooms": "8",
+        "Bedrooms": "3",
+        "Bathrooms": "2",
+        "Delivery Time": "30 Months",
+        "Parking Type": "Private Parking",
+        "Location": "Ayat",
+        "Garage Size": "1 car",
+        "Basement": "yes",
+        "Building Size": "3B+G+15",
+        "Building Type": "Residential"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "arada-site",
+        "block_code": "C1",
+        "unit_number": "T21356"
+      },
+      "slug": "temer-arada-site-shops-2",
+      "title": "Arada Site, Shops",
+      "description": "Arada Site, Shops — Temer Properties, Piyassa, Addis Ababa. Delivery: 16 Months. Building type: Residential. Temer listing ref. 21356. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Piyassa",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2025/05/GoldmallAds-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_H-1.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_H-1-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_I.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_I-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_F.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_F-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_I-1.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_I-1-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_H-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_H-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_J.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_J-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_G-1.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_G-1-835x467.png"
+      ],
+      "property_kind": "commercial",
+      "external_property_id": "21356",
+      "specs": {
+        "Property Id": "21356",
+        "Property Size": "20 m 2",
+        "Property Lot Size": "1,235 m 2",
+        "Delivery Time": "16 Months",
+        "Parking Type": "Private Parking",
+        "Location": "Piyassa",
+        "Garage Size": "1 car",
+        "Building Size": "B+G+5",
+        "Building Type": "Residential"
+      },
+      "feature_groups": {
+        "interior": [
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "adwa-empire",
+        "block_code": "C1",
+        "unit_number": "T21355"
+      },
+      "slug": "temer-adwa-empire-shops",
+      "title": "Adwa-empire, Shops",
+      "description": "Adwa-empire, Shops — Temer Properties, Piyassa, Addis Ababa. Temer listing ref. 21355. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Piyassa",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2025/05/GoldmallAds-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_H-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_H-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_G-1.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_G-1-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_F-1.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_F-1-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_E-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_E-2-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_C-1.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_C-1-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_B.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_B-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_A.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_A-835x467.png"
+      ],
+      "property_kind": "commercial",
+      "external_property_id": "21355",
+      "specs": {
+        "Property Id": "21355",
+        "Property Size": "20 m 2",
+        "Property Lot Size": "1,236 m 2",
+        "Parking Type": "Private Parking",
+        "Garage Size": "1 car"
+      },
+      "feature_groups": {
+        "interior": [
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "adwa-ewket",
+        "block_code": "C1",
+        "unit_number": "T21354"
+      },
+      "slug": "temer-adwa-ewketshops-2",
+      "title": "Adwa -ewket, Shops",
+      "description": "Adwa -ewket, Shops — Temer Properties, Piyassa, Addis Ababa. Delivery: 16 Months. Building type: Commercial. Temer listing ref. 21354. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Piyassa",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2025/05/GoldmallAds-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_E-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_E-2-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_H-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_H-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_C-1.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_C-1-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_B.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_B-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_J.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_J-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/GoldmallAds-1-143x83.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_E-2-143x83.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_H-3-143x83.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Goldmall_C-1-143x83.png"
+      ],
+      "property_kind": "commercial",
+      "external_property_id": "21354",
+      "specs": {
+        "Property Id": "21354",
+        "Property Size": "20 m 2",
+        "Property Lot Size": "1,235 m 2",
+        "Delivery Time": "16 Months",
+        "Parking Type": "Private Parking",
+        "Location": "Piyassa",
+        "Garage Size": "1 car",
+        "Building Size": "2B+G+5",
+        "Building Type": "Commercial"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Laundry"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "achantan",
+        "block_code": "T1",
+        "unit_number": "T21263"
+      },
+      "slug": "temer-achantan-three-bedroom-apartment",
+      "title": "Achantan,Three BedRoom Apartment",
+      "description": "Achantan,Three BedRoom Apartment — Temer Properties, Ayat, Addis Ababa. Delivery: 30 Months. Building type: Residential. Temer listing ref. 21263. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Ayat",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2026/02/achante-3.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/achante-3-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/achante-3-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/achantansk-min-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/achantansk-min-1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/bedroom-800-2-3-1.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/bedroom-800-2-3-1-835x467.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/5-7-1-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/5-7-1-1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/3-2-1-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/3-2-1-1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1-1.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1-1-835x467.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern-2-1-1.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern-2-1-1-835x467.jpeg"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "21263",
+      "specs": {
+        "Property Id": "21263",
+        "Property Size": "214 m 2",
+        "Rooms": "8",
+        "Bedrooms": "3",
+        "Bathrooms": "2",
+        "Delivery Time": "30 Months",
+        "Parking Type": "Private Parking",
+        "Location": "Ayat",
+        "Garage Size": "1 car",
+        "Basement": "Yes",
+        "Building Size": "B+G+10+T",
+        "Building Type": "Residential"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "ayat-feres-bet",
+        "block_code": "T1",
+        "unit_number": "T21261"
+      },
+      "slug": "temer-ayatferesbet-two-bedroom-apartment",
+      "title": "Ayat Feres Bet,Two BedRoom Apartment",
+      "description": "Ayat Feres Bet,Two BedRoom Apartment — Temer Properties, Ayat, Addis Ababa. Delivery: 30 Months. Building type: Residential. Temer listing ref. 21261. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Ayat",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2026/02/feres2.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/feres2-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/feres2-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/3-2-1-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/3-2-1-1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1-1.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1-1-835x467.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/bedroom-800-2-3-1.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/bedroom-800-2-3-1-835x467.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern-2-1-1.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern-2-1-1-835x467.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1-835x467.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/feres2-143x83.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/3-2-1-1-143x83.jpg"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "21261",
+      "specs": {
+        "Property Id": "21261",
+        "Property Size": "86 m 2",
+        "Rooms": "5",
+        "Bedrooms": "2",
+        "Bathrooms": "1",
+        "Delivery Time": "30 Months",
+        "Parking Type": "Private Parking",
+        "Location": "Ayat",
+        "Garage Size": "1 car",
+        "Basement": "cement",
+        "Building Size": "2B+G+16+T",
+        "Building Type": "Residential"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "ayat-feres-bet",
+        "block_code": "T1",
+        "unit_number": "T21259"
+      },
+      "slug": "temer-ayat-feres-betthree-bedroom-apartment",
+      "title": "Ayat Feres Bet,Three BedRoom Apartment",
+      "description": "Ayat Feres Bet,Three BedRoom Apartment — Temer Properties, Ayat, Addis Ababa. Temer listing ref. 21259. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Ayat",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2026/02/feres3.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/feres3-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/feres3-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ferestbetSkb-min-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ferestbetSkb-min-1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0036-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0036-2-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/00020-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/00020-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0001-6.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0001-6-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0003-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0003-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0022-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0022-2-835x467.png"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "21259",
+      "specs": {
+        "Property Id": "21259",
+        "Property Size": "120 m 2",
+        "Property Lot Size": "1,110 m 2",
+        "Rooms": "8",
+        "Bedrooms": "3",
+        "Bathrooms": "2",
+        "Parking Type": "Private Parking",
+        "Garage Size": "1 car"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "ayat-lomiyad",
+        "block_code": "T1",
+        "unit_number": "T21247"
+      },
+      "slug": "temer-ayat-lomiyad-four-bedroom-apartment",
+      "title": "Ayat Lomiyad,Four BedRoom Apartment",
+      "description": "Ayat Lomiyad,Four BedRoom Apartment — Temer Properties, Ayat, Addis Ababa. Temer listing ref. 21247. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Ayat",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2026/02/lomiyad4.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/lomiyad4-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/lomiyad4-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/00020-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/00020-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0008-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0008-2-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-2-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0003-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0003-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0002-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0002-3-835x467.png"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "21247",
+      "specs": {
+        "Property Id": "21247",
+        "Property Size": "154 m 2",
+        "Property Lot Size": "1,110 m 2",
+        "Rooms": "8",
+        "Bedrooms": "3",
+        "Bathrooms": "2",
+        "Parking Type": "Private Parking",
+        "Garage Size": "1 car"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "ayat-lomiyad",
+        "block_code": "T1",
+        "unit_number": "T21246"
+      },
+      "slug": "temer-ayat-lomiyad-three-bedroom-apartment-2",
+      "title": "Ayat Lomiyad,Three BedRoom Apartment",
+      "description": "Ayat Lomiyad,Three BedRoom Apartment — Temer Properties, Ayat, Addis Ababa. Temer listing ref. 21246. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Ayat",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-36.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-36-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-36-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-2-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0002-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0002-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0003-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0003-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0001-5.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0001-5-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/00020-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/00020-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-36-143x83.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-2-143x83.png"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "21246",
+      "specs": {
+        "Property Id": "21246",
+        "Property Size": "154 m 2",
+        "Property Lot Size": "1,110 m 2",
+        "Rooms": "8",
+        "Bedrooms": "3",
+        "Bathrooms": "2",
+        "Parking Type": "Private Parking",
+        "Garage Size": "1 car"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Laundry"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "ayat-lomiyad",
+        "block_code": "T1",
+        "unit_number": "T21245"
+      },
+      "slug": "temer-ayatlomiyad-two-bedroom-apartment",
+      "title": "Ayat Lomiyad,Two BedRoom Apartment",
+      "description": "Ayat Lomiyad,Two BedRoom Apartment — Temer Properties, Ayat, Addis Ababa. Temer listing ref. 21245. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Ayat",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-36.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-36-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-36-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/04/Livingroom-3.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Livingroom-3.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Livingroom-3-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/5-7-1-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/5-7-1-1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1-1.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1-1-835x467.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-36-143x83.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Livingroom-3-143x83.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/5-7-1-1-143x83.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1-1-143x83.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-36-1170x656.jpg"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "21245",
+      "specs": {
+        "Property Id": "21245",
+        "Property Size": "129 m 2",
+        "Property Lot Size": "1,110 m 2",
+        "Rooms": "5",
+        "Bedrooms": "2",
+        "Bathrooms": "1",
+        "Parking Type": "Private Parking",
+        "Garage Size": "1 car"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "aware-site",
+        "block_code": "T1",
+        "unit_number": "T21244"
+      },
+      "slug": "temer-aware-4kilo-two-bedroom-apartment",
+      "title": "Aware-4 kilo,Two BedRoom Apartment",
+      "description": "Aware-4 kilo,Two BedRoom Apartment — Temer Properties, Aware, Addis Ababa. Temer listing ref. 21244. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Aware",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-30.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-30-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-30-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1-1.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1-1-835x467.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1-835x467.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Shower.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Shower-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0002-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0002-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-30-143x83.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1-1-143x83.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1-143x83.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Shower-143x83.jpg"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "21244",
+      "specs": {
+        "Property Id": "21244",
+        "Property Size": "120 m 2",
+        "Property Lot Size": "1,110 m 2",
+        "Rooms": "5",
+        "Bedrooms": "2",
+        "Bathrooms": "1",
+        "Parking Type": "Private Parking",
+        "Garage Size": "1 car"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "aware-site",
+        "block_code": "T1",
+        "unit_number": "T21243"
+      },
+      "slug": "temer-aware-4-kilo-three-bedroom-apartment",
+      "title": "Aware-4 Kilo,Three BedRoom Apartment",
+      "description": "Aware-4 Kilo,Three BedRoom Apartment — Temer Properties, Aware, Addis Ababa. Temer listing ref. 21243. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Aware",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-28.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-28-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-28-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/5-7-1-1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/5-7-1-1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1-1.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/kitchen_modern2-2-3-1-1-835x467.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/bedroom-800-2-3-1.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/bedroom-800-2-3-1-835x467.jpeg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Shower.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/Shower-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0002-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0002-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-28-143x83.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/5-7-1-1-143x83.jpg"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "21243",
+      "specs": {
+        "Property Id": "21243",
+        "Property Size": "146 m 2",
+        "Property Lot Size": "1,110 m 2",
+        "Rooms": "8",
+        "Bedrooms": "3",
+        "Bathrooms": "2",
+        "Parking Type": "Private Parking",
+        "Garage Size": "1 car"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Laundry"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "lycee-seken",
+        "block_code": "T1",
+        "unit_number": "T21242"
+      },
+      "slug": "temer-sarbet-three-bedroom-apartment-2",
+      "title": "Sarbet -Seken,Three BedRoom Apartment",
+      "description": "Sarbet -Seken,Three BedRoom Apartment — Temer Properties, Piyassa, Addis Ababa. Temer listing ref. 21242. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Piyassa",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2025/05/3SEKLYCE.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/3SEKLYCE-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/3SEKLYCE-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0002-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0002-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0001-6.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0001-6-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0036-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0036-2-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0030-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0030-2-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-2-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-3-835x467.png"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "21242",
+      "specs": {
+        "Property Id": "21242",
+        "Property Size": "133 m 2",
+        "Property Lot Size": "1,110 m 2",
+        "Rooms": "8",
+        "Bedrooms": "3",
+        "Bathrooms": "2",
+        "Parking Type": "Private Parking",
+        "Garage Size": "1 car"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "haile-garment",
+        "block_code": "T1",
+        "unit_number": "T21240"
+      },
+      "slug": "temer-haile-garment-three-bedroom-apartment",
+      "title": "Haile Garment,Three BedRoom Apartment",
+      "description": "Haile Garment,Three BedRoom Apartment — Temer Properties, Garment, Addis Ababa. Temer listing ref. 21240. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Garment",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2025/05/HAILE3.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/HAILE3-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/HAILE3-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/00020-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/00020-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0036-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0036-2-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0030-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0030-2-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0022-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0022-2-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0003-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0003-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0001-6.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0001-6-835x467.png"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "21240",
+      "specs": {
+        "Property Id": "21240",
+        "Property Size": "139 m 2",
+        "Property Lot Size": "1,110 m 2",
+        "Rooms": "8",
+        "Bedrooms": "3",
+        "Bathrooms": "2",
+        "Parking Type": "Private Parking",
+        "Garage Size": "1 car"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "lycee-new-road",
+        "block_code": "T1",
+        "unit_number": "T21239"
+      },
+      "slug": "temer-lycee-newroad-three-bedroom-apartment-2-2",
+      "title": "Lycee NewRoad,Three BedRoom Apartment",
+      "description": "Lycee NewRoad,Three BedRoom Apartment — Temer Properties, Piyassa, Addis Ababa. Temer listing ref. 21239. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Piyassa",
+      "is_public": true,
+      "is_featured": false,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2025/05/newwroad.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/newwroad-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/newwroad-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0002-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0002-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0003-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0003-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0005-2-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/00020-3.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/00020-3-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0001-6.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0001-6-835x467.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0022-2.png",
+        "https://temerproperties.com/wp-content/uploads/2025/05/0022-2-835x467.png"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "21239",
+      "specs": {
+        "Property Id": "21239",
+        "Property Size": "139 m 2",
+        "Property Lot Size": "1,110 m 2",
+        "Rooms": "8",
+        "Bedrooms": "3",
+        "Bathrooms": "2",
+        "Parking Type": "Private Parking",
+        "Garage Size": "1 car",
+        "Basement": "cement"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "gelan-shopping-center",
+        "block_code": "C1",
+        "unit_number": "T25918"
+      },
+      "slug": "temer-gelan-shopping-center",
+      "title": "Gelan Shopping Center",
+      "description": "Gelan Shopping Center — Temer Properties, Gelan, Addis Ababa. Delivery: 30 Months. Building type: Commercial. Temer listing ref. 25918. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Gelan",
+      "is_public": true,
+      "is_featured": true,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2025/11/test.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/test-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/test-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/12g.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/12g-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/9g.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/9g-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/8g.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/8g-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/7g.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/7g-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/test-143x83.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/12g-143x83.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/9g-143x83.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/11/8g-143x83.jpg"
+      ],
+      "property_kind": "commercial",
+      "external_property_id": "25918",
+      "specs": {
+        "Property Id": "25918",
+        "Property Lot Size": "2,835 m 2",
+        "Delivery Time": "30 Months",
+        "Parking Type": "Private Parking",
+        "Location": "Gelan",
+        "Garage Size": "1 car",
+        "Basement": "No",
+        "Building Size": "G+7",
+        "Building Type": "Commercial"
+      },
+      "feature_groups": {
+        "interior": [
+          "Fireplace"
+        ],
+        "outdoor": [
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "sarbet-city-plus",
+        "block_code": "T1",
+        "unit_number": "T28802"
+      },
+      "slug": "temer-sarbet-city-plus-three-bedroom-apartment",
+      "title": "Sarbet -City Plus Three BedRoom Apartment",
+      "description": "Sarbet -City Plus Three BedRoom Apartment — Temer Properties, Sarbet, Addis Ababa. Delivery: 36 Months. Building type: Mixed Use. Temer listing ref. 28802. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Sarbet",
+      "is_public": true,
+      "is_featured": true,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2026/05/threebeds.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/threebeds-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/threebeds-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus2.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus2-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus3.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus3-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/threebeds-143x83.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus1-143x83.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus2-143x83.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus3-143x83.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/achante-3-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/achante-3-525x328.jpg"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "28802",
+      "specs": {
+        "Property Id": "28802",
+        "Property Size": "151 m 2",
+        "Rooms": "9",
+        "Bedrooms": "3",
+        "Bathrooms": "2",
+        "Delivery Time": "36 Months",
+        "Parking Type": "Private Parking",
+        "Location": "Sarbet",
+        "Garage Size": "1 car",
+        "Basement": "Yes",
+        "Building Size": "3B+G+23",
+        "Building Type": "Mixed Use"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace",
+          "Laundry"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "sarbet-city-plus",
+        "block_code": "T1",
+        "unit_number": "T28893"
+      },
+      "slug": "temer-sarbet-city-plus-two-bedroom",
+      "title": "Sarbet -City Plus Two BedRoom Apartment",
+      "description": "Sarbet -City Plus Two BedRoom Apartment — Temer Properties, Sarbet, Addis Ababa. Delivery: 36 Months. Building type: Mixed Use. Temer listing ref. 28893. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Sarbet",
+      "is_public": true,
+      "is_featured": true,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2026/05/twobedrooms.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/twobedrooms-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/twobedrooms-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus2.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus2-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus3.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus3-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/twobedrooms-143x83.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus1-143x83.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus2-143x83.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus3-143x83.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/achante-3-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/02/achante-3-525x328.jpg"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "28893",
+      "specs": {
+        "Property Id": "28893",
+        "Property Size": "100 m 2",
+        "Rooms": "5",
+        "Bedrooms": "2",
+        "Bathrooms": "2",
+        "Delivery Time": "36 Months",
+        "Parking Type": "Private Parking",
+        "Location": "Sarbet",
+        "Garage Size": "1 car",
+        "Basement": "Yes",
+        "Building Size": "3B+G+23",
+        "Building Type": "Mixed Use"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace",
+          "Laundry"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    },
+    {
+      "unit_ref": {
+        "project_slug": "sarbet-city-plus",
+        "block_code": "T1",
+        "unit_number": "T28908"
+      },
+      "slug": "temer-sarbet-city-plus-one-bedroom-apartment",
+      "title": "Sarbet -City Plus One BedRoom Apartment",
+      "description": "Sarbet -City Plus One BedRoom Apartment — Temer Properties, Sarbet, Addis Ababa. Delivery: 36 Months. Building type: Mixed Use. Temer listing ref. 28908. Price on request — contact Belay Properties.",
+      "city": "Addis Ababa",
+      "area": "Sarbet",
+      "is_public": true,
+      "is_featured": true,
+      "images": [
+        "https://temerproperties.com/wp-content/uploads/2026/05/onebedcityplus.jpg",
+        "https://temerproperties.com/wp-content/uploads/2025/05/ayat-lomiyadsk-min.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/onebedcityplus-1280x790.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/onebedcityplus-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus1.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus1-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus2.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus2-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus3.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/cityplus3-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/mbath.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/mbath-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/mbed.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/mbed-835x467.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/bath.jpg",
+        "https://temerproperties.com/wp-content/uploads/2026/05/bath-835x467.jpg"
+      ],
+      "property_kind": "residential",
+      "external_property_id": "28908",
+      "specs": {
+        "Property Id": "28908",
+        "Property Size": "76 m 2",
+        "Rooms": "5",
+        "Bedrooms": "1",
+        "Bathrooms": "1",
+        "Delivery Time": "36 Months",
+        "Parking Type": "Private Parking",
+        "Location": "Sarbet",
+        "Garage Size": "1 car",
+        "Basement": "Yes",
+        "Building Size": "3B+G+23",
+        "Building Type": "Mixed Use"
+      },
+      "feature_groups": {
+        "interior": [
+          "Equipped Kitchen",
+          "Fireplace",
+          "Laundry"
+        ],
+        "outdoor": [
+          "Back yard",
+          "Garage Attached",
+          "Water"
+        ],
+        "utilities": [
+          "Central Air",
+          "Electricity"
+        ],
+        "other": [
+          "Elevator",
+          "WiFi"
+        ]
+      },
+      "map": null
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 
 import { useTranslation } from '../context/LocaleContext'
+import { PartnerLogo } from './PartnerLogo'
 import { formatBedroomCount } from '../lib/ayatLabels'
 import type { ProjectListingGroup } from '../lib/groupListingsByProject'
 import { formatListingLocation, resolveDevelopmentZone } from '../lib/listingDisplay'
@@ -22,7 +23,7 @@ export function ProjectLocationCard({ group }: ProjectLocationCardProps) {
   return (
     <Link
       to={href}
-      className="group surface relative flex h-full flex-col overflow-hidden p-0 transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-12px_rgba(2,132,199,0.25)]"
+      className="group surface-luxury relative flex h-full flex-col overflow-hidden p-0"
     >
       <div className="relative aspect-[4/5] overflow-hidden bg-surface-muted">
         {group.primary_image_url ? (
@@ -39,8 +40,9 @@ export function ProjectLocationCard({ group }: ProjectLocationCardProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/25 to-transparent" />
         <div className="absolute left-4 right-4 top-4 flex items-start justify-between gap-2">
           <span className="badge-sale">{t('listingCard.forSale')}</span>
-          <span className="max-w-[55%] truncate rounded-full bg-surface/95 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-wide text-brand-800 shadow backdrop-blur dark:text-brand-200">
-            {group.company_name}
+          <span className="flex max-w-[55%] items-center gap-2 truncate rounded-full bg-surface/95 py-1 pl-1 pr-3 text-[0.65rem] font-bold uppercase tracking-wide text-brand-800 shadow backdrop-blur dark:text-brand-200">
+            <PartnerLogo companySlug={group.company_slug} companyName={group.company_name} size="sm" />
+            <span className="truncate">{group.company_name}</span>
           </span>
         </div>
         <div className="absolute bottom-0 left-0 right-0 p-5">

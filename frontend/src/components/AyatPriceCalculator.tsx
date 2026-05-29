@@ -517,30 +517,32 @@ export function AyatPriceCalculator({
     <div className="space-y-8">
       {showFullWizard && (
         <>
-          <section className="card p-6">
-            <PropertyKindTabs
-              kind={kind}
-              onSelect={(next) =>
-                selectKind(next, {
-                  setKind,
-                  setProjectId,
-                  setShopZoneId,
-                  setShopFloor,
-                  setBedrooms,
-                  setFinish,
-                  setFloor,
-                  setAreaSqm,
-                })
-              }
-            />
-            <p className="mt-4 text-sm text-fg-muted">
-              {kind === 'commercial'
-                ? t('calculator.shopLocationsHint')
-                : kind === 'residential'
-                  ? t('calculator.apartmentLocationsHint')
-                  : t('calculator.propertyKindPickHint')}
-            </p>
-          </section>
+          {embedded ? (
+            <section className="card p-6">
+              <PropertyKindTabs
+                kind={kind}
+                onSelect={(next) =>
+                  selectKind(next, {
+                    setKind,
+                    setProjectId,
+                    setShopZoneId,
+                    setShopFloor,
+                    setBedrooms,
+                    setFinish,
+                    setFloor,
+                    setAreaSqm,
+                  })
+                }
+              />
+              <p className="mt-4 text-sm text-fg-muted">
+                {kind === 'commercial'
+                  ? t('calculator.shopLocationsHint')
+                  : kind === 'residential'
+                    ? t('calculator.apartmentLocationsHint')
+                    : t('calculator.propertyKindPickHint')}
+              </p>
+            </section>
+          ) : null}
 
           {kind === 'residential' && (
             <section className="card p-6">

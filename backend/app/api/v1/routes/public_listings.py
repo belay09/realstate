@@ -19,6 +19,7 @@ from app.models.inventory import (
 )
 from app.models.payment import PaymentPlan
 from app.schemas.inventory import (
+    ListingMetadataPublic,
     Paginated,
     PublicFilterOption,
     PublicHomeCard,
@@ -269,6 +270,10 @@ def get_public_listing(slug: str, db: Session = Depends(get_db)) -> PublicListin
         raise _not_found()
     unit = row.unit
     summary = _to_summary(row)
+    meta = None
+    if row.listing_metadata:
+        meta = ListingMetadataPublic.model_validate(row.listing_metadata)
+
     return PublicListingDetail(
         **summary.model_dump(),
         description=row.description,
@@ -277,6 +282,7 @@ def get_public_listing(slug: str, db: Session = Depends(get_db)) -> PublicListin
         floor_number=unit.floor_number,
         area_sqm=unit.area_sqm,
         unit_status=unit.status,
+        listing_metadata=meta,
     )
 
 
