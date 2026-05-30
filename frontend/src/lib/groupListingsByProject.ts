@@ -1,4 +1,5 @@
 import type { PublicListingSummary } from '../api/types'
+import { pickBestCardImageUrl } from './listingCardImage'
 
 export type ProjectListingGroup = {
   project_slug: string
@@ -42,6 +43,9 @@ export function groupListingsByProject(items: PublicListingSummary[]): ProjectLi
       group.listings.map((l) => l.bedrooms).filter((b): b is number => b != null),
     )
     group.bedroomCounts = [...beds].sort((a, b) => a - b)
+    group.primary_image_url = pickBestCardImageUrl(
+      group.listings.map((l) => l.primary_image_url),
+    )
   }
 
   return [...map.values()].sort((a, b) => {

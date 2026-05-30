@@ -7,6 +7,7 @@ from sqlalchemy import distinct
 from sqlalchemy.orm import Session, selectinload
 
 from app.api.deps import get_db
+from app.data.listing_card_image import is_card_image_usable, pick_best_card_image_url
 from app.models.company import Company
 from app.models.inventory import (
     Block,
@@ -61,8 +62,13 @@ def _primary_image_url(listing: PropertyListing) -> str | None:
     ims = list(listing.images)
     if not ims:
         return None
+    urls = [i.url for i in ims]
+    best = pick_best_card_image_url(urls)
+    if best:
+        return best
     ims.sort(key=lambda i: (not i.is_primary, i.sort_order))
-    return ims[0].url
+    fallback = ims[0].url
+    return fallback if is_card_image_usable(fallback) else None
 
 
 def _sorted_images(listing: PropertyListing) -> list[PublicListingImage]:
@@ -88,6 +94,32 @@ def _sorted_location_media(content: LocationContent) -> list[dict[str, object]]:
     ]
 
 
+def _cover_image_url(listing: PropertyListing) -> str | None:
+    ims = list(listing.images)
+    if not ims:
+        return None
+    ims.sort(key=lambda i: (not i.is_primary, i.sort_order, str(i.id)))
+    return ims[0].url
+
+
+def _listing_card_extras(listing: PropertyListing) -> dict[str, str | None]:
+    meta = listing.listing_metadata or {}
+    specs = meta.get("specs") or {}
+    bathrooms = specs.get("Bathrooms")
+    property_size = specs.get("Property Size")
+    if not property_size and listing.unit.area_sqm is not None:
+        property_size = f"{listing.unit.area_sqm} m²"
+    preview = None
+    if listing.description:
+        text = listing.description.strip()
+        preview = text if len(text) <= 180 else f"{text[:177].rstrip()}..."
+    return {
+        "description_preview": preview,
+        "bathrooms": str(bathrooms).strip() if bathrooms else None,
+        "property_size": str(property_size).strip() if property_size else None,
+    }
+
+
 def _to_summary(
     listing: PropertyListing,
     location_cover_map: dict[str, str] | None = None,
@@ -100,6 +132,7 @@ def _to_summary(
     project_cover = None
     if location_cover_map:
         project_cover = location_cover_map.get(project.slug)
+    extras = _listing_card_extras(listing)
     return PublicListingSummary(
         id=listing.id,
         title=listing.title,
@@ -114,6 +147,10 @@ def _to_summary(
         project_name=project.name,
         project_slug=project.slug,
         primary_image_url=project_cover or _primary_image_url(listing),
+        cover_image_url=_cover_image_url(listing),
+        description_preview=extras["description_preview"],
+        bathrooms=extras["bathrooms"],
+        property_size=extras["property_size"],
     )
 
 

@@ -1,4 +1,4 @@
-/** Belay Properties contact — shown site-wide. */
+/** Belay Realtor contact — shown site-wide. */
 export const SITE_CONTACT = {
   phoneDisplay: '0962750710',
   phoneE164: '251962750710',

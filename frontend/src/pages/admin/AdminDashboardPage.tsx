@@ -2,9 +2,14 @@ import { Link } from 'react-router-dom'
 
 const ACTIONS = [
   {
-    title: 'Listings',
+    title: 'Properties',
+    href: '/admin/properties',
+    desc: 'Edit Temer (and other) homes — photos, detail tabs, and public visibility.',
+  },
+  {
+    title: 'Location pages',
     href: '/admin/listings',
-    desc: 'Turn homes on or off for the public site and add photos.',
+    desc: 'Ayat apartment and shop browse pages — media, descriptions, and highlight cards.',
   },
   {
     title: 'Leads',
@@ -23,9 +28,8 @@ export function AdminDashboardPage() {
     <div className="space-y-6 text-left">
       <h1 className="text-2xl font-semibold text-fg">Dashboard</h1>
       <p className="text-sm text-fg-muted">
-        Three things to manage: what visitors see (listings), who contacted you (leads), and
-        official prices (pricing). The public site shows locations first — apartments and shops
-        separately.
+        Manage property listings (Temer and others), Ayat location pages, leads, and official Ayat
+        pricing. The public site reads listing data directly from the database.
       </p>
       <ul className="grid gap-4 sm:grid-cols-1">
         {ACTIONS.map(({ title, href, desc }) => (

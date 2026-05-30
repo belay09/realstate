@@ -12,6 +12,7 @@ import { ShopLocationPage } from './pages/ShopLocationPage'
 import { AdminDashboardPage } from './pages/admin/AdminDashboardPage'
 import { AdminLeadsPage } from './pages/admin/AdminLeadsPage'
 import { AdminListingsPage } from './pages/admin/AdminListingsPage'
+import { AdminPropertyListingsPage } from './pages/admin/AdminPropertyListingsPage'
 import { AdminPricingPage } from './pages/admin/AdminPricingPage'
 import { AdminLoginPage } from './pages/admin/AdminLoginPage'
 import { ProtectedRoute } from './routes/ProtectedRoute'
@@ -42,6 +43,7 @@ export default function App() {
         <Route element={<AdminLayout />}>
           <Route index element={<AdminDashboardPage />} />
           <Route path="listings" element={<AdminListingsPage />} />
+          <Route path="properties" element={<AdminPropertyListingsPage />} />
           <Route path="leads" element={<AdminLeadsPage />} />
           <Route path="pricing" element={<AdminPricingPage />} />
           <Route path="*" element={<Navigate to="/admin" replace />} />

@@ -18,6 +18,7 @@ export function PublicLayout() {
   const adminPath = useAdminEntryPath()
   const location = useLocation()
   const isHome = location.pathname === '/'
+  const isFullBleed = isHome
   const brand = messages.brand
   const path = location.pathname
 
@@ -25,7 +26,7 @@ export function PublicLayout() {
     <div className="flex min-h-dvh flex-col bg-canvas">
       <header
         className={`sticky top-0 z-50 backdrop-blur-xl ${
-          isHome
+          isFullBleed
             ? 'border-b border-transparent bg-surface/70'
             : 'border-b border-border bg-surface/90'
         }`}
@@ -211,7 +212,7 @@ export function PublicLayout() {
       </header>
 
       <main
-        className={`mx-auto w-full flex-1 pb-24 ${isHome ? '' : 'max-w-[90rem] px-4 py-10 sm:px-8'}`}
+        className={`mx-auto w-full flex-1 pb-24 ${isFullBleed ? '' : 'max-w-[90rem] px-4 py-10 sm:px-8'}`}
       >
         <Outlet />
       </main>

@@ -43,7 +43,13 @@ export function AdminLayout() {
             to="/admin/listings"
             className={({ isActive }) => `${navCls} ${isActive ? activeCls : ''}`}
           >
-            Listings
+            Location pages
+          </NavLink>
+          <NavLink
+            to="/admin/properties"
+            className={({ isActive }) => `${navCls} ${isActive ? activeCls : ''}`}
+          >
+            Properties
           </NavLink>
           <NavLink
             to="/admin/leads"

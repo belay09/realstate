@@ -203,6 +203,7 @@ class PropertyListingCreate(BaseModel):
     area: str | None = Field(default=None, max_length=128)
     is_featured: bool = False
     is_public: bool = False
+    listing_metadata: dict | None = None
 
 
 class PropertyListingUpdate(BaseModel):
@@ -213,6 +214,7 @@ class PropertyListingUpdate(BaseModel):
     area: str | None = Field(default=None, max_length=128)
     is_featured: bool | None = None
     is_public: bool | None = None
+    listing_metadata: dict | None = None
 
 
 class PropertyListingRead(BaseModel):
@@ -228,7 +230,26 @@ class PropertyListingRead(BaseModel):
     area: str | None
     is_featured: bool
     is_public: bool
+    listing_metadata: dict | None = None
     created_at: datetime
+    updated_at: datetime
+
+
+class AdminPropertyListingSummary(BaseModel):
+    id: UUID
+    title: str
+    slug: str
+    city: str | None
+    area: str | None
+    is_featured: bool
+    is_public: bool
+    company_name: str
+    company_slug: str
+    project_name: str
+    project_slug: str
+    bedrooms: int | None
+    image_count: int
+    primary_image_url: str | None
     updated_at: datetime
 
 
@@ -237,6 +258,11 @@ class PropertyImageCreate(BaseModel):
     sort_order: int = 0
     is_primary: bool = False
     public_id: str | None = Field(default=None, max_length=512)
+
+
+class PropertyImageUpdate(BaseModel):
+    sort_order: int | None = None
+    is_primary: bool | None = None
 
 
 class PropertyImageRead(BaseModel):
@@ -249,6 +275,15 @@ class PropertyImageRead(BaseModel):
     sort_order: int
     is_primary: bool
     created_at: datetime
+
+
+class AdminPropertyListingDetail(PropertyListingRead):
+    company_name: str
+    company_slug: str
+    project_name: str
+    project_slug: str
+    bedrooms: int | None
+    images: list[PropertyImageRead]
 
 
 # --- Location content (admin + public) ---
@@ -366,6 +401,10 @@ class PublicListingSummary(BaseModel):
     project_name: str
     project_slug: str
     primary_image_url: str | None
+    cover_image_url: str | None = None
+    description_preview: str | None = None
+    bathrooms: str | None = None
+    property_size: str | None = None
 
 
 class ListingFeatureGroups(BaseModel):

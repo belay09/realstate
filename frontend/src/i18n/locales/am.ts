@@ -2,7 +2,7 @@ import type { Messages } from './en'
 
 export const am = {
   brand: {
-    name: 'በላይ ፕሮፐርቲስ',
+    name: 'ብሌይ ሪልተር',
     tagline: 'አልሚዎችን ያወዳድሩ',
     headerNote: 'እኛ ሪል እስቴት አልሚ አይደለንም',
   },
@@ -24,7 +24,7 @@ export const am = {
     call: 'ይደውሉ',
     whatsapp: 'ዋትስአፕ',
     bannerHint: 'ስለ ማንኛውም ዝርዝር በስልክ ወይም ዋትስአፕ ያግኙን።',
-    regionLabel: 'ብሌይ ፕሮፐርቲስን ያግኙ',
+    regionLabel: 'ብሌይ ሪልተርን ያግኙ',
   },
   footer: {
     contact: 'እውቂያ',
@@ -63,8 +63,17 @@ export const am = {
   },
   apartments: {
     heroEyebrow: 'የአጋር አፓርታማ',
-    heroTitle: 'ቦታ ይምረጡ',
+    heroTitle: 'ቦታ',
+    heroTitleAccent: 'ይምረጡ',
     heroBody: 'እያንዳንዱ ካርድ አንድ ፕሮጀክት ነው። ባጅ ላይ አልሚው (አያት ወይም ቴመር) ይታያል። ቤቶችን ለማየት ይክፈቱ።',
+    heroEyebrowAyat: 'አያት ሪል እስቴት',
+    heroEyebrowTemer: 'ቴመር ፕሮፐርቲዝ',
+    heroTitleFiltered: 'ያስሱ',
+    heroTitleAccentAyat: 'የአያት ቤቶች',
+    heroTitleAccentTemer: 'የቴመር ቤቶች',
+    statDevelopments: 'ፕሮጀክቶች',
+    statHomes: 'የተመዘገቡ ቤቶች',
+    resultsHint: '{{developments}} ፕሮጀክቶች · {{homes}} ቤቶች',
     pickLocation: 'በዚያ ቦታ ያሉ ቤቶችን ለማየት ቦታውን ይንኩ።',
     filterAll: 'ሁሉም አልሚዎች',
     filterAyat: 'አያት',
@@ -97,9 +106,9 @@ export const am = {
     heroTitleEnd: 'የተነደፉ ቤቶች።',
     heroBody:
       'ከ{{ayatBrand}} እና {{temerBrand}} ፕሪሚየም አፓርታማዎችን በአንድ ጣቢያ ያወዳድሩ። {{belayNotAyat}} እያንዳንዱ ፕሮጀክት ማን እንደገነባው ይታያል፤ ከብሌይ ጠይቁ።',
-    belayNotAyat: 'ብሌይ ፕሮፐርቲስ አልሚ አይደለም።',
+    belayNotAyat: 'ብሌይ ሪልተር አልሚ አይደለም።',
     exploreListings: 'ቦታዎችን ያስሱ',
-    marqueeTagline: 'በብሌይ ፕሮፐርቲስ ላይ ታመኑ አጋር አልሚዎች',
+    marqueeTagline: 'በብሌይ ሪልተር ላይ ታመኑ አጋር አልሚዎች',
     ayatHomes: 'የአያት ቤቶች',
     priceCalculator: 'የአያት ዋጋ ያስሉ',
     statDevelopers: 'አጋር አልሚዎች',
@@ -156,11 +165,20 @@ export const am = {
     priceOnRequestBody: 'የቴመር ዋጋ ከሽያጭ ቡድናቸው ይረጋገጣል። ብሌይን በ 0962750710 ያግኙን።',
     temerCalculatorLink: 'የቴመር የዋጋ ስሌት ↗',
   },
+  temerCard: {
+    beds: 'መኝታ',
+    baths: 'መታጠቢያ',
+    size: 'ስፋት',
+    specDash: '—',
+    viewDetails: 'ዝርዝር ይመልከቱ',
+    browseIntro:
+      'በአዲስ አበባ የቴመር ፕሮፐርቲዝ የሚሸጡ አፓርታማዎችን በብሌይ ሪልተር ያስሱ።',
+  },
   ayat: {
     years: 'ዓመታት',
     featuredEyebrow: 'ዋና አጋር አልሚ',
     reputation: 'የአያት ሪል እስቴት እምነትና ታማኝነት',
-    body: 'ታዋቂው የኢትዮጵያ ሪል እስቴት አልሚ፡ አያት ሂልስ፣ ሲኤምሲ፣ ግራንድ ሞል እና ሌሎችም። {{reputation}} በብሌይ ፕሮፐርቲስ ላይ በቀላሉ ያስሱና ያወዳድሩ። ግዢና ውል በቀጥታ ከሚመርጡት አልሚ ጋር የሚፈጸም ይሆናል።',
+    body: 'ታዋቂው የኢትዮጵያ ሪል እስቴት አልሚ፡ አያት ሂልስ፣ ሲኤምሲ፣ ግራንድ ሞል እና ሌሎችም። {{reputation}} በብሌይ ሪልተር ላይ በቀላሉ ያስሱና ያወዳድሩ። ግዢና ውል በቀጥታ ከሚመርጡት አልሚ ጋር የሚፈጸም ይሆናል።',
     browseAyat: 'የአያት ቤቶችን እዚህ ያስሱ',
     officialSite: 'የአያት ኦፊሴላዊ ድረ-ገጽ ↗',
     highlights: [
@@ -176,9 +194,9 @@ export const am = {
   },
   belayRole: {
     eyebrow: 'እንዴት እንሰራለን',
-    title: 'ብሌይ ፕሮፐርቲስ ምንድን ነው?',
+    title: 'ብሌይ ሪልተር ምንድን ነው?',
     summary:
-      'ብሌይ ፕሮፐርቲስ ማወዳደሪያ ድረ-ገጽ እንጂ ሪል እስቴት አልሚ አይደለም፤ እንደ አያት ሪል እስቴት ያሉ ብራንዶችንም አይተካም። እኛ ከተለያዩ ኩባንያዎች የሚገኙ ቤቶችን የሚያስሱበት እና እያንዳንዱን ፕሮጀክት ማን እንደገነባው የሚያሳዩበት መድረክ ነን። አያት ታማኝነቱን በዓመታት ያስመሰከረ ነው፤ እኛ ደግሞ የእነሱን ዝርዝሮች ከሌሎች ጋር ለማግኘትና ለማወዳደር እንረዳዎታለን።',
+      'ብሌይ ሪልተር ማወዳደሪያ ድረ-ገጽ እንጂ ሪል እስቴት አልሚ አይደለም፤ እንደ አያት ሪል እስቴት ያሉ ብራንዶችንም አይተካም። እኛ ከተለያዩ ኩባንያዎች የሚገኙ ቤቶችን የሚያስሱበት እና እያንዳንዱን ፕሮጀክት ማን እንደገነባው የሚያሳዩበት መድረክ ነን። አያት ታማኝነቱን በዓመታት ያስመሰከረ ነው፤ እኛ ደግሞ የእነሱን ዝርዝሮች ከሌሎች ጋር ለማግኘትና ለማወዳደር እንረዳዎታለን።',
     feature1Title: 'የአልሚው ስም በየዝርዝሩ ላይ',
     feature1Text:
       'እያንዳንዱ የቤት ዝርዝር የአልሚውን ስም ያሳያል። ፕሮጀክቱን ማን እንደገነባው እና ከማን እንደሚገዙ አስቀድመው ያውቃሉ።',
@@ -192,7 +210,7 @@ export const am = {
     heroEyebrow: 'ያስሱ · ያወዳድሩ · ይጠይቁ',
     heroTitle: 'ከአያት፣ ቴመር እና ሌሎች አልሚዎች የቀረቡ ቤቶች',
     heroBody:
-      'እያንዳንዱ ዝርዝር አልሚውን በግልጽ ያሳያል — {{ayatBrand}} ወይም {{temerBrand}}። ብሌይ ፕሮፐርቲስ አማራጮችን ያወዳድራል። በግዢዎ ሂደት ላይ አልሚውን አንተካም።',
+      'እያንዳንዱ ዝርዝር አልሚውን በግልጽ ያሳያል — {{ayatBrand}} ወይም {{temerBrand}}። ብሌይ ሪልተር አማራጮችን ያወዳድራል። በግዢዎ ሂደት ላይ አልሚውን አንተካም።',
     loadError: 'ዝርዝሮችን መጫን አልተሳካም። እባክዎ የኢንተርኔት ግንኙነትዎን አረጋግጠው ገጹን ያድሱ።',
     emptyTitle: 'እስካሁን ምንም አልተገኘም',
     emptyDescription: 'እባክዎ ሌላ አካባቢ ወይም የክፍል (የአልጋ) ቁጥር ይሞክሩ፣ ወይም ሁሉንም የአጋር አልሚ ቤቶች ያስሱ።',

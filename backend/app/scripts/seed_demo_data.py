@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 
 from app.db.session import SessionLocal
 from app.models.commission import CommissionRule, CommissionScheme
-from app.models.company import Company, SalesChannel
+from app.data.listing_card_image import order_images_for_card, SalesChannel
 from app.models.identity import User
 from app.models.inventory import (
     Block,
@@ -235,7 +235,8 @@ def _upsert_listing(
 
     if image_urls:
         existing = {img.url for img in row.images}
-        for i, url in enumerate(image_urls):
+        ordered = order_images_for_card(image_urls)
+        for i, url in enumerate(ordered):
             if url in existing:
                 continue
             db.add(

@@ -1,6 +1,6 @@
 export const en = {
   brand: {
-    name: 'Belay Properties',
+    name: 'Belay Realtor',
     tagline: 'Compare developers',
     headerNote: 'Not a developer',
   },
@@ -22,7 +22,7 @@ export const en = {
     call: 'Call',
     whatsapp: 'WhatsApp',
     bannerHint: 'Call or WhatsApp for any listing enquiry.',
-    regionLabel: 'Contact Belay Properties',
+    regionLabel: 'Contact Belay Realtor',
   },
   footer: {
     contact: 'Contact',
@@ -61,9 +61,18 @@ export const en = {
   },
   apartments: {
     heroEyebrow: 'Partner apartments',
-    heroTitle: 'Pick a location',
+    heroTitle: 'Pick a',
+    heroTitleAccent: 'location',
     heroBody:
       'Each card is one development. The badge shows the developer (Ayat or Temer). Open a card to see layouts and contact Belay.',
+    heroEyebrowAyat: 'Ayat Real Estate',
+    heroEyebrowTemer: 'Temer Properties',
+    heroTitleFiltered: 'Browse',
+    heroTitleAccentAyat: 'Ayat homes',
+    heroTitleAccentTemer: 'Temer homes',
+    statDevelopments: 'Developments',
+    statHomes: 'Homes listed',
+    resultsHint: '{{developments}} developments · {{homes}} homes',
     pickLocation: 'Tap a location to see homes at that place.',
     filterAll: 'All developers',
     filterAyat: 'Ayat',
@@ -98,9 +107,9 @@ export const en = {
     heroTitleEnd: 'lifestyle.',
     heroBody:
       'Compare premium apartments from {{ayatBrand}} and {{temerBrand}} on one site. {{belayNotAyat}} See who built each project, then enquire through Belay.',
-    belayNotAyat: 'Belay Properties is not a developer.',
+    belayNotAyat: 'Belay Realtor is not a developer.',
     exploreListings: 'Explore locations',
-    marqueeTagline: 'Trusted partner developers on Belay Properties',
+    marqueeTagline: 'Trusted partner developers on Belay Realtor',
     ayatHomes: 'Ayat homes',
     priceCalculator: 'Estimate Ayat price',
     statDevelopers: 'Partner developers',
@@ -155,11 +164,20 @@ export const en = {
       'Temer pricing is confirmed with their sales team. Contact Belay on 0962750710 and we will help you reach Temer.',
     temerCalculatorLink: 'Temer’s online estimator ↗',
   },
+  temerCard: {
+    beds: 'Beds',
+    baths: 'Baths',
+    size: 'Size',
+    specDash: '—',
+    viewDetails: 'View details',
+    browseIntro:
+      'Discover Temer apartments for sale in Addis Ababa — residential and commercial listings through Belay Realtor.',
+  },
   ayat: {
     years: 'Years',
     featuredEyebrow: 'Featured partner developer',
     reputation: 'That reputation belongs to Ayat.',
-    body: "Ethiopia's established developer: Ayat Hills, CMC, Grand Mall, and communities built over decades. {{reputation}} On Belay Properties you only browse and compare. Purchase and contracts stay with the developer you choose.",
+    body: "Ethiopia's established developer: Ayat Hills, CMC, Grand Mall, and communities built over decades. {{reputation}} On Belay Realtor you only browse and compare. Purchase and contracts stay with the developer you choose.",
     browseAyat: 'Browse Ayat homes here',
     officialSite: 'Official Ayat site ↗',
     highlights: [
@@ -175,9 +193,9 @@ export const en = {
   },
   belayRole: {
     eyebrow: 'How we work',
-    title: 'What Belay Properties is',
+    title: 'What Belay Realtor is',
     summary:
-      'Belay Properties is not a developer and we do not replace brands like Ayat Real Estate. We are a comparison website where you browse homes from multiple companies, see who built each project, and choose the developer you trust. Ayat earns its reputation over decades; we simply help you find and compare their listings alongside others.',
+      'Belay Realtor is not a developer and we do not replace brands like Ayat Real Estate. We are a comparison website where you browse homes from multiple companies, see who built each project, and choose the developer you trust. Ayat earns its reputation over decades; we simply help you find and compare their listings alongside others.',
     feature1Title: 'Developer on every listing',
     feature1Text:
       'Every listing shows the developer name. You always know who built the project and who you buy from.',
@@ -191,7 +209,7 @@ export const en = {
     heroEyebrow: 'Browse · Compare · Enquire',
     heroTitle: 'Homes from Ayat, Temer, and more',
     heroBody:
-      'Each listing names the builder — {{ayatBrand}} or {{temerBrand}}. Belay Properties helps you compare. We do not replace the developer on your purchase.',
+      'Each listing names the builder — {{ayatBrand}} or {{temerBrand}}. Belay Realtor helps you compare. We do not replace the developer on your purchase.',
     loadError: 'Could not load listings. Check that the API is running, then refresh.',
     emptyTitle: 'No matches yet',
     emptyDescription: 'Try another area or bedroom count, or browse all partner homes.',

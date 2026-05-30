@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom'
 import { api } from '../api/client'
 import type { Paginated, PublicListingSummary, PublicLocationContent } from '../api/types'
 import { AyatPriceCalculator } from '../components/AyatPriceCalculator'
+import { TemerListingCard } from '../components/TemerListingCard'
 import { useTranslation } from '../context/LocaleContext'
 import { AYAT_PARTNER, TEMER_PARTNER } from '../content/partners'
 import { usePageTitle } from '../hooks/usePageTitle'
@@ -125,26 +126,36 @@ export function ProjectListingsPage() {
       {(listingsQuery.data?.items.length ?? 0) > 0 && (
         <section className="space-y-4">
           <h2 className="text-h3">{t('projectBrowse.homesHere')}</h2>
-          <ul className="grid gap-4 sm:grid-cols-2">
-            {listingsQuery.data!.items.map((item) => (
-              <li key={item.slug}>
-                <Link
-                  to={`/listings/${item.slug}`}
-                  className="surface block p-5 transition hover:border-brand-300"
-                >
-                  <p className="text-xs font-semibold uppercase tracking-wide text-brand-700 dark:text-brand-300">
-                    {item.company_name}
-                  </p>
-                  <h3 className="mt-1 text-lg font-bold text-fg">{formatListingCardTitle(item, t)}</h3>
-                  <p className="mt-2 text-body-sm text-fg-muted">
-                    {item.bedrooms != null
-                      ? t('projectBrowse.bedroomCount', { count: item.bedrooms })
-                      : null}
-                  </p>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {isTemer ? (
+            <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {listingsQuery.data!.items.map((item) => (
+                <li key={item.slug}>
+                  <TemerListingCard listing={item} />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <ul className="grid gap-4 sm:grid-cols-2">
+              {listingsQuery.data!.items.map((item) => (
+                <li key={item.slug}>
+                  <Link
+                    to={`/listings/${item.slug}`}
+                    className="surface block p-5 transition hover:border-brand-300"
+                  >
+                    <p className="text-xs font-semibold uppercase tracking-wide text-brand-700 dark:text-brand-300">
+                      {item.company_name}
+                    </p>
+                    <h3 className="mt-1 text-lg font-bold text-fg">{formatListingCardTitle(item, t)}</h3>
+                    <p className="mt-2 text-body-sm text-fg-muted">
+                      {item.bedrooms != null
+                        ? t('projectBrowse.bedroomCount', { count: item.bedrooms })
+                        : null}
+                    </p>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
       )}
 

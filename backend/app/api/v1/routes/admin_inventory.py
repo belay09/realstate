@@ -4,7 +4,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from app.api.deps import get_current_active_user, get_db, require_roles
 from app.models.company import Company
@@ -22,6 +22,8 @@ from app.models.inventory import (
     UnitType,
 )
 from app.schemas.inventory import (
+    AdminPropertyListingDetail,
+    AdminPropertyListingSummary,
     BlockCreate,
     BlockRead,
     BlockUpdate,
@@ -41,6 +43,7 @@ from app.schemas.inventory import (
     ProjectUpdate,
     PropertyImageCreate,
     PropertyImageRead,
+    PropertyImageUpdate,
     PropertyListingCreate,
     PropertyListingRead,
     PropertyListingUpdate,
@@ -616,22 +619,110 @@ def delete_unit(unit_id: UUID, db: Session = Depends(get_db)) -> None:
 # --- Listings ---
 
 
-@router.get("/listings", response_model=Paginated[PropertyListingRead])
+def _listing_primary_image_url(listing: PropertyListing) -> str | None:
+    if not listing.images:
+        return None
+    ordered = sorted(listing.images, key=lambda i: (not i.is_primary, i.sort_order, str(i.id)))
+    return ordered[0].url
+
+
+def _admin_listing_base_query(db: Session):
+    return (
+        db.query(PropertyListing)
+        .join(PropertyUnit, PropertyListing.unit_id == PropertyUnit.id)
+        .join(UnitType, PropertyUnit.unit_type_id == UnitType.id)
+        .join(Block, PropertyUnit.block_id == Block.id)
+        .join(Project, Block.project_id == Project.id)
+        .join(Company, Project.company_id == Company.id)
+        .options(
+            selectinload(PropertyListing.images),
+            selectinload(PropertyListing.unit).selectinload(PropertyUnit.unit_type),
+            selectinload(PropertyListing.unit)
+            .selectinload(PropertyUnit.block)
+            .selectinload(Block.project)
+            .selectinload(Project.company),
+        )
+    )
+
+
+def _to_admin_listing_summary(listing: PropertyListing) -> AdminPropertyListingSummary:
+    unit = listing.unit
+    project = unit.block.project
+    company = project.company
+    return AdminPropertyListingSummary(
+        id=listing.id,
+        title=listing.title,
+        slug=listing.slug,
+        city=listing.city,
+        area=listing.area,
+        is_featured=listing.is_featured,
+        is_public=listing.is_public,
+        company_name=company.name,
+        company_slug=company.slug,
+        project_name=project.name,
+        project_slug=project.slug,
+        bedrooms=unit.unit_type.bedrooms,
+        image_count=len(listing.images),
+        primary_image_url=_listing_primary_image_url(listing),
+        updated_at=listing.updated_at,
+    )
+
+
+def _to_admin_listing_detail(listing: PropertyListing) -> AdminPropertyListingDetail:
+    unit = listing.unit
+    project = unit.block.project
+    company = project.company
+    images = sorted(listing.images, key=lambda i: (not i.is_primary, i.sort_order, str(i.id)))
+    base = PropertyListingRead.model_validate(listing)
+    return AdminPropertyListingDetail(
+        **base.model_dump(),
+        company_name=company.name,
+        company_slug=company.slug,
+        project_name=project.name,
+        project_slug=project.slug,
+        bedrooms=unit.unit_type.bedrooms,
+        images=[PropertyImageRead.model_validate(i) for i in images],
+    )
+
+
+@router.get("/listings", response_model=Paginated[AdminPropertyListingSummary])
 def list_listings(
     db: Session = Depends(get_db),
     unit_id: UUID | None = None,
+    company_id: UUID | None = None,
+    company_slug: str | None = None,
+    project_slug: str | None = None,
     is_public: bool | None = None,
+    q: str | None = Query(default=None, min_length=1, max_length=128),
     skip: int = Query(0, ge=0),
-    limit: int = Query(50, ge=1, le=100),
-) -> Paginated[PropertyListingRead]:
-    q = db.query(PropertyListing)
+    limit: int = Query(50, ge=1, le=200),
+) -> Paginated[AdminPropertyListingSummary]:
+    query = _admin_listing_base_query(db)
     if unit_id is not None:
-        q = q.filter(PropertyListing.unit_id == unit_id)
+        query = query.filter(PropertyListing.unit_id == unit_id)
+    if company_id is not None:
+        query = query.filter(Company.id == company_id)
+    if company_slug:
+        query = query.filter(Company.slug == company_slug)
+    if project_slug:
+        query = query.filter(Project.slug == project_slug)
     if is_public is not None:
-        q = q.filter(PropertyListing.is_public.is_(is_public))
-    total = q.count()
-    rows = q.order_by(PropertyListing.title).offset(skip).limit(limit).all()
-    return Paginated(items=[PropertyListingRead.model_validate(r) for r in rows], total=total)
+        query = query.filter(PropertyListing.is_public.is_(is_public))
+    if q:
+        pattern = f"%{q.strip()}%"
+        query = query.filter(
+            PropertyListing.title.ilike(pattern)
+            | PropertyListing.area.ilike(pattern)
+            | Project.name.ilike(pattern)
+        )
+    total = query.count()
+    rows = (
+        query.order_by(Project.name, PropertyListing.title)
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+    return Paginated(items=[_to_admin_listing_summary(r) for r in rows], total=total)
 
 
 @router.post("/listings", response_model=PropertyListingRead, status_code=status.HTTP_201_CREATED)
@@ -658,6 +749,7 @@ def create_listing(
         area=body.area,
         is_featured=body.is_featured,
         is_public=body.is_public,
+        listing_metadata=body.listing_metadata,
     )
     db.add(row)
     try:
@@ -669,20 +761,20 @@ def create_listing(
     return PropertyListingRead.model_validate(row)
 
 
-@router.get("/listings/{listing_id}", response_model=PropertyListingRead)
-def get_listing(listing_id: UUID, db: Session = Depends(get_db)) -> PropertyListingRead:
-    row = db.query(PropertyListing).filter(PropertyListing.id == listing_id).first()
+@router.get("/listings/{listing_id}", response_model=AdminPropertyListingDetail)
+def get_listing(listing_id: UUID, db: Session = Depends(get_db)) -> AdminPropertyListingDetail:
+    row = _admin_listing_base_query(db).filter(PropertyListing.id == listing_id).first()
     if row is None:
         raise _not_found("Listing")
-    return PropertyListingRead.model_validate(row)
+    return _to_admin_listing_detail(row)
 
 
-@router.patch("/listings/{listing_id}", response_model=PropertyListingRead)
+@router.patch("/listings/{listing_id}", response_model=AdminPropertyListingDetail)
 def update_listing(
     listing_id: UUID,
     body: PropertyListingUpdate,
     db: Session = Depends(get_db),
-) -> PropertyListingRead:
+) -> AdminPropertyListingDetail:
     row = db.query(PropertyListing).filter(PropertyListing.id == listing_id).first()
     if row is None:
         raise _not_found("Listing")
@@ -704,7 +796,9 @@ def update_listing(
         db.rollback()
         raise _conflict("Could not update listing") from None
     db.refresh(row)
-    return PropertyListingRead.model_validate(row)
+    row = _admin_listing_base_query(db).filter(PropertyListing.id == listing_id).first()
+    assert row is not None
+    return _to_admin_listing_detail(row)
 
 
 @router.delete("/listings/{listing_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -776,6 +870,37 @@ def delete_listing_image(
         raise _not_found("Image")
     db.delete(image)
     db.commit()
+
+
+@router.patch(
+    "/listings/{listing_id}/images/{image_id}",
+    response_model=PropertyImageRead,
+)
+def update_listing_image(
+    listing_id: UUID,
+    image_id: UUID,
+    body: PropertyImageUpdate,
+    db: Session = Depends(get_db),
+) -> PropertyImageRead:
+    row = db.query(PropertyListing).filter(PropertyListing.id == listing_id).first()
+    if row is None:
+        raise _not_found("Listing")
+    image = (
+        db.query(PropertyImage)
+        .filter(PropertyImage.id == image_id, PropertyImage.listing_id == listing_id)
+        .first()
+    )
+    if image is None:
+        raise _not_found("Image")
+    data = body.model_dump(exclude_unset=True)
+    if data.get("is_primary"):
+        for img in row.images:
+            img.is_primary = False
+    for k, v in data.items():
+        setattr(image, k, v)
+    db.commit()
+    db.refresh(image)
+    return PropertyImageRead.model_validate(image)
 
 
 # --- Location content ---

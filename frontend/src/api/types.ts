@@ -58,6 +58,59 @@ export type PropertyListing = {
   area: string | null
   is_featured?: boolean
   is_public: boolean
+  listing_metadata?: ListingMetadata | null
+}
+
+export type ListingMetadata = {
+  property_kind: string
+  external_property_id?: string | null
+  specs: Record<string, string>
+  features: {
+    interior: string[]
+    outdoor: string[]
+    utilities: string[]
+    other: string[]
+  }
+  map: { latitude: number; longitude: number; label?: string | null } | null
+}
+
+export type AdminPropertyListingSummary = {
+  id: string
+  title: string
+  slug: string
+  city: string | null
+  area: string | null
+  is_featured: boolean
+  is_public: boolean
+  company_name: string
+  company_slug: string
+  project_name: string
+  project_slug: string
+  bedrooms: number | null
+  image_count: number
+  primary_image_url: string | null
+  updated_at: string
+}
+
+export type PropertyImage = {
+  id: string
+  listing_id: string
+  url: string
+  public_id: string | null
+  sort_order: number
+  is_primary: boolean
+  created_at: string
+}
+
+export type AdminPropertyListingDetail = PropertyListing & {
+  company_name: string
+  company_slug: string
+  project_name: string
+  project_slug: string
+  bedrooms: number | null
+  images: PropertyImage[]
+  created_at: string
+  updated_at: string
 }
 
 export type LocationCard = {
@@ -117,6 +170,10 @@ export type PublicListingSummary = {
   project_name: string
   project_slug: string
   primary_image_url: string | null
+  cover_image_url?: string | null
+  description_preview?: string | null
+  bathrooms?: string | null
+  property_size?: string | null
 }
 
 export type ListingFeatureGroups = {
