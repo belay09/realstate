@@ -9,9 +9,10 @@ from decimal import Decimal
 
 from sqlalchemy.orm import Session
 
+from app.data.listing_card_image import order_images_for_card
 from app.db.session import SessionLocal
 from app.models.commission import CommissionRule, CommissionScheme
-from app.data.listing_card_image import order_images_for_card, SalesChannel
+from app.models.company import Company, SalesChannel
 from app.models.identity import User
 from app.models.inventory import (
     Block,

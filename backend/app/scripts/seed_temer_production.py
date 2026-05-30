@@ -12,8 +12,8 @@ from sqlalchemy.orm import Session
 
 from app.data.temer_listing_metadata import build_metadata
 from app.db.session import SessionLocal
-from app.models.identity import User
 from app.models.company import Company
+from app.models.identity import User
 from app.models.inventory import Block, Project, PropertyListing, PropertyUnit
 from app.scripts.seed_demo_data import (
     _get_company,
