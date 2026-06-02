@@ -8,7 +8,8 @@ _DIM_SUFFIX = re.compile(r"-\d+x\d+\.(jpe?g|png|webp)$", re.I)
 _TEMPLATE_MARKETING = re.compile(r"/t-[a-z0-9_-]+\.(jpe?g|png|webp)$", re.I)
 _NUMBERED_INTERIOR = re.compile(r"/\d{4}/\d{2}/\d+(?:-\d+)?\.(jpe?g|png|webp)$", re.I)
 
-MIN_CARD_IMAGE_SCORE = 10
+# Neutral URLs (e.g. Ayat Unsplash photos) score 0; only penalized marketing assets score below 0.
+MIN_CARD_IMAGE_SCORE = 0
 
 _INTERIOR_HINTS = (
     "livingroom",

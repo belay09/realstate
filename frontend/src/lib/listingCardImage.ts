@@ -4,7 +4,8 @@ const DIM_SUFFIX = /-\d+x\d+\.(jpe?g|png|webp)$/i
 const TEMPLATE_MARKETING = /\/t-[a-z0-9_-]+\.(jpe?g|png|webp)$/i
 const NUMBERED_INTERIOR = /\/\d{4}\/\d{2}\/\d+(?:-\d+)?\.(jpe?g|png|webp)$/i
 
-export const MIN_CARD_IMAGE_SCORE = 10
+// Neutral URLs (e.g. Ayat Unsplash photos) score 0; only penalized marketing assets score below 0.
+export const MIN_CARD_IMAGE_SCORE = 0
 
 const INTERIOR_HINTS = ['livingroom', 'kitchen', 'bedroom', 'interior', 'modern', 'hall', 'dining']
 

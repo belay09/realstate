@@ -4,7 +4,6 @@ import { useTranslation } from '../context/LocaleContext'
 import { formatBedroomCount } from '../lib/ayatLabels'
 import type { ProjectListingGroup } from '../lib/groupListingsByProject'
 import { formatListingLocation, resolveDevelopmentZone } from '../lib/listingDisplay'
-import { isCardImageUsable } from '../lib/listingCardImage'
 import { CardCoverMedia } from './CardCoverMedia'
 import { PartnerLogo } from './PartnerLogo'
 
@@ -62,7 +61,7 @@ export function ProjectLocationCard({ group }: ProjectLocationCardProps) {
     group.project_name && zone && group.project_name !== zone ? group.project_name : null
   const homeCount = group.listings.length
   const href = `/apartments/${group.project_slug}`
-  const coverImage = isCardImageUsable(group.primary_image_url) ? group.primary_image_url : null
+  const coverImage = group.primary_image_url
   const forSaleLabel = t('listingCard.forSale')
 
   return (
