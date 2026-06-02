@@ -22,14 +22,22 @@ Production Ayat **inventory** (listings, units, projects) is in `backend/data/ay
 
 ## Quick start (production server)
 
-`scripts/deploy-production.sh` runs the seed automatically after migrations. Manual run:
+`scripts/deploy-production.sh` runs **migrations only** so admin CMS edits (location pages, listing copy, images) are not reset on every deploy.
+
+To load or refresh inventory/pricing from JSON (first install or intentional bulk update):
 
 ```bash
 cd ~/realstate
 docker compose -f docker-compose.prod.yml exec -T api python -m app.scripts.seed_ayat_production
 ```
 
-You do **not** need to drop or recreate the database — the seed upserts projects, units, and listings in place.
+Or set `SEED_ON_DEPLOY=1` for one deploy that also runs the seed:
+
+```bash
+SEED_ON_DEPLOY=1 ./scripts/deploy-production.sh
+```
+
+The seed **creates** missing location CMS rows but **does not overwrite** existing ones (admin dashboard is source of truth). Existing public listings keep admin-edited title, description, visibility, and metadata.
 
 Local dev:
 

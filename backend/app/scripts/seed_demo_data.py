@@ -226,12 +226,8 @@ def _upsert_listing(
         db.flush()
     else:
         row.unit_id = unit.id
-        row.title = title
-        row.description = description
-        row.city = city
-        row.area = area
-        row.is_public = is_public
-        row.is_featured = is_featured
+        # Preserve admin-edited listing copy, visibility, metadata, and images.
+        return row
     row.listing_metadata = listing_metadata
 
     if image_urls:

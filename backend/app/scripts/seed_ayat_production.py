@@ -245,7 +245,7 @@ def seed_from_data(db: Session, data: dict) -> None:
     print(f"Projects: {', '.join(project_by_slug.keys())}")
     print(f"Public listings: {len(data.get('listings', []))}")
     print(f"Pricing version: {data['pricing']['version_name']}")
-    print("Location CMS content: seeded from official Ayat reference")
+    print("Location CMS content: created only when missing (existing admin edits kept)")
     print("\nPublic URLs (examples):")
     for listing in data.get("listings", []):
         if listing.get("is_public", True):
@@ -448,11 +448,7 @@ def _upsert_location_content(
         for c in cards
     ]
     if row:
-        row.title = title
-        row.subtitle = subtitle
-        row.description = description
-        row.cards = payload_cards
-        row.is_public = True
+        # Keep admin-edited copy, media, and Active toggle after the first seed.
         return
     db.add(
         LocationContent(

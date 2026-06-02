@@ -76,8 +76,13 @@ echo "==> Starting stack..."
 echo "==> Running database migrations..."
 ./scripts/deploy-migrate.sh
 
-echo "==> Seeding Ayat inventory and official pricing (idempotent)..."
-"${COMPOSE[@]}" exec -T api python -m app.scripts.seed_ayat_production
+if [[ "${SEED_ON_DEPLOY:-0}" == "1" ]]; then
+  echo "==> SEED_ON_DEPLOY=1 — seeding Ayat inventory from JSON (skips existing CMS rows)..."
+  "${COMPOSE[@]}" exec -T api python -m app.scripts.seed_ayat_production
+else
+  echo "==> Skipping Ayat seed (admin CMS edits are preserved)."
+  echo "    To sync from backend/data/ayat_production.json: SEED_ON_DEPLOY=1 ./scripts/deploy-production.sh"
+fi
 
 echo "==> Removing unused Docker artifacts..."
 docker image prune -f 2>/dev/null || true
