@@ -171,6 +171,7 @@ Or in GitHub: **Actions → Deploy → Run workflow**.
 | `Missing .env` | Create `.env` and `backend/.env.production` on server |
 | Old UI after deploy | Check Deploy workflow logs; hard-refresh browser (Ctrl+Shift+R) |
 | Build slow / timeout | First build can take 15–20 min on `t3.small`; workflow allows 45 min |
+| `No space left on device` during build | EC2 root volume is full (often Docker build cache). SSH in and run `df -h` and `docker system df`. Free space: `docker builder prune -af && docker image prune -af`. If still tight, expand the EBS volume in AWS (8 GB is often too small). Deploy now prunes before each build. |
 
 ---
 

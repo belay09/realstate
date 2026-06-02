@@ -35,6 +35,38 @@ fi
 
 COMPOSE=(docker compose -f docker-compose.prod.yml)
 
+_free_docker_disk() {
+  echo "==> Disk usage before Docker cleanup:"
+  df -h / || true
+  docker system df 2>/dev/null || true
+
+  echo "==> Pruning Docker build cache and dangling images..."
+  docker builder prune -f 2>/dev/null || true
+  docker image prune -f 2>/dev/null || true
+  docker container prune -f 2>/dev/null || true
+
+  local avail_kb
+  avail_kb="$(df --output=avail / | tail -1 | tr -d ' ')"
+  if [ "${avail_kb:-0}" -lt 2097152 ]; then
+    echo "==> Low disk (${avail_kb} KB free); pruning unused Docker images..."
+    docker image prune -a -f 2>/dev/null || true
+    docker builder prune -a -f 2>/dev/null || true
+  fi
+
+  echo "==> Disk usage after Docker cleanup:"
+  df -h / || true
+  docker system df 2>/dev/null || true
+
+  avail_kb="$(df --output=avail / | tail -1 | tr -d ' ')"
+  if [ "${avail_kb:-0}" -lt 524288 ]; then
+    echo "ERROR: Less than 512 MB free on /. Free space on the EC2 volume before redeploying." >&2
+    echo "  On the server: df -h && docker system df && sudo du -xh /var/lib/docker | sort -h | tail -20" >&2
+    exit 1
+  fi
+}
+
+_free_docker_disk
+
 echo "==> Building api and web (uses VITE_API_BASE_URL from .env)..."
 "${COMPOSE[@]}" build api web
 
@@ -47,8 +79,9 @@ echo "==> Running database migrations..."
 echo "==> Seeding Ayat inventory and official pricing (idempotent)..."
 "${COMPOSE[@]}" exec -T api python -m app.scripts.seed_ayat_production
 
-echo "==> Removing dangling images..."
-docker image prune -f
+echo "==> Removing unused Docker artifacts..."
+docker image prune -f 2>/dev/null || true
+docker builder prune -f 2>/dev/null || true
 
 echo "==> Container status:"
 "${COMPOSE[@]}" ps
