@@ -59,6 +59,7 @@ export function AdminListingsPage() {
   const [createSubmitError, setCreateSubmitError] = useState<string | null>(null)
   const [createPendingMedia, setCreatePendingMedia] = useState<PendingMedia[]>([])
   const [homeCardForms, setHomeCardForms] = useState<HomeCardFormState[]>([])
+  const [createLocationPreset, setCreateLocationPreset] = useState('')
   const [createForm, setCreateForm] = useState<CreateFormState>({
     kind: 'apartment',
     location_id: '',
@@ -121,6 +122,17 @@ export function AdminListingsPage() {
     setShowCreateModal(false)
     setCreateSubmitError(null)
     setCreatePendingMedia([])
+    setCreateLocationPreset('')
+    setCreateForm({
+      kind: 'apartment',
+      location_id: '',
+      title: '',
+      subtitle: '',
+      description: '',
+      video_url: '',
+      is_public: true,
+      cards: [{ ...EMPTY_CARD }],
+    })
   }
   const pushToast = (level: NotifyLevel, message: string) => {
     if (level === 'success') {
@@ -130,17 +142,6 @@ export function AdminListingsPage() {
     toast.error(message)
   }
 
-  useEffect(() => {
-    if (locationOptions.length === 0) return
-    setCreateForm((prev) => {
-      if (prev.location_id && locationOptions.some((o) => o.value === prev.location_id)) return prev
-      return {
-        ...prev,
-        location_id: locationOptions[0].value,
-        title: locationOptions[0].label,
-      }
-    })
-  }, [createForm.kind, locationOptions])
   const updateLocationContent = useMutation({
     mutationFn: ({
       id,
@@ -166,47 +167,6 @@ export function AdminListingsPage() {
       pushToast('success', 'Location visibility updated.')
     },
     onError: (err) => pushToast('error', uploadErrorMessage(err)),
-  })
-  const seedDefaults = useMutation({
-    mutationFn: async () => {
-      const apartmentPayloads = apartmentOptions.map((o) => ({
-        kind: 'apartment' as const,
-        location_id: o.value,
-        title: o.label,
-        subtitle: o.label,
-        description: 'Default apartment location content. Edit details, media, and cards.',
-        video_url: '',
-        cards: [
-          { title: '2 bedrooms', body: 'Add sizes and details', image_url: '' },
-          { title: '3 bedrooms', body: 'Add sizes and details', image_url: '' },
-        ],
-        is_public: true,
-      }))
-      const shopPayloads = shopOptions.map((o) => ({
-        kind: 'shop' as const,
-        location_id: o.value,
-        title: o.label,
-        subtitle: 'Ayat commercial shops',
-        description: 'Default shop location content. Add floor rate context, media, and cards.',
-        video_url: '',
-        cards: [{ title: 'Floor rates', body: 'Add floor-by-floor details', image_url: '' }],
-        is_public: true,
-      }))
-      for (const payload of [...apartmentPayloads, ...shopPayloads]) {
-        try {
-          await api.post('/admin/location-content', payload)
-        } catch {
-          // Ignore duplicates/conflicts; this is an idempotent helper button.
-        }
-      }
-    },
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['admin', 'location-content'] })
-      pushToast('success', 'Default location content seeded.')
-    },
-    onError: (err) => {
-      pushToast('error', uploadErrorMessage(err))
-    },
   })
   const seedHomeCards = useMutation({
     mutationFn: () => api.post<HomePageCard[]>('/admin/home-cards/seed-defaults'),
@@ -383,15 +343,7 @@ export function AdminListingsPage() {
         <div>
           <button
             type="button"
-            className="btn-secondary"
-            onClick={() => seedDefaults.mutate()}
-            disabled={seedDefaults.isPending}
-          >
-            {seedDefaults.isPending ? 'Seeding defaults...' : 'Seed default content'}
-          </button>
-          <button
-            type="button"
-            className="btn-primary ml-2"
+            className="btn-primary"
             onClick={() => setShowCreateModal(true)}
           >
             Create location content
@@ -459,10 +411,15 @@ export function AdminListingsPage() {
             onSubmit={async (e) => {
               e.preventDefault()
               setCreateSubmitError(null)
+              const locationId = createForm.location_id.trim().toLowerCase().replace(/\s+/g, '-')
+              if (!locationId) {
+                setCreateSubmitError('Location ID is required.')
+                return
+              }
               try {
                 const created = await createLocationContent.mutateAsync({
                   kind: createForm.kind,
-                  location_id: createForm.location_id,
+                  location_id: locationId,
                   title: createForm.title,
                   subtitle: createForm.subtitle,
                   description: createForm.description,
@@ -488,38 +445,64 @@ export function AdminListingsPage() {
                 name="kind"
                 className="input mt-1"
                 value={createForm.kind}
-                onChange={(e) =>
-                  setCreateForm((prev) => ({ ...prev, kind: e.target.value as LocationKind }))
-                }
+                onChange={(e) => {
+                  setCreateLocationPreset('')
+                  setCreateForm((prev) => ({
+                    ...prev,
+                    kind: e.target.value as LocationKind,
+                    location_id: '',
+                  }))
+                }}
               >
                 <option value="apartment">Apartment</option>
                 <option value="shop">Shop</option>
               </select>
             </label>
-            <label className="text-xs font-medium text-stone-600 dark:text-stone-400">
-              Location
-              <select
+            <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
+              Location ID (slug)
+              <input
                 name="location_id"
                 required
-                className="input mt-1"
+                className="input mt-1 font-mono text-sm"
+                placeholder="e.g. bole-arabsa or my-new-shop-zone"
                 value={createForm.location_id}
                 onChange={(e) => {
-                  const nextId = e.target.value
-                  const next = locationOptions.find((o) => o.value === nextId)
-                  setCreateForm((prev) => ({
-                    ...prev,
-                    location_id: nextId,
-                    title: prev.title.trim() ? prev.title : (next?.label ?? ''),
-                  }))
+                  setCreateLocationPreset('')
+                  setCreateForm((prev) => ({ ...prev, location_id: e.target.value }))
                 }}
-              >
-                {locationOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label} ({opt.value})
-                  </option>
-                ))}
-              </select>
+              />
+              <span className="mt-1 block text-[11px] text-stone-500 dark:text-stone-400">
+                URL-safe id for this location. For apartments, use the project slug if you have
+                listings (e.g. ayat-hills). Shops use zone ids like ledeta.
+              </span>
             </label>
+            {locationOptions.length > 0 ? (
+              <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
+                Quick fill from known locations (optional)
+                <select
+                  className="input mt-1"
+                  value={createLocationPreset}
+                  onChange={(e) => {
+                    const nextId = e.target.value
+                    setCreateLocationPreset(nextId)
+                    if (!nextId) return
+                    const next = locationOptions.find((o) => o.value === nextId)
+                    setCreateForm((prev) => ({
+                      ...prev,
+                      location_id: nextId,
+                      title: prev.title.trim() ? prev.title : (next?.label ?? prev.title),
+                    }))
+                  }}
+                >
+                  <option value="">— Type your own id above —</option>
+                  {locationOptions.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label} ({opt.value})
+                    </option>
+                  ))}
+                </select>
+              </label>
+            ) : null}
             <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
               Title
               <input
