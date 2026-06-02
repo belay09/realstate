@@ -9,13 +9,18 @@ import { formatMoney } from '../lib/format'
 import { formatShopFloorLabel } from '../lib/ayatLabels'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { useCalculatorConfig } from '../hooks/useCalculatorConfig'
+import { useLocationVisibility } from '../hooks/useLocationVisibility'
+import { isLocationActive } from '../lib/locationVisibility'
 import { getShopLocationById, shopFloorKeys, shopLocationsFromConfig } from '../lib/shopLocations'
 
 export function ShopLocationPage() {
   const { t } = useTranslation()
   const { zoneId } = useParams<{ zoneId: string }>()
   const { data: config } = useCalculatorConfig()
-  const shopLocations = shopLocationsFromConfig(config)
+  const { data: visibility } = useLocationVisibility()
+  const shopLocations = shopLocationsFromConfig(config).filter((loc) =>
+    isLocationActive(visibility, 'shop', loc.id),
+  )
   const location = zoneId ? getShopLocationById(zoneId, shopLocations) : undefined
 
   const title = location

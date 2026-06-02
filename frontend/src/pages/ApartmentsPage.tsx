@@ -10,7 +10,9 @@ import { SITE_CONTACT, siteWhatsAppHref } from '../content/siteContact'
 import { AYAT_PARTNER, TEMER_PARTNER } from '../content/partners'
 import { useTranslation } from '../context/LocaleContext'
 import { groupListingsByProject } from '../lib/groupListingsByProject'
+import { isLocationActive } from '../lib/locationVisibility'
 import { usePageTitle } from '../hooks/usePageTitle'
+import { useLocationVisibility } from '../hooks/useLocationVisibility'
 
 function PhoneIcon({ className = 'h-5 w-5' }: { className?: string }) {
   return (
@@ -96,6 +98,8 @@ export function ApartmentsPage() {
     setSearchParams(next, { replace: true })
   }
 
+  const visibilityQuery = useLocationVisibility()
+
   const query = useQuery({
     queryKey: ['public-listings-apartments', companySlug],
     queryFn: async () => {
@@ -110,10 +114,14 @@ export function ApartmentsPage() {
     },
   })
 
-  const projectGroups = React.useMemo(
-    () => groupListingsByProject(query.data?.items ?? []),
-    [query.data?.items],
-  )
+  const projectGroups = React.useMemo(() => {
+    const groups = groupListingsByProject(query.data?.items ?? [])
+    const visibility = visibilityQuery.data
+    return groups.filter((group) => {
+      if (group.company_slug !== AYAT_PARTNER.slug) return true
+      return isLocationActive(visibility, 'apartment', group.project_slug)
+    })
+  }, [query.data?.items, visibilityQuery.data])
 
   const isTemerBrowse = companySlug === TEMER_PARTNER.slug
   const listings = query.data?.items ?? []

@@ -8,11 +8,13 @@ import { TemerListingCard } from '../components/TemerListingCard'
 import { useTranslation } from '../context/LocaleContext'
 import { AYAT_PARTNER, TEMER_PARTNER } from '../content/partners'
 import { usePageTitle } from '../hooks/usePageTitle'
+import { useLocationVisibility } from '../hooks/useLocationVisibility'
 import { formatListingCardTitle, resolveDevelopmentZone } from '../lib/listingDisplay'
 
 export function ProjectListingsPage() {
   const { t } = useTranslation()
   const { projectSlug } = useParams<{ projectSlug: string }>()
+  const { data: visibility } = useLocationVisibility()
 
   const listingsQuery = useQuery({
     queryKey: ['public-listings-project', projectSlug],
@@ -51,6 +53,22 @@ export function ProjectListingsPage() {
 
   if (!projectSlug) {
     return <p className="text-sm text-red-600">{t('projectBrowse.missingProject')}</p>
+  }
+
+  const locationInactive = Boolean(
+    projectSlug && visibility?.apartment[projectSlug] === false,
+  )
+
+  if (locationInactive) {
+    return (
+      <div className="surface p-6 text-center">
+        <p className="text-h3">{t('projectBrowse.notFoundTitle')}</p>
+        <p className="mt-2 text-body-sm text-fg-muted">{t('projectBrowse.notFoundBody')}</p>
+        <Link to="/apartments" className="btn-primary mt-6 inline-flex">
+          {t('projectBrowse.backToLocations')}
+        </Link>
+      </div>
+    )
   }
 
   if (listingsQuery.isLoading && contentQuery.isLoading) {

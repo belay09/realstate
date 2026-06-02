@@ -462,6 +462,13 @@ class PublicLocationContent(BaseModel):
     media: list[dict[str, object]]
 
 
+class PublicLocationVisibility(BaseModel):
+    """CMS-controlled visibility. Missing location_id means visible by default."""
+
+    apartment: dict[str, bool]
+    shop: dict[str, bool]
+
+
 class PublicHomeCard(BaseModel):
     card_key: str
     title: str

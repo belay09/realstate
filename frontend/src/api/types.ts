@@ -225,6 +225,11 @@ export type PublicLocationContent = {
   }[]
 }
 
+export type PublicLocationVisibility = {
+  apartment: Record<string, boolean>
+  shop: Record<string, boolean>
+}
+
 export type HomePageCard = {
   id: string
   card_key: string

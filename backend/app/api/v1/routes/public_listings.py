@@ -29,6 +29,11 @@ from app.schemas.inventory import (
     PublicListingImage,
     PublicListingSummary,
     PublicLocationContent,
+    PublicLocationVisibility,
+)
+from app.services.location_visibility import (
+    filter_calculator_config_by_visibility,
+    load_location_visibility_maps,
 )
 from app.schemas.payment import (
     InstallmentItemRead,
@@ -323,6 +328,12 @@ def get_public_listing(slug: str, db: Session = Depends(get_db)) -> PublicListin
     )
 
 
+@router.get("/location-content/visibility", response_model=PublicLocationVisibility)
+def get_public_location_visibility(db: Session = Depends(get_db)) -> PublicLocationVisibility:
+    maps = load_location_visibility_maps(db)
+    return PublicLocationVisibility(apartment=maps["apartment"], shop=maps["shop"])
+
+
 @router.get(
     "/location-content/{kind}/{location_id}",
     response_model=PublicLocationContent,
@@ -387,6 +398,8 @@ def get_public_calculator_config(
             status_code=status.HTTP_404_NOT_FOUND,
             detail={"code": exc.code, "message": exc.message},
         ) from exc
+    visibility = load_location_visibility_maps(db)
+    payload = filter_calculator_config_by_visibility(payload, visibility)
     return PublicCalculatorConfig.model_validate(payload)
 
 

@@ -158,6 +158,15 @@ export function AdminListingsPage() {
     }) => api.patch(`/admin/location-content/${id}`, body),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['admin', 'location-content'] }),
   })
+  const toggleLocationActive = useMutation({
+    mutationFn: ({ id, is_public }: { id: string; is_public: boolean }) =>
+      api.patch(`/admin/location-content/${id}`, { is_public }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin', 'location-content'] })
+      pushToast('success', 'Location visibility updated.')
+    },
+    onError: (err) => pushToast('error', uploadErrorMessage(err)),
+  })
   const seedDefaults = useMutation({
     mutationFn: async () => {
       const apartmentPayloads = apartmentOptions.map((o) => ({
@@ -246,8 +255,8 @@ export function AdminListingsPage() {
     <div className="space-y-8 text-left">
       <h1 className="text-2xl font-semibold text-stone-900 dark:text-stone-50">Location details CMS</h1>
       <p className="text-sm text-stone-600 dark:text-stone-400">
-        Manage apartment and shop detail pages in one place: description, media (image/video), bedroom
-        cards, and calculator context. Users see this immediately after clicking a location card.
+        Manage apartment and shop locations: toggle Active to show or hide each zone on the
+        apartments/shops pages and calculator. Edit media, description, and bedroom cards below.
       </p>
 
       <section className="space-y-4 rounded-xl border border-stone-200 bg-white p-4 dark:border-stone-800 dark:bg-stone-950">
@@ -397,7 +406,7 @@ export function AdminListingsPage() {
                   <th className="px-3 py-2 text-left font-medium">Kind</th>
                   <th className="px-3 py-2 text-left font-medium">Location ID</th>
                   <th className="px-3 py-2 text-left font-medium">Title</th>
-                  <th className="px-3 py-2 text-left font-medium">Public</th>
+                  <th className="px-3 py-2 text-left font-medium">Active</th>
                   <th className="px-3 py-2 text-left font-medium">Actions</th>
                 </tr>
               </thead>
@@ -407,7 +416,22 @@ export function AdminListingsPage() {
                     <td className="px-3 py-2">{row.kind}</td>
                     <td className="px-3 py-2 font-mono text-xs">{row.location_id}</td>
                     <td className="px-3 py-2">{row.title}</td>
-                    <td className="px-3 py-2">{row.is_public ? 'Yes' : 'No'}</td>
+                    <td className="px-3 py-2">
+                      <label className="flex items-center gap-2 text-xs text-stone-600 dark:text-stone-400">
+                        <input
+                          type="checkbox"
+                          checked={row.is_public}
+                          disabled={toggleLocationActive.isPending}
+                          onChange={(e) =>
+                            toggleLocationActive.mutate({
+                              id: row.id,
+                              is_public: e.target.checked,
+                            })
+                          }
+                        />
+                        {row.is_public ? 'Visible' : 'Hidden'}
+                      </label>
+                    </td>
                     <td className="px-3 py-2">
                       <button
                         type="button"
@@ -591,7 +615,7 @@ export function AdminListingsPage() {
                 checked={createForm.is_public}
                 onChange={(e) => setCreateForm((prev) => ({ ...prev, is_public: e.target.checked }))}
               />
-              Public on location page
+              Active — show on apartments/shops browse and calculator
             </label>
             <button type="submit" className="btn-primary md:col-span-2" disabled={createLocationContent.isPending}>
               Create location content
@@ -808,7 +832,7 @@ function LocationContentEditor({
             checked={form.is_public}
             onChange={(e) => setForm((prev) => ({ ...prev, is_public: e.target.checked }))}
           />
-          Public on location page
+          Active — show on apartments/shops browse, calculator, and location pages
         </label>
         <button type="submit" className="btn-secondary md:col-span-2">
           Save location details

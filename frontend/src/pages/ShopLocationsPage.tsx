@@ -4,13 +4,18 @@ import { ShopLocationCard } from '../components/ShopLocationCard'
 import { useTranslation } from '../context/LocaleContext'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { useCalculatorConfig } from '../hooks/useCalculatorConfig'
+import { useLocationVisibility } from '../hooks/useLocationVisibility'
+import { isLocationActive } from '../lib/locationVisibility'
 import { shopLocationsFromConfig } from '../lib/shopLocations'
 
 export function ShopLocationsPage() {
   const { t } = useTranslation()
   usePageTitle(t('pageTitles.shops'))
   const { data: config } = useCalculatorConfig()
-  const locations = shopLocationsFromConfig(config)
+  const { data: visibility } = useLocationVisibility()
+  const locations = shopLocationsFromConfig(config).filter((loc) =>
+    isLocationActive(visibility, 'shop', loc.id),
+  )
 
   return (
     <div className="space-y-10 text-left">
