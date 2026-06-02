@@ -31,10 +31,6 @@ from app.schemas.inventory import (
     PublicLocationContent,
     PublicLocationVisibility,
 )
-from app.services.location_visibility import (
-    filter_calculator_config_by_visibility,
-    load_location_visibility_maps,
-)
 from app.schemas.payment import (
     InstallmentItemRead,
     PublicPaymentPlanOption,
@@ -45,6 +41,10 @@ from app.services.calculator_config import (
     CalculatorConfigError,
     build_public_calculator_config,
     get_company_by_slug,
+)
+from app.services.location_visibility import (
+    filter_calculator_config_by_visibility,
+    load_location_visibility_maps,
 )
 from app.services.payment_service import (
     PaymentError,
