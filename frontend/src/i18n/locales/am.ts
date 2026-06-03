@@ -420,6 +420,7 @@ export const am = {
     finishSemiHint: 'መሰረታዊ ፊኒሺንግ። አነስተኛ መነሻ ዋጋ።',
     finishRegular: 'ሙሉ ፊኒሺንግ ያለው አፓርታማ',
     finishRegularHint: 'ሙሉ የውስጥ ፊኒሺንግ የተጠናቀቀ። ከፍተኛ የካሬ ሜትር ዋጋ።',
+    finishLockedHint: 'ይህ ቅድመ ስሌት በአሁኑ ጊዜ የግማሽ ጨረታ ዋጋ ብቻ ይጠቀማል።',
     step3ShopFloorTitle: 'መደብሩ በየትኛው ወለል (ፎቅ) ላይ ነው?',
     step3ShopFloorHint: 'የመሬት ወለል (Ground Floor) መደብሮች ብዙውን ጊዜ ከላይ ካሉት ወለሎች በካሬ ሜትር ዋጋቸው ይበልጣል።',
     shopFloor: {

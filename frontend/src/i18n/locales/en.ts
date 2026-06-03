@@ -422,6 +422,7 @@ export const en = {
     finishSemiHint: 'Shell with basic fittings. Lower base price, faster delivery target.',
     finishRegular: 'Regular finished apartment',
     finishRegularHint: 'Full interior finish. Higher price per square meter on supported types.',
+    finishLockedHint: 'Indicative calculator uses semi-finished rates only for now.',
     step3ShopFloorTitle: 'Which floor is the shop on?',
     step3ShopFloorHint: 'Ground floor shops usually cost more per square meter than upper floors.',
     shopFloor: {

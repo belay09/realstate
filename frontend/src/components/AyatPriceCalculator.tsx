@@ -31,6 +31,9 @@ type ShopFloor = 'GF' | '1F' | '2F' | '3F'
 
 const SHOP_FLOORS: ShopFloor[] = ['GF', '1F', '2F', '3F']
 
+/** Indicative apartment calculator uses semi-finished rates only (for now). */
+const RESIDENTIAL_FINISH: FinishKind = 'semi-finished'
+
 export type AyatPriceCalculatorProps = {
   variant?: 'page' | 'embedded'
   /** Wizard with large cards, or compact dropdowns with defaults on load */
@@ -350,7 +353,6 @@ function selectKind(
     setShopZoneId: (v: string | null) => void
     setShopFloor: (v: ShopFloor | null) => void
     setBedrooms: (v: 1 | 2 | 3 | null) => void
-    setFinish: (v: FinishKind | null) => void
     setFloor: (v: number | null) => void
     setAreaSqm: (v: number | null) => void
   },
@@ -362,7 +364,6 @@ function selectKind(
   } else {
     setters.setProjectId(null)
     setters.setBedrooms(null)
-    setters.setFinish(null)
     setters.setFloor(null)
     setters.setAreaSqm(null)
   }
@@ -396,9 +397,6 @@ export function AyatPriceCalculator({
   const [completion, setCompletion] = useState<CompletionKind>(preset?.completion ?? 'unstarted')
   const [bedrooms, setBedrooms] = useState<1 | 2 | 3 | null>(
     preset?.bedrooms ?? (initialResidentialProjectId ? 3 : null),
-  )
-  const [finish, setFinish] = useState<FinishKind | null>(
-    preset?.finish ?? (initialResidentialProjectId ? 'semi-finished' : null),
   )
   const [areaSqm, setAreaSqm] = useState<number | null>(preset?.areaSqm ?? null)
   const [floor, setFloor] = useState<number | null>(preset?.floor ?? null)
@@ -442,7 +440,6 @@ export function AyatPriceCalculator({
       setKind('residential')
       setProjectId(resolved)
       setBedrooms(3)
-      setFinish('semi-finished')
       setAreaSqm(defaultAreaSqm(config, 3))
       setFloor(defaultFloor(proj))
       setCompletion('unstarted')
@@ -494,13 +491,13 @@ export function AyatPriceCalculator({
 
   const result = useMemo(() => {
     if (kind === 'residential') {
-      if (!projectId || bedrooms == null || !finish || areaSqm == null || floor == null) {
+      if (!projectId || bedrooms == null || areaSqm == null || floor == null) {
         return null
       }
       return calculateResidential(config, {
         projectId,
         bedrooms,
-        finish,
+        finish: RESIDENTIAL_FINISH,
         areaSqm,
         floor,
         completion,
@@ -517,7 +514,6 @@ export function AyatPriceCalculator({
     kind,
     projectId,
     bedrooms,
-    finish,
     areaSqm,
     floor,
     completion,
@@ -531,7 +527,7 @@ export function AyatPriceCalculator({
     kind === 'residential' ? projectId != null : kind === 'commercial' ? shopZoneId != null : false
   const step3Done =
     kind === 'residential'
-      ? bedrooms != null && finish != null
+      ? bedrooms != null
       : kind === 'commercial'
         ? shopFloor != null
         : false
@@ -562,7 +558,6 @@ export function AyatPriceCalculator({
                 setShopZoneId,
                 setShopFloor,
                 setBedrooms,
-                setFinish,
                 setFloor,
                 setAreaSqm,
               })
@@ -659,11 +654,11 @@ export function AyatPriceCalculator({
             <FormSelect
               id="calc-finish"
               label={t('calculator.compactFieldFinish')}
-              value={finish ?? ''}
-              onChange={(v) => setFinish(v as FinishKind)}
+              value={RESIDENTIAL_FINISH}
+              disabled
+              onChange={() => {}}
             >
               <option value="semi-finished">{t('calculator.finishSemi')}</option>
-              <option value="regular-finished">{t('calculator.finishRegular')}</option>
             </FormSelect>
           </>
         )}
@@ -687,7 +682,7 @@ export function AyatPriceCalculator({
           </FormSelect>
         )}
 
-        {kind && bedrooms != null && finish != null && kind === 'residential' && (
+        {kind && bedrooms != null && kind === 'residential' && (
           <FormSelect
             id="calc-size"
             label={t('calculator.compactFieldSize')}
@@ -868,7 +863,6 @@ export function AyatPriceCalculator({
                     setShopZoneId,
                     setShopFloor,
                     setBedrooms,
-                    setFinish,
                     setFloor,
                     setAreaSqm,
                   })
@@ -981,29 +975,11 @@ export function AyatPriceCalculator({
                 ))}
               </div>
               {bedrooms != null && (
-                <>
-                  <p className="mb-2 text-sm font-medium text-fg">{t('calculator.finishLabel')}</p>
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <ChoiceButton
-                      selected={finish === 'semi-finished'}
-                      onClick={() => setFinish('semi-finished')}
-                    >
-                      <span className="font-semibold">{t('calculator.finishSemi')}</span>
-                      <span className="mt-1 block text-xs font-normal text-fg-muted">
-                        {t('calculator.finishSemiHint')}
-                      </span>
-                    </ChoiceButton>
-                    <ChoiceButton
-                      selected={finish === 'regular-finished'}
-                      onClick={() => setFinish('regular-finished')}
-                    >
-                      <span className="font-semibold">{t('calculator.finishRegular')}</span>
-                      <span className="mt-1 block text-xs font-normal text-fg-muted">
-                        {t('calculator.finishRegularHint')}
-                      </span>
-                    </ChoiceButton>
-                  </div>
-                </>
+                <p className="rounded-lg border border-border bg-surface-muted px-4 py-3 text-sm text-fg-muted">
+                  <span className="font-medium text-fg">{t('calculator.finishLabel')}:</span>{' '}
+                  {t('calculator.finishSemi')}
+                  <span className="mt-1 block text-xs">{t('calculator.finishLockedHint')}</span>
+                </p>
               )}
             </section>
           )}
@@ -1034,7 +1010,7 @@ export function AyatPriceCalculator({
           )}
 
           {kind &&
-            ((kind === 'residential' && bedrooms != null && finish != null) ||
+            ((kind === 'residential' && bedrooms != null) ||
               (kind === 'commercial' && shopFloor != null)) && (
               <section className="card p-6">
                 <div className="mb-4 flex items-center gap-3">
@@ -1139,7 +1115,6 @@ export function AyatPriceCalculator({
                   setShopZoneId,
                   setShopFloor,
                   setBedrooms,
-                  setFinish,
                   setFloor,
                   setAreaSqm,
                 })
@@ -1167,11 +1142,7 @@ export function AyatPriceCalculator({
             </div>
             <div>
               <dt className="text-fg-muted">{t('calculator.finishLabel')}</dt>
-              <dd className="font-medium text-fg">
-                {preset.finish === 'semi-finished'
-                  ? t('calculator.finishSemi')
-                  : t('calculator.finishRegular')}
-              </dd>
+              <dd className="font-medium text-fg">{t('calculator.finishSemi')}</dd>
             </div>
             <div>
               <dt className="text-fg-muted">{t('calculator.embeddedSize')}</dt>
