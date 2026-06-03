@@ -556,7 +556,7 @@ function ListingEditModal({
                   <Link to="/admin/listings" className="font-medium text-brand-700 underline dark:text-brand-300">
                     Location pages
                   </Link>{' '}
-                  appear here. Save to move this listing to that zone.
+                  appear here. Saving creates the development project automatically if needed.
                 </p>
                 {locationKind === 'apartment' && locationId ? (
                   <Link

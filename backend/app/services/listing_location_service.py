@@ -61,6 +61,33 @@ def _move_unit_to_project(db: Session, unit: PropertyUnit, target_project: Proje
     unit.block_id = block.id
 
 
+def _get_or_create_apartment_project(
+    db: Session,
+    *,
+    company_id: UUID,
+    location_id: str,
+    location_content: LocationContent,
+) -> Project:
+    project = (
+        db.query(Project)
+        .filter(Project.company_id == company_id, Project.slug == location_id)
+        .first()
+    )
+    if project is not None:
+        return project
+    project = Project(
+        company_id=company_id,
+        slug=location_id,
+        name=location_content.title.strip() or location_id,
+        city="Addis Ababa",
+        area=location_content.subtitle or location_content.title or location_id,
+        status="active",
+    )
+    db.add(project)
+    db.flush()
+    return project
+
+
 def _get_or_create_shop_project(
     db: Session,
     *,
@@ -133,17 +160,12 @@ def reassign_listing_location(
     listing.listing_metadata = meta
 
     if location_kind == "apartment":
-        target = (
-            db.query(Project)
-            .filter(Project.company_id == company_id, Project.slug == location_id)
-            .first()
+        target = _get_or_create_apartment_project(
+            db,
+            company_id=company_id,
+            location_id=location_id,
+            location_content=location_content,
         )
-        if target is None:
-            raise ListingLocationError(
-                "PROJECT_NOT_FOUND",
-                f"No development project “{location_id}” for this company. "
-                "Apartment locations must match a project slug (e.g. kazanchis-residential).",
-            )
         _move_unit_to_project(db, unit, target)
         listing.city = target.city or listing.city
         listing.area = target.area or location_content.title

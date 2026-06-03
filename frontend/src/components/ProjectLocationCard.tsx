@@ -62,7 +62,10 @@ function GradientFallbackHeader({
 export function ProjectLocationCard({ group, locationCms }: ProjectLocationCardProps) {
   const { t } = useTranslation()
   const zone = resolveDevelopmentZone(group.project_slug, group.area)
-  const location = formatListingLocation(group.listings[0], t)
+  const location =
+    group.listings.length > 0
+      ? formatListingLocation(group.listings[0], t)
+      : [zone, group.city ?? t('listingCard.defaultCity')].filter(Boolean).join(', ')
   const fallbackTitle = zone || group.project_name
   const title = locationCms?.title?.trim() || fallbackTitle
   const subtitle =

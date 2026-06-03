@@ -10,7 +10,7 @@ import { SITE_CONTACT, siteWhatsAppHref } from '../content/siteContact'
 import { AYAT_PARTNER, TEMER_PARTNER } from '../content/partners'
 import { useTranslation } from '../context/LocaleContext'
 import { groupListingsByProject } from '../lib/groupListingsByProject'
-import { isLocationActive } from '../lib/locationVisibility'
+import { mergeApartmentBrowseGroups } from '../lib/mergeApartmentBrowseGroups'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { useLocationBrowseSummaries } from '../hooks/useLocationBrowseSummaries'
 import { useLocationVisibility } from '../hooks/useLocationVisibility'
@@ -118,12 +118,13 @@ export function ApartmentsPage() {
 
   const projectGroups = React.useMemo(() => {
     const groups = groupListingsByProject(query.data?.items ?? [])
-    const visibility = visibilityQuery.data
-    return groups.filter((group) => {
-      if (group.company_slug !== AYAT_PARTNER.slug) return true
-      return isLocationActive(visibility, 'apartment', group.project_slug)
-    })
-  }, [query.data?.items, visibilityQuery.data])
+    return mergeApartmentBrowseGroups(
+      groups,
+      locationSummariesQuery.data,
+      visibilityQuery.data,
+      companySlug,
+    )
+  }, [query.data?.items, visibilityQuery.data, locationSummariesQuery.data, companySlug])
 
   const isTemerBrowse = companySlug === TEMER_PARTNER.slug
   const listings = query.data?.items ?? []
