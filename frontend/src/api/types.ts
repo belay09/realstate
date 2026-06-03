@@ -171,6 +171,7 @@ export type PublicListingSummary = {
   project_slug: string
   primary_image_url: string | null
   cover_image_url?: string | null
+  image_urls?: string[]
   description_preview?: string | null
   bathrooms?: string | null
   property_size?: string | null

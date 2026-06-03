@@ -6,6 +6,7 @@ import {
   formatListingLocation,
   finishKindFromUnitTypeCode,
 } from '../lib/listingDisplay'
+import { ListingCardImageCarousel } from './ListingCardImageCarousel'
 import { LocationPageSection } from './LocationPageSection'
 import { ScrollReveal } from './ScrollReveal'
 
@@ -42,25 +43,29 @@ function LayoutCard({ item, index }: { item: PublicListingSummary; index: number
   const title = formatListingCardTitle(item, t)
   const beds = formatListingBedrooms(item, t)
   const location = formatListingLocation(item, t)
+  const imageUrls =
+    item.image_urls && item.image_urls.length > 0
+      ? item.image_urls
+      : item.primary_image_url
+        ? [item.primary_image_url]
+        : []
 
   return (
     <ScrollReveal animation="scale" delayMs={index * 140}>
       <article className="location-card-shine group flex h-full flex-col overflow-hidden rounded-2xl border border-border/80 bg-surface shadow-md transition duration-500 hover:-translate-y-2 hover:border-brand-400/50 hover:shadow-[0_28px_56px_-16px_rgba(2,132,199,0.35)] dark:hover:border-brand-600/40">
-        <div className="relative aspect-[5/4] overflow-hidden bg-gradient-to-br from-slate-800 to-slate-950">
-          {item.primary_image_url ? (
-            <img
-              src={item.primary_image_url}
-              alt=""
-              className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-110"
-            />
-          ) : (
-            <div className="flex h-full flex-col items-center justify-center gap-2 text-slate-400">
-              <PhotoPlaceholderIcon />
-              <span className="text-xs font-medium">{t('listingCard.photoSoon')}</span>
-            </div>
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
-          <div className="absolute left-3 right-3 top-3 flex flex-wrap items-center gap-2">
+        <div className="group/image relative aspect-[5/4] overflow-hidden bg-gradient-to-br from-slate-800 to-slate-950">
+          <div className="h-full w-full transition duration-700 ease-out group-hover/image:scale-[1.02]">
+            {imageUrls.length > 0 ? (
+              <ListingCardImageCarousel urls={imageUrls} alt={title} startOffset={index} />
+            ) : (
+              <div className="flex h-full flex-col items-center justify-center gap-2 text-slate-400">
+                <PhotoPlaceholderIcon />
+                <span className="text-xs font-medium">{t('listingCard.photoSoon')}</span>
+              </div>
+            )}
+          </div>
+          <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
+          <div className="absolute left-3 right-3 top-3 z-[2] flex flex-wrap items-center gap-2 pr-16">
             {beds ? (
               <span className="rounded-full bg-white/95 px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-wide text-brand-900 shadow-lg">
                 {beds}
@@ -68,7 +73,7 @@ function LayoutCard({ item, index }: { item: PublicListingSummary; index: number
             ) : null}
             <FinishBadge code={item.unit_type_code} />
           </div>
-          <div className="absolute bottom-3 left-3 right-3 translate-y-2 opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+          <div className="absolute bottom-3 left-3 right-3 z-[2] translate-y-2 opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
             <span className="inline-block rounded-lg bg-brand-600/90 px-3 py-1.5 text-xs font-bold text-white backdrop-blur-sm">
               View details →
             </span>

@@ -289,6 +289,11 @@ export const am = {
   listingCard: {
     forSale: 'ለሽያጭ',
     photoSoon: 'ፎቶ በቅርቡ',
+    galleryPhotos: '{{count}} ፎቶዎች',
+    galleryPrev: 'ቀዳሚ ፎቶ',
+    galleryNext: 'ቀጣይ ፎቶ',
+    galleryGoTo: 'ፎቶ {{n}} አሳይ',
+    galleryPosition: '{{current}} / {{total}}',
     defaultCity: 'አዲስ አበባ',
     locatedIn: '{{place}}',
     titleTemplate: '{{bedrooms}}፣ {{finish}}፣ {{project}}',
@@ -480,7 +485,7 @@ export const am = {
     tierDiscount: 'በዝርዝር ዋጋ ላይ {{percent}}% የደንበኛ ቅናሽ',
     resultTitle: 'የእርስዎ ቅድመ ስሌት ውጤት',
     resultPending: 'በካሬ ሜትር ዋጋን፣ ቅናሾችን እና ክፍያዎችን ለማየት እባክዎ ደረጃዎቹን ያጠናቅቁ።',
-    compactAdjustHint: 'ትርፍዎን ለማዘመን ከታች ያለውን ማንኛውንም አማራጭ ይቀይሩ።',
+    compactAdjustHint: 'አማራጮችዎን ይምረጡ — ቅድመ ስሌቱ ከታች ይዘምናል።',
     compactDisclaimer:
       'ይህ ቅድመ ስሚት ብቻ ነው — ከመግዛት በፊት ከአያት ኦፊሴላዊ የዋጋ ማረጋገጫ ያስፈልጋል።',
     compactFieldKind: 'የንብረት አይነት',

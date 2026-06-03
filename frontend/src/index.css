@@ -427,6 +427,7 @@
   .animate-reveal-fade,
   .animate-reveal-slide-right,
   .animate-hero-ken-burns,
+  .animate-card-image-ken,
   .animate-hero-glow-drift,
   .animate-hero-glow-drift-slow,
   .animate-hero-content-in,
@@ -502,6 +503,19 @@
   to {
     transform: scale(1.12);
   }
+}
+
+@keyframes card-image-ken {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
+}
+
+.animate-card-image-ken {
+  animation: card-image-ken 8s ease-in-out infinite alternate;
 }
 
 @keyframes hero-glow-drift {

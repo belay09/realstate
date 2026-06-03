@@ -402,6 +402,7 @@ class PublicListingSummary(BaseModel):
     project_slug: str
     primary_image_url: str | None
     cover_image_url: str | None = None
+    image_urls: list[str] = Field(default_factory=list)
     description_preview: str | None = None
     bathrooms: str | None = None
     property_size: str | None = None

@@ -64,6 +64,19 @@ def _not_found() -> HTTPException:
     )
 
 
+def _layout_card_image_urls(listing: PropertyListing) -> list[str]:
+    """All listing photos in admin order (primary first) for layout card carousels."""
+    ims = sorted(listing.images, key=lambda i: (not i.is_primary, i.sort_order, str(i.id)))
+    seen: set[str] = set()
+    urls: list[str] = []
+    for img in ims:
+        u = (img.url or "").strip()
+        if u and u not in seen:
+            seen.add(u)
+            urls.append(u)
+    return urls
+
+
 def _primary_image_url(listing: PropertyListing) -> str | None:
     ims = list(listing.images)
     if not ims:
@@ -139,6 +152,10 @@ def _to_summary(
     if location_cover_map:
         project_cover = location_cover_map.get(project.slug)
     extras = _listing_card_extras(listing)
+    primary = project_cover or _primary_image_url(listing)
+    image_urls = _layout_card_image_urls(listing)
+    if not image_urls and primary:
+        image_urls = [primary]
     return PublicListingSummary(
         id=listing.id,
         title=listing.title,
@@ -152,8 +169,9 @@ def _to_summary(
         company_slug=company.slug,
         project_name=project.name,
         project_slug=project.slug,
-        primary_image_url=project_cover or _primary_image_url(listing),
+        primary_image_url=primary,
         cover_image_url=_cover_image_url(listing),
+        image_urls=image_urls,
         description_preview=extras["description_preview"],
         bathrooms=extras["bathrooms"],
         property_size=extras["property_size"],

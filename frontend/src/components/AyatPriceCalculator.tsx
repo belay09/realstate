@@ -1228,17 +1228,15 @@ export function AyatPriceCalculator({
           />
         </div>
       ) : isCompact ? (
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr),min(22rem,100%)] lg:items-start">
-          <aside className="order-2 lg:order-1 lg:sticky lg:top-24 lg:self-start">
-            <CalculatorResults
-              result={result}
-              kind={kind}
-              canShowResult={Boolean(canShowResult)}
-              step5Done={step5Done}
-              compact
-            />
-          </aside>
-          <div className="order-1 lg:order-2 lg:self-start">{wizardColumn}</div>
+        <div className="flex w-full flex-col gap-6">
+          {wizardColumn}
+          <CalculatorResults
+            result={result}
+            kind={kind}
+            canShowResult={Boolean(canShowResult)}
+            step5Done={step5Done}
+            compact
+          />
         </div>
       ) : (
         <div className="grid gap-10 lg:grid-cols-[1fr,min(22rem,100%)]">

@@ -289,6 +289,11 @@ export const en = {
   listingCard: {
     forSale: 'For sale',
     photoSoon: 'Photo coming soon',
+    galleryPhotos: '{{count}} photos',
+    galleryPrev: 'Previous photo',
+    galleryNext: 'Next photo',
+    galleryGoTo: 'Show photo {{n}}',
+    galleryPosition: '{{current}} / {{total}}',
     defaultCity: 'Addis Ababa',
     locatedIn: '{{place}}',
     titleTemplate: '{{bedrooms}}, {{finish}}, {{project}}',
@@ -489,7 +494,7 @@ export const en = {
     resultTitle: 'Your estimate',
     resultPending:
       'Complete the steps on the left to see price per square meter, discount, and payments.',
-    compactAdjustHint: 'Change any option below to update your estimate.',
+    compactAdjustHint: 'Choose your options — your estimate updates below.',
     compactDisclaimer:
       'Indicative only — official Ayat quotes are required before purchase.',
     compactFieldKind: 'Property type',
