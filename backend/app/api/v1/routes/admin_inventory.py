@@ -982,6 +982,7 @@ def create_location_content(
         description=body.description,
         video_url=body.video_url,
         cards=[c.model_dump() for c in body.cards],
+        settings=body.settings.model_dump() if body.settings else None,
         is_public=body.is_public,
     )
     db.add(row)
@@ -1006,6 +1007,8 @@ def update_location_content(
     data = body.model_dump(exclude_unset=True)
     if "cards" in data and data["cards"] is not None:
         data["cards"] = [c.model_dump() for c in body.cards or []]
+    if "settings" in data and data["settings"] is not None:
+        data["settings"] = body.settings.model_dump() if body.settings else None
     for k, v in data.items():
         setattr(row, k, v)
     try:

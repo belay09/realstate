@@ -7,8 +7,8 @@ import { AyatLocationHero } from '../components/AyatLocationHero'
 import { AyatLocationSectionNav } from '../components/AyatLocationSectionNav'
 import { ScrollReveal } from '../components/ScrollReveal'
 import { AyatPriceCalculator } from '../components/AyatPriceCalculator'
+import { GroupedLocationListingCards } from '../components/GroupedLocationListingCards'
 import { LocationDetailSections } from '../components/LocationDetailSections'
-import { LocationListingCards } from '../components/LocationListingCards'
 import { SiteContactStrip } from '../components/SiteContactStrip'
 import { TemerListingCard } from '../components/TemerListingCard'
 import { useTranslation } from '../context/LocaleContext'
@@ -172,8 +172,10 @@ export function ProjectListingsPage() {
         />
 
         {hasListings ? (
-          <LocationListingCards
+          <GroupedLocationListingCards
+            locationId={projectSlug}
             listings={listings}
+            settings={content?.settings}
             title={t('projectBrowse.layoutsTitle')}
             subtitle={t('projectBrowse.layoutsSubtitle', { count: layoutCount })}
           />

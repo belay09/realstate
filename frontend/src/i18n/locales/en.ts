@@ -264,6 +264,20 @@ export const en = {
     noBedroomMatch: 'No homes match this bedroom count at this location.',
     showAllLayouts: 'Show all layouts',
   },
+  buildingType: {
+    mixedTitle: 'Mixed use',
+    duplexTitle: 'Duplex',
+    flatTitle: 'Flat apartments',
+    mixedIntro:
+      'Shops and mall on ground to floor {{retailMax}}. Apartments from floor {{residentialMin}} upward.',
+    mixedIntroFallback: 'Combined retail and residential towers.',
+    duplexIntro: 'Duplex apartments at this location.',
+    flatIntro: 'Residential-only towers — no shop floors.',
+    shopFloorsHint: 'For shop floors in mixed towers,',
+    shopCalculatorLink: 'use the shop price calculator',
+    otherLayouts: 'Other layouts',
+    otherLayoutsHint: 'Homes not yet tagged with a building type.',
+  },
   filters: {
     findHome: 'Find your home',
     loading: 'Loading…',

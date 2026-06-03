@@ -294,6 +294,28 @@ class AdminPropertyListingDetail(PropertyListingRead):
 # --- Location content (admin + public) ---
 
 
+class TowerFloorOverride(BaseModel):
+    tower_code: str = Field(min_length=1, max_length=64)
+    label: str | None = Field(default=None, max_length=128)
+    retail_floor_max: int = Field(ge=0, le=50)
+    residential_floor_min: int = Field(ge=1, le=50)
+
+
+class MixedBuildingSettings(BaseModel):
+    enabled: bool = True
+    retail_floor_max: int = Field(default=3, ge=0, le=50)
+    residential_floor_min: int = Field(default=4, ge=1, le=50)
+    shop_zone_id: str | None = Field(default=None, max_length=255)
+
+
+class LocationBuildingSettings(BaseModel):
+    enabled_types: list[Literal["mixed", "duplex", "flat"]] = Field(
+        default_factory=lambda: ["mixed", "duplex", "flat"]
+    )
+    mixed: MixedBuildingSettings | None = None
+    tower_overrides: list[TowerFloorOverride] = Field(default_factory=list)
+
+
 class LocationMediaCreate(BaseModel):
     url: str = Field(min_length=1, max_length=2048)
     media_type: str = Field(default="image", pattern="^(image|video)$")
@@ -411,6 +433,10 @@ class PublicListingSummary(BaseModel):
     description_preview: str | None = None
     bathrooms: str | None = None
     property_size: str | None = None
+    building_type: str | None = None
+    use_segment: str | None = None
+    tower_code: str | None = None
+    floor_number: int | None = None
 
 
 class ListingFeatureGroups(BaseModel):
@@ -429,6 +455,9 @@ class ListingMapPoint(BaseModel):
 class ListingMetadataPublic(BaseModel):
     property_kind: str = "residential"
     external_property_id: str | None = None
+    building_type: str | None = None
+    use_segment: str | None = None
+    tower_code: str | None = None
     specs: dict[str, str] = Field(default_factory=dict)
     features: ListingFeatureGroups = Field(default_factory=ListingFeatureGroups)
     map: ListingMapPoint | None = None
@@ -465,6 +494,7 @@ class PublicLocationContent(BaseModel):
     description: str | None
     video_url: str | None
     cards: list[LocationCard]
+    settings: LocationBuildingSettings | None = None
     media: list[dict[str, object]]
 
 

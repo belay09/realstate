@@ -21,6 +21,7 @@ from app.models.inventory import (
 from app.models.payment import PaymentPlan
 from app.schemas.inventory import (
     ListingMetadataPublic,
+    LocationBuildingSettings,
     Paginated,
     PublicFilterOption,
     PublicHomeCard,
@@ -139,6 +140,33 @@ def _listing_card_extras(listing: PropertyListing) -> dict[str, str | None]:
     }
 
 
+def _listing_building_fields(listing: PropertyListing) -> dict[str, str | int | None]:
+    meta = listing.listing_metadata or {}
+    building_type = meta.get("building_type")
+    use_segment = meta.get("use_segment")
+    tower_code = meta.get("tower_code")
+    if building_type not in {"mixed", "duplex", "flat"}:
+        building_type = None
+    if use_segment not in {"retail", "residential"}:
+        use_segment = None
+    tower_code = str(tower_code).strip() if tower_code else None
+    return {
+        "building_type": building_type,
+        "use_segment": use_segment,
+        "tower_code": tower_code or None,
+        "floor_number": listing.unit.floor_number,
+    }
+
+
+def _parse_location_settings(raw: dict | None) -> LocationBuildingSettings | None:
+    if not raw:
+        return None
+    try:
+        return LocationBuildingSettings.model_validate(raw)
+    except Exception:
+        return None
+
+
 def _to_summary(
     listing: PropertyListing,
     location_cover_map: dict[str, str] | None = None,
@@ -152,6 +180,7 @@ def _to_summary(
     if location_cover_map:
         project_cover = location_cover_map.get(project.slug)
     extras = _listing_card_extras(listing)
+    building = _listing_building_fields(listing)
     primary = project_cover or _primary_image_url(listing)
     image_urls = _layout_card_image_urls(listing)
     if not image_urls and primary:
@@ -175,6 +204,10 @@ def _to_summary(
         description_preview=extras["description_preview"],
         bathrooms=extras["bathrooms"],
         property_size=extras["property_size"],
+        building_type=building["building_type"],
+        use_segment=building["use_segment"],
+        tower_code=building["tower_code"],
+        floor_number=building["floor_number"],
     )
 
 
@@ -425,6 +458,7 @@ def get_public_location_content(
             description=None,
             video_url=None,
             cards=[],
+            settings=None,
             media=[],
         )
     return PublicLocationContent(
@@ -435,6 +469,7 @@ def get_public_location_content(
         description=row.description,
         video_url=row.video_url,
         cards=row.cards or [],
+        settings=_parse_location_settings(row.settings),
         media=_sorted_location_media(row),
     )
 

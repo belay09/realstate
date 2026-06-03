@@ -27,6 +27,9 @@ type SpecRow = { key: string; value: string }
 const EMPTY_METADATA: ListingMetadata = {
   property_kind: 'residential',
   external_property_id: null,
+  building_type: null,
+  use_segment: null,
+  tower_code: null,
   specs: {},
   features: { interior: [], outdoor: [], utilities: [], other: [] },
   map: null,
@@ -64,6 +67,9 @@ function metadataFromDetail(detail: AdminPropertyListingDetail | undefined): Lis
   return {
     property_kind: meta.property_kind || 'residential',
     external_property_id: meta.external_property_id ?? null,
+    building_type: meta.building_type ?? null,
+    use_segment: meta.use_segment ?? null,
+    tower_code: meta.tower_code ?? null,
     specs: meta.specs ?? {},
     features: {
       interior: meta.features?.interior ?? [],
@@ -382,6 +388,15 @@ function ListingEditModal({
       const listing_metadata: ListingMetadata = {
         property_kind: locationKind === 'shop' ? 'commercial' : 'residential',
         external_property_id: metadata.external_property_id,
+        building_type: locationKind === 'apartment' ? metadata.building_type ?? null : null,
+        use_segment:
+          locationKind === 'apartment' && metadata.building_type === 'mixed'
+            ? metadata.use_segment ?? null
+            : null,
+        tower_code:
+          locationKind === 'apartment' && metadata.tower_code?.trim()
+            ? metadata.tower_code.trim()
+            : null,
         specs: rowsToSpecs(specRows),
         features: {
           interior: textToFeatures(featureTexts.interior),
@@ -640,6 +655,73 @@ function ListingEditModal({
                   Set automatically from Type above.
                 </span>
               </label>
+
+              {locationKind === 'apartment' ? (
+                <div className="space-y-3 rounded-lg border border-stone-200 bg-stone-50 p-4 dark:border-stone-800 dark:bg-stone-900/50">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
+                    Building type
+                  </p>
+                  <div className="grid gap-4 sm:grid-cols-3">
+                    <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
+                      Type
+                      <select
+                        className="input mt-1 w-full"
+                        value={metadata.building_type ?? ''}
+                        onChange={(e) => {
+                          const value = e.target.value as '' | 'mixed' | 'duplex' | 'flat'
+                          setMetadata((prev) => ({
+                            ...prev,
+                            building_type: value || null,
+                            use_segment: value === 'mixed' ? prev.use_segment : null,
+                          }))
+                        }}
+                      >
+                        <option value="">— not set —</option>
+                        <option value="mixed">Mixed use</option>
+                        <option value="duplex">Duplex</option>
+                        <option value="flat">Flat (residential only)</option>
+                      </select>
+                    </label>
+                    {metadata.building_type === 'mixed' ? (
+                      <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
+                        Use segment
+                        <select
+                          className="input mt-1 w-full"
+                          value={metadata.use_segment ?? ''}
+                          onChange={(e) =>
+                            setMetadata((prev) => ({
+                              ...prev,
+                              use_segment: (e.target.value as '' | 'retail' | 'residential') || null,
+                            }))
+                          }
+                        >
+                          <option value="">— select —</option>
+                          <option value="retail">Retail / shop floor</option>
+                          <option value="residential">Residential floor</option>
+                        </select>
+                      </label>
+                    ) : null}
+                    <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
+                      Tower code (optional)
+                      <input
+                        className="input mt-1 w-full"
+                        placeholder="e.g. MIX-1"
+                        value={metadata.tower_code ?? ''}
+                        onChange={(e) =>
+                          setMetadata((prev) => ({
+                            ...prev,
+                            tower_code: e.target.value || null,
+                          }))
+                        }
+                      />
+                    </label>
+                  </div>
+                  <p className="text-xs text-stone-500">
+                    Mixed: shops on lower floors, apartments above. Enable types and floor rules on the
+                    location page under Admin → Location pages.
+                  </p>
+                </div>
+              ) : null}
 
               <div className="space-y-2">
                 <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">Specs</p>

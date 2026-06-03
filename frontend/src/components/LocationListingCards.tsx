@@ -14,6 +14,7 @@ type LocationListingCardsProps = {
   listings: PublicListingSummary[]
   title: string
   subtitle?: string | null
+  sectionId?: string
 }
 
 function FinishBadge({ code }: { code: string }) {
@@ -101,12 +102,17 @@ function LayoutCard({ item, index }: { item: PublicListingSummary; index: number
   )
 }
 
-export function LocationListingCards({ listings, title, subtitle }: LocationListingCardsProps) {
+export function LocationListingCards({
+  listings,
+  title,
+  subtitle,
+  sectionId = 'location-layouts',
+}: LocationListingCardsProps) {
   const visible = listings.filter((l) => l.title?.trim())
   if (visible.length === 0) return null
 
   return (
-    <LocationPageSection id="location-layouts" title={title} description={subtitle ?? undefined}>
+    <LocationPageSection id={sectionId} title={title} description={subtitle ?? undefined}>
       <ul
         className={`grid gap-6 ${
           visible.length === 1 ? 'max-w-xl' : visible.length === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3'

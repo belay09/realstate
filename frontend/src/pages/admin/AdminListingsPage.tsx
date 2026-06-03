@@ -6,14 +6,17 @@ import { api } from '../../api/client'
 import type {
   AdminLocationContent,
   HomePageCard,
+  LocationBuildingSettings,
   LocationCard,
   LocationMedia,
   Paginated,
 } from '../../api/types'
 import { getAccessToken } from '../../lib/auth'
 import { AYAT_DEVELOPMENT_ZONES } from '../../lib/listingDisplay'
+import { defaultBuildingSettings } from '../../lib/buildingTypes'
 import { useCalculatorConfig } from '../../hooks/useCalculatorConfig'
 import { shopLocationsFromConfig } from '../../lib/shopLocations'
+import { LocationBuildingSettingsForm } from '../../components/admin/LocationBuildingSettingsForm'
 
 type LocationKind = 'apartment' | 'shop'
 
@@ -115,6 +118,22 @@ export function AdminListingsPage() {
       })),
     [calculatorConfig],
   )
+  const shopZoneOptions = useMemo(() => {
+    const seen = new Set<string>()
+    const out: { value: string; label: string }[] = []
+    for (const row of locationContent.data?.items ?? []) {
+      if (row.kind !== 'shop' || !row.is_public) continue
+      if (seen.has(row.location_id)) continue
+      seen.add(row.location_id)
+      out.push({ value: row.location_id, label: row.title })
+    }
+    for (const opt of shopOptions) {
+      if (seen.has(opt.value)) continue
+      seen.add(opt.value)
+      out.push(opt)
+    }
+    return out
+  }, [locationContent.data?.items, shopOptions])
   const locationOptions = createForm.kind === 'apartment' ? apartmentOptions : shopOptions
   const createPrimaryImageUrl =
     createPendingMedia.find((m) => m.is_primary && m.media_type === 'image')?.url ?? ''
@@ -155,6 +174,7 @@ export function AdminListingsPage() {
         video_url: string
         is_public: boolean
         cards: LocationCard[]
+        settings: LocationBuildingSettings
       }>
     }) => api.patch(`/admin/location-content/${id}`, body),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['admin', 'location-content'] }),
@@ -619,6 +639,7 @@ export function AdminListingsPage() {
         <ModalShell title="Edit media/details" onClose={() => setShowEditModal(false)}>
           <LocationContentEditor
             content={locationContent.data?.items.find((x) => x.id === selectedContentId) ?? null}
+            shopZoneOptions={shopZoneOptions}
             onSave={async (id, body) => {
               await updateLocationContent.mutateAsync({ id, body })
               pushToast('success', 'Location details saved.')
@@ -633,10 +654,12 @@ export function AdminListingsPage() {
 
 function LocationContentEditor({
   content,
+  shopZoneOptions,
   onSave,
   onNotify,
 }: {
   content: AdminLocationContent | null
+  shopZoneOptions: { value: string; label: string }[]
   onSave: (
     id: string,
     body: Partial<{
@@ -646,6 +669,7 @@ function LocationContentEditor({
       video_url: string
       is_public: boolean
       cards: LocationCard[]
+      settings: LocationBuildingSettings
     }>,
   ) => Promise<void>
   onNotify: (level: NotifyLevel, message: string) => void
@@ -675,6 +699,9 @@ function LocationContentEditor({
     is_public: true,
     cards: [{ ...EMPTY_CARD }],
   })
+  const [buildingSettings, setBuildingSettings] = useState<LocationBuildingSettings>(() =>
+    defaultBuildingSettings(''),
+  )
   useEffect(() => {
     if (!content) return
     setForm({
@@ -689,6 +716,9 @@ function LocationContentEditor({
         image_url: c.image_url ?? '',
       })),
     })
+    setBuildingSettings(
+      content.settings ?? defaultBuildingSettings(content.location_id),
+    )
   }, [content?.id])
   const media = useQuery({
     queryKey: ['admin', 'location-media', content?.id],
@@ -738,7 +768,14 @@ function LocationContentEditor({
               is_public: form.is_public,
               ...(content.kind === 'shop'
                 ? { cards: form.cards.filter((c) => c.title.trim().length > 0) }
-                : {}),
+                : {
+                    settings: {
+                      ...buildingSettings,
+                      tower_overrides: buildingSettings.tower_overrides.filter((row) =>
+                        row.tower_code.trim(),
+                      ),
+                    },
+                  }),
             })
           } catch (err) {
             onNotify('error', uploadErrorMessage(err))
@@ -820,10 +857,18 @@ function LocationContentEditor({
             />
           </div>
         ) : (
-          <p className="md:col-span-2 text-xs text-stone-500 dark:text-stone-400">
-            Unit cards for this zone are edited under <strong>Admin → Properties</strong> (one row per
-            home). This page is only for title, video, cover, and description.
-          </p>
+          <>
+            <p className="md:col-span-2 text-xs text-stone-500 dark:text-stone-400">
+              Unit cards are edited under <strong>Admin → Properties</strong> (one row per home).
+              Configure building types below; assign each property its type on the Properties page.
+            </p>
+            <LocationBuildingSettingsForm
+              locationId={content.location_id}
+              settings={buildingSettings}
+              shopZoneOptions={shopZoneOptions}
+              onChange={setBuildingSettings}
+            />
+          </>
         )}
         <label className="flex items-center gap-2 text-sm text-stone-700 dark:text-stone-300 md:col-span-2">
           <input

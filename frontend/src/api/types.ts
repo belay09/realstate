@@ -64,6 +64,9 @@ export type PropertyListing = {
 export type ListingMetadata = {
   property_kind: string
   external_property_id?: string | null
+  building_type?: 'mixed' | 'duplex' | 'flat' | null
+  use_segment?: 'retail' | 'residential' | null
+  tower_code?: string | null
   specs: Record<string, string>
   features: {
     interior: string[]
@@ -121,6 +124,26 @@ export type LocationCard = {
   image_url: string | null
 }
 
+export type TowerFloorOverride = {
+  tower_code: string
+  label?: string | null
+  retail_floor_max: number
+  residential_floor_min: number
+}
+
+export type MixedBuildingSettings = {
+  enabled: boolean
+  retail_floor_max: number
+  residential_floor_min: number
+  shop_zone_id: string | null
+}
+
+export type LocationBuildingSettings = {
+  enabled_types: ('mixed' | 'duplex' | 'flat')[]
+  mixed: MixedBuildingSettings | null
+  tower_overrides: TowerFloorOverride[]
+}
+
 export type AdminLocationContent = {
   id: string
   kind: 'apartment' | 'shop'
@@ -130,6 +153,7 @@ export type AdminLocationContent = {
   description: string | null
   video_url: string | null
   cards: LocationCard[]
+  settings: LocationBuildingSettings | null
   is_public: boolean
   created_at: string
   updated_at: string
@@ -177,6 +201,10 @@ export type PublicListingSummary = {
   description_preview?: string | null
   bathrooms?: string | null
   property_size?: string | null
+  building_type?: 'mixed' | 'duplex' | 'flat' | null
+  use_segment?: 'retail' | 'residential' | null
+  tower_code?: string | null
+  floor_number?: number | null
 }
 
 export type ListingFeatureGroups = {
@@ -195,6 +223,9 @@ export type ListingMapPoint = {
 export type ListingMetadataPublic = {
   property_kind: 'residential' | 'commercial' | string
   external_property_id: string | null
+  building_type?: 'mixed' | 'duplex' | 'flat' | null
+  use_segment?: 'retail' | 'residential' | null
+  tower_code?: string | null
   specs: Record<string, string>
   features: ListingFeatureGroups
   map: ListingMapPoint | null
@@ -218,6 +249,7 @@ export type PublicLocationContent = {
   description: string | null
   video_url: string | null
   cards: LocationCard[]
+  settings?: LocationBuildingSettings | null
   media: {
     id: string
     url: string
