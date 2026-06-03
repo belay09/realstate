@@ -24,6 +24,7 @@ from app.models.inventory import (
 from app.schemas.inventory import (
     AdminPropertyListingDetail,
     AdminPropertyListingSummary,
+    AdminUnitListingOption,
     BlockCreate,
     BlockRead,
     BlockUpdate,
@@ -733,13 +734,58 @@ def list_listings(
     return Paginated(items=[_to_admin_listing_summary(r) for r in rows], total=total)
 
 
+@router.get("/listings/unit-options", response_model=Paginated[AdminUnitListingOption])
+def list_unit_options_for_listing(
+    company_id: UUID,
+    db: Session = Depends(get_db),
+    without_listing: bool = True,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(200, ge=1, le=200),
+) -> Paginated[AdminUnitListingOption]:
+    q = (
+        db.query(PropertyUnit, Block, Project, UnitType)
+        .join(Block, PropertyUnit.block_id == Block.id)
+        .join(Project, Block.project_id == Project.id)
+        .join(UnitType, PropertyUnit.unit_type_id == UnitType.id)
+        .filter(Project.company_id == company_id)
+    )
+    if without_listing:
+        q = q.outerjoin(PropertyListing, PropertyListing.unit_id == PropertyUnit.id).filter(
+            PropertyListing.id.is_(None)
+        )
+    total = q.count()
+    rows = (
+        q.order_by(Project.name, PropertyUnit.unit_number)
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+    items = [
+        AdminUnitListingOption(
+            id=unit.id,
+            unit_number=unit.unit_number,
+            floor_number=unit.floor_number,
+            status=unit.status,
+            project_id=project.id,
+            project_name=project.name,
+            project_slug=project.slug,
+            block_name=block.name,
+            unit_type_name=ut.name,
+            bedrooms=ut.bedrooms,
+        )
+        for unit, block, project, ut in rows
+    ]
+    return Paginated(items=items, total=total)
+
+
 @router.post("/listings", response_model=PropertyListingRead, status_code=status.HTTP_201_CREATED)
 def create_listing(
     body: PropertyListingCreate,
     db: Session = Depends(get_db),
     admin: User = Depends(get_current_active_user),
 ) -> PropertyListingRead:
-    if db.query(PropertyUnit).filter(PropertyUnit.id == body.unit_id).first() is None:
+    unit = db.query(PropertyUnit).filter(PropertyUnit.id == body.unit_id).first()
+    if unit is None:
         raise _not_found("Unit")
     if body.slug:
         slug = slugify(body.slug, max_length=480)
@@ -760,6 +806,34 @@ def create_listing(
         listing_metadata=body.listing_metadata,
     )
     db.add(row)
+    db.flush()
+    location_kind = body.location_kind
+    location_id = body.location_id
+    if (location_kind is None) ^ (location_id is None):
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={
+                "code": "INVALID_LOCATION",
+                "message": "location_kind and location_id must be sent together",
+            },
+        )
+    if location_kind is not None and location_id is not None:
+        try:
+            reassign_listing_location(
+                db,
+                row,
+                location_kind=location_kind,
+                location_id=location_id.strip(),
+            )
+        except ListingLocationError as exc:
+            db.rollback()
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail={"code": exc.code, "message": exc.message},
+            ) from exc
+    if unit.status == "draft":
+        unit.status = "available"
     try:
         db.commit()
     except IntegrityError:

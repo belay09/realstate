@@ -13,6 +13,7 @@ import type {
   Paginated,
   PropertyImage,
 } from '../../api/types'
+import { AdminCreateListingModal } from '../../components/admin/AdminCreateListingModal'
 import { AdminPhotoUploadField } from '../../components/admin/AdminPhotoUploadField'
 import { AdminPropertyLocationVideoTab } from '../../components/admin/AdminPropertyLocationVideoTab'
 import { AdminCompanySelect } from '../../components/AdminCompanySelect'
@@ -97,6 +98,7 @@ export function AdminPropertyListingsPage() {
   const [publicOnly, setPublicOnly] = useState<'all' | 'public' | 'hidden'>('all')
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editTab, setEditTab] = useState<EditTab>('basics')
+  const [showCreate, setShowCreate] = useState(false)
 
   const companies = useQuery({
     queryKey: ['admin', 'companies'],
@@ -188,6 +190,14 @@ export function AdminPropertyListingsPage() {
             View on site
           </Link>
         ) : null}
+        <button
+          type="button"
+          className="btn-primary text-sm"
+          disabled={!companyId}
+          onClick={() => setShowCreate(true)}
+        >
+          Add listing
+        </button>
       </div>
 
       {listings.isLoading ? <p className="text-sm text-stone-500">Loading listings…</p> : null}
@@ -196,9 +206,14 @@ export function AdminPropertyListingsPage() {
       ) : null}
 
       {listings.data && listings.data.total === 0 ? (
-        <p className="text-sm text-stone-500">
-          No listings found. Run the Temer seed script if this is a fresh database.
-        </p>
+        <div className="rounded-lg border border-dashed border-stone-300 bg-stone-50 p-6 text-sm text-stone-600 dark:border-stone-700 dark:bg-stone-900/40 dark:text-stone-400">
+          <p className="font-medium text-stone-800 dark:text-stone-200">No listings yet</p>
+          <p className="mt-2">
+            Click <strong>Add listing</strong> to create a home for this company. You need at least one{' '}
+            <strong>unit type</strong> (from seed data or API). If you only have location pages, pick an
+            active location and we will create the development project automatically.
+          </p>
+        </div>
       ) : null}
 
       {listings.data && listings.data.total > 0 ? (
@@ -275,6 +290,18 @@ export function AdminPropertyListingsPage() {
             {listings.data.total} listing{listings.data.total === 1 ? '' : 's'}
           </p>
         </div>
+      ) : null}
+
+      {showCreate && companyId ? (
+        <AdminCreateListingModal
+          companyId={companyId}
+          onClose={() => setShowCreate(false)}
+          onCreated={(id) => {
+            setShowCreate(false)
+            setEditingId(id)
+            setEditTab('images')
+          }}
+        />
       ) : null}
 
       {editingId ? (

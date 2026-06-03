@@ -77,6 +77,19 @@ export type ListingMetadata = {
   map: { latitude: number; longitude: number; label?: string | null } | null
 }
 
+export type AdminUnitListingOption = {
+  id: string
+  unit_number: string
+  floor_number: number | null
+  status: string
+  project_id: string
+  project_name: string
+  project_slug: string
+  block_name: string
+  unit_type_name: string
+  bedrooms: number | null
+}
+
 export type AdminPropertyListingSummary = {
   id: string
   title: string

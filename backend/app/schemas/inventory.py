@@ -205,6 +205,8 @@ class PropertyListingCreate(BaseModel):
     is_featured: bool = False
     is_public: bool = False
     listing_metadata: dict | None = None
+    location_kind: Literal["apartment", "shop"] | None = None
+    location_id: str | None = Field(default=None, max_length=255)
 
 
 class PropertyListingUpdate(BaseModel):
@@ -236,6 +238,21 @@ class PropertyListingRead(BaseModel):
     listing_metadata: dict | None = None
     created_at: datetime
     updated_at: datetime
+
+
+class AdminUnitListingOption(BaseModel):
+    """Unit available when creating a property listing in admin."""
+
+    id: UUID
+    unit_number: str
+    floor_number: int | None
+    status: str
+    project_id: UUID
+    project_name: str
+    project_slug: str
+    block_name: str
+    unit_type_name: str
+    bedrooms: int | None
 
 
 class AdminPropertyListingSummary(BaseModel):
