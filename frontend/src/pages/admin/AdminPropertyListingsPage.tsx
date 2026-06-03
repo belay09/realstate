@@ -1,11 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 
 import { api } from '../../api/client'
 import type {
+  AdminLocationContent,
   AdminPropertyListingDetail,
   AdminPropertyListingSummary,
   ListingMetadata,
@@ -16,6 +17,8 @@ import { AdminPhotoUploadField } from '../../components/admin/AdminPhotoUploadFi
 import { AdminPropertyLocationVideoTab } from '../../components/admin/AdminPropertyLocationVideoTab'
 import { AdminCompanySelect } from '../../components/AdminCompanySelect'
 import { TEMER_PARTNER } from '../../content/partners'
+
+type LocationKind = 'apartment' | 'shop'
 
 type EditTab = 'basics' | 'details' | 'images' | 'video'
 
@@ -138,8 +141,13 @@ export function AdminPropertyListingsPage() {
       <div>
         <h1 className="text-2xl font-semibold text-stone-900 dark:text-stone-50">Property listings</h1>
         <p className="mt-2 text-sm text-stone-600 dark:text-stone-400">
-          Manage homes shown on the public site — titles, photos, detail tabs, and visibility. Temer
-          cards and listing pages read directly from this data (no pricing tables required).
+          Manage homes shown on the public site — titles, photos, detail tabs, and visibility. Each
+          listing is linked to a <strong>development (project)</strong> such as Kazanchis or CMC; see
+          the Location column and the Basics tab when editing. Use{' '}
+          <Link to="/admin/listings" className="font-medium text-brand-700 underline dark:text-brand-300">
+            Location pages
+          </Link>{' '}
+          for zone hero, video, and description (not for assigning homes).
         </p>
       </div>
 
@@ -295,11 +303,23 @@ function ListingEditModal({
     },
   })
 
+  const locationPages = useQuery({
+    queryKey: ['admin', 'location-content', 'all'],
+    queryFn: async () => {
+      const { data } = await api.get<Paginated<AdminLocationContent>>('/admin/location-content', {
+        params: { limit: 200 },
+      })
+      return data
+    },
+  })
+
   const [title, setTitle] = useState('')
   const [slug, setSlug] = useState('')
   const [description, setDescription] = useState('')
   const [city, setCity] = useState('')
   const [area, setArea] = useState('')
+  const [locationKind, setLocationKind] = useState<LocationKind>('apartment')
+  const [locationId, setLocationId] = useState('')
   const [isPublic, setIsPublic] = useState(true)
   const [isFeatured, setIsFeatured] = useState(false)
   const [metadata, setMetadata] = useState<ListingMetadata>(EMPTY_METADATA)
@@ -315,6 +335,16 @@ function ListingEditModal({
   const [mapLabel, setMapLabel] = useState('')
   const [newImageUrl, setNewImageUrl] = useState('')
 
+  const activeLocations = useMemo(
+    () => (locationPages.data?.items ?? []).filter((row) => row.is_public),
+    [locationPages.data?.items],
+  )
+
+  const locationOptions = useMemo(
+    () => activeLocations.filter((row) => row.kind === locationKind),
+    [activeLocations, locationKind],
+  )
+
   useEffect(() => {
     if (!detail.data) return
     const d = detail.data
@@ -323,6 +353,8 @@ function ListingEditModal({
     setDescription(d.description ?? '')
     setCity(d.city ?? '')
     setArea(d.area ?? '')
+    setLocationKind(d.location_kind === 'shop' ? 'shop' : 'apartment')
+    setLocationId(d.location_id ?? d.project_slug ?? '')
     setIsPublic(d.is_public)
     setIsFeatured(d.is_featured ?? false)
     const meta = metadataFromDetail(d)
@@ -348,7 +380,7 @@ function ListingEditModal({
           ? { latitude: lat, longitude: lng, label: mapLabel.trim() || title.trim() || null }
           : null
       const listing_metadata: ListingMetadata = {
-        property_kind: metadata.property_kind,
+        property_kind: locationKind === 'shop' ? 'commercial' : 'residential',
         external_property_id: metadata.external_property_id,
         specs: rowsToSpecs(specRows),
         features: {
@@ -368,6 +400,8 @@ function ListingEditModal({
         is_public: isPublic,
         is_featured: isFeatured,
         listing_metadata,
+        location_kind: locationKind,
+        location_id: locationId.trim(),
       })
     },
     onSuccess: () => {
@@ -476,6 +510,75 @@ function ListingEditModal({
 
           {tab === 'basics' && detail.data ? (
             <div className="space-y-4">
+              <div className="rounded-lg border border-stone-200 bg-stone-50 px-4 py-3 dark:border-stone-800 dark:bg-stone-900/50">
+                <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
+                  Location on site
+                </p>
+                <div className="mt-3 grid gap-4 sm:grid-cols-2">
+                  <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
+                    Type
+                    <select
+                      className="input mt-1 w-full"
+                      value={locationKind}
+                      onChange={(e) => {
+                        const next = e.target.value as LocationKind
+                        setLocationKind(next)
+                        const opts = activeLocations.filter((row) => row.kind === next)
+                        if (opts[0]) setLocationId(opts[0].location_id)
+                      }}
+                    >
+                      <option value="apartment">Apartment location</option>
+                      <option value="shop">Shop location</option>
+                    </select>
+                  </label>
+                  <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
+                    Active location
+                    <select
+                      className="input mt-1 w-full"
+                      value={locationId}
+                      onChange={(e) => setLocationId(e.target.value)}
+                      disabled={locationOptions.length === 0}
+                    >
+                      {locationOptions.length === 0 ? (
+                        <option value="">No active locations — add one under Location pages</option>
+                      ) : (
+                        locationOptions.map((row) => (
+                          <option key={row.id} value={row.location_id}>
+                            {row.title} ({row.location_id})
+                          </option>
+                        ))
+                      )}
+                    </select>
+                  </label>
+                </div>
+                <p className="mt-2 text-xs text-stone-500">
+                  Only locations marked <strong>Active</strong> in{' '}
+                  <Link to="/admin/listings" className="font-medium text-brand-700 underline dark:text-brand-300">
+                    Location pages
+                  </Link>{' '}
+                  appear here. Save to move this listing to that zone.
+                </p>
+                {locationKind === 'apartment' && locationId ? (
+                  <Link
+                    to={`/apartments/${locationId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-block text-xs font-semibold text-brand-700 underline dark:text-brand-300"
+                  >
+                    Preview apartment location page ↗
+                  </Link>
+                ) : null}
+                {locationKind === 'shop' && locationId ? (
+                  <Link
+                    to={`/shops/${locationId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-block text-xs font-semibold text-brand-700 underline dark:text-brand-300"
+                  >
+                    Preview shop location page ↗
+                  </Link>
+                ) : null}
+              </div>
               <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
                 Title
                 <input className="input mt-1 w-full" value={title} onChange={(e) => setTitle(e.target.value)} />
@@ -496,10 +599,12 @@ function ListingEditModal({
                 <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
                   City
                   <input className="input mt-1 w-full" value={city} onChange={(e) => setCity(e.target.value)} />
+                  <span className="mt-1 block font-normal text-stone-500">Display label only — does not change location.</span>
                 </label>
                 <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
                   Area
                   <input className="input mt-1 w-full" value={area} onChange={(e) => setArea(e.target.value)} />
+                  <span className="mt-1 block font-normal text-stone-500">Display label only — does not change location.</span>
                 </label>
               </div>
               <div className="flex flex-wrap gap-6">
@@ -525,12 +630,15 @@ function ListingEditModal({
                 Property kind
                 <select
                   className="input mt-1"
-                  value={metadata.property_kind}
-                  onChange={(e) => setMetadata((m) => ({ ...m, property_kind: e.target.value }))}
+                  value={locationKind === 'shop' ? 'commercial' : 'residential'}
+                  disabled
                 >
                   <option value="residential">Residential</option>
                   <option value="commercial">Commercial</option>
                 </select>
+                <span className="mt-1 block font-normal text-stone-500">
+                  Set automatically from Type above.
+                </span>
               </label>
 
               <div className="space-y-2">
@@ -677,7 +785,7 @@ function ListingEditModal({
             <button
               type="button"
               className="btn-primary"
-              disabled={saveListing.isPending || !detail.data}
+              disabled={saveListing.isPending || !detail.data || !locationId.trim()}
               onClick={() => saveListing.mutate()}
             >
               {saveListing.isPending ? 'Saving…' : 'Save changes'}

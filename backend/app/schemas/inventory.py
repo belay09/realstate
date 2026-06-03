@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from decimal import Decimal
+from typing import Literal
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -215,6 +216,8 @@ class PropertyListingUpdate(BaseModel):
     is_featured: bool | None = None
     is_public: bool | None = None
     listing_metadata: dict | None = None
+    location_kind: Literal["apartment", "shop"] | None = None
+    location_id: str | None = Field(default=None, max_length=255)
 
 
 class PropertyListingRead(BaseModel):
@@ -283,6 +286,8 @@ class AdminPropertyListingDetail(PropertyListingRead):
     project_name: str
     project_slug: str
     bedrooms: int | None
+    location_kind: str | None = None
+    location_id: str | None = None
     images: list[PropertyImageRead]
 
 

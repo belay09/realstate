@@ -108,6 +108,8 @@ export type AdminPropertyListingDetail = PropertyListing & {
   project_name: string
   project_slug: string
   bedrooms: number | null
+  location_kind?: 'apartment' | 'shop' | null
+  location_id?: string | null
   images: PropertyImage[]
   created_at: string
   updated_at: string

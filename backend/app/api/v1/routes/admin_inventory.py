@@ -55,6 +55,11 @@ from app.schemas.inventory import (
     UnitTypeRead,
     UnitTypeUpdate,
 )
+from app.services.listing_location_service import (
+    ListingLocationError,
+    infer_listing_location,
+    reassign_listing_location,
+)
 from app.shared.slug import slugify, unique_slug_candidate
 
 router = APIRouter(dependencies=[Depends(require_roles("admin"))])
@@ -673,6 +678,7 @@ def _to_admin_listing_detail(listing: PropertyListing) -> AdminPropertyListingDe
     project = unit.block.project
     company = project.company
     images = sorted(listing.images, key=lambda i: (not i.is_primary, i.sort_order, str(i.id)))
+    location_kind, location_id = infer_listing_location(listing, project=project)
     base = PropertyListingRead.model_validate(listing)
     return AdminPropertyListingDetail(
         **base.model_dump(),
@@ -681,6 +687,8 @@ def _to_admin_listing_detail(listing: PropertyListing) -> AdminPropertyListingDe
         project_name=project.name,
         project_slug=project.slug,
         bedrooms=unit.unit_type.bedrooms,
+        location_kind=location_kind,
+        location_id=location_id,
         images=[PropertyImageRead.model_validate(i) for i in images],
     )
 
@@ -775,10 +783,29 @@ def update_listing(
     body: PropertyListingUpdate,
     db: Session = Depends(get_db),
 ) -> AdminPropertyListingDetail:
-    row = db.query(PropertyListing).filter(PropertyListing.id == listing_id).first()
+    row = (
+        db.query(PropertyListing)
+        .options(
+            selectinload(PropertyListing.unit)
+            .selectinload(PropertyUnit.block)
+            .selectinload(Block.project)
+        )
+        .filter(PropertyListing.id == listing_id)
+        .first()
+    )
     if row is None:
         raise _not_found("Listing")
     data = body.model_dump(exclude_unset=True)
+    location_kind = data.pop("location_kind", None)
+    location_id = data.pop("location_id", None)
+    if (location_kind is None) ^ (location_id is None):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={
+                "code": "INVALID_LOCATION",
+                "message": "location_kind and location_id must be sent together",
+            },
+        )
     if "slug" in data and data["slug"] is not None:
         data["slug"] = slugify(data["slug"], max_length=480)
         taken = (
@@ -790,12 +817,24 @@ def update_listing(
             raise _conflict("Listing slug already in use")
     for k, v in data.items():
         setattr(row, k, v)
+    if location_kind is not None and location_id is not None:
+        try:
+            reassign_listing_location(
+                db,
+                row,
+                location_kind=location_kind,
+                location_id=location_id,
+            )
+        except ListingLocationError as exc:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail={"code": exc.code, "message": exc.message},
+            ) from exc
     try:
         db.commit()
     except IntegrityError:
         db.rollback()
         raise _conflict("Could not update listing") from None
-    db.refresh(row)
     row = _admin_listing_base_query(db).filter(PropertyListing.id == listing_id).first()
     assert row is not None
     return _to_admin_listing_detail(row)
