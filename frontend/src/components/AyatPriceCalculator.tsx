@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import {
@@ -13,8 +13,11 @@ import type { ListingCalculatorPreset } from '../lib/listingCalculatorPreset'
 import {
   calculateCommercial,
   calculateResidential,
+  calculatorProjectIdFromSlug,
+  resolveCalculatorProject,
   type CalculatorResult,
 } from '../lib/ayatCalculator'
+import type { CalculatorRuntimeConfig } from '../lib/calculatorRuntime'
 import {
   formatBedroomCount,
   formatFloorBandLabel,
@@ -30,6 +33,8 @@ const SHOP_FLOORS: ShopFloor[] = ['GF', '1F', '2F', '3F']
 
 export type AyatPriceCalculatorProps = {
   variant?: 'page' | 'embedded'
+  /** Wizard with large cards, or compact dropdowns with defaults on load */
+  layout?: 'wizard' | 'compact'
   listingPreset?: ListingCalculatorPreset | null
   listingTitle?: string
   /** Pre-select apartment or shop (e.g. from /calculator?kind=shop) */
@@ -38,6 +43,49 @@ export type AyatPriceCalculatorProps = {
   initialShopZoneId?: string | null
   /** Pre-select apartment project on location pages (e.g. cmc-extension) */
   initialResidentialProjectId?: string | null
+}
+
+function defaultAreaSqm(config: CalculatorRuntimeConfig, bedrooms: 1 | 2 | 3): number {
+  const areas = config.bedroomAreaOptions[bedrooms]
+  const idx = Math.min(1, Math.max(0, areas.length - 1))
+  return areas[idx] ?? areas[0]
+}
+
+function defaultFloor(project: ReturnType<typeof resolveCalculatorProject>): number {
+  if (!project) return 5
+  const floors = floorOptionsForProject(project)
+  return floors[Math.floor(floors.length / 2)] ?? floors[0]
+}
+
+function FormSelect({
+  id,
+  label,
+  value,
+  onChange,
+  children,
+  disabled,
+}: {
+  id: string
+  label: string
+  value: string | number
+  onChange: (value: string) => void
+  children: React.ReactNode
+  disabled?: boolean
+}) {
+  return (
+    <label className="flex flex-col gap-1.5" htmlFor={id}>
+      <span className="text-xs font-medium text-fg-muted">{label}</span>
+      <select
+        id={id}
+        value={value}
+        disabled={disabled}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm font-medium text-fg shadow-sm transition focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {children}
+      </select>
+    </label>
+  )
 }
 
 function PropertyKindTabs({
@@ -137,19 +185,29 @@ function CalculatorResults({
   kind,
   canShowResult,
   step5Done,
+  compact,
 }: {
   result: CalculatorResult | null
   kind: PropertyKind | null
   canShowResult: boolean
   step5Done: boolean
+  compact?: boolean
 }) {
   const { t } = useTranslation()
 
   return (
-    <div className="card border-brand-200/60 bg-gradient-to-b from-brand-50/80 to-surface p-6 dark:border-brand-800/40 dark:from-brand-950/50">
+    <div
+      className={
+        compact
+          ? 'rounded-2xl border border-brand-200/70 bg-gradient-to-b from-brand-50/90 to-surface p-5 shadow-sm dark:border-brand-800/50 dark:from-brand-950/60'
+          : 'card border-brand-200/60 bg-gradient-to-b from-brand-50/80 to-surface p-6 dark:border-brand-800/40 dark:from-brand-950/50'
+      }
+    >
       <h3 className="text-lg font-bold text-fg">{t('calculator.resultTitle')}</h3>
       {!canShowResult && (
-        <p className="mt-4 text-sm text-fg-muted">{t('calculator.resultPending')}</p>
+        <p className="mt-4 text-sm text-fg-muted">
+          {compact ? t('calculator.compactAdjustHint') : t('calculator.resultPending')}
+        </p>
       )}
       {canShowResult && result && (
         <dl className="mt-5 space-y-4 text-sm">
@@ -312,6 +370,7 @@ function selectKind(
 
 export function AyatPriceCalculator({
   variant = 'page',
+  layout,
   listingPreset = null,
   listingTitle,
   initialKind = null,
@@ -321,22 +380,33 @@ export function AyatPriceCalculator({
   const { t } = useTranslation()
   const { data: config, isLoading: configLoading, isError: configError } = useCalculatorConfig()
   const embedded = variant === 'embedded'
+  const isCompact = layout === 'compact' || (layout !== 'wizard' && !embedded)
+  const lockResidentialProject = Boolean(initialResidentialProjectId)
   const preset = listingPreset ?? undefined
+  const defaultsApplied = useRef(false)
 
   const [kind, setKind] = useState<PropertyKind | null>(
-    preset?.propertyKind ?? initialKind ?? null,
+    preset?.propertyKind ??
+      initialKind ??
+      (initialResidentialProjectId ? 'residential' : null),
   )
   const [projectId, setProjectId] = useState<string | null>(
     preset?.projectId ?? initialResidentialProjectId ?? null,
   )
   const [completion, setCompletion] = useState<CompletionKind>(preset?.completion ?? 'unstarted')
-  const [bedrooms, setBedrooms] = useState<1 | 2 | 3 | null>(preset?.bedrooms ?? null)
-  const [finish, setFinish] = useState<FinishKind | null>(preset?.finish ?? null)
+  const [bedrooms, setBedrooms] = useState<1 | 2 | 3 | null>(
+    preset?.bedrooms ?? (initialResidentialProjectId ? 3 : null),
+  )
+  const [finish, setFinish] = useState<FinishKind | null>(
+    preset?.finish ?? (initialResidentialProjectId ? 'semi-finished' : null),
+  )
   const [areaSqm, setAreaSqm] = useState<number | null>(preset?.areaSqm ?? null)
   const [floor, setFloor] = useState<number | null>(preset?.floor ?? null)
   const [shopZoneId, setShopZoneId] = useState<string | null>(null)
   const [shopFloor, setShopFloor] = useState<ShopFloor | null>(null)
-  const [tierId, setTierId] = useState<string>('100')
+  const [tierId, setTierId] = useState<string>(
+    preset ? '100' : initialResidentialProjectId && variant === 'page' ? '40' : '100',
+  )
 
   useEffect(() => {
     if (!preset && initialKind && kind == null) {
@@ -362,9 +432,60 @@ export function AyatPriceCalculator({
     }
   }, [preset, initialShopZoneId, config.commercialZones])
 
-  const project = config.residentialProjects.find((p) => p.id === projectId)
+  useEffect(() => {
+    if (!isCompact || preset || configLoading || defaultsApplied.current) return
+
+    const applyResidential = (pid: string) => {
+      const resolved = calculatorProjectIdFromSlug(config, pid)
+      const proj = resolveCalculatorProject(config, resolved)
+      if (!proj) return
+      setKind('residential')
+      setProjectId(resolved)
+      setBedrooms(3)
+      setFinish('semi-finished')
+      setAreaSqm(defaultAreaSqm(config, 3))
+      setFloor(defaultFloor(proj))
+      setCompletion('unstarted')
+      setTierId('40')
+    }
+
+    const applyCommercial = (zoneId: string) => {
+      const zone = config.commercialZones.find((z) => z.id === zoneId)
+      if (!zone) return
+      setKind('commercial')
+      setShopZoneId(zoneId)
+      const first = SHOP_FLOORS.find((f) => zone.floors[f] > 0) ?? 'GF'
+      setShopFloor(first)
+      const presets = config.commercialAreaPresets
+      setAreaSqm(presets[Math.min(2, presets.length - 1)] ?? presets[0] ?? 50)
+      setTierId('100')
+    }
+
+    if (initialResidentialProjectId) {
+      applyResidential(initialResidentialProjectId)
+    } else if (initialKind === 'commercial' && initialShopZoneId) {
+      applyCommercial(initialShopZoneId)
+    } else if (initialKind === 'commercial' && config.commercialZones[0]) {
+      applyCommercial(config.commercialZones[0].id)
+    } else if (initialKind === 'residential' || initialKind == null) {
+      const first = config.residentialProjects[0]
+      if (first) applyResidential(first.id)
+    }
+
+    defaultsApplied.current = true
+  }, [
+    isCompact,
+    preset,
+    configLoading,
+    config,
+    initialResidentialProjectId,
+    initialKind,
+    initialShopZoneId,
+  ])
+
+  const project = projectId ? resolveCalculatorProject(config, projectId) : undefined
   const presetProject = preset
-    ? config.residentialProjects.find((p) => p.id === preset.projectId)
+    ? resolveCalculatorProject(config, preset.projectId)
     : null
   const selectedShopZone = config.commercialZones.find((z) => z.id === shopZoneId)
   const shopFloorsAvailable = SHOP_FLOORS.filter(
@@ -423,8 +544,215 @@ export function AyatPriceCalculator({
   const areaOptions =
     bedrooms != null ? config.bedroomAreaOptions[bedrooms] : config.commercialAreaPresets
 
-  const showFullWizard = !embedded
+  const showFullWizard = !embedded && !isCompact
   let stepCounter = 0
+
+  const compactForm = isCompact && (
+    <div className="rounded-2xl border border-border bg-surface p-5 shadow-sm sm:p-6">
+      <p className="mb-5 text-sm text-fg-muted">{t('calculator.compactAdjustHint')}</p>
+
+      {!lockResidentialProject && !initialKind && (
+        <div className="mb-5">
+          <PropertyKindTabs
+            kind={kind}
+            onSelect={(next) =>
+              selectKind(next, {
+                setKind,
+                setProjectId,
+                setShopZoneId,
+                setShopFloor,
+                setBedrooms,
+                setFinish,
+                setFloor,
+                setAreaSqm,
+              })
+            }
+          />
+        </div>
+      )}
+
+      {lockResidentialProject && project && (
+        <p className="mb-4 text-sm font-semibold text-fg">
+          {t(project.nameKey)}
+          <span className="ml-2 font-normal text-fg-muted">· {t(project.areaLabelKey)}</span>
+        </p>
+      )}
+
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {kind === 'residential' && !lockResidentialProject && (
+          <FormSelect
+            id="calc-area"
+            label={t('calculator.compactFieldArea')}
+            value={projectId ?? ''}
+            onChange={(v) => {
+              setProjectId(v)
+              const proj = resolveCalculatorProject(config, v)
+              setFloor(proj ? defaultFloor(proj) : null)
+            }}
+          >
+            <option value="" disabled>
+              —
+            </option>
+            {config.residentialProjects.map((p) => (
+              <option key={p.id} value={p.id}>
+                {t(p.nameKey)}
+              </option>
+            ))}
+          </FormSelect>
+        )}
+
+        {kind === 'commercial' && (
+          <FormSelect
+            id="calc-shop-zone"
+            label={t('calculator.compactFieldShopZone')}
+            value={shopZoneId ?? ''}
+            onChange={(v) => {
+              setShopZoneId(v)
+              const zone = config.commercialZones.find((z) => z.id === v)
+              const first = zone
+                ? SHOP_FLOORS.find((f) => zone.floors[f] > 0)
+                : undefined
+              setShopFloor(first ?? null)
+            }}
+          >
+            <option value="" disabled>
+              —
+            </option>
+            {config.commercialZones.map((z) => (
+              <option key={z.id} value={z.id}>
+                {t(z.labelKey)}
+              </option>
+            ))}
+          </FormSelect>
+        )}
+
+        {kind === 'residential' && project?.supportsCompletionChoice && (
+          <FormSelect
+            id="calc-completion"
+            label={t('calculator.compactFieldCompletion')}
+            value={completion}
+            onChange={(v) => setCompletion(v as CompletionKind)}
+          >
+            <option value="unstarted">{t('calculator.completionUnstarted')}</option>
+            <option value="near_completion">{t('calculator.completionNear')}</option>
+          </FormSelect>
+        )}
+
+        {kind === 'residential' && (
+          <>
+            <FormSelect
+              id="calc-bedrooms"
+              label={t('calculator.compactFieldBedrooms')}
+              value={bedrooms ?? ''}
+              onChange={(v) => {
+                const b = Number(v) as 1 | 2 | 3
+                setBedrooms(b)
+                setAreaSqm(defaultAreaSqm(config, b))
+              }}
+            >
+              {([1, 2, 3] as const).map((b) => (
+                <option key={b} value={b}>
+                  {formatBedroomCount(b, t)}
+                </option>
+              ))}
+            </FormSelect>
+            <FormSelect
+              id="calc-finish"
+              label={t('calculator.compactFieldFinish')}
+              value={finish ?? ''}
+              onChange={(v) => setFinish(v as FinishKind)}
+            >
+              <option value="semi-finished">{t('calculator.finishSemi')}</option>
+              <option value="regular-finished">{t('calculator.finishRegular')}</option>
+            </FormSelect>
+          </>
+        )}
+
+        {kind === 'commercial' && shopZoneId && (
+          <FormSelect
+            id="calc-shop-floor"
+            label={t('calculator.compactFieldShopFloor')}
+            value={shopFloor ?? ''}
+            onChange={(v) => setShopFloor(v as ShopFloor)}
+          >
+            {(shopFloorsAvailable.length > 0 ? shopFloorsAvailable : SHOP_FLOORS).map((f) => (
+              <option
+                key={f}
+                value={f}
+                disabled={selectedShopZone != null && selectedShopZone.floors[f] === 0}
+              >
+                {t(`calculator.shopFloor.${f}`)}
+              </option>
+            ))}
+          </FormSelect>
+        )}
+
+        {kind && bedrooms != null && finish != null && kind === 'residential' && (
+          <FormSelect
+            id="calc-size"
+            label={t('calculator.compactFieldSize')}
+            value={areaSqm ?? ''}
+            onChange={(v) => setAreaSqm(Number(v))}
+          >
+            {areaOptions.map((a) => (
+              <option key={a} value={a}>
+                {formatSquareMeters(a, t)}
+              </option>
+            ))}
+          </FormSelect>
+        )}
+
+        {kind === 'commercial' && shopFloor && (
+          <FormSelect
+            id="calc-shop-size"
+            label={t('calculator.compactFieldSize')}
+            value={areaSqm ?? ''}
+            onChange={(v) => setAreaSqm(Number(v))}
+          >
+            {config.commercialAreaPresets.map((a) => (
+              <option key={a} value={a}>
+                {formatSquareMeters(a, t)}
+              </option>
+            ))}
+          </FormSelect>
+        )}
+
+        {kind === 'residential' && project && areaSqm != null && (
+          <FormSelect
+            id="calc-floor"
+            label={t('calculator.compactFieldFloor')}
+            value={floor ?? ''}
+            onChange={(v) => setFloor(Number(v))}
+          >
+            {floorOptionsForProject(project).map((f) => (
+              <option key={f} value={f}>
+                {t('calculator.floorN', { n: f })}
+              </option>
+            ))}
+          </FormSelect>
+        )}
+
+        {kind && step5Done && (
+          <FormSelect
+            id="calc-tier"
+            label={t('calculator.compactFieldPayment')}
+            value={tierId}
+            onChange={setTierId}
+          >
+            {config.downPaymentTiers.map((tier) => (
+              <option key={tier.id} value={tier.id}>
+                {t(tier.labelKey)} — {t('calculator.tierDiscount', { percent: tier.clientDiscountPercent })}
+              </option>
+            ))}
+          </FormSelect>
+        )}
+      </div>
+
+      <p className="mt-4 rounded-lg border border-amber-200/70 bg-amber-50/80 px-3 py-2 text-xs text-amber-950 dark:border-amber-900/40 dark:bg-amber-950/30 dark:text-amber-100">
+        {t('calculator.compactDisclaimer')}
+      </p>
+    </div>
+  )
   const nextStep = () => {
     stepCounter += 1
     return stepCounter
@@ -526,6 +854,7 @@ export function AyatPriceCalculator({
 
   const wizardColumn = (
     <div className="space-y-8">
+      {isCompact && compactForm}
       {showFullWizard && (
         <>
           {embedded ? (
@@ -777,10 +1106,23 @@ export function AyatPriceCalculator({
   return (
     <div
       className={
-        embedded ? 'space-y-6 text-left' : 'mx-auto max-w-5xl space-y-10 text-left'
+        embedded
+          ? 'space-y-6 text-left'
+          : isCompact
+            ? 'mx-auto max-w-5xl space-y-6 text-left'
+            : 'mx-auto max-w-5xl space-y-10 text-left'
       }
     >
-      {!embedded && (
+      {!embedded && isCompact && !lockResidentialProject && (
+        <header className="space-y-2">
+          <p className="text-eyebrow text-brand-700 dark:text-brand-300">{t('calculator.eyebrow')}</p>
+          <h1 className="text-2xl font-bold tracking-tight text-fg sm:text-3xl">
+            {t('calculator.title')}
+          </h1>
+        </header>
+      )}
+
+      {!embedded && !isCompact && (
         <header className="space-y-5">
           <div className="space-y-3">
             <p className="text-eyebrow text-brand-700 dark:text-brand-300">{t('calculator.eyebrow')}</p>
@@ -868,9 +1210,11 @@ export function AyatPriceCalculator({
         <p className="text-xs text-fg-muted">{t('calculator.liveRatesNote')}</p>
       ) : null}
 
-      <p className="rounded-lg border border-amber-200/80 bg-amber-50 px-4 py-3 text-sm text-amber-950 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-100">
-        {t('calculator.disclaimer')}
-      </p>
+      {!isCompact && (
+        <p className="rounded-lg border border-amber-200/80 bg-amber-50 px-4 py-3 text-sm text-amber-950 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-100">
+          {t('calculator.disclaimer')}
+        </p>
+      )}
 
       {embedded ? (
         <div className="space-y-6">
@@ -880,7 +1224,21 @@ export function AyatPriceCalculator({
             kind={kind}
             canShowResult={Boolean(canShowResult)}
             step5Done={step5Done}
+            compact={isCompact}
           />
+        </div>
+      ) : isCompact ? (
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr),min(22rem,100%)] lg:items-start">
+          <aside className="order-2 lg:order-1 lg:sticky lg:top-24 lg:self-start">
+            <CalculatorResults
+              result={result}
+              kind={kind}
+              canShowResult={Boolean(canShowResult)}
+              step5Done={step5Done}
+              compact
+            />
+          </aside>
+          <div className="order-1 lg:order-2 lg:self-start">{wizardColumn}</div>
         </div>
       ) : (
         <div className="grid gap-10 lg:grid-cols-[1fr,min(22rem,100%)]">
@@ -896,7 +1254,7 @@ export function AyatPriceCalculator({
         </div>
       )}
 
-      {!embedded && (
+      {!embedded && !isCompact && (
         <section className="card space-y-4 p-6 text-sm text-fg-muted">
           <h2 className="text-base font-bold text-fg">{t('calculator.howItWorksTitle')}</h2>
           <ol className="list-decimal space-y-2 pl-5">

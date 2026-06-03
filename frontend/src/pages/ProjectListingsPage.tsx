@@ -199,6 +199,7 @@ export function ProjectListingsPage() {
             <div className="p-4 sm:p-6 md:p-8">
               <AyatPriceCalculator
                 variant="page"
+                layout="compact"
                 initialKind="residential"
                 initialResidentialProjectId={projectSlug}
               />

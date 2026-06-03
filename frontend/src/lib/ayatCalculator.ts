@@ -78,8 +78,30 @@ export function getTier(config: CalculatorRuntimeConfig, tierId: string): DownPa
   return config.downPaymentTiers.find((t) => t.id === tierId)
 }
 
+export function resolveCalculatorProject(
+  config: CalculatorRuntimeConfig,
+  projectId: string,
+) {
+  const direct = config.residentialProjects.find((p) => p.id === projectId)
+  if (direct) return direct
+  const strategyId = config.inventoryToStrategyLocation[projectId]
+  if (strategyId) {
+    return config.residentialProjects.find((p) => p.id === strategyId)
+  }
+  return undefined
+}
+
 export function getProject(config: CalculatorRuntimeConfig, projectId: string) {
-  return config.residentialProjects.find((p) => p.id === projectId)
+  return resolveCalculatorProject(config, projectId)
+}
+
+/** Map inventory project slug to calculator project id for dropdowns and pricing. */
+export function calculatorProjectIdFromSlug(
+  config: CalculatorRuntimeConfig,
+  slug: string,
+): string {
+  if (config.residentialProjects.some((p) => p.id === slug)) return slug
+  return config.inventoryToStrategyLocation[slug] ?? slug
 }
 
 export function getCommercialZone(
