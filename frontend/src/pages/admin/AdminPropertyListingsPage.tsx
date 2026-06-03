@@ -12,10 +12,12 @@ import type {
   Paginated,
   PropertyImage,
 } from '../../api/types'
+import { AdminPhotoUploadField } from '../../components/admin/AdminPhotoUploadField'
+import { AdminPropertyLocationVideoTab } from '../../components/admin/AdminPropertyLocationVideoTab'
 import { AdminCompanySelect } from '../../components/AdminCompanySelect'
 import { TEMER_PARTNER } from '../../content/partners'
 
-type EditTab = 'basics' | 'details' | 'images'
+type EditTab = 'basics' | 'details' | 'images' | 'video'
 
 type SpecRow = { key: string; value: string }
 
@@ -453,6 +455,9 @@ function ListingEditModal({
           <button type="button" className={tabClass('images')} onClick={() => onTabChange('images')}>
             Photos ({images.length})
           </button>
+          <button type="button" className={tabClass('video')} onClick={() => onTabChange('video')}>
+            Video
+          </button>
           {detail.data ? (
             <Link
               to={`/listings/${detail.data.slug}`}
@@ -593,6 +598,23 @@ function ListingEditModal({
 
           {tab === 'images' && detail.data ? (
             <div className="space-y-4">
+              <AdminPhotoUploadField
+                disabled={addImage.isPending}
+                buttonLabel="Upload & add photo"
+                onUploaded={async (url) => {
+                  await addImage.mutateAsync(url)
+                }}
+              />
+
+              <div className="relative py-1">
+                <div className="absolute inset-0 flex items-center" aria-hidden>
+                  <div className="w-full border-t border-stone-200 dark:border-stone-800" />
+                </div>
+                <p className="relative mx-auto w-fit bg-white px-2 text-[11px] text-stone-500 dark:bg-stone-950">
+                  or paste a URL
+                </p>
+              </div>
+
               <form
                 className="flex flex-wrap items-end gap-2"
                 onSubmit={(e) => {
@@ -612,12 +634,17 @@ function ListingEditModal({
                   />
                 </label>
                 <button type="submit" className="btn-secondary" disabled={addImage.isPending}>
-                  Add photo
+                  Add from URL
                 </button>
               </form>
 
+              <p className="text-xs text-stone-500 dark:text-stone-400">
+                The <strong>primary</strong> photo is shown on location layout cards and browse lists. Mark one
+                image as primary below.
+              </p>
+
               {images.length === 0 ? (
-                <p className="text-sm text-stone-500">No photos yet. The card thumbnail uses the primary image.</p>
+                <p className="text-sm text-stone-500">No photos yet — upload above or add a URL.</p>
               ) : (
                 <ul className="grid gap-3 sm:grid-cols-2">
                   {images.map((img) => (
@@ -633,9 +660,16 @@ function ListingEditModal({
               )}
             </div>
           ) : null}
+
+          {tab === 'video' && detail.data ? (
+            <AdminPropertyLocationVideoTab
+              projectSlug={detail.data.project_slug}
+              projectName={detail.data.project_name}
+            />
+          ) : null}
         </div>
 
-        {tab !== 'images' ? (
+        {tab !== 'images' && tab !== 'video' ? (
           <div className="flex justify-end gap-2 border-t border-stone-200 px-5 py-4 dark:border-stone-800">
             <button type="button" className="btn-secondary" onClick={onClose}>
               Cancel

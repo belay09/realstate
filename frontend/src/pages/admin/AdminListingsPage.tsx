@@ -424,7 +424,10 @@ export function AdminListingsPage() {
                   subtitle: createForm.subtitle,
                   description: createForm.description,
                   video_url: createForm.video_url,
-                  cards: createForm.cards.filter((c) => c.title.trim().length > 0),
+                  cards:
+                    createForm.kind === 'shop'
+                      ? createForm.cards.filter((c) => c.title.trim().length > 0)
+                      : [],
                   is_public: createForm.is_public,
                 })
                 for (const media of createPendingMedia) {
@@ -582,13 +585,19 @@ export function AdminListingsPage() {
                 onUploaded={(url) => setCreateForm((prev) => ({ ...prev, video_url: url }))}
               />
             </label>
-            <div className="md:col-span-2">
-              <CardEditor
-                cards={createForm.cards}
-                onChange={(cards) => setCreateForm((prev) => ({ ...prev, cards }))}
-                onNotify={pushToast}
-              />
-            </div>
+            {createForm.kind === 'shop' ? (
+              <div className="md:col-span-2">
+                <CardEditor
+                  cards={createForm.cards}
+                  onChange={(cards) => setCreateForm((prev) => ({ ...prev, cards }))}
+                  onNotify={pushToast}
+                />
+              </div>
+            ) : (
+              <p className="md:col-span-2 text-xs text-stone-500 dark:text-stone-400">
+                Apartment unit cards are added under <strong>Properties</strong>, not here.
+              </p>
+            )}
             {createSubmitError ? <p className="text-xs text-red-600 md:col-span-2">{createSubmitError}</p> : null}
             <label className="flex items-center gap-2 text-sm text-stone-700 dark:text-stone-300 md:col-span-2">
               <input
@@ -727,7 +736,9 @@ function LocationContentEditor({
               description: form.description,
               video_url: form.video_url,
               is_public: form.is_public,
-              cards: form.cards.filter((c) => c.title.trim().length > 0),
+              ...(content.kind === 'shop'
+                ? { cards: form.cards.filter((c) => c.title.trim().length > 0) }
+                : {}),
             })
           } catch (err) {
             onNotify('error', uploadErrorMessage(err))
@@ -800,13 +811,20 @@ function LocationContentEditor({
             onUploaded={(url) => setForm((prev) => ({ ...prev, video_url: url }))}
           />
         </label>
-        <div className="md:col-span-2">
-          <CardEditor
-            cards={form.cards}
-            onChange={(cards) => setForm((prev) => ({ ...prev, cards }))}
-            onNotify={onNotify}
-          />
-        </div>
+        {content.kind === 'shop' ? (
+          <div className="md:col-span-2">
+            <CardEditor
+              cards={form.cards}
+              onChange={(cards) => setForm((prev) => ({ ...prev, cards }))}
+              onNotify={onNotify}
+            />
+          </div>
+        ) : (
+          <p className="md:col-span-2 text-xs text-stone-500 dark:text-stone-400">
+            Unit cards for this zone are edited under <strong>Admin → Properties</strong> (one row per
+            home). This page is only for title, video, cover, and description.
+          </p>
+        )}
         <label className="flex items-center gap-2 text-sm text-stone-700 dark:text-stone-300 md:col-span-2">
           <input
             name="is_public"

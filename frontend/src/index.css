@@ -335,6 +335,111 @@
   .animate-fade-in {
     animation: fade-in 0.5s ease-out both;
   }
+
+  .reveal-pending {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+
+  .animate-reveal-up {
+    animation: reveal-up 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .animate-reveal-scale {
+    animation: reveal-scale 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .animate-reveal-fade {
+    animation: reveal-fade 0.75s ease-out both;
+  }
+
+  .animate-reveal-slide-right {
+    animation: reveal-slide-right 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .animate-hero-ken-burns {
+    animation: hero-ken-burns 22s ease-in-out infinite alternate;
+  }
+
+  .animate-hero-glow-drift {
+    animation: hero-glow-drift 8s ease-in-out infinite alternate;
+  }
+
+  .animate-hero-glow-drift-slow {
+    animation: hero-glow-drift 12s ease-in-out infinite alternate-reverse;
+  }
+
+  .animate-hero-content-in {
+    animation: hero-content-in 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .animate-bounce-soft {
+    animation: bounce-soft 2s ease-in-out infinite;
+  }
+
+  .animate-shine-sweep {
+    animation: shine-sweep 0.65s ease-out;
+  }
+
+  .location-card-shine {
+    @apply relative overflow-hidden;
+  }
+
+  .location-card-shine::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 40%,
+      rgba(255, 255, 255, 0.35) 50%,
+      transparent 60%
+    );
+    transform: translateX(-120%);
+    transition: transform 0.6s ease;
+    pointer-events: none;
+  }
+
+  .location-card-shine:hover::after {
+    transform: translateX(120%);
+  }
+
+  .ayat-page-mesh {
+    background-image:
+      radial-gradient(at 20% 0%, rgba(14, 165, 233, 0.12) 0, transparent 50%),
+      radial-gradient(at 80% 20%, rgba(139, 92, 246, 0.08) 0, transparent 45%),
+      radial-gradient(at 50% 100%, rgba(2, 132, 199, 0.06) 0, transparent 55%);
+  }
+
+  .calculator-panel-glow {
+    background: linear-gradient(
+      135deg,
+      rgba(14, 165, 233, 0.08) 0%,
+      transparent 40%,
+      rgba(139, 92, 246, 0.06) 100%
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-reveal-up,
+  .animate-reveal-scale,
+  .animate-reveal-fade,
+  .animate-reveal-slide-right,
+  .animate-hero-ken-burns,
+  .animate-hero-glow-drift,
+  .animate-hero-glow-drift-slow,
+  .animate-hero-content-in,
+  .animate-bounce-soft,
+  .reveal-pending {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .location-card-shine::after {
+    display: none;
+  }
 }
 
 @keyframes fade-in {
@@ -345,6 +450,89 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes reveal-scale {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes reveal-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes reveal-slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes hero-ken-burns {
+  from {
+    transform: scale(1.05);
+  }
+  to {
+    transform: scale(1.12);
+  }
+}
+
+@keyframes hero-glow-drift {
+  from {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.5;
+  }
+  to {
+    transform: translate(12px, -16px) scale(1.08);
+    opacity: 0.85;
+  }
+}
+
+@keyframes hero-content-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
   }
 }
 
