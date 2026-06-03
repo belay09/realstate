@@ -469,6 +469,16 @@ class PublicLocationVisibility(BaseModel):
     shop: dict[str, bool]
 
 
+class PublicLocationBrowseSummary(BaseModel):
+    """Title, description, and cover for location cards on /apartments and /shops."""
+
+    location_id: str
+    title: str
+    subtitle: str | None
+    description: str | None
+    cover_image_url: str | None = None
+
+
 class PublicHomeCard(BaseModel):
     card_key: str
     title: str

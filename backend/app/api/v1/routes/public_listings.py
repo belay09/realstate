@@ -28,6 +28,7 @@ from app.schemas.inventory import (
     PublicListingFilterOptions,
     PublicListingImage,
     PublicListingSummary,
+    PublicLocationBrowseSummary,
     PublicLocationContent,
     PublicLocationVisibility,
 )
@@ -228,13 +229,7 @@ def list_public_listings(
             .all()
         )
         for content in content_rows:
-            sorted_media = sorted(
-                content.media,
-                key=lambda m: (not m.is_primary, m.sort_order, m.id),
-            )
-            cover = next((m.url for m in sorted_media if m.media_type == "image"), None)
-            if not cover and sorted_media:
-                cover = sorted_media[0].url
+            cover = _location_content_cover_url(content)
             if cover:
                 location_cover_map[content.location_id] = cover
 
@@ -328,10 +323,56 @@ def get_public_listing(slug: str, db: Session = Depends(get_db)) -> PublicListin
     )
 
 
+def _location_content_cover_url(content: LocationContent) -> str | None:
+    sorted_media = sorted(
+        content.media,
+        key=lambda m: (not m.is_primary, m.sort_order, m.id),
+    )
+    cover = next((m.url for m in sorted_media if m.media_type == "image"), None)
+    if not cover and sorted_media:
+        cover = sorted_media[0].url
+    return cover
+
+
 @router.get("/location-content/visibility", response_model=PublicLocationVisibility)
 def get_public_location_visibility(db: Session = Depends(get_db)) -> PublicLocationVisibility:
     maps = load_location_visibility_maps(db)
     return PublicLocationVisibility(apartment=maps["apartment"], shop=maps["shop"])
+
+
+@router.get(
+    "/location-content/{kind}/summaries",
+    response_model=list[PublicLocationBrowseSummary],
+)
+def list_public_location_summaries(
+    kind: str,
+    db: Session = Depends(get_db),
+) -> list[PublicLocationBrowseSummary]:
+    if kind not in {"apartment", "shop"}:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"code": "BAD_REQUEST", "message": "kind must be apartment or shop"},
+        )
+    rows = (
+        db.query(LocationContent)
+        .options(selectinload(LocationContent.media))
+        .filter(
+            LocationContent.kind == kind,
+            LocationContent.is_public.is_(True),
+        )
+        .order_by(LocationContent.title)
+        .all()
+    )
+    return [
+        PublicLocationBrowseSummary(
+            location_id=row.location_id,
+            title=row.title,
+            subtitle=row.subtitle,
+            description=row.description,
+            cover_image_url=_location_content_cover_url(row),
+        )
+        for row in rows
+    ]
 
 
 @router.get(

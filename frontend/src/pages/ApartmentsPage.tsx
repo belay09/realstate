@@ -12,6 +12,7 @@ import { useTranslation } from '../context/LocaleContext'
 import { groupListingsByProject } from '../lib/groupListingsByProject'
 import { isLocationActive } from '../lib/locationVisibility'
 import { usePageTitle } from '../hooks/usePageTitle'
+import { useLocationBrowseSummaries } from '../hooks/useLocationBrowseSummaries'
 import { useLocationVisibility } from '../hooks/useLocationVisibility'
 
 function PhoneIcon({ className = 'h-5 w-5' }: { className?: string }) {
@@ -99,6 +100,7 @@ export function ApartmentsPage() {
   }
 
   const visibilityQuery = useLocationVisibility()
+  const locationSummariesQuery = useLocationBrowseSummaries('apartment')
 
   const query = useQuery({
     queryKey: ['public-listings-apartments', companySlug],
@@ -279,7 +281,10 @@ export function ApartmentsPage() {
         <ul className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
           {projectGroups.map((group) => (
             <li key={`${group.company_slug}-${group.project_slug}`} className="animate-fade-in">
-              <ProjectLocationCard group={group} />
+              <ProjectLocationCard
+                group={group}
+                locationCms={locationSummariesQuery.data?.get(group.project_slug)}
+              />
             </li>
           ))}
         </ul>

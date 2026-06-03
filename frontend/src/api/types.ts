@@ -230,6 +230,14 @@ export type PublicLocationVisibility = {
   shop: Record<string, boolean>
 }
 
+export type PublicLocationBrowseSummary = {
+  location_id: string
+  title: string
+  subtitle: string | null
+  description: string | null
+  cover_image_url: string | null
+}
+
 export type HomePageCard = {
   id: string
   card_key: string

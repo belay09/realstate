@@ -36,6 +36,8 @@ export type AyatPriceCalculatorProps = {
   initialKind?: PropertyKind | null
   /** Pre-select shop zone (e.g. from /shops/ledeta) */
   initialShopZoneId?: string | null
+  /** Pre-select apartment project on location pages (e.g. cmc-extension) */
+  initialResidentialProjectId?: string | null
 }
 
 function PropertyKindTabs({
@@ -314,6 +316,7 @@ export function AyatPriceCalculator({
   listingTitle,
   initialKind = null,
   initialShopZoneId = null,
+  initialResidentialProjectId = null,
 }: AyatPriceCalculatorProps) {
   const { t } = useTranslation()
   const { data: config, isLoading: configLoading, isError: configError } = useCalculatorConfig()
@@ -323,7 +326,9 @@ export function AyatPriceCalculator({
   const [kind, setKind] = useState<PropertyKind | null>(
     preset?.propertyKind ?? initialKind ?? null,
   )
-  const [projectId, setProjectId] = useState<string | null>(preset?.projectId ?? null)
+  const [projectId, setProjectId] = useState<string | null>(
+    preset?.projectId ?? initialResidentialProjectId ?? null,
+  )
   const [completion, setCompletion] = useState<CompletionKind>(preset?.completion ?? 'unstarted')
   const [bedrooms, setBedrooms] = useState<1 | 2 | 3 | null>(preset?.bedrooms ?? null)
   const [finish, setFinish] = useState<FinishKind | null>(preset?.finish ?? null)
@@ -338,6 +343,12 @@ export function AyatPriceCalculator({
       setKind(initialKind)
     }
   }, [preset, initialKind, kind])
+
+  useEffect(() => {
+    if (!preset && initialResidentialProjectId && kind === 'residential') {
+      setProjectId(initialResidentialProjectId)
+    }
+  }, [preset, initialResidentialProjectId, kind])
 
   useEffect(() => {
     if (!preset && initialShopZoneId) {

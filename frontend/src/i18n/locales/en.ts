@@ -232,7 +232,11 @@ export const en = {
   projectBrowse: {
     developerApartments: '{{developer}} apartments',
     homesHere: 'Homes at this location',
-    tapForLayouts: 'Tap to see all bedroom layouts',
+    tapForLayouts: 'View location details',
+    locationIntroFallback: 'Browse layouts, media, and pricing for this development below.',
+    layoutsTitle: 'Available layouts',
+    mediaTitle: 'Photos & video',
+    calculatorHint: 'Estimate price for this location using official Ayat rates.',
     oneHome: '1 example home',
     homeCount: '{{count}} example homes',
     bedroomCount: '{{count}} bedrooms',

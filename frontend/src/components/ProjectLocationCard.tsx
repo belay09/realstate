@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 
 import { useTranslation } from '../context/LocaleContext'
 import { formatBedroomCount } from '../lib/ayatLabels'
+import type { PublicLocationBrowseSummary } from '../api/types'
 import type { ProjectListingGroup } from '../lib/groupListingsByProject'
 import { formatListingLocation, resolveDevelopmentZone } from '../lib/listingDisplay'
 import { CardCoverMedia } from './CardCoverMedia'
@@ -9,17 +10,20 @@ import { PartnerLogo } from './PartnerLogo'
 
 type ProjectLocationCardProps = {
   group: ProjectListingGroup
+  locationCms?: PublicLocationBrowseSummary | null
 }
 
 function GradientFallbackHeader({
   title,
   subtitle,
+  description,
   companyName,
   companySlug,
   forSaleLabel,
 }: {
   title: string
   subtitle: string | null
+  description: string | null
   companyName: string
   companySlug: string
   forSaleLabel: string
@@ -48,21 +52,28 @@ function GradientFallbackHeader({
         {title}
       </h2>
       {subtitle ? <p className="relative mt-1.5 text-sm text-slate-300">{subtitle}</p> : null}
+      {description ? (
+        <p className="relative mt-3 text-sm leading-relaxed text-slate-300/90 line-clamp-3">{description}</p>
+      ) : null}
     </div>
   )
 }
 
-export function ProjectLocationCard({ group }: ProjectLocationCardProps) {
+export function ProjectLocationCard({ group, locationCms }: ProjectLocationCardProps) {
   const { t } = useTranslation()
   const zone = resolveDevelopmentZone(group.project_slug, group.area)
   const location = formatListingLocation(group.listings[0], t)
-  const title = zone || group.project_name
+  const fallbackTitle = zone || group.project_name
+  const title = locationCms?.title?.trim() || fallbackTitle
   const subtitle =
-    group.project_name && zone && group.project_name !== zone ? group.project_name : null
+    locationCms?.subtitle?.trim() ||
+    (group.project_name && zone && group.project_name !== zone ? group.project_name : null)
+  const description = locationCms?.description?.trim() || null
   const homeCount = group.listings.length
   const href = `/apartments/${group.project_slug}`
-  const coverImage = group.primary_image_url
+  const coverImage = locationCms?.cover_image_url || group.primary_image_url
   const forSaleLabel = t('listingCard.forSale')
+  const showTitleBlock = Boolean(coverImage)
 
   return (
     <Link
@@ -88,6 +99,7 @@ export function ProjectLocationCard({ group }: ProjectLocationCardProps) {
         <GradientFallbackHeader
           title={title}
           subtitle={subtitle}
+          description={description}
           companyName={group.company_name}
           companySlug={group.company_slug}
           forSaleLabel={forSaleLabel}
@@ -95,17 +107,22 @@ export function ProjectLocationCard({ group }: ProjectLocationCardProps) {
       )}
 
       <div className="flex flex-1 flex-col gap-4 p-6">
-        {coverImage ? (
+        {showTitleBlock ? (
           <div>
             <p className="text-[0.65rem] font-bold uppercase tracking-[0.16em] text-brand-700 dark:text-brand-300">
               {group.company_name}
             </p>
             <h2 className="mt-1.5 text-h3 leading-snug">{title}</h2>
             {subtitle ? <p className="mt-1 text-sm text-fg-muted">{subtitle}</p> : null}
+            {description ? (
+              <p className="mt-3 text-body-sm leading-relaxed text-fg-muted line-clamp-4">
+                {description}
+              </p>
+            ) : null}
           </div>
         ) : null}
 
-        <p className="text-body-sm text-fg-muted">{location}</p>
+        {!description ? <p className="text-body-sm text-fg-muted">{location}</p> : null}
 
         {group.bedroomCounts.length > 0 ? (
           <div className="flex flex-wrap gap-2">

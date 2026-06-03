@@ -4,12 +4,14 @@ import { Link, useParams } from 'react-router-dom'
 import { api } from '../api/client'
 import type { Paginated, PublicListingSummary, PublicLocationContent } from '../api/types'
 import { AyatPriceCalculator } from '../components/AyatPriceCalculator'
+import { LocationDetailSections } from '../components/LocationDetailSections'
+import { SiteContactStrip } from '../components/SiteContactStrip'
 import { TemerListingCard } from '../components/TemerListingCard'
 import { useTranslation } from '../context/LocaleContext'
 import { AYAT_PARTNER, TEMER_PARTNER } from '../content/partners'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { useLocationVisibility } from '../hooks/useLocationVisibility'
-import { formatListingCardTitle, resolveDevelopmentZone } from '../lib/listingDisplay'
+import { resolveDevelopmentZone } from '../lib/listingDisplay'
 
 export function ProjectListingsPage() {
   const { t } = useTranslation()
@@ -38,56 +40,66 @@ export function ProjectListingsPage() {
     },
   })
 
-  const firstListing = listingsQuery.data?.items[0]
+  const content = contentQuery.data
+  const listings = listingsQuery.data?.items ?? []
+  const firstListing = listings[0]
   const companyName = firstListing?.company_name ?? 'Developer'
   const companySlug = firstListing?.company_slug
   const isAyat = companySlug === AYAT_PARTNER.slug
   const isTemer = companySlug === TEMER_PARTNER.slug
 
   const zone = projectSlug ? resolveDevelopmentZone(projectSlug, firstListing?.area ?? null) : ''
-  const pageTitle =
-    contentQuery.data?.title || firstListing?.project_name || zone || t('pageTitles.apartments')
+  const pageTitle = content?.title || firstListing?.project_name || zone || t('pageTitles.apartments')
   usePageTitle(pageTitle)
 
-  const backTo = '/apartments'
+  const backTo = isTemer ? `/apartments?company_slug=${TEMER_PARTNER.slug}` : '/apartments'
+
+  const cmsCards = (content?.cards ?? []).filter((c) => c.title?.trim())
+  const hasCmsBody = Boolean(
+    content?.title?.trim() ||
+      content?.description?.trim() ||
+      cmsCards.length > 0 ||
+      (content?.media?.length ?? 0) > 0 ||
+      content?.video_url,
+  )
+  const queriesReady = !listingsQuery.isLoading && !contentQuery.isLoading
+  const hasListings = listings.length > 0
+  const pageExists = hasCmsBody || hasListings
 
   if (!projectSlug) {
     return <p className="text-sm text-red-600">{t('projectBrowse.missingProject')}</p>
   }
 
-  const locationInactive = Boolean(
-    projectSlug && visibility?.apartment[projectSlug] === false,
-  )
-
-  if (locationInactive) {
+  if (projectSlug && visibility?.apartment[projectSlug] === false) {
     return (
       <div className="surface p-6 text-center">
         <p className="text-h3">{t('projectBrowse.notFoundTitle')}</p>
         <p className="mt-2 text-body-sm text-fg-muted">{t('projectBrowse.notFoundBody')}</p>
-        <Link to="/apartments" className="btn-primary mt-6 inline-flex">
+        <Link to={backTo} className="btn-primary mt-6 inline-flex">
           {t('projectBrowse.backToLocations')}
         </Link>
       </div>
     )
   }
 
-  if (listingsQuery.isLoading && contentQuery.isLoading) {
+  if (!queriesReady) {
     return <p className="text-body-sm">{t('projectBrowse.loading')}</p>
   }
 
-  if (listingsQuery.isSuccess && (listingsQuery.data?.items.length ?? 0) === 0) {
+  if (!pageExists) {
     return (
       <div className="surface p-6 text-center">
         <p className="text-h3">{t('projectBrowse.notFoundTitle')}</p>
         <p className="mt-2 text-body-sm text-fg-muted">{t('projectBrowse.notFoundBody')}</p>
-        <Link to="/apartments" className="btn-primary mt-6 inline-flex">
+        <Link to={backTo} className="btn-primary mt-6 inline-flex">
           {t('projectBrowse.backToLocations')}
         </Link>
       </div>
     )
   }
 
-  const content = contentQuery.data
+  const primaryImage = content?.media?.find((m) => m.is_primary && m.media_type === 'image')?.url
+    ?? content?.media?.find((m) => m.media_type === 'image')?.url
 
   return (
     <div className="space-y-10 text-left">
@@ -96,93 +108,60 @@ export function ProjectListingsPage() {
           {t('projectBrowse.backToLocations')}
         </Link>
         <span className="mx-2">/</span>
-        <span className="text-fg">{content?.title || firstListing?.project_name || zone || projectSlug}</span>
+        <span className="text-fg">{pageTitle}</span>
       </nav>
 
-      <header className="max-w-2xl">
+      {primaryImage ? (
+        <div className="overflow-hidden rounded-3xl border border-border">
+          <img src={primaryImage} alt="" className="aspect-[21/9] w-full object-cover" />
+        </div>
+      ) : null}
+
+      <header className="max-w-3xl">
         <p className="text-eyebrow text-brand-700 dark:text-brand-300">
           {t('projectBrowse.developerApartments', { developer: companyName })}
         </p>
         <h1 className="mt-2 text-h1">{content?.title || firstListing?.project_name || zone || projectSlug}</h1>
-        {content?.subtitle ? <p className="mt-1 text-lg text-fg-muted">{content.subtitle}</p> : null}
-        <p className="mt-4 text-body-sm">
-          {content?.description || t('projectBrowse.chooseLayout')}
-        </p>
+        {content?.subtitle ? <p className="mt-2 text-lg text-fg-muted">{content.subtitle}</p> : null}
+        {content?.description ? (
+          <p className="mt-4 whitespace-pre-line text-body-sm leading-relaxed">{content.description}</p>
+        ) : (
+          <p className="mt-4 text-body-sm text-fg-muted">{t('projectBrowse.locationIntroFallback')}</p>
+        )}
       </header>
 
-      {(content?.video_url || (content?.media?.length ?? 0) > 0) && (
-        <section className="space-y-4">
-          <h2 className="text-h3">Location media</h2>
-          {content?.video_url ? (
-            <div className="aspect-video overflow-hidden rounded-2xl border border-border">
-              <iframe
-                src={content.video_url}
-                className="h-full w-full"
-                title="Location video"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-          ) : null}
-          {content?.media?.length ? (
-            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {content.media.map((m) => (
-                <li key={m.id} className="surface overflow-hidden p-0">
-                  {m.media_type === 'video' ? (
-                    <video src={m.url} controls className="aspect-video w-full bg-black" />
-                  ) : (
-                    <img src={m.url} alt={m.caption ?? ''} className="aspect-video w-full object-cover" />
-                  )}
-                  {m.caption ? <p className="px-3 py-2 text-xs text-fg-muted">{m.caption}</p> : null}
-                </li>
-              ))}
-            </ul>
-          ) : null}
-        </section>
-      )}
-
-      {(listingsQuery.data?.items.length ?? 0) > 0 && (
-        <section className="space-y-4">
-          <h2 className="text-h3">{t('projectBrowse.homesHere')}</h2>
-          {isTemer ? (
-            <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {listingsQuery.data!.items.map((item) => (
-                <li key={item.slug}>
-                  <TemerListingCard listing={item} />
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <ul className="grid gap-4 sm:grid-cols-2">
-              {listingsQuery.data!.items.map((item) => (
-                <li key={item.slug}>
-                  <Link
-                    to={`/listings/${item.slug}`}
-                    className="surface block p-5 transition hover:border-brand-300"
-                  >
-                    <p className="text-xs font-semibold uppercase tracking-wide text-brand-700 dark:text-brand-300">
-                      {item.company_name}
-                    </p>
-                    <h3 className="mt-1 text-lg font-bold text-fg">{formatListingCardTitle(item, t)}</h3>
-                    <p className="mt-2 text-body-sm text-fg-muted">
-                      {item.bedrooms != null
-                        ? t('projectBrowse.bedroomCount', { count: item.bedrooms })
-                        : null}
-                    </p>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-      )}
+      <LocationDetailSections
+        content={content}
+        mediaTitle={t('projectBrowse.mediaTitle')}
+        cardsTitle={t('projectBrowse.layoutsTitle')}
+      />
 
       {isAyat ? (
         <section className="space-y-4">
           <h2 className="text-h3">{t('projectBrowse.priceEstimate')}</h2>
-          <AyatPriceCalculator variant="page" initialKind="residential" />
+          <p className="max-w-2xl text-body-sm text-fg-muted">{t('projectBrowse.calculatorHint')}</p>
+          <AyatPriceCalculator
+            variant="page"
+            initialKind="residential"
+            initialResidentialProjectId={projectSlug}
+          />
         </section>
-      ) : isTemer ? (
+      ) : null}
+
+      {isTemer && hasListings ? (
+        <section className="space-y-4">
+          <h2 className="text-h3">{t('projectBrowse.homesHere')}</h2>
+          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {listings.map((item) => (
+              <li key={item.slug}>
+                <TemerListingCard listing={item} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      {isTemer ? (
         <section className="surface-muted space-y-3 p-6">
           <p className="section-eyebrow">{t('temer.priceOnRequestTitle')}</p>
           <p className="text-body-sm">{t('temer.priceOnRequestBody')}</p>
@@ -196,6 +175,8 @@ export function ProjectListingsPage() {
           </a>
         </section>
       ) : null}
+
+      <SiteContactStrip />
     </div>
   )
 }

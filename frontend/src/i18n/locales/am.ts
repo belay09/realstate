@@ -233,7 +233,11 @@ export const am = {
   projectBrowse: {
     developerApartments: '{{developer}} አፓርታማ',
     homesHere: 'በዚህ ቦታ ያሉ ቤቶች',
-    tapForLayouts: 'ሁሉንም የመኝታ አማራጮች ለማየት ይንኩ',
+    tapForLayouts: 'የቦታ ዝርዝር ይመልከቱ',
+    locationIntroFallback: 'ከታች ለዚህ ቦታ የቤት አይነቶች፣ ሚዲያ እና ዋጋ ይመልከቱ።',
+    layoutsTitle: 'የሚገኙ አይነቶች',
+    mediaTitle: 'ፎቶ እና ቪዲዮ',
+    calculatorHint: 'ለዚህ ቦታ ኦፊሴላዊ የአያት ዋጋ በመሰረት ይመድቡ።',
     oneHome: '1 የምሳሌ ቤት',
     homeCount: '{{count}} የምሳሌ ቤቶች',
     bedroomCount: '{{count}} መኝታ',
