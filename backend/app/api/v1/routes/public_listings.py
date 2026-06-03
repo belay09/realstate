@@ -367,7 +367,6 @@ def get_public_listing(slug: str, db: Session = Depends(get_db)) -> PublicListin
         description=row.description,
         images=_sorted_images(row),
         unit_number=unit.unit_number,
-        floor_number=unit.floor_number,
         area_sqm=unit.area_sqm,
         unit_status=unit.status,
         listing_metadata=meta,
