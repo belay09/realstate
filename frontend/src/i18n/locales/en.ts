@@ -98,6 +98,8 @@ export const en = {
     floorColumn: 'Floor',
     pricePerSqmColumn: 'Price',
     ratesNote: 'Prices include VAT where applicable. Full payment discount applies in the calculator.',
+    ratesPending:
+      'Floor rates for this zone are not in the calculator yet. Add shop price rows in Admin → Pricing, or contact us for a quote.',
     estimateTitle: 'Estimate your shop',
   },
   home: {

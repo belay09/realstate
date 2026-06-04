@@ -368,7 +368,9 @@ export function AdminListingsPage() {
         </h2>
         <p className="text-sm text-stone-600 dark:text-stone-400">
           Configure the content users see after clicking a location: title, description, video, photos,
-          and highlight cards.
+          and highlight cards. For <strong>shops</strong>, set <strong>Active</strong> to show the
+          location on the public <span className="font-mono">/shops</span> list (calculator zones in
+          Admin → Pricing still control floor rates).
         </p>
         {!selectedContentId ? (
           <p className="text-xs text-brand-700 dark:text-brand-300">

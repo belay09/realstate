@@ -6,6 +6,19 @@ export type ShopLocationSummary = {
   id: string
   labelKey: string
   floors: CommercialZone['floors']
+  /** Title from location CMS when present */
+  displayTitle?: string
+  coverImageUrl?: string | null
+}
+
+export function shopLocationTitle(
+  location: ShopLocationSummary,
+  t: (key: string) => string,
+): string {
+  if (location.displayTitle?.trim()) return location.displayTitle.trim()
+  const translated = t(location.labelKey)
+  if (translated !== location.labelKey) return translated
+  return location.id
 }
 
 export function shopLocationsFromConfig(

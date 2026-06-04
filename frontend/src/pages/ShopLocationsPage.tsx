@@ -1,11 +1,13 @@
+import * as React from 'react'
 import { Link } from 'react-router-dom'
 
 import { ShopLocationCard } from '../components/ShopLocationCard'
 import { useTranslation } from '../context/LocaleContext'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { useCalculatorConfig } from '../hooks/useCalculatorConfig'
+import { useLocationBrowseSummaries } from '../hooks/useLocationBrowseSummaries'
 import { useLocationVisibility } from '../hooks/useLocationVisibility'
-import { isLocationActive } from '../lib/locationVisibility'
+import { mergeShopBrowseLocations } from '../lib/mergeShopBrowseLocations'
 import { shopLocationsFromConfig } from '../lib/shopLocations'
 
 export function ShopLocationsPage() {
@@ -13,8 +15,15 @@ export function ShopLocationsPage() {
   usePageTitle(t('pageTitles.shops'))
   const { data: config } = useCalculatorConfig()
   const { data: visibility } = useLocationVisibility()
-  const locations = shopLocationsFromConfig(config).filter((loc) =>
-    isLocationActive(visibility, 'shop', loc.id),
+  const summariesQuery = useLocationBrowseSummaries('shop')
+  const locations = React.useMemo(
+    () =>
+      mergeShopBrowseLocations(
+        shopLocationsFromConfig(config),
+        summariesQuery.data,
+        visibility,
+      ),
+    [config, summariesQuery.data, visibility],
   )
 
   return (

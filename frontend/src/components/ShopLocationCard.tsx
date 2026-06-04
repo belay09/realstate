@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from '../context/LocaleContext'
 import { formatShopFloorLabel } from '../lib/ayatLabels'
 import type { ShopLocationSummary } from '../lib/shopLocations'
-import { shopFloorKeys } from '../lib/shopLocations'
+import { shopFloorKeys, shopLocationTitle } from '../lib/shopLocations'
 
 type ShopLocationCardProps = {
   location: ShopLocationSummary
@@ -11,7 +11,7 @@ type ShopLocationCardProps = {
 
 export function ShopLocationCard({ location }: ShopLocationCardProps) {
   const { t } = useTranslation()
-  const title = t(location.labelKey as Parameters<typeof t>[0])
+  const title = shopLocationTitle(location, t)
   const floors = shopFloorKeys(location)
 
   return (
@@ -20,6 +20,13 @@ export function ShopLocationCard({ location }: ShopLocationCardProps) {
       className="group surface relative flex h-full flex-col overflow-hidden p-0 transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-12px_rgba(2,132,199,0.25)]"
     >
       <div className="relative aspect-[4/5] overflow-hidden bg-gradient-to-br from-slate-800 via-brand-900 to-brand-950">
+        {location.coverImageUrl ? (
+          <img
+            src={location.coverImageUrl}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        ) : null}
         <div className="absolute inset-0 flex items-center justify-center p-6 text-center">
           <p className="text-sm font-medium uppercase tracking-widest text-brand-200/90">
             {t('shops.commercial')}

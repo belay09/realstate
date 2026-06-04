@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
 
@@ -10,23 +11,34 @@ import { formatMoney } from '../lib/format'
 import { formatShopFloorLabel } from '../lib/ayatLabels'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { useCalculatorConfig } from '../hooks/useCalculatorConfig'
+import { useLocationBrowseSummaries } from '../hooks/useLocationBrowseSummaries'
 import { useLocationVisibility } from '../hooks/useLocationVisibility'
-import { isLocationActive } from '../lib/locationVisibility'
-import { getShopLocationById, shopFloorKeys, shopLocationsFromConfig } from '../lib/shopLocations'
+import { mergeShopBrowseLocations } from '../lib/mergeShopBrowseLocations'
+import {
+  getShopLocationById,
+  shopFloorKeys,
+  shopLocationTitle,
+  shopLocationsFromConfig,
+} from '../lib/shopLocations'
 
 export function ShopLocationPage() {
   const { t } = useTranslation()
   const { zoneId } = useParams<{ zoneId: string }>()
   const { data: config } = useCalculatorConfig()
   const { data: visibility } = useLocationVisibility()
-  const shopLocations = shopLocationsFromConfig(config).filter((loc) =>
-    isLocationActive(visibility, 'shop', loc.id),
+  const summariesQuery = useLocationBrowseSummaries('shop')
+  const shopLocations = React.useMemo(
+    () =>
+      mergeShopBrowseLocations(
+        shopLocationsFromConfig(config),
+        summariesQuery.data,
+        visibility,
+      ),
+    [config, summariesQuery.data, visibility],
   )
   const location = zoneId ? getShopLocationById(zoneId, shopLocations) : undefined
 
-  const title = location
-    ? t(location.labelKey as Parameters<typeof t>[0])
-    : t('pageTitles.shops')
+  const title = location ? shopLocationTitle(location, t) : t('pageTitles.shops')
   const contentQuery = useQuery({
     queryKey: ['public-location-content', 'shop', zoneId],
     enabled: Boolean(zoneId),
@@ -50,6 +62,7 @@ export function ShopLocationPage() {
   }
 
   const floors = shopFloorKeys(location)
+  const hasRateTable = floors.length > 0
   const isBoleAir = location.id === 'bole-air'
 
   return (
@@ -82,38 +95,44 @@ export function ShopLocationPage() {
         cardsTitle={t('projectBrowse.layoutsTitle')}
       />
 
-      <section className="surface overflow-hidden">
-        <h2 className="border-b border-border px-5 py-4 text-sm font-semibold text-fg">
-          {t('shops.officialRatesTitle')}
-        </h2>
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[280px] text-left text-sm">
-            <thead>
-              <tr className="border-b border-border bg-surface-muted">
-                <th className="px-5 py-3 font-semibold text-fg">{t('shops.floorColumn')}</th>
-                <th className="px-5 py-3 font-semibold text-fg">{t('shops.pricePerSqmColumn')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {floors.map((f) => (
-                <tr key={f} className="border-b border-border last:border-0">
-                  <td className="px-5 py-3 text-fg">{formatShopFloorLabel(f, t)}</td>
-                  <td className="px-5 py-3 font-medium text-fg">
-                    {formatMoney(location.floors[f], 'ETB')}
-                    <span className="text-fg-muted"> / m²</span>
-                  </td>
+      {hasRateTable ? (
+        <section className="surface overflow-hidden">
+          <h2 className="border-b border-border px-5 py-4 text-sm font-semibold text-fg">
+            {t('shops.officialRatesTitle')}
+          </h2>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[280px] text-left text-sm">
+              <thead>
+                <tr className="border-b border-border bg-surface-muted">
+                  <th className="px-5 py-3 font-semibold text-fg">{t('shops.floorColumn')}</th>
+                  <th className="px-5 py-3 font-semibold text-fg">{t('shops.pricePerSqmColumn')}</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <p className="px-5 py-3 text-xs text-fg-muted">{t('shops.ratesNote')}</p>
-      </section>
+              </thead>
+              <tbody>
+                {floors.map((f) => (
+                  <tr key={f} className="border-b border-border last:border-0">
+                    <td className="px-5 py-3 text-fg">{formatShopFloorLabel(f, t)}</td>
+                    <td className="px-5 py-3 font-medium text-fg">
+                      {formatMoney(location.floors[f], 'ETB')}
+                      <span className="text-fg-muted"> / m²</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="px-5 py-3 text-xs text-fg-muted">{t('shops.ratesNote')}</p>
+        </section>
+      ) : (
+        <p className="text-sm text-fg-muted">{t('shops.ratesPending')}</p>
+      )}
 
-      <section className="space-y-4">
-        <h2 className="text-h3">{t('shops.estimateTitle')}</h2>
-        <AyatPriceCalculator variant="page" initialKind="commercial" initialShopZoneId={location.id} />
-      </section>
+      {hasRateTable ? (
+        <section className="space-y-4">
+          <h2 className="text-h3">{t('shops.estimateTitle')}</h2>
+          <AyatPriceCalculator variant="page" initialKind="commercial" initialShopZoneId={location.id} />
+        </section>
+      ) : null}
     </div>
   )
 }

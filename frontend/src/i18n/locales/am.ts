@@ -97,7 +97,9 @@ export const am = {
     floorColumn: 'ወለል',
     pricePerSqmColumn: 'ዋጋ',
     ratesNote: 'ዋጋዎች ተገቢ ሲሆን ቫት ይጨምራሉ። ሙሉ ክፍያ ቅናሽ በስሌቱ ውስጥ ይታያል።',
-    estimateTitle: 'የመደብርዎን ዋጋ ያስሉ',
+    ratesPending:
+      'ለዚህ ቦታ የወለድ ዋጋ በስሌቱ ውስጥ አልተገኘም። በአስተዳዳሪ → Pricing ይጨምሩ ወይም ዋጋ ለመጠየቅ ያግኙን።',
+    estimateTitle: 'የመደብርዎን ዋጋ ያስሁ',
   },
   home: {
     heroEyebrow: 'ዘመናዊ ሪል እስቴት · አዲስ አበባ',
