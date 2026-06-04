@@ -9,6 +9,11 @@ import type {
 import { unitTypeCodesForPriceLookup, unitTypeForBedroomsFinish } from '../data/ayatCalculatorConfig'
 import type { CalculatorRuntimeConfig } from './calculatorRuntime'
 import { resolveResidentialProjectId } from './calculatorRuntime'
+import {
+  promotionDiscountAmount,
+  promotionForLocation,
+  type LocationPromotionLine,
+} from './locationPromotions'
 
 export interface ResidentialCalcInput {
   projectId: string
@@ -43,6 +48,8 @@ export interface CalculatorResult {
   listPrice: number
   clientDiscountPercent: number
   clientDiscountAmount: number
+  priceAfterTierDiscount: number
+  locationPromotion: LocationPromotionLine | null
   priceAfterDiscount: number
   tier: DownPaymentTier
   upfrontCashDue: number
@@ -50,6 +57,28 @@ export interface CalculatorResult {
   milestoneScheduleId: MilestoneScheduleId | null
   milestones: MilestoneLine[]
   notes: string[]
+}
+
+function applyLocationPromotion(
+  config: CalculatorRuntimeConfig,
+  kind: 'apartment' | 'shop',
+  locationId: string,
+  priceAfterTier: number,
+): { priceAfterDiscount: number; promotion: LocationPromotionLine | null } {
+  const promo = promotionForLocation(config.locationPromotions, kind, locationId)
+  if (!promo || promo.discountPercent <= 0) {
+    return { priceAfterDiscount: priceAfterTier, promotion: null }
+  }
+  const amount = promotionDiscountAmount(priceAfterTier, promo.discountPercent)
+  return {
+    priceAfterDiscount: priceAfterTier - amount,
+    promotion: {
+      id: promo.id,
+      name: promo.name,
+      percent: promo.discountPercent,
+      amount,
+    },
+  }
 }
 
 function roundMoney(n: number): number {
@@ -301,7 +330,14 @@ export function calculateResidential(
   const listPrice = roundMoney(pricePerSqm * input.areaSqm)
   const clientDiscountPercent = tier.clientDiscountPercent
   const clientDiscountAmount = roundMoney((listPrice * clientDiscountPercent) / 100)
-  const priceAfterDiscount = listPrice - clientDiscountAmount
+  const priceAfterTierDiscount = listPrice - clientDiscountAmount
+  const { priceAfterDiscount, promotion } = applyLocationPromotion(
+    config,
+    'apartment',
+    input.projectId,
+    priceAfterTierDiscount,
+  )
+  if (promotion) notes.push('location_promotion')
 
   const milestoneScheduleId = resolveMilestoneSchedule('residential', tier, input.completion)
   const milestones = milestoneScheduleId
@@ -337,6 +373,8 @@ export function calculateResidential(
     listPrice,
     clientDiscountPercent,
     clientDiscountAmount,
+    priceAfterTierDiscount,
+    locationPromotion: promotion,
     priceAfterDiscount,
     tier,
     upfrontCashDue,
@@ -361,7 +399,15 @@ export function calculateCommercial(
   const listPrice = roundMoney(pricePerSqm * input.areaSqm)
   const clientDiscountPercent = tier.clientDiscountPercent
   const clientDiscountAmount = roundMoney((listPrice * clientDiscountPercent) / 100)
-  const priceAfterDiscount = listPrice - clientDiscountAmount
+  const priceAfterTierDiscount = listPrice - clientDiscountAmount
+  const notes: string[] = ['commercial_no_installments', 'shop_milestone_only']
+  const { priceAfterDiscount, promotion } = applyLocationPromotion(
+    config,
+    'shop',
+    input.zoneId,
+    priceAfterTierDiscount,
+  )
+  if (promotion) notes.push('location_promotion')
 
   const milestoneScheduleId: MilestoneScheduleId = 'shop_unstarted_100'
   const milestones = buildMilestones(config, milestoneScheduleId, priceAfterDiscount)
@@ -378,12 +424,14 @@ export function calculateCommercial(
     listPrice,
     clientDiscountPercent,
     clientDiscountAmount,
+    priceAfterTierDiscount,
+    locationPromotion: promotion,
     priceAfterDiscount,
     tier,
     upfrontCashDue,
     remainingAfterUpfront,
     milestoneScheduleId,
     milestones,
-    notes: ['commercial_no_installments', 'shop_milestone_only'],
+    notes,
   }
 }

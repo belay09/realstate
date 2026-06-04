@@ -63,6 +63,12 @@ export function AdminLayout() {
           >
             Pricing
           </NavLink>
+          <NavLink
+            to="/admin/promotions"
+            className={({ isActive }) => `${navCls} ${isActive ? activeCls : ''}`}
+          >
+            Promotions
+          </NavLink>
           <NavLink to="/apartments" className={navCls}>
             View public site
           </NavLink>

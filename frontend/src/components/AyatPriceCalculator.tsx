@@ -270,6 +270,23 @@ function CalculatorResults({
             </p>
           </div>
 
+          {result.locationPromotion ? (
+            <div className="rounded-lg bg-amber-50 px-3 py-3 dark:bg-amber-950/40">
+              <dt className="font-medium text-amber-900 dark:text-amber-200">
+                {t('calculator.locationPromotion', { name: result.locationPromotion.name })}
+              </dt>
+              <dd className="mt-1 text-amber-900 dark:text-amber-100">
+                <span className="text-lg font-bold">−{result.locationPromotion.percent}%</span>
+                <span className="ml-2">
+                  ({formatMoney(result.locationPromotion.amount, result.currency)})
+                </span>
+              </dd>
+              <p className="mt-2 text-xs text-amber-800/90 dark:text-amber-200/80">
+                {t('calculator.locationPromotionHint')}
+              </p>
+            </div>
+          ) : null}
+
           <div>
             <dt className="text-fg-muted">{t('calculator.priceAfterDiscount')}</dt>
             <dd className="text-2xl font-bold text-brand-800 dark:text-brand-200">

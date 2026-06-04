@@ -14,6 +14,7 @@ import { AdminLeadsPage } from './pages/admin/AdminLeadsPage'
 import { AdminListingsPage } from './pages/admin/AdminListingsPage'
 import { AdminPropertyListingsPage } from './pages/admin/AdminPropertyListingsPage'
 import { AdminPricingPage } from './pages/admin/AdminPricingPage'
+import { AdminPromotionsPage } from './pages/admin/AdminPromotionsPage'
 import { AdminLoginPage } from './pages/admin/AdminLoginPage'
 import { ProtectedRoute } from './routes/ProtectedRoute'
 
@@ -46,6 +47,7 @@ export default function App() {
           <Route path="properties" element={<AdminPropertyListingsPage />} />
           <Route path="leads" element={<AdminLeadsPage />} />
           <Route path="pricing" element={<AdminPricingPage />} />
+          <Route path="promotions" element={<AdminPromotionsPage />} />
           <Route path="*" element={<Navigate to="/admin" replace />} />
         </Route>
       </Route>

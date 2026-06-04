@@ -44,6 +44,10 @@ from app.services.calculator_config import (
     build_public_calculator_config,
     get_company_by_slug,
 )
+from app.services.location_promotions import (
+    load_active_public_promotions,
+    promotion_to_public_dict,
+)
 from app.services.location_visibility import (
     filter_calculator_config_by_visibility,
     load_location_visibility_maps,
@@ -493,6 +497,9 @@ def get_public_calculator_config(
         ) from exc
     visibility = load_location_visibility_maps(db)
     payload = filter_calculator_config_by_visibility(payload, visibility)
+    payload["location_promotions"] = [
+        promotion_to_public_dict(p) for p in load_active_public_promotions(db, company.id)
+    ]
     return PublicCalculatorConfig.model_validate(payload)
 
 

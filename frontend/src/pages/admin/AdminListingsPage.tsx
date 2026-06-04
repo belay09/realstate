@@ -368,9 +368,13 @@ export function AdminListingsPage() {
         </h2>
         <p className="text-sm text-stone-600 dark:text-stone-400">
           Configure the content users see after clicking a location: title, description, video, photos,
-          and highlight cards. For <strong>shops</strong>, only <strong>Active</strong> rows appear on{' '}
-          <span className="font-mono">/shops</span> (Ledeta/Summit from Pricing alone are not shown).
-          Add shop price rows in Pricing for floor rates on each zone.
+          and highlight cards.           For <strong>shops</strong>, only <strong>Active</strong> rows appear on{' '}
+          <span className="font-mono">/shops</span>. Add shop rates under Pricing. For a limited-time
+          extra discount, use{' '}
+          <a href="/admin/promotions" className="font-medium text-brand-700 underline dark:text-brand-400">
+            Admin → Promotions
+          </a>
+          .
         </p>
         {!selectedContentId ? (
           <p className="text-xs text-brand-700 dark:text-brand-300">

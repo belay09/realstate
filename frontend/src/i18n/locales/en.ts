@@ -560,7 +560,10 @@ export const en = {
     clientDiscount: 'Client discount',
     clientDiscountHint:
       'From Ayat’s discount schedule based on your selected down payment level. Group purchase bonuses are not included.',
-    priceAfterDiscount: 'Price after client discount',
+    locationPromotion: 'Special offer: {{name}}',
+    locationPromotionHint:
+      'Limited-time extra discount for this location, applied after the Ayat tier discount.',
+    priceAfterDiscount: 'Final indicative price',
     downPayment6040: 'Down payment now (sixty-forty plan)',
     balance6040: 'Balance due on handover',
     firstMilestone: 'Due when you sign the contract (first milestone)',

@@ -31,6 +31,7 @@ export const CALCULATOR_CONFIG_FALLBACK: CalculatorRuntimeConfig = {
   commercialAreaMax: COMMERCIAL_AREA_MAX,
   commercialAreaPresets: COMMERCIAL_AREA_PRESETS,
   inventoryToStrategyLocation: INVENTORY_TO_STRATEGY_LOCATION,
+  locationPromotions: [],
 }
 
 export type CalculatorConfigQuery = Omit<

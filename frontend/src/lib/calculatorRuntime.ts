@@ -8,6 +8,10 @@ import type {
   ResidentialPriceRow,
   ResidentialProject,
 } from '../data/ayatCalculatorConfig'
+import {
+  normalizePromotionFromApi,
+  type LocationPromotion,
+} from './locationPromotions'
 
 export interface CalculatorRuntimeConfig {
   currency: string
@@ -22,6 +26,7 @@ export interface CalculatorRuntimeConfig {
   commercialAreaMax: number
   commercialAreaPresets: number[]
   inventoryToStrategyLocation: Record<string, string>
+  locationPromotions: LocationPromotion[]
 }
 
 type ApiFloorBand = { label: string; floorMin: number; floorMax: number }
@@ -156,6 +161,15 @@ export type PublicCalculatorConfigApi = {
   commercialAreaMax: number
   commercialAreaPresets: number[]
   inventoryToStrategyLocation: Record<string, string>
+  locationPromotions?: Array<{
+    id: string
+    name: string
+    kind: string
+    locationIds?: string[]
+    location_ids?: string[]
+    discountPercent?: number
+    discount_percent?: number
+  }>
 }
 
 export function calculatorConfigFromApi(data: PublicCalculatorConfigApi): CalculatorRuntimeConfig {
@@ -179,6 +193,9 @@ export function calculatorConfigFromApi(data: PublicCalculatorConfigApi): Calcul
     commercialAreaMax: data.commercialAreaMax,
     commercialAreaPresets: data.commercialAreaPresets,
     inventoryToStrategyLocation: data.inventoryToStrategyLocation,
+    locationPromotions: (data.locationPromotions ?? []).map((p) =>
+      normalizePromotionFromApi(p),
+    ),
   }
 }
 

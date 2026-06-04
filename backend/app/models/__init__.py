@@ -9,6 +9,7 @@ from app.models import (
     leads_contracts,  # noqa: F401
     payment,  # noqa: F401
     pricing,  # noqa: F401
+    promotions,  # noqa: F401
 )
 
 __all__ = [
@@ -20,4 +21,5 @@ __all__ = [
     "leads_contracts",
     "payment",
     "pricing",
+    "promotions",
 ]

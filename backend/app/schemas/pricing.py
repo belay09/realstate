@@ -182,6 +182,7 @@ class PublicCalculatorConfig(BaseModel):
     commercial_area_max: int
     commercial_area_presets: list[int]
     inventory_to_strategy_location: dict[str, str] = Field(default_factory=dict)
+    location_promotions: list[dict] = Field(default_factory=list)
 
 
 class PublicPricePreview(BaseModel):

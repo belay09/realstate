@@ -21,6 +21,11 @@ const ACTIONS = [
     href: '/admin/pricing',
     desc: 'Publish Ayat price tables used by the calculator and quotes.',
   },
+  {
+    title: 'Promotions',
+    href: '/admin/promotions',
+    desc: 'Time-limited extra % off for chosen apartment or shop locations (calculator).',
+  },
 ] as const
 
 export function AdminDashboardPage() {
