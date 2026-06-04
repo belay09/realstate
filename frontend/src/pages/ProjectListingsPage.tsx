@@ -177,7 +177,7 @@ export function ProjectListingsPage() {
             listings={listings}
             settings={content?.settings}
             title={t('projectBrowse.layoutsTitle')}
-            subtitle={t('projectBrowse.layoutsSubtitle', { count: layoutCount })}
+            subtitle={t('projectBrowse.layoutsIntro')}
           />
         ) : null}
 

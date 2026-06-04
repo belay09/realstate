@@ -253,7 +253,9 @@ export const en = {
     homeCount: '{{count}} example homes',
     bedroomCount: '{{count}} bedrooms',
     chooseLayout:
-      'Each home below is one example unit at this location. Pick the bedroom count and finish that fits you, then open it for photos, pricing, and enquiry.',
+      'Each layout below is a real home type at this development. Compare bedrooms, finish, and size — then open a layout for full photos, indicative Ayat pricing, and enquiry.',
+    layoutsIntro:
+      'Homes are grouped by building type. Open any layout for photos and pricing details.',
     filterBedrooms: 'Bedrooms',
     priceEstimate: 'Price estimate',
     backToLocations: 'All locations',
@@ -277,6 +279,22 @@ export const en = {
     shopCalculatorLink: 'use the shop price calculator',
     otherLayouts: 'Other layouts',
     otherLayoutsHint: 'Homes not yet tagged with a building type.',
+  },
+  layoutCard: {
+    bedrooms: 'Bedrooms',
+    finish: 'Finish',
+    size: 'Size',
+    floor: 'Floor',
+    notSpecified: '—',
+    viewDetails: 'View full details',
+    viewDetailsHint: 'Photos, specs & indicative price',
+    buildingMixedApt: 'Mixed · Apartment',
+    buildingMixedShop: 'Mixed · Shop floor',
+    sectionEyebrowMixed: 'Building type',
+    sectionEyebrowDuplex: 'Building type',
+    sectionEyebrowFlat: 'Building type',
+    sectionEyebrowAll: 'Available homes',
+    sectionEyebrowOther: 'More layouts',
   },
   filters: {
     findHome: 'Find your home',

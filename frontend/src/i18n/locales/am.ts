@@ -254,6 +254,8 @@ export const am = {
     bedroomCount: '{{count}} መኝታ',
     chooseLayout:
       'ከታች ያሉት እያንዳንዱ በዚህ ቦታ ያለው የምሳሌ ክፍል ነው። የሚፈልጉትን የመኝታ ብዛት እና ጨረታ ይምረጡ፤ ፎቶ፣ ዋጋ እና ጥያቄ ለመላክ ይክፈቱ።',
+    layoutsIntro:
+      'ቤቶች በየየህንፃ አይነት ተመድበዋል። ማንኛውንም አማራጭ ለፎቶ እና ዋጋ ይክፈቱ።',
     filterBedrooms: 'መኝታ',
     priceEstimate: 'የዋጋ ቅድመ ስሌት',
     backToLocations: 'ሁሉም ቦታዎች',
@@ -277,6 +279,22 @@ export const am = {
     shopCalculatorLink: 'use the shop price calculator',
     otherLayouts: 'Other layouts',
     otherLayoutsHint: 'Homes not yet tagged with a building type.',
+  },
+  layoutCard: {
+    bedrooms: 'Bedrooms',
+    finish: 'Finish',
+    size: 'Size',
+    floor: 'Floor',
+    notSpecified: '—',
+    viewDetails: 'View full details',
+    viewDetailsHint: 'Photos, specs & indicative price',
+    buildingMixedApt: 'Mixed · Apartment',
+    buildingMixedShop: 'Mixed · Shop floor',
+    sectionEyebrowMixed: 'Building type',
+    sectionEyebrowDuplex: 'Building type',
+    sectionEyebrowFlat: 'Building type',
+    sectionEyebrowAll: 'Available homes',
+    sectionEyebrowOther: 'More layouts',
   },
   filters: {
     findHome: 'ቤትዎን ያግኙ',
