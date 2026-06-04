@@ -44,6 +44,6 @@ export function useCalculatorConfig(companySlug = 'ayat-real-estate') {
       return calculatorConfigFromApi(data)
     },
     staleTime: 5 * 60 * 1000,
-    initialData: STATIC_FALLBACK,
+    placeholderData: STATIC_FALLBACK,
   })
 }

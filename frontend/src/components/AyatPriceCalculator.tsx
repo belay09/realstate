@@ -11,6 +11,7 @@ import {
   calculatorProjectIdFromSlug,
   completionKindsWithRates,
   floorOptionsForResidential,
+  hasResidentialRatesForProject,
   resolveCalculatorProject,
   type CalculatorResult,
 } from '../lib/ayatCalculator'
@@ -380,7 +381,12 @@ export function AyatPriceCalculator({
   initialResidentialProjectId = null,
 }: AyatPriceCalculatorProps) {
   const { t } = useTranslation()
-  const { data: config, isLoading: configLoading, isError: configError } = useCalculatorConfig()
+  const {
+    data: config,
+    isPending: configLoading,
+    isError: configError,
+    isSuccess: configReady,
+  } = useCalculatorConfig()
   const embedded = variant === 'embedded'
   const isCompact = layout === 'compact' || (layout !== 'wizard' && !embedded)
   const lockResidentialProject = Boolean(initialResidentialProjectId)
@@ -432,7 +438,7 @@ export function AyatPriceCalculator({
   }, [preset, initialShopZoneId, config.commercialZones])
 
   useEffect(() => {
-    if (!isCompact || preset || configLoading || defaultsApplied.current) return
+    if (!isCompact || preset || configLoading || !configReady || defaultsApplied.current) return
 
     const applyResidential = (pid: string) => {
       const resolved = calculatorProjectIdFromSlug(config, pid)
@@ -475,6 +481,7 @@ export function AyatPriceCalculator({
     isCompact,
     preset,
     configLoading,
+    configReady,
     config,
     initialResidentialProjectId,
     initialKind,
@@ -575,6 +582,19 @@ export function AyatPriceCalculator({
 
   const canShowResult = step1Done && step2Done && step3Done && step4Done && step5Done && result
 
+  const residentialRatesReady =
+    configReady &&
+    kind === 'residential' &&
+    projectId != null &&
+    bedrooms != null &&
+    hasResidentialRatesForProject(
+      config,
+      projectId,
+      effectiveCompletion,
+      bedrooms,
+      RESIDENTIAL_FINISH,
+    )
+
   const areaOptions =
     bedrooms != null ? config.bedroomAreaOptions[bedrooms] : config.commercialAreaPresets
 
@@ -583,7 +603,15 @@ export function AyatPriceCalculator({
 
   const compactForm = isCompact && (
     <div className="rounded-2xl border border-border bg-surface p-5 shadow-sm sm:p-6">
-      <p className="mb-5 text-sm text-fg-muted">{t('calculator.compactAdjustHint')}</p>
+      {configLoading ? (
+        <p className="mb-5 text-sm text-fg-muted">{t('calculator.loadingRates')}</p>
+      ) : configReady && kind === 'residential' && projectId && bedrooms != null && !residentialRatesReady ? (
+        <p className="mb-5 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-950 dark:border-amber-800 dark:bg-amber-950/50 dark:text-amber-100">
+          {t('calculator.noRatesLoaded')}
+        </p>
+      ) : (
+        <p className="mb-5 text-sm text-fg-muted">{t('calculator.compactAdjustHint')}</p>
+      )}
 
       {!lockResidentialProject && !initialKind && (
         <div className="mb-5">
@@ -757,13 +785,17 @@ export function AyatPriceCalculator({
           </FormSelect>
         )}
 
-        {kind === 'residential' && project && areaSqm != null && (
+        {kind === 'residential' && project && areaSqm != null && residentialRatesReady && (
           <FormSelect
             id="calc-floor"
             label={t('calculator.compactFieldFloor')}
             value={floor ?? ''}
             onChange={(v) => setFloor(Number(v))}
+            disabled={residentialFloors.length === 0}
           >
+            {residentialFloors.length === 0 ? (
+              <option value="">{t('calculator.noFloorsForRates')}</option>
+            ) : null}
             {residentialFloors.map((f) => (
               <option key={f} value={f}>
                 {t('calculator.floorN', { n: f })}

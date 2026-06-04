@@ -166,12 +166,18 @@ export function floorOptionsForResidential(
     }
   }
 
-  if (floors.size > 0) {
-    return Array.from(floors).sort((a, b) => a - b)
-  }
+  return Array.from(floors).sort((a, b) => a - b)
+}
 
-  const project = getProject(config, projectId)
-  return project ? floorOptionsForProject(project) : []
+/** True when live admin price rows exist for this apartment location. */
+export function hasResidentialRatesForProject(
+  config: CalculatorRuntimeConfig,
+  projectId: string,
+  completion: CompletionKind,
+  bedrooms: 1 | 2 | 3,
+  finish: FinishKind,
+): boolean {
+  return floorOptionsForResidential(config, projectId, completion, bedrooms, finish).length > 0
 }
 
 export function findResidentialPriceRow(

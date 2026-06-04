@@ -411,6 +411,10 @@ export const en = {
       'Apartment areas from Ayat strategy Section 10 (Lideta, Kazanchis, Bole, CMC, Ayat Hills). Price per square meter depends on floor range and construction stage.',
     shopLocationsHint:
       'Shop areas from Ayat strategy Section 11 (Ledeta, Kazanchis, Bole Air, Zone 2, Meri Luke 1, Summit, and more). Different from apartment locations.',
+    loadingRates: 'Loading apartment rates from admin Pricing…',
+    noRatesLoaded:
+      'Live apartment rates did not load. Open Admin → Pricing, confirm CMC rows are saved with Construction stage “Near completion”, then restart the API and refresh this page.',
+    noFloorsForRates: 'No floors priced for this selection',
     liveRatesNote: 'Rates reflect current admin pricing (updated when you save in Pricing).',
     disclaimer:
       'Indicative only. Figures follow Ayat’s published sales strategy structure and Belay’s current price table estimates. Official quotes from Ayat Share Company are required before purchase. Prices may change quarterly.',
