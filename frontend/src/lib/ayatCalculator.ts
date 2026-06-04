@@ -51,6 +51,11 @@ export interface CalculatorResult {
   priceAfterTierDiscount: number
   locationPromotion: LocationPromotionLine | null
   priceAfterDiscount: number
+  areaSqm: number
+  /** List total after Ayat tier discount, ÷ area. */
+  effectivePricePerSqmAfterTier: number
+  /** Final price ÷ area — after tier and any location promotion. */
+  effectivePricePerSqm: number
   tier: DownPaymentTier
   upfrontCashDue: number
   remainingAfterUpfront: number
@@ -83,6 +88,11 @@ function applyLocationPromotion(
 
 function roundMoney(n: number): number {
   return Math.round(n)
+}
+
+function effectivePricePerSqm(priceAfterDiscount: number, areaSqm: number): number {
+  if (areaSqm <= 0) return 0
+  return roundMoney(priceAfterDiscount / areaSqm)
 }
 
 /** Strategy table + optional shared rows on cmc-extension (both stages). */
@@ -376,6 +386,9 @@ export function calculateResidential(
     priceAfterTierDiscount,
     locationPromotion: promotion,
     priceAfterDiscount,
+    areaSqm: input.areaSqm,
+    effectivePricePerSqmAfterTier: effectivePricePerSqm(priceAfterTierDiscount, input.areaSqm),
+    effectivePricePerSqm: effectivePricePerSqm(priceAfterDiscount, input.areaSqm),
     tier,
     upfrontCashDue,
     remainingAfterUpfront,
@@ -427,6 +440,9 @@ export function calculateCommercial(
     priceAfterTierDiscount,
     locationPromotion: promotion,
     priceAfterDiscount,
+    areaSqm: input.areaSqm,
+    effectivePricePerSqmAfterTier: effectivePricePerSqm(priceAfterTierDiscount, input.areaSqm),
+    effectivePricePerSqm: effectivePricePerSqm(priceAfterDiscount, input.areaSqm),
     tier,
     upfrontCashDue,
     remainingAfterUpfront,

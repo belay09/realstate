@@ -563,7 +563,15 @@ export const en = {
     locationPromotion: 'Special offer: {{name}}',
     locationPromotionHint:
       'Limited-time extra discount for this location, applied after the Ayat tier discount.',
-    priceAfterDiscount: 'Final indicative price',
+    priceAfterDiscount: 'Total price (all discounts)',
+    totalAfterTier: 'Total after down-payment discount',
+    pricePerSqmAfterTier: 'Per m² after down-payment discount',
+    totalAfterPromotion: 'Total after special offer',
+    pricePerSqmAfterPromotion: 'Per m² after special offer',
+    finalSummaryTitle: 'Final summary (all discounts)',
+    effectivePricePerSqmFinal: 'Per m² — all discounts included',
+    effectivePricePerSqmSummary:
+      '{{area}} — list {{listRate}}/m² → after down-payment {{tierRate}}/m² → final {{finalRate}}/m².',
     downPayment6040: 'Down payment now (sixty-forty plan)',
     balance6040: 'Balance due on handover',
     firstMilestone: 'Due when you sign the contract (first milestone)',

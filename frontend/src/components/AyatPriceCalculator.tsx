@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 
 import type { CompletionKind, FinishKind, PropertyKind } from '../data/ayatCalculatorConfig'
 import { useTranslation } from '../context/LocaleContext'
+import type { Translator } from '../i18n/translate'
 import { useActiveShopLocations } from '../hooks/useActiveShopCommercialZones'
 import { useCalculatorConfig } from '../hooks/useCalculatorConfig'
 import type { ListingCalculatorPreset } from '../lib/listingCalculatorPreset'
@@ -187,6 +188,49 @@ function ChoiceButton({
   )
 }
 
+function DiscountStepTotals({
+  totalLabel,
+  total,
+  rateLabel,
+  ratePerSqm,
+  currency,
+  t,
+  tone,
+}: {
+  totalLabel: string
+  total: number
+  rateLabel: string
+  ratePerSqm: number
+  currency: string
+  t: Translator
+  tone: 'emerald' | 'amber'
+}) {
+  if (ratePerSqm <= 0) return null
+  const toneBorder =
+    tone === 'emerald'
+      ? 'border-emerald-200/80 dark:border-emerald-800/50'
+      : 'border-amber-200/80 dark:border-amber-800/50'
+  const toneText =
+    tone === 'emerald'
+      ? 'text-emerald-900 dark:text-emerald-100'
+      : 'text-amber-900 dark:text-amber-100'
+  return (
+    <div className={`mt-3 space-y-2 border-t pt-3 ${toneBorder}`}>
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <dt className={`text-xs font-medium ${toneText}`}>{totalLabel}</dt>
+        <dd className={`text-sm font-semibold ${toneText}`}>{formatMoney(total, currency)}</dd>
+      </div>
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <dt className={`text-xs ${toneText} opacity-90`}>{rateLabel}</dt>
+        <dd className={`text-base font-bold ${toneText}`}>
+          {formatMoney(ratePerSqm, currency)}
+          <span className="ml-1 text-xs font-normal opacity-80">{t('calculator.perSquareMeter')}</span>
+        </dd>
+      </div>
+    </div>
+  )
+}
+
 function CalculatorResults({
   result,
   kind,
@@ -268,6 +312,15 @@ function CalculatorResults({
             <p className="mt-2 text-xs text-emerald-800/90 dark:text-emerald-200/80">
               {t('calculator.clientDiscountHint')}
             </p>
+            <DiscountStepTotals
+              totalLabel={t('calculator.totalAfterTier')}
+              total={result.priceAfterTierDiscount}
+              rateLabel={t('calculator.pricePerSqmAfterTier')}
+              ratePerSqm={result.effectivePricePerSqmAfterTier}
+              currency={result.currency}
+              t={t}
+              tone="emerald"
+            />
           </div>
 
           {result.locationPromotion ? (
@@ -284,14 +337,46 @@ function CalculatorResults({
               <p className="mt-2 text-xs text-amber-800/90 dark:text-amber-200/80">
                 {t('calculator.locationPromotionHint')}
               </p>
+              <DiscountStepTotals
+                totalLabel={t('calculator.totalAfterPromotion')}
+                total={result.priceAfterDiscount}
+                rateLabel={t('calculator.pricePerSqmAfterPromotion')}
+                ratePerSqm={result.effectivePricePerSqm}
+                currency={result.currency}
+                t={t}
+                tone="amber"
+              />
             </div>
           ) : null}
 
-          <div>
-            <dt className="text-fg-muted">{t('calculator.priceAfterDiscount')}</dt>
-            <dd className="text-2xl font-bold text-brand-800 dark:text-brand-200">
+          <div className="rounded-xl border-2 border-brand-300/70 bg-brand-50/80 px-4 py-4 dark:border-brand-700/50 dark:bg-brand-950/40">
+            <dt className="text-sm font-semibold text-brand-900 dark:text-brand-100">
+              {t('calculator.finalSummaryTitle')}
+            </dt>
+            <dd className="mt-2 text-2xl font-bold text-brand-800 dark:text-brand-200">
               {formatMoney(result.priceAfterDiscount, result.currency)}
             </dd>
+            <p className="text-xs font-medium text-fg-muted">{t('calculator.priceAfterDiscount')}</p>
+            {result.areaSqm > 0 && result.effectivePricePerSqm > 0 ? (
+              <>
+                <dd className="mt-3 text-xl font-bold text-brand-800 dark:text-brand-200">
+                  {formatMoney(result.effectivePricePerSqm, result.currency)}
+                  <span className="text-sm font-normal text-fg-muted">
+                    {' '}
+                    {t('calculator.perSquareMeter')}
+                  </span>
+                </dd>
+                <p className="text-xs text-fg-muted">{t('calculator.effectivePricePerSqmFinal')}</p>
+                <p className="mt-2 text-xs text-fg-muted">
+                  {t('calculator.effectivePricePerSqmSummary', {
+                    area: formatSquareMeters(result.areaSqm, t),
+                    listRate: formatMoney(result.pricePerSqm, result.currency),
+                    tierRate: formatMoney(result.effectivePricePerSqmAfterTier, result.currency),
+                    finalRate: formatMoney(result.effectivePricePerSqm, result.currency),
+                  })}
+                </p>
+              </>
+            ) : null}
           </div>
 
           {result.tier.is6040 ? (
