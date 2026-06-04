@@ -59,6 +59,7 @@ export function AdminListingsPage() {
   const [selectedContentId, setSelectedContentId] = useState('')
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
+  const [deleteTarget, setDeleteTarget] = useState<AdminLocationContent | null>(null)
   const [createSubmitError, setCreateSubmitError] = useState<string | null>(null)
   const [createPendingMedia, setCreatePendingMedia] = useState<PendingMedia[]>([])
   const [homeCardForms, setHomeCardForms] = useState<HomeCardFormState[]>([])
@@ -185,6 +186,20 @@ export function AdminListingsPage() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin', 'location-content'] })
       pushToast('success', 'Location visibility updated.')
+    },
+    onError: (err) => pushToast('error', uploadErrorMessage(err)),
+  })
+  const deleteLocationContent = useMutation({
+    mutationFn: (id: string) => api.delete(`/admin/location-content/${id}`),
+    onSuccess: (_data, id) => {
+      qc.invalidateQueries({ queryKey: ['admin', 'location-content'] })
+      qc.invalidateQueries({ queryKey: ['public-location-content'] })
+      if (selectedContentId === id) {
+        setSelectedContentId('')
+        setShowEditModal(false)
+      }
+      setDeleteTarget(null)
+      pushToast('success', 'Location content deleted.')
     },
     onError: (err) => pushToast('error', uploadErrorMessage(err)),
   })
@@ -405,16 +420,25 @@ export function AdminListingsPage() {
                       </label>
                     </td>
                     <td className="px-3 py-2">
-                      <button
-                        type="button"
-                        className="text-xs text-brand-700 hover:underline dark:text-brand-400"
-                        onClick={() => {
-                          setSelectedContentId(row.id)
-                          setShowEditModal(true)
-                        }}
-                      >
-                        Edit media/details
-                      </button>
+                      <div className="flex flex-wrap items-center gap-3">
+                        <button
+                          type="button"
+                          className="text-xs text-brand-700 hover:underline dark:text-brand-400"
+                          onClick={() => {
+                            setSelectedContentId(row.id)
+                            setShowEditModal(true)
+                          }}
+                        >
+                          Edit media/details
+                        </button>
+                        <button
+                          type="button"
+                          className="text-xs text-red-600 hover:underline dark:text-red-400"
+                          onClick={() => setDeleteTarget(row)}
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -647,6 +671,16 @@ export function AdminListingsPage() {
             onNotify={pushToast}
           />
         </ModalShell>
+      ) : null}
+      {deleteTarget ? (
+        <ConfirmDeleteLocationModal
+          target={deleteTarget}
+          pending={deleteLocationContent.isPending}
+          onCancel={() => {
+            if (!deleteLocationContent.isPending) setDeleteTarget(null)
+          }}
+          onConfirm={() => deleteLocationContent.mutate(deleteTarget.id)}
+        />
       ) : null}
     </div>
   )
@@ -1155,6 +1189,57 @@ function InlineUploadToUrlField({
         </div>
       ) : null}
       {error ? <p className="mt-1 text-xs text-red-600">{error}</p> : null}
+    </div>
+  )
+}
+
+function ConfirmDeleteLocationModal({
+  target,
+  pending,
+  onCancel,
+  onConfirm,
+}: {
+  target: AdminLocationContent
+  pending: boolean
+  onCancel: () => void
+  onConfirm: () => void
+}) {
+  return (
+    <div className="fixed inset-0 z-[260] flex items-center justify-center bg-slate-900/50 p-4">
+      <div
+        className="w-full max-w-md rounded-2xl border border-red-200 bg-surface p-5 shadow-lg dark:border-red-900/50"
+        role="alertdialog"
+        aria-labelledby="delete-location-title"
+        aria-describedby="delete-location-desc"
+      >
+        <h3 id="delete-location-title" className="text-lg font-semibold text-fg">
+          Delete location content?
+        </h3>
+        <p id="delete-location-desc" className="mt-3 text-sm text-fg-muted">
+          This permanently removes{' '}
+          <span className="font-medium text-fg">{target.title}</span> (
+          <span className="font-mono text-xs">{target.kind}</span> /{' '}
+          <span className="font-mono text-xs">{target.location_id}</span>). All photos, cards, and
+          building settings for this page will be deleted. Listings are not removed, but the public
+          location page will no longer have CMS content.
+        </p>
+        <p className="mt-2 text-sm font-medium text-red-700 dark:text-red-400">
+          This cannot be undone.
+        </p>
+        <div className="mt-6 flex flex-wrap justify-end gap-2">
+          <button type="button" className="btn-secondary" disabled={pending} onClick={onCancel}>
+            Cancel
+          </button>
+          <button
+            type="button"
+            className="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:opacity-50"
+            disabled={pending}
+            onClick={onConfirm}
+          >
+            {pending ? 'Deleting…' : 'Delete location'}
+          </button>
+        </div>
+      </div>
     </div>
   )
 }

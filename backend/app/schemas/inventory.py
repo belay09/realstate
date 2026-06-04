@@ -370,6 +370,7 @@ class LocationContentCreate(BaseModel):
     description: str | None = None
     video_url: str | None = Field(default=None, max_length=2048)
     cards: list[LocationCard] = []
+    settings: LocationBuildingSettings | None = None
     is_public: bool = True
 
 
@@ -379,6 +380,7 @@ class LocationContentUpdate(BaseModel):
     description: str | None = None
     video_url: str | None = Field(default=None, max_length=2048)
     cards: list[LocationCard] | None = None
+    settings: LocationBuildingSettings | None = None
     is_public: bool | None = None
 
 
@@ -393,6 +395,7 @@ class LocationContentRead(BaseModel):
     description: str | None
     video_url: str | None
     cards: list[LocationCard]
+    settings: LocationBuildingSettings | None = None
     is_public: bool
     created_at: datetime
     updated_at: datetime
