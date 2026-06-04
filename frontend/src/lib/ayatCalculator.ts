@@ -6,11 +6,7 @@ import type {
   MilestoneScheduleId,
   PropertyKind,
 } from '../data/ayatCalculatorConfig'
-import {
-  floorOptionsForProject,
-  unitTypeCodesForPriceLookup,
-  unitTypeForBedroomsFinish,
-} from '../data/ayatCalculatorConfig'
+import { unitTypeCodesForPriceLookup, unitTypeForBedroomsFinish } from '../data/ayatCalculatorConfig'
 import type { CalculatorRuntimeConfig } from './calculatorRuntime'
 import { resolveResidentialProjectId } from './calculatorRuntime'
 

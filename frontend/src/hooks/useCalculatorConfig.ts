@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 
 import { api } from '../api/client'
 import {
@@ -19,7 +19,7 @@ import {
 } from '../lib/calculatorRuntime'
 
 /** Avoid showing Ayat default rates before live pricing loads (hides removed construction stages). */
-const STATIC_FALLBACK: CalculatorRuntimeConfig = {
+export const CALCULATOR_CONFIG_FALLBACK: CalculatorRuntimeConfig = {
   currency: 'ETB',
   pricingVersionName: 'Loading…',
   residentialProjects: RESIDENTIAL_PROJECTS,
@@ -34,8 +34,15 @@ const STATIC_FALLBACK: CalculatorRuntimeConfig = {
   inventoryToStrategyLocation: INVENTORY_TO_STRATEGY_LOCATION,
 }
 
-export function useCalculatorConfig(companySlug = 'ayat-real-estate') {
-  return useQuery({
+export type CalculatorConfigQuery = Omit<
+  UseQueryResult<CalculatorRuntimeConfig, Error>,
+  'data'
+> & {
+  data: CalculatorRuntimeConfig
+}
+
+export function useCalculatorConfig(companySlug = 'ayat-real-estate'): CalculatorConfigQuery {
+  const query = useQuery({
     queryKey: ['public', 'calculator-config', companySlug],
     queryFn: async () => {
       const { data } = await api.get<PublicCalculatorConfigApi>('/public/calculator-config', {
@@ -44,6 +51,10 @@ export function useCalculatorConfig(companySlug = 'ayat-real-estate') {
       return calculatorConfigFromApi(data)
     },
     staleTime: 5 * 60 * 1000,
-    placeholderData: STATIC_FALLBACK,
+    placeholderData: CALCULATOR_CONFIG_FALLBACK,
   })
+  return {
+    ...query,
+    data: query.data ?? CALCULATOR_CONFIG_FALLBACK,
+  }
 }
