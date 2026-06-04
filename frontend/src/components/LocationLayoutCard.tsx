@@ -67,17 +67,17 @@ export function LocationLayoutCard({ listing, index = 0 }: Props) {
 
   return (
     <article className="group overflow-hidden rounded-2xl border border-border bg-surface shadow-sm transition duration-300 hover:border-brand-400/40 hover:shadow-lg hover:shadow-brand-900/10 dark:hover:border-brand-600/35">
-      <div className="flex flex-col sm:flex-row">
-        <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-gradient-to-br from-slate-800 to-slate-950 sm:aspect-auto sm:w-56 md:w-72 lg:w-80">
+      <div className="flex flex-col @md:flex-row">
+        <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-gradient-to-br from-slate-800 to-slate-950 @md:aspect-auto @md:w-48 @lg:w-56">
           {imageUrls.length > 0 ? (
             <ListingCardImageCarousel urls={imageUrls} alt={title} startOffset={index} />
           ) : (
-            <div className="flex h-full min-h-[12rem] flex-col items-center justify-center gap-2 text-slate-400 sm:min-h-[220px]">
+            <div className="flex h-full min-h-[12rem] flex-col items-center justify-center gap-2 text-slate-400 @md:min-h-[220px]">
               <PhotoIcon />
               <span className="text-xs font-medium">{t('listingCard.photoSoon')}</span>
             </div>
           )}
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-transparent sm:bg-gradient-to-r sm:from-slate-950/30" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-transparent @md:bg-gradient-to-r @md:from-slate-950/30" />
           {buildingLabel ? (
             <span className="absolute left-3 top-3 z-[2] rounded-full bg-violet-600/95 px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-wide text-white shadow">
               {buildingLabel}
@@ -85,17 +85,17 @@ export function LocationLayoutCard({ listing, index = 0 }: Props) {
           ) : null}
         </div>
 
-        <div className="flex min-w-0 flex-1 flex-col p-5 sm:p-6 md:p-7">
+        <div className="flex min-w-0 flex-1 flex-col p-5 @md:p-6">
           <p className="text-xs font-semibold uppercase tracking-wide text-brand-600 dark:text-brand-400">
             {location}
           </p>
-          <h3 className="mt-2 text-lg font-bold leading-snug tracking-tight text-fg md:text-xl">
+          <h3 className="mt-2 text-lg font-bold leading-snug tracking-tight text-fg @lg:text-xl">
             <Link to={detailHref} className="hover:text-brand-700 dark:hover:text-brand-300">
               {title}
             </Link>
           </h3>
 
-          <dl className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <dl className="mt-4 grid grid-cols-2 gap-2 @md:grid-cols-4">
             <SpecItem label={t('layoutCard.bedrooms')} value={beds ?? t('layoutCard.notSpecified')} />
             <SpecItem label={t('layoutCard.finish')} value={finishLabel} />
             <SpecItem
@@ -113,7 +113,7 @@ export function LocationLayoutCard({ listing, index = 0 }: Props) {
           </dl>
 
           {listing.description_preview ? (
-            <p className="mt-4 line-clamp-4 text-sm leading-relaxed text-fg-muted md:line-clamp-5">
+            <p className="mt-4 line-clamp-4 text-sm leading-relaxed text-fg-muted @lg:line-clamp-5">
               {listing.description_preview}
             </p>
           ) : null}
@@ -122,7 +122,7 @@ export function LocationLayoutCard({ listing, index = 0 }: Props) {
             <Link to={detailHref} className="btn-primary text-sm">
               {t('layoutCard.viewDetails')}
             </Link>
-            <span className="text-xs text-fg-muted">{t('layoutCard.viewDetailsHint')}</span>
+            <span className="hidden text-xs text-fg-muted @lg:inline">{t('layoutCard.viewDetailsHint')}</span>
           </div>
         </div>
       </div>

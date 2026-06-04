@@ -10,6 +10,11 @@ type LocationListingCardsProps = {
   eyebrow?: string
 }
 
+function gridClass(count: number) {
+  if (count === 1) return 'grid grid-cols-1 gap-6'
+  return 'grid grid-cols-1 gap-6 md:grid-cols-2'
+}
+
 export function LocationListingCards({
   listings,
   title,
@@ -27,9 +32,9 @@ export function LocationListingCards({
       title={title}
       description={subtitle ?? undefined}
     >
-      <ul className="mx-auto flex w-full max-w-4xl flex-col gap-6">
+      <ul className={gridClass(visible.length)}>
         {visible.map((item, index) => (
-          <li key={item.slug}>
+          <li key={item.slug} className="@container min-h-0">
             <LocationLayoutCard listing={item} index={index} />
           </li>
         ))}

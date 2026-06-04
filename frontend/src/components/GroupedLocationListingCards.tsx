@@ -21,22 +21,16 @@ type Props = {
   subtitle?: string | null
 }
 
-const SECTION_ACCENT: Record<BuildingType, string> = {
-  mixed: 'border-violet-500 bg-violet-500/5',
-  duplex: 'border-sky-500 bg-sky-500/5',
-  flat: 'border-emerald-500 bg-emerald-500/5',
+function sectionEyebrow(t: (key: string) => string, type: BuildingType) {
+  if (type === 'mixed') return t('layoutCard.sectionEyebrowMixed')
+  if (type === 'duplex') return t('layoutCard.sectionEyebrowDuplex')
+  return t('layoutCard.sectionEyebrowFlat')
 }
 
 function sectionTitle(t: (key: string) => string, type: BuildingType) {
   if (type === 'mixed') return t('buildingType.mixedTitle')
   if (type === 'duplex') return t('buildingType.duplexTitle')
   return t('buildingType.flatTitle')
-}
-
-function sectionEyebrow(t: (key: string) => string, type: BuildingType) {
-  if (type === 'mixed') return t('layoutCard.sectionEyebrowMixed')
-  if (type === 'duplex') return t('layoutCard.sectionEyebrowDuplex')
-  return t('layoutCard.sectionEyebrowFlat')
 }
 
 function sectionDescription(
@@ -100,10 +94,7 @@ export function GroupedLocationListingCards({
             : null
 
         return (
-          <div
-            key={type}
-            className={`scroll-mt-28 rounded-3xl border-l-4 px-4 py-2 md:px-6 ${SECTION_ACCENT[type]}`}
-          >
+          <div key={type} className="scroll-mt-28 border-t border-border pt-10 first:border-t-0 first:pt-0">
             <LocationListingCards
               listings={items}
               title={sectionTitle(t, type)}
@@ -112,25 +103,21 @@ export function GroupedLocationListingCards({
               sectionId={type === firstTypeWithItems ? 'location-layouts' : undefined}
             />
             {shopLink ? (
-              <p className="mx-auto -mt-2 max-w-4xl text-sm text-fg-muted">
+              <p className="mt-4 text-sm text-fg-muted">
                 {t('buildingType.shopFloorsHint')}{' '}
-                <Link
-                  to={shopLink}
-                  className="font-semibold text-brand-700 underline dark:text-brand-300"
-                >
+                <Link to={shopLink} className="font-medium text-fg underline underline-offset-2">
                   {t('buildingType.shopCalculatorLink')}
                 </Link>
               </p>
             ) : null}
             {mixed && settings.tower_overrides.length > 0 ? (
-              <ul className="mx-auto mt-3 max-w-4xl space-y-1 rounded-xl border border-border/80 bg-surface/60 px-4 py-3 text-sm text-fg-muted">
+              <ul className="mt-3 space-y-1 text-sm text-fg-muted">
                 {settings.tower_overrides.map((row) => {
                   const rules = floorRulesForTower(settings, row.tower_code)
                   return (
                     <li key={row.tower_code}>
-                      <strong className="text-fg">{row.label || row.tower_code}:</strong> shops
-                      ground–{rules.retail_floor_max}, apartments from floor{' '}
-                      {rules.residential_floor_min}
+                      {row.label || row.tower_code}: shops ground–{rules.retail_floor_max}, apartments
+                      from floor {rules.residential_floor_min}
                     </li>
                   )
                 })}
@@ -141,7 +128,7 @@ export function GroupedLocationListingCards({
       })}
 
       {untagged.length > 0 ? (
-        <div className="rounded-3xl border-l-4 border-stone-400 bg-stone-500/5 px-4 py-2 md:px-6">
+        <div className="border-t border-border pt-10">
           <LocationListingCards
             listings={untagged}
             title={t('buildingType.otherLayouts')}
