@@ -563,7 +563,7 @@ export const en = {
     oneBedNote:
       'One-bedroom pricing uses the same semi-finished two-bedroom Type A price band as a guide. Confirm the exact unit type with Ayat sales.',
     noPriceForSelection:
-      'No price band for this combination (for example regular finished on a low floor). Try semi-finished or a higher floor.',
+      'No ETB/m² rate in admin Pricing for this bedroom count, finish, floor, and construction stage. Add a price row whose floor band includes this floor (e.g. 11-18 for floor 16) and the right unit code (SFCA for 1–2 bed semi-finished, SFCR for 3 bed semi-finished).',
     howItWorksTitle: 'How this calculator works',
     how1:
       'We multiply your net area in square meters by the rate for your floor range and unit type (semi-finished or regular finished, two or three bedrooms).',

@@ -129,3 +129,14 @@ export function unitTypeForBedroomsFinish(
   if (bedrooms === 3) return 'RFCR'
   return 'RFCA'
 }
+
+/** Ayat tables often omit SFCR/RFCR; use the A-type row when the R-type band is missing. */
+export function unitTypeCodesForPriceLookup(
+  bedrooms: 1 | 2 | 3,
+  finish: FinishKind,
+): string[] {
+  const primary = unitTypeForBedroomsFinish(bedrooms, finish)
+  if (finish === 'semi-finished' && primary === 'SFCR') return ['SFCR', 'SFCA']
+  if (finish === 'regular-finished' && primary === 'RFCR') return ['RFCR', 'RFCA']
+  return [primary]
+}

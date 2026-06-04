@@ -351,8 +351,11 @@ export function AdminPricingPage() {
             <p className="text-xs text-stone-500">
               Unit codes: SFCA, SFCR (semi-finished), RFCA, RFCR (regular). Floor band examples:{' '}
               <span className="font-mono">3-10</span>, <span className="font-mono">1-16</span>.
-              For <strong>CMC</strong>, use <em>Construction stage</em> to set different rates for
-              “not started” vs “near completion” (same choices as on the public calculator).
+              For <strong>CMC</strong>, use <em>Construction stage</em> for not started vs near
+              completion. Cover every floor band you need (e.g. add <span className="font-mono">SFCA
+              11-18</span> if floors 11–18 are missing between 3–10 and 19–26). Use{' '}
+              <span className="font-mono">SFCR</span> for 3-bedroom semi-finished, or{' '}
+              <span className="font-mono">SFCA</span> if you use one rate for all semi-finished beds.
             </p>
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">

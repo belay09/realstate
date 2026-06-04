@@ -6,7 +6,11 @@ import type {
   MilestoneScheduleId,
   PropertyKind,
 } from '../data/ayatCalculatorConfig'
-import { floorOptionsForProject, unitTypeForBedroomsFinish } from '../data/ayatCalculatorConfig'
+import {
+  floorOptionsForProject,
+  unitTypeCodesForPriceLookup,
+  unitTypeForBedroomsFinish,
+} from '../data/ayatCalculatorConfig'
 import type { CalculatorRuntimeConfig } from './calculatorRuntime'
 import { resolveResidentialProjectId } from './calculatorRuntime'
 
@@ -120,33 +124,17 @@ export function findResidentialPriceRowForCompletion(
   config: CalculatorRuntimeConfig,
   inventoryProjectId: string,
   completion: CompletionKind,
-  unitTypeCode: string,
+  bedrooms: 1 | 2 | 3,
   finish: FinishKind,
   floor: number,
 ) {
   const projectIds = priceRowProjectIdsForCompletion(inventoryProjectId, completion, config)
+  const unitCodes = unitTypeCodesForPriceLookup(bedrooms, finish)
   for (const pid of projectIds) {
-    const row = findResidentialPriceRow(config, pid, unitTypeCode, finish, floor)
-    if (row) return row
-  }
-  for (const pid of projectIds) {
-    const relaxed = config.residentialPriceRows.filter(
-      (r) =>
-        r.projectId === pid &&
-        r.finishType === finish &&
-        floor >= r.floorBand.floorMin &&
-        floor <= r.floorBand.floorMax,
-    )
-    if (relaxed[0]) return relaxed[0]
-  }
-  for (const pid of projectIds) {
-    const any = config.residentialPriceRows.filter(
-      (r) =>
-        r.projectId === pid &&
-        floor >= r.floorBand.floorMin &&
-        floor <= r.floorBand.floorMax,
-    )
-    if (any[0]) return any[0]
+    for (const code of unitCodes) {
+      const row = findResidentialPriceRow(config, pid, code, finish, floor)
+      if (row) return row
+    }
   }
   return null
 }
@@ -160,24 +148,16 @@ export function floorOptionsForResidential(
   finish: FinishKind,
 ): number[] {
   const projectIds = new Set(priceRowProjectIdsForCompletion(projectId, completion, config))
-  const unitTypeCode = unitTypeForBedroomsFinish(bedrooms, finish)
+  const unitCodes = new Set(unitTypeCodesForPriceLookup(bedrooms, finish))
 
   const matchProject = (rowProjectId: string) => projectIds.has(rowProjectId)
 
-  let rows = config.residentialPriceRows.filter(
+  const rows = config.residentialPriceRows.filter(
     (r) =>
       matchProject(r.projectId) &&
-      r.unitTypeCode === unitTypeCode &&
+      unitCodes.has(r.unitTypeCode) &&
       r.finishType === finish,
   )
-  if (rows.length === 0) {
-    rows = config.residentialPriceRows.filter(
-      (r) => matchProject(r.projectId) && r.finishType === finish,
-    )
-  }
-  if (rows.length === 0) {
-    rows = config.residentialPriceRows.filter((r) => matchProject(r.projectId))
-  }
 
   const floors = new Set<number>()
   for (const row of rows) {
@@ -293,7 +273,7 @@ export function calculateResidential(
         config,
         input.projectId,
         input.completion,
-        unitTypeCode,
+        input.bedrooms,
         input.finish,
         input.floor,
       )
@@ -301,7 +281,7 @@ export function calculateResidential(
         config,
         input.projectId,
         'unstarted',
-        unitTypeCode,
+        input.bedrooms,
         input.finish,
         input.floor,
       ) ??
