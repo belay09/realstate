@@ -11,6 +11,7 @@ import type {
   AdminPropertyListingSummary,
   ListingMetadata,
   Paginated,
+  Project,
   PropertyImage,
 } from '../../api/types'
 import { AdminCreateListingModal } from '../../components/admin/AdminCreateListingModal'
@@ -95,6 +96,7 @@ export function AdminPropertyListingsPage() {
   const qc = useQueryClient()
   const [companyId, setCompanyId] = useState('')
   const [search, setSearch] = useState('')
+  const [projectSlug, setProjectSlug] = useState('')
   const [publicOnly, setPublicOnly] = useState<'all' | 'public' | 'hidden'>('all')
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editTab, setEditTab] = useState<EditTab>('basics')
@@ -117,12 +119,33 @@ export function AdminPropertyListingsPage() {
     setCompanyId(temer?.id ?? companies.data.items[0].id)
   }, [companies.data, companyId])
 
+  useEffect(() => {
+    setProjectSlug('')
+  }, [companyId])
+
+  const projects = useQuery({
+    queryKey: ['admin', 'projects', companyId],
+    enabled: Boolean(companyId),
+    queryFn: async () => {
+      const { data } = await api.get<Paginated<Project>>('/admin/projects', {
+        params: { company_id: companyId, limit: 100 },
+      })
+      return data
+    },
+  })
+
+  const projectOptions = useMemo(() => {
+    const rows = [...(projects.data?.items ?? [])].sort((a, b) => a.name.localeCompare(b.name))
+    return rows
+  }, [projects.data?.items])
+
   const listings = useQuery({
-    queryKey: ['admin', 'property-listings', companyId, search, publicOnly],
+    queryKey: ['admin', 'property-listings', companyId, search, projectSlug, publicOnly],
     enabled: Boolean(companyId),
     queryFn: async () => {
       const params: Record<string, string | boolean> = { company_id: companyId, limit: '200' }
       if (search.trim()) params.q = search.trim()
+      if (projectSlug) params.project_slug = projectSlug
       if (publicOnly === 'public') params.is_public = true
       if (publicOnly === 'hidden') params.is_public = false
       const { data } = await api.get<Paginated<AdminPropertyListingSummary>>('/admin/listings', {
@@ -162,12 +185,28 @@ export function AdminPropertyListingsPage() {
       <div className="flex flex-wrap items-end gap-4">
         <AdminCompanySelect value={companyId} onChange={setCompanyId} />
         <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
+          Location / project
+          <select
+            className="input mt-1 min-w-[12rem] max-w-xs"
+            value={projectSlug}
+            onChange={(e) => setProjectSlug(e.target.value)}
+            disabled={projects.isLoading}
+          >
+            <option value="">All locations</option>
+            {projectOptions.map((p) => (
+              <option key={p.id} value={p.slug}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
           Search
           <input
             className="input mt-1 w-56"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Title, area, project…"
+            placeholder="Title, area…"
           />
         </label>
         <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
@@ -205,9 +244,11 @@ export function AdminPropertyListingsPage() {
         <p className="text-sm text-red-600">Could not load listings for this company.</p>
       ) : null}
 
-      {listings.data && listings.data.total === 0 ? (
+      {listings.data && listings.data.total === 0 && !listings.isLoading ? (
         <div className="rounded-lg border border-dashed border-stone-300 bg-stone-50 p-6 text-sm text-stone-600 dark:border-stone-700 dark:bg-stone-900/40 dark:text-stone-400">
-          <p className="font-medium text-stone-800 dark:text-stone-200">No listings yet</p>
+          <p className="font-medium text-stone-800 dark:text-stone-200">
+            {projectSlug ? 'No listings for this location' : 'No listings yet'}
+          </p>
           <p className="mt-2">
             Click <strong>Add listing</strong> to create a home for this company. You need at least one{' '}
             <strong>unit type</strong> (from seed data or API). If you only have location pages, pick an
@@ -288,6 +329,9 @@ export function AdminPropertyListingsPage() {
           </table>
           <p className="border-t border-stone-200 px-3 py-2 text-xs text-stone-500 dark:border-stone-800">
             {listings.data.total} listing{listings.data.total === 1 ? '' : 's'}
+            {projectSlug
+              ? ` in ${projectOptions.find((p) => p.slug === projectSlug)?.name ?? projectSlug}`
+              : ''}
           </p>
         </div>
       ) : null}

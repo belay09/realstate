@@ -58,6 +58,10 @@ cd backend
 
 If the email already exists, the password is reset and the `admin` role is ensured. Use the same email and password in the React admin login page.
 
+## Admin session length
+
+Login tokens last **8 hours** by default (`ACCESS_TOKEN_EXPIRE_MINUTES=480` in `.env`). Set a higher value (e.g. `1440` for 24 hours) if your team needs longer; restart the API after changing env on the server.
+
 ## Demo data (UI route testing)
 
 Loads **Ayat Real Estate** and **Sunshine Developers** with projects, blocks, unit types, units, and public listings (plus one sold + one draft case for filter/visibility checks).
