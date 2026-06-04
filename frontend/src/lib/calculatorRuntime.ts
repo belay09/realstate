@@ -54,6 +54,34 @@ type ApiTier = {
 }
 type ApiMilestone = { id: string; labelKey: string; percent: number }
 
+type ApiResidentialRowRaw = ApiResidentialRow & {
+  project_id?: string
+  unit_type_code?: string
+  finish_type?: FinishKind
+  price_per_sqm?: number
+  floor_band?: { label: string; floor_min?: number; floor_max?: number }
+}
+
+function normalizeResidentialRow(r: ApiResidentialRowRaw): ApiResidentialRow {
+  const band = (r.floorBand ?? r.floor_band) as
+    | ApiFloorBand
+    | { label: string; floor_min?: number; floor_max?: number }
+    | undefined
+  const floorMin = band && 'floorMin' in band ? band.floorMin : (band?.floor_min ?? 0)
+  const floorMax = band && 'floorMax' in band ? band.floorMax : (band?.floor_max ?? 0)
+  return {
+    projectId: r.projectId ?? r.project_id ?? '',
+    unitTypeCode: r.unitTypeCode ?? r.unit_type_code ?? '',
+    finishType: (r.finishType ?? r.finish_type ?? 'semi-finished') as FinishKind,
+    floorBand: {
+      label: band?.label ?? '',
+      floorMin,
+      floorMax,
+    },
+    pricePerSqm: r.pricePerSqm ?? r.price_per_sqm ?? 0,
+  }
+}
+
 export type PublicCalculatorConfigApi = {
   currency: string
   includesVat: boolean
@@ -84,17 +112,9 @@ export function calculatorConfigFromApi(data: PublicCalculatorConfigApi): Calcul
       supportsCompletionChoice: p.supportsCompletionChoice,
       usesStrategyFloorTable: p.usesStrategyFloorTable,
     })),
-    residentialPriceRows: data.residentialPriceRows.map((r) => ({
-      projectId: r.projectId,
-      unitTypeCode: r.unitTypeCode,
-      finishType: r.finishType,
-      floorBand: {
-        label: r.floorBand.label,
-        floorMin: r.floorBand.floorMin,
-        floorMax: r.floorBand.floorMax,
-      },
-      pricePerSqm: r.pricePerSqm,
-    })),
+    residentialPriceRows: (data.residentialPriceRows ?? []).map((r) =>
+      normalizeResidentialRow(r as ApiResidentialRowRaw),
+    ),
     commercialZones: data.commercialZones.map((z) => ({
       id: z.id,
       labelKey: z.labelKey,

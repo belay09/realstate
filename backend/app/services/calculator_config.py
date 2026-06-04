@@ -214,15 +214,15 @@ def build_public_calculator_config(
         )
         api_rows.append(
             {
-                "project_id": pid,
-                "unit_type_code": r["unitTypeCode"],
-                "finish_type": r["finishType"],
-                "floor_band": {
+                "projectId": pid,
+                "unitTypeCode": r["unitTypeCode"],
+                "finishType": r["finishType"],
+                "floorBand": {
                     "label": fb["label"],
-                    "floor_min": fb["floorMin"],
-                    "floor_max": fb["floorMax"],
+                    "floorMin": fb["floorMin"],
+                    "floorMax": fb["floorMax"],
                 },
-                "price_per_sqm": r["pricePerSqm"],
+                "pricePerSqm": r["pricePerSqm"],
             }
         )
     base["residential_price_rows"] = api_rows
