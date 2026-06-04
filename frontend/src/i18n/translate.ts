@@ -4,6 +4,7 @@ type Primitive = string | number
 type Params = Record<string, Primitive>
 
 function getNested(obj: Record<string, unknown>, path: string): unknown {
+  if (!path) return undefined
   return path.split('.').reduce<unknown>((acc, part) => {
     if (acc && typeof acc === 'object' && part in (acc as Record<string, unknown>)) {
       return (acc as Record<string, unknown>)[part]
@@ -19,6 +20,7 @@ function interpolate(template: string, params?: Params): string {
 
 export function createTranslator(messages: Messages) {
   return function t(path: string, params?: Params): string {
+    if (!path) return ''
     const value = getNested(messages as unknown as Record<string, unknown>, path)
     if (typeof value === 'string') {
       return interpolate(value, params)

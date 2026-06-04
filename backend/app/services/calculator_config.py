@@ -74,13 +74,13 @@ def _rows_to_residential_price_rows(
 
 
 def _normalize_stored_config(stored: dict[str, Any]) -> dict[str, Any]:
-    """Normalize calculator_config from DB to snake_case API fields."""
+    """Normalize calculator_config from DB for the public API (camelCase nested dicts)."""
 
     def zones(raw: list[dict]) -> list[dict]:
         return [
             {
                 "id": z["id"],
-                "label_key": z.get("label_key") or z.get("labelKey", z["id"]),
+                "labelKey": z.get("labelKey") or z.get("label_key", z["id"]),
                 "floors": z["floors"],
             }
             for z in raw
@@ -90,12 +90,12 @@ def _normalize_stored_config(stored: dict[str, Any]) -> dict[str, Any]:
         return [
             {
                 "id": t["id"],
-                "down_payment_percent": t.get("down_payment_percent", t.get("downPaymentPercent")),
-                "client_discount_percent": t.get(
-                    "client_discount_percent", t.get("clientDiscountPercent")
+                "downPaymentPercent": t.get("downPaymentPercent", t.get("down_payment_percent")),
+                "clientDiscountPercent": t.get(
+                    "clientDiscountPercent", t.get("client_discount_percent")
                 ),
-                "label_key": t.get("label_key", t.get("labelKey", t["id"])),
-                "is_6040": t.get("is_6040", t.get("is6040", False)),
+                "labelKey": t.get("labelKey", t.get("label_key", t["id"])),
+                "is6040": t.get("is6040", t.get("is_6040", False)),
             }
             for t in raw
         ]
@@ -104,14 +104,14 @@ def _normalize_stored_config(stored: dict[str, Any]) -> dict[str, Any]:
         return [
             {
                 "id": p["id"],
-                "area_label_key": p.get("area_label_key", p.get("areaLabelKey", "")),
-                "name_key": p.get("name_key", p.get("nameKey", "")),
-                "max_floor": p.get("max_floor", p.get("maxFloor", 1)),
-                "supports_completion_choice": p.get(
-                    "supports_completion_choice", p.get("supportsCompletionChoice", False)
+                "areaLabelKey": p.get("areaLabelKey", p.get("area_label_key", "")),
+                "nameKey": p.get("nameKey", p.get("name_key", "")),
+                "maxFloor": p.get("maxFloor", p.get("max_floor", 1)),
+                "supportsCompletionChoice": p.get(
+                    "supportsCompletionChoice", p.get("supports_completion_choice", False)
                 ),
-                "uses_strategy_floor_table": p.get(
-                    "uses_strategy_floor_table", p.get("usesStrategyFloorTable", False)
+                "usesStrategyFloorTable": p.get(
+                    "usesStrategyFloorTable", p.get("uses_strategy_floor_table", False)
                 ),
             }
             for p in raw
@@ -123,7 +123,7 @@ def _normalize_stored_config(stored: dict[str, Any]) -> dict[str, Any]:
             result[schedule_id] = [
                 {
                     "id": s["id"],
-                    "label_key": s.get("label_key", s.get("labelKey", s["id"])),
+                    "labelKey": s.get("labelKey", s.get("label_key", s["id"])),
                     "percent": s["percent"],
                 }
                 for s in steps
@@ -230,9 +230,9 @@ def build_public_calculator_config(
     for proj in base.get("residential_projects", []):
         pid = proj.get("id")
         if pid and pid in max_floor_by_project:
-            proj["max_floor"] = max_floor_by_project[pid]
-            if proj.get("uses_strategy_floor_table"):
-                proj["floor_min"] = min_floor_by_project.get(pid, 3)
+            proj["maxFloor"] = max_floor_by_project[pid]
+            if proj.get("usesStrategyFloorTable"):
+                proj["floorMin"] = min_floor_by_project.get(pid, 3)
     return base
 
 

@@ -72,6 +72,6 @@ def filter_calculator_config_by_visibility(
         filtered["residential_price_rows"] = [
             row
             for row in filtered["residential_price_rows"]
-            if row.get("project_id") in price_project_ids
+            if (row.get("projectId") or row.get("project_id")) in price_project_ids
         ]
     return filtered
