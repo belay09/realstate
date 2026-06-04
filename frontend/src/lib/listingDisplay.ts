@@ -54,6 +54,9 @@ export function formatListingLocation(
 }
 
 export function formatListingCardTitle(item: PublicListingSummary, t: Translator): string {
+  const adminTitle = item.title?.trim()
+  if (adminTitle) return adminTitle
+
   const beds = item.bedrooms
   const finish = finishKindFromUnitTypeCode(item.unit_type_code)
   if (beds === 1 || beds === 2 || beds === 3) {
