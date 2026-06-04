@@ -39,11 +39,11 @@ def _parse_floor_band(band: str) -> dict[str, Any]:
 
 
 def _project_id_for_row(row: PriceTableRow, slug_by_id: dict[UUID, str]) -> str | None:
-    if row.project_id is not None:
-        return slug_by_id.get(row.project_id)
     conditions = row.conditions or {}
     if conditions.get("calculator_project_id"):
         return str(conditions["calculator_project_id"])
+    if row.project_id is not None:
+        return slug_by_id.get(row.project_id)
     if conditions.get("project_slug"):
         return str(conditions["project_slug"])
     return None
