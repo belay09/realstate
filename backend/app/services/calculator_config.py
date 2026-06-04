@@ -201,12 +201,20 @@ def build_public_calculator_config(
             "Published pricing has no apartment rate rows for the calculator",
         )
 
-    base["residential_price_rows"] = []
+    api_rows: list[dict[str, Any]] = []
+    max_floor_by_project: dict[str, int] = {}
+    min_floor_by_project: dict[str, int] = {}
     for r in residential_rows:
         fb = r["floorBand"]
-        base["residential_price_rows"].append(
+        pid = r["projectId"]
+        max_floor_by_project[pid] = max(max_floor_by_project.get(pid, 0), fb["floorMax"])
+        prev_min = min_floor_by_project.get(pid)
+        min_floor_by_project[pid] = (
+            fb["floorMin"] if prev_min is None else min(prev_min, fb["floorMin"])
+        )
+        api_rows.append(
             {
-                "project_id": r["projectId"],
+                "project_id": pid,
                 "unit_type_code": r["unitTypeCode"],
                 "finish_type": r["finishType"],
                 "floor_band": {
@@ -217,6 +225,14 @@ def build_public_calculator_config(
                 "price_per_sqm": r["pricePerSqm"],
             }
         )
+    base["residential_price_rows"] = api_rows
+
+    for proj in base.get("residential_projects", []):
+        pid = proj.get("id")
+        if pid and pid in max_floor_by_project:
+            proj["max_floor"] = max_floor_by_project[pid]
+            if proj.get("uses_strategy_floor_table"):
+                proj["floor_min"] = min_floor_by_project.get(pid, 3)
     return base
 
 

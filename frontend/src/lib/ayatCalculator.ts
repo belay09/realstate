@@ -6,7 +6,7 @@ import type {
   MilestoneScheduleId,
   PropertyKind,
 } from '../data/ayatCalculatorConfig'
-import { unitTypeForBedroomsFinish } from '../data/ayatCalculatorConfig'
+import { floorOptionsForProject, unitTypeForBedroomsFinish } from '../data/ayatCalculatorConfig'
 import type { CalculatorRuntimeConfig } from './calculatorRuntime'
 import { resolveResidentialProjectId } from './calculatorRuntime'
 
@@ -54,6 +54,61 @@ export interface CalculatorResult {
 
 function roundMoney(n: number): number {
   return Math.round(n)
+}
+
+function pricingProjectIds(
+  config: CalculatorRuntimeConfig,
+  projectId: string,
+  completion: CompletionKind,
+): Set<string> {
+  const ids = new Set<string>([projectId])
+  ids.add(resolveResidentialProjectId(projectId, completion, config))
+  const strategyId = config.inventoryToStrategyLocation[projectId]
+  if (strategyId) ids.add(strategyId)
+  return ids
+}
+
+/** Floors that have at least one published rate row for this location (from admin price bands). */
+export function floorOptionsForResidential(
+  config: CalculatorRuntimeConfig,
+  projectId: string,
+  completion: CompletionKind,
+  bedrooms: 1 | 2 | 3,
+  finish: FinishKind,
+): number[] {
+  const projectIds = pricingProjectIds(config, projectId, completion)
+  const unitTypeCode = unitTypeForBedroomsFinish(bedrooms, finish)
+
+  const matchProject = (rowProjectId: string) => projectIds.has(rowProjectId)
+
+  let rows = config.residentialPriceRows.filter(
+    (r) =>
+      matchProject(r.projectId) &&
+      r.unitTypeCode === unitTypeCode &&
+      r.finishType === finish,
+  )
+  if (rows.length === 0) {
+    rows = config.residentialPriceRows.filter(
+      (r) => matchProject(r.projectId) && r.finishType === finish,
+    )
+  }
+  if (rows.length === 0) {
+    rows = config.residentialPriceRows.filter((r) => matchProject(r.projectId))
+  }
+
+  const floors = new Set<number>()
+  for (const row of rows) {
+    for (let f = row.floorBand.floorMin; f <= row.floorBand.floorMax; f++) {
+      floors.add(f)
+    }
+  }
+
+  if (floors.size > 0) {
+    return Array.from(floors).sort((a, b) => a - b)
+  }
+
+  const project = getProject(config, projectId)
+  return project ? floorOptionsForProject(project) : []
 }
 
 export function findResidentialPriceRow(

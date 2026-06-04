@@ -1,12 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import {
-  floorOptionsForProject,
-  type CompletionKind,
-  type FinishKind,
-  type PropertyKind,
-} from '../data/ayatCalculatorConfig'
+import type { CompletionKind, FinishKind, PropertyKind } from '../data/ayatCalculatorConfig'
 import { useTranslation } from '../context/LocaleContext'
 import { useCalculatorConfig } from '../hooks/useCalculatorConfig'
 import type { ListingCalculatorPreset } from '../lib/listingCalculatorPreset'
@@ -14,6 +9,7 @@ import {
   calculateCommercial,
   calculateResidential,
   calculatorProjectIdFromSlug,
+  floorOptionsForResidential,
   resolveCalculatorProject,
   type CalculatorResult,
 } from '../lib/ayatCalculator'
@@ -54,10 +50,14 @@ function defaultAreaSqm(config: CalculatorRuntimeConfig, bedrooms: 1 | 2 | 3): n
   return areas[idx] ?? areas[0]
 }
 
-function defaultFloor(project: ReturnType<typeof resolveCalculatorProject>): number {
-  if (!project) return 5
-  const floors = floorOptionsForProject(project)
-  return floors[Math.floor(floors.length / 2)] ?? floors[0]
+function defaultFloor(
+  config: CalculatorRuntimeConfig,
+  projectId: string,
+  completion: CompletionKind,
+  bedrooms: 1 | 2 | 3,
+): number {
+  const floors = floorOptionsForResidential(config, projectId, completion, bedrooms, RESIDENTIAL_FINISH)
+  return floors[Math.floor(floors.length / 2)] ?? floors[0] ?? 5
 }
 
 function FormSelect({
@@ -441,7 +441,7 @@ export function AyatPriceCalculator({
       setProjectId(resolved)
       setBedrooms(3)
       setAreaSqm(defaultAreaSqm(config, 3))
-      setFloor(defaultFloor(proj))
+      setFloor(defaultFloor(config, resolved, 'unstarted', 3))
       setCompletion('unstarted')
       setTierId('40')
     }
@@ -484,6 +484,24 @@ export function AyatPriceCalculator({
   const presetProject = preset
     ? resolveCalculatorProject(config, preset.projectId)
     : null
+
+  const residentialFloors = useMemo(() => {
+    if (!projectId || bedrooms == null) return []
+    return floorOptionsForResidential(
+      config,
+      projectId,
+      completion,
+      bedrooms,
+      RESIDENTIAL_FINISH,
+    )
+  }, [config, projectId, completion, bedrooms])
+
+  useEffect(() => {
+    if (kind !== 'residential' || residentialFloors.length === 0) return
+    if (floor == null || !residentialFloors.includes(floor)) {
+      setFloor(residentialFloors[Math.floor(residentialFloors.length / 2)] ?? residentialFloors[0])
+    }
+  }, [kind, residentialFloors, floor])
   const selectedShopZone = config.commercialZones.find((z) => z.id === shopZoneId)
   const shopFloorsAvailable = SHOP_FLOORS.filter(
     (f) => selectedShopZone && selectedShopZone.floors[f] > 0,
@@ -581,8 +599,11 @@ export function AyatPriceCalculator({
             value={projectId ?? ''}
             onChange={(v) => {
               setProjectId(v)
-              const proj = resolveCalculatorProject(config, v)
-              setFloor(proj ? defaultFloor(proj) : null)
+              if (bedrooms != null) {
+                setFloor(defaultFloor(config, v, completion, bedrooms))
+              } else {
+                setFloor(null)
+              }
             }}
           >
             <option value="" disabled>
@@ -719,7 +740,7 @@ export function AyatPriceCalculator({
             value={floor ?? ''}
             onChange={(v) => setFloor(Number(v))}
           >
-            {floorOptionsForProject(project).map((f) => (
+            {residentialFloors.map((f) => (
               <option key={f} value={f}>
                 {t('calculator.floorN', { n: f })}
               </option>
@@ -838,7 +859,16 @@ export function AyatPriceCalculator({
 
       <p className="mb-2 text-sm font-medium text-fg">{t('calculator.step5FloorTitle')}</p>
       <div className="flex flex-wrap gap-2">
-        {floorOptionsForProject(presetProject).map((f) => (
+        {(preset && bedrooms != null
+          ? floorOptionsForResidential(
+              config,
+              preset.projectId,
+              preset.completion ?? completion,
+              bedrooms,
+              RESIDENTIAL_FINISH,
+            )
+          : residentialFloors
+        ).map((f) => (
           <ChoiceButton key={f} selected={floor === f} onClick={() => setFloor(f)}>
             {t('calculator.floorN', { n: f })}
           </ChoiceButton>
@@ -1061,7 +1091,7 @@ export function AyatPriceCalculator({
               </div>
               <p className="mb-3 text-sm text-fg-muted">{t('calculator.step5FloorHint')}</p>
               <div className="flex flex-wrap gap-2">
-                {floorOptionsForProject(project).map((f) => (
+                {residentialFloors.map((f) => (
                   <ChoiceButton key={f} selected={floor === f} onClick={() => setFloor(f)}>
                     {t('calculator.floorN', { n: f })}
                   </ChoiceButton>
