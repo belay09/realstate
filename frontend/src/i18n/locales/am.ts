@@ -84,6 +84,9 @@ export const am = {
     heroTitle: 'የመደብር ቦታ ይምረጡ',
     heroBody: 'እያንዳንዱ ካርድ ከኦፊሴላዊ ስትራቴጂ የመደብር ቦታ ነው። የወለል ዋጋ እና ቅድመ ስሌት ለማየት ይክፈቱ።',
     pickLocation: 'የወለል ዋጋ እና የመደብርዎን ዋጋ ለማየት ቦታውን ይንኩ።',
+    loading: 'የመደብር ቦታዎች በመጫን ላይ…',
+    noLocations:
+      'የታየ መደብር ቦታ የለም። በአስተዳዳሪ → Location pages መደብር ይፍጠሩ፣ Active ያድርጉ እና ያድሱ።',
     commercial: 'የንግድ መደብር',
     developer: 'አያት አክሲዮን ማኅበር',
     tapForDetails: 'ዋጋ እና ስሌት ይመልከቱ',

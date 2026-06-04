@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 
 import type { CompletionKind, FinishKind, PropertyKind } from '../data/ayatCalculatorConfig'
 import { useTranslation } from '../context/LocaleContext'
+import { useActiveShopLocations } from '../hooks/useActiveShopCommercialZones'
 import { useCalculatorConfig } from '../hooks/useCalculatorConfig'
 import type { ListingCalculatorPreset } from '../lib/listingCalculatorPreset'
 import {
@@ -24,6 +25,7 @@ import {
   formatUnitTypeLabel,
 } from '../lib/ayatLabels'
 import { formatMoney } from '../lib/format'
+import { shopLocationTitle } from '../lib/shopLocations'
 
 type ShopFloor = 'GF' | '1F' | '2F' | '3F'
 
@@ -387,6 +389,7 @@ export function AyatPriceCalculator({
     isError: configError,
     isSuccess: configReady,
   } = useCalculatorConfig()
+  const shopLocations = useActiveShopLocations(config)
   const embedded = variant === 'embedded'
   const isCompact = layout === 'compact' || (layout !== 'wizard' && !embedded)
   const lockResidentialProject = Boolean(initialResidentialProjectId)
@@ -429,13 +432,13 @@ export function AyatPriceCalculator({
     if (!preset && initialShopZoneId) {
       setKind('commercial')
       setShopZoneId(initialShopZoneId)
-      const zone = config.commercialZones.find((z) => z.id === initialShopZoneId)
+      const zone = shopLocations.find((z) => z.id === initialShopZoneId)
       if (zone) {
         const first = SHOP_FLOORS.find((f) => zone.floors[f] > 0)
         if (first) setShopFloor(first)
       }
     }
-  }, [preset, initialShopZoneId, config.commercialZones])
+  }, [preset, initialShopZoneId, shopLocations])
 
   useEffect(() => {
     if (!isCompact || preset || configLoading || !configReady || defaultsApplied.current) return
@@ -454,7 +457,7 @@ export function AyatPriceCalculator({
     }
 
     const applyCommercial = (zoneId: string) => {
-      const zone = config.commercialZones.find((z) => z.id === zoneId)
+      const zone = shopLocations.find((z) => z.id === zoneId)
       if (!zone) return
       setKind('commercial')
       setShopZoneId(zoneId)
@@ -469,8 +472,8 @@ export function AyatPriceCalculator({
       applyResidential(initialResidentialProjectId)
     } else if (initialKind === 'commercial' && initialShopZoneId) {
       applyCommercial(initialShopZoneId)
-    } else if (initialKind === 'commercial' && config.commercialZones[0]) {
-      applyCommercial(config.commercialZones[0].id)
+    } else if (initialKind === 'commercial' && shopLocations[0]) {
+      applyCommercial(shopLocations[0].id)
     } else if (initialKind === 'residential' || initialKind == null) {
       const first = config.residentialProjects[0]
       if (first) applyResidential(first.id)
@@ -486,6 +489,7 @@ export function AyatPriceCalculator({
     initialResidentialProjectId,
     initialKind,
     initialShopZoneId,
+    shopLocations,
   ])
 
   const project = projectId ? resolveCalculatorProject(config, projectId) : undefined
@@ -529,7 +533,7 @@ export function AyatPriceCalculator({
       setFloor(residentialFloors[Math.floor(residentialFloors.length / 2)] ?? residentialFloors[0])
     }
   }, [kind, residentialFloors, floor])
-  const selectedShopZone = config.commercialZones.find((z) => z.id === shopZoneId)
+  const selectedShopZone = shopLocations.find((z) => z.id === shopZoneId)
   const shopFloorsAvailable = SHOP_FLOORS.filter(
     (f) => selectedShopZone && selectedShopZone.floors[f] > 0,
   )
@@ -551,7 +555,7 @@ export function AyatPriceCalculator({
     }
     if (kind === 'commercial') {
       if (!shopZoneId || !shopFloor || areaSqm == null) return null
-      return calculateCommercial(config, { zoneId: shopZoneId, shopFloor, areaSqm, tierId })
+      return calculateCommercial(config, { zoneId: shopZoneId, shopFloor, areaSqm, tierId }, shopLocations)
     }
     return null
   }, [
@@ -565,6 +569,7 @@ export function AyatPriceCalculator({
     tierId,
     shopZoneId,
     shopFloor,
+    shopLocations,
   ])
 
   const step1Done = kind != null
@@ -672,7 +677,7 @@ export function AyatPriceCalculator({
             value={shopZoneId ?? ''}
             onChange={(v) => {
               setShopZoneId(v)
-              const zone = config.commercialZones.find((z) => z.id === v)
+              const zone = shopLocations.find((z) => z.id === v)
               const first = zone
                 ? SHOP_FLOORS.find((f) => zone.floors[f] > 0)
                 : undefined
@@ -682,9 +687,9 @@ export function AyatPriceCalculator({
             <option value="" disabled>
               —
             </option>
-            {config.commercialZones.map((z) => (
+            {shopLocations.map((z) => (
               <option key={z.id} value={z.id}>
-                {t(z.labelKey)}
+                {shopLocationTitle(z, t)}
               </option>
             ))}
           </FormSelect>
@@ -1031,7 +1036,7 @@ export function AyatPriceCalculator({
                 </div>
               </div>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {config.commercialZones.map((z) => (
+                {shopLocations.map((z) => (
                   <ChoiceButton
                     key={z.id}
                     selected={shopZoneId === z.id}
@@ -1040,7 +1045,7 @@ export function AyatPriceCalculator({
                       setShopFloor(null)
                     }}
                   >
-                    {t(z.labelKey)}
+                    {shopLocationTitle(z, t)}
                   </ChoiceButton>
                 ))}
               </div>

@@ -1,9 +1,10 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 
 import { api } from '../../api/client'
+import type { AdminLocationContent, Paginated } from '../../api/types'
 
 type CommercialZoneStored = {
   id: string
@@ -29,17 +30,54 @@ type Props = {
   initialConfig: CalculatorConfigStored | null
 }
 
+function emptyZone(id: string): CommercialZoneStored {
+  return {
+    id,
+    label_key: `calculator.shopZones.${id}`,
+    floors: { GF: 0, '1F': 0, '2F': 0, '3F': 0 },
+  }
+}
+
+function zonesForActiveShops(
+  stored: CommercialZoneStored[],
+  activeShops: AdminLocationContent[],
+): CommercialZoneStored[] {
+  const byId = new Map(stored.map((z) => [z.id, z]))
+  return activeShops.map((shop) => byId.get(shop.location_id) ?? emptyZone(shop.location_id))
+}
+
 export function CalculatorConfigEditor({ companyId, initialConfig }: Props) {
   const qc = useQueryClient()
   const [zones, setZones] = useState<CommercialZoneStored[]>([])
   const [tiers, setTiers] = useState<DownPaymentTierStored[]>([])
   const [dirty, setDirty] = useState(false)
 
+  const shopLocations = useQuery({
+    queryKey: ['admin', 'location-content', 'shop', 'calculator-editor'],
+    queryFn: async () => {
+      const { data } = await api.get<Paginated<AdminLocationContent>>('/admin/location-content', {
+        params: { kind: 'shop', limit: 200 },
+      })
+      return data
+    },
+  })
+
+  const activeShops = useMemo(
+    () => (shopLocations.data?.items ?? []).filter((row) => row.is_public),
+    [shopLocations.data?.items],
+  )
+
   useEffect(() => {
-    setZones(initialConfig?.commercial_zones ?? [])
     setTiers(initialConfig?.down_payment_tiers ?? [])
     setDirty(false)
   }, [initialConfig])
+
+  useEffect(() => {
+    if (shopLocations.isLoading) return
+    const stored = initialConfig?.commercial_zones ?? []
+    setZones(zonesForActiveShops(stored, activeShops))
+    setDirty(false)
+  }, [initialConfig, activeShops, shopLocations.isLoading])
 
   const saveErrorMessage = (err: unknown) => {
     if (axios.isAxiosError(err)) {
@@ -76,7 +114,8 @@ export function CalculatorConfigEditor({ companyId, initialConfig }: Props) {
         </h2>
         <p className="mt-1 text-sm text-stone-600 dark:text-stone-400">
           Apartment rates are set in the price rows above. Here you set shop ETB/m² by floor and
-          client discount by down-payment tier. Changes apply on the live site as soon as you save.
+          client discount by down-payment tier. Only <strong>Active</strong> shop locations from
+          Location pages appear below; saving removes rates for hidden or deleted shops.
         </p>
       </div>
 
@@ -84,44 +123,59 @@ export function CalculatorConfigEditor({ companyId, initialConfig }: Props) {
         <h3 className="text-xs font-semibold uppercase tracking-wide text-stone-500">
           Shop zones (ETB per m² by floor)
         </h3>
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[32rem] text-left text-sm">
-            <thead>
-              <tr className="border-b border-stone-200 dark:border-stone-700">
-                <th className="py-2 pr-2 font-medium">Zone</th>
-                <th className="py-2 pr-2 font-medium">GF</th>
-                <th className="py-2 pr-2 font-medium">1F</th>
-                <th className="py-2 pr-2 font-medium">2F</th>
-                <th className="py-2 font-medium">3F</th>
-              </tr>
-            </thead>
-            <tbody>
-              {zones.map((zone, idx) => (
-                <tr key={zone.id} className="border-b border-stone-100 dark:border-stone-800">
-                  <td className="py-2 pr-2 font-mono text-xs">{zone.id}</td>
-                  {(['GF', '1F', '2F', '3F'] as const).map((floor) => (
-                    <td key={floor} className="py-2 pr-2">
-                      <input
-                        type="number"
-                        className="input w-24"
-                        value={zone.floors[floor]}
-                        onChange={(e) => {
-                          const next = [...zones]
-                          next[idx] = {
-                            ...zone,
-                            floors: { ...zone.floors, [floor]: Number(e.target.value) || 0 },
-                          }
-                          setZones(next)
-                          setDirty(true)
-                        }}
-                      />
-                    </td>
-                  ))}
+        {shopLocations.isLoading ? (
+          <p className="text-sm text-stone-500">Loading shop locations…</p>
+        ) : activeShops.length === 0 ? (
+          <p className="text-sm text-stone-500">
+            No Active shop locations. Create one under Location pages and mark it Active.
+          </p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[32rem] text-left text-sm">
+              <thead>
+                <tr className="border-b border-stone-200 dark:border-stone-700">
+                  <th className="py-2 pr-2 font-medium">Zone</th>
+                  <th className="py-2 pr-2 font-medium">Title</th>
+                  <th className="py-2 pr-2 font-medium">GF</th>
+                  <th className="py-2 pr-2 font-medium">1F</th>
+                  <th className="py-2 pr-2 font-medium">2F</th>
+                  <th className="py-2 font-medium">3F</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {zones.map((zone, idx) => {
+                  const shop = activeShops.find((s) => s.location_id === zone.id)
+                  return (
+                    <tr key={zone.id} className="border-b border-stone-100 dark:border-stone-800">
+                      <td className="py-2 pr-2 font-mono text-xs">{zone.id}</td>
+                      <td className="py-2 pr-2 text-xs text-stone-600 dark:text-stone-400">
+                        {shop?.title ?? '—'}
+                      </td>
+                      {(['GF', '1F', '2F', '3F'] as const).map((floor) => (
+                        <td key={floor} className="py-2 pr-2">
+                          <input
+                            type="number"
+                            className="input w-24"
+                            value={zone.floors[floor]}
+                            onChange={(e) => {
+                              const next = [...zones]
+                              next[idx] = {
+                                ...zone,
+                                floors: { ...zone.floors, [floor]: Number(e.target.value) || 0 },
+                              }
+                              setZones(next)
+                              setDirty(true)
+                            }}
+                          />
+                        </td>
+                      ))}
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       <div className="space-y-3">
@@ -184,7 +238,7 @@ export function CalculatorConfigEditor({ companyId, initialConfig }: Props) {
       <button
         type="button"
         className="btn-primary"
-        disabled={!dirty || save.isPending}
+        disabled={!dirty || save.isPending || activeShops.length === 0}
         onClick={() => save.mutate()}
       >
         {save.isPending ? 'Saving…' : 'Save calculator settings'}

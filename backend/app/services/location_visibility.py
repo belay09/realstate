@@ -28,10 +28,10 @@ def is_location_active(
     kind: str,
     location_id: str,
 ) -> bool:
-    """Locations without CMS rows stay visible until admin configures them."""
+    """Apartments without CMS rows stay visible; shops require an Active location page."""
     kind_map = visibility.get(kind, {})
     if location_id not in kind_map:
-        return True
+        return kind != "shop"
     return kind_map[location_id]
 
 

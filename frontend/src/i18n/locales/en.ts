@@ -84,6 +84,9 @@ export const en = {
     heroBody:
       'Each card is one Ayat shop zone from the official strategy. Open it for floor rates and a price estimate.',
     pickLocation: 'Tap a location to see official rates and estimate your shop price.',
+    loading: 'Loading shop locations…',
+    noLocations:
+      'No shop locations are published yet. In Admin → Location pages, create a shop, set Active, and refresh.',
     commercial: 'Commercial shop',
     developer: 'Ayat Share Company',
     tapForDetails: 'View rates & estimate',

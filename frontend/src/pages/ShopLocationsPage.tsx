@@ -38,6 +38,12 @@ export function ShopLocationsPage() {
 
       <p className="text-body-sm text-fg-muted">{t('shops.pickLocation')}</p>
 
+      {summariesQuery.isLoading ? (
+        <p className="text-body-sm text-fg-muted">{t('shops.loading')}</p>
+      ) : locations.length === 0 ? (
+        <p className="text-body-sm text-fg-muted">{t('shops.noLocations')}</p>
+      ) : null}
+
       <ul className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
         {locations.map((loc) => (
           <li key={loc.id} className="animate-fade-in">

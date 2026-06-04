@@ -5,9 +5,14 @@ export function isLocationActive(
   kind: 'apartment' | 'shop',
   locationId: string,
 ): boolean {
-  if (!visibility) return true
-  const map = kind === 'apartment' ? visibility.apartment : visibility.shop
-  if (!(locationId in map)) return true
+  const map = visibility?.[kind === 'apartment' ? 'apartment' : 'shop']
+  if (!map) {
+    // Apartments: show until CMS loads. Shops: only explicit Active rows.
+    return kind === 'apartment'
+  }
+  if (!(locationId in map)) {
+    return kind === 'apartment'
+  }
   return map[locationId]
 }
 

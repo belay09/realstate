@@ -227,8 +227,10 @@ export function calculatorProjectIdFromSlug(
 export function getCommercialZone(
   config: CalculatorRuntimeConfig,
   zoneId: string,
+  commercialZones?: CommercialZone[],
 ): CommercialZone | undefined {
-  return config.commercialZones.find((z) => z.id === zoneId)
+  const list = commercialZones ?? config.commercialZones
+  return list.find((z) => z.id === zoneId)
 }
 
 function resolveMilestoneSchedule(
@@ -348,8 +350,9 @@ export function calculateResidential(
 export function calculateCommercial(
   config: CalculatorRuntimeConfig,
   input: CommercialCalcInput,
+  commercialZones?: CommercialZone[],
 ): CalculatorResult | null {
-  const zone = getCommercialZone(config, input.zoneId)
+  const zone = getCommercialZone(config, input.zoneId, commercialZones)
   const tier = getTier(config, input.tierId)
   if (!zone || !tier) return null
 
