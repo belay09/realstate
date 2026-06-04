@@ -651,10 +651,24 @@ def _admin_listing_base_query(db: Session):
     )
 
 
+def _listing_building_fields_from_metadata(
+    listing: PropertyListing,
+) -> tuple[str | None, str | None]:
+    meta = listing.listing_metadata or {}
+    building_type = meta.get("building_type")
+    use_segment = meta.get("use_segment")
+    if building_type not in {"mixed", "duplex", "flat"}:
+        building_type = None
+    if use_segment not in {"retail", "residential"}:
+        use_segment = None
+    return building_type, use_segment
+
+
 def _to_admin_listing_summary(listing: PropertyListing) -> AdminPropertyListingSummary:
     unit = listing.unit
     project = unit.block.project
     company = project.company
+    building_type, use_segment = _listing_building_fields_from_metadata(listing)
     return AdminPropertyListingSummary(
         id=listing.id,
         title=listing.title,
@@ -670,6 +684,8 @@ def _to_admin_listing_summary(listing: PropertyListing) -> AdminPropertyListingS
         bedrooms=unit.unit_type.bedrooms,
         image_count=len(listing.images),
         primary_image_url=_listing_primary_image_url(listing),
+        building_type=building_type,
+        use_segment=use_segment,
         updated_at=listing.updated_at,
     )
 

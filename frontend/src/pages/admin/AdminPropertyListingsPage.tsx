@@ -83,6 +83,23 @@ function metadataFromDetail(detail: AdminPropertyListingDetail | undefined): Lis
   }
 }
 
+function buildingTypeLabel(
+  buildingType: AdminPropertyListingSummary['building_type'],
+  useSegment: AdminPropertyListingSummary['use_segment'],
+): string {
+  if (!buildingType) return '—'
+  const names: Record<string, string> = {
+    mixed: 'Mixed',
+    duplex: 'Duplex',
+    flat: 'Flat',
+  }
+  const base = names[buildingType] ?? buildingType
+  if (buildingType === 'mixed' && useSegment) {
+    return `${base} (${useSegment === 'retail' ? 'shop' : 'apt'})`
+  }
+  return base
+}
+
 function actionError(err: unknown, fallback: string) {
   if (axios.isAxiosError(err)) {
     const message = err.response?.data?.detail?.message
@@ -264,6 +281,7 @@ export function AdminPropertyListingsPage() {
               <tr>
                 <th className="px-3 py-2">Listing</th>
                 <th className="px-3 py-2">Project</th>
+                <th className="px-3 py-2">Building</th>
                 <th className="px-3 py-2">Area</th>
                 <th className="px-3 py-2">Photos</th>
                 <th className="px-3 py-2">Public</th>
@@ -296,6 +314,23 @@ export function AdminPropertyListingsPage() {
                     </div>
                   </td>
                   <td className="px-3 py-2 text-stone-700 dark:text-stone-300">{row.project_name}</td>
+                  <td className="px-3 py-2">
+                    {row.building_type ? (
+                      <span
+                        className={`inline-block rounded-full px-2 py-0.5 text-xs font-semibold ${
+                          row.building_type === 'mixed'
+                            ? 'bg-violet-100 text-violet-800 dark:bg-violet-950 dark:text-violet-200'
+                            : row.building_type === 'duplex'
+                              ? 'bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-200'
+                              : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200'
+                        }`}
+                      >
+                        {buildingTypeLabel(row.building_type, row.use_segment)}
+                      </span>
+                    ) : (
+                      <span className="text-stone-400">—</span>
+                    )}
+                  </td>
                   <td className="px-3 py-2 text-stone-600 dark:text-stone-400">{row.area ?? '—'}</td>
                   <td className="px-3 py-2 text-stone-600 dark:text-stone-400">{row.image_count}</td>
                   <td className="px-3 py-2">

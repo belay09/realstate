@@ -105,6 +105,8 @@ export type AdminPropertyListingSummary = {
   bedrooms: number | null
   image_count: number
   primary_image_url: string | null
+  building_type?: 'mixed' | 'duplex' | 'flat' | null
+  use_segment?: 'retail' | 'residential' | null
   updated_at: string
 }
 

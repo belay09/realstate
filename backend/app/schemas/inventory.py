@@ -270,6 +270,8 @@ class AdminPropertyListingSummary(BaseModel):
     bedrooms: int | None
     image_count: int
     primary_image_url: str | None
+    building_type: str | None = None
+    use_segment: str | None = None
     updated_at: datetime
 
 
