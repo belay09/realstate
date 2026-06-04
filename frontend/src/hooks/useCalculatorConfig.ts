@@ -8,7 +8,6 @@ import {
   COMMERCIAL_ZONES,
   DOWN_PAYMENT_TIERS,
   MILESTONE_SCHEDULES,
-  RESIDENTIAL_PRICE_ROWS,
   RESIDENTIAL_PROJECTS,
   BEDROOM_AREA_OPTIONS,
 } from '../data/ayatCalculatorConfig'
@@ -19,11 +18,12 @@ import {
   type PublicCalculatorConfigApi,
 } from '../lib/calculatorRuntime'
 
+/** Avoid showing Ayat default rates before live pricing loads (hides removed construction stages). */
 const STATIC_FALLBACK: CalculatorRuntimeConfig = {
   currency: 'ETB',
-  pricingVersionName: 'Official strategy (offline)',
+  pricingVersionName: 'Loading…',
   residentialProjects: RESIDENTIAL_PROJECTS,
-  residentialPriceRows: RESIDENTIAL_PRICE_ROWS,
+  residentialPriceRows: [],
   commercialZones: COMMERCIAL_ZONES,
   downPaymentTiers: DOWN_PAYMENT_TIERS,
   milestoneSchedules: MILESTONE_SCHEDULES,

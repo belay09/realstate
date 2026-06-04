@@ -9,6 +9,7 @@ import {
   calculateCommercial,
   calculateResidential,
   calculatorProjectIdFromSlug,
+  completionKindsWithRates,
   floorOptionsForResidential,
   resolveCalculatorProject,
   type CalculatorResult,
@@ -485,16 +486,35 @@ export function AyatPriceCalculator({
     ? resolveCalculatorProject(config, preset.projectId)
     : null
 
+  const completionChoices = useMemo(() => {
+    if (!projectId || bedrooms == null || !project?.supportsCompletionChoice) return []
+    return completionKindsWithRates(config, projectId, bedrooms, RESIDENTIAL_FINISH)
+  }, [config, projectId, bedrooms, project?.supportsCompletionChoice])
+
+  const effectiveCompletion: CompletionKind =
+    completionChoices.length > 0
+      ? completionChoices.includes(completion)
+        ? completion
+        : completionChoices[0]
+      : completion
+
   const residentialFloors = useMemo(() => {
     if (!projectId || bedrooms == null) return []
     return floorOptionsForResidential(
       config,
       projectId,
-      completion,
+      effectiveCompletion,
       bedrooms,
       RESIDENTIAL_FINISH,
     )
-  }, [config, projectId, completion, bedrooms])
+  }, [config, projectId, effectiveCompletion, bedrooms])
+
+  useEffect(() => {
+    if (completionChoices.length === 0) return
+    if (!completionChoices.includes(completion)) {
+      setCompletion(completionChoices[0])
+    }
+  }, [completionChoices, completion])
 
   useEffect(() => {
     if (kind !== 'residential' || residentialFloors.length === 0) return
@@ -518,7 +538,7 @@ export function AyatPriceCalculator({
         finish: RESIDENTIAL_FINISH,
         areaSqm,
         floor,
-        completion,
+        completion: effectiveCompletion,
         tierId,
       })
     }
@@ -534,7 +554,7 @@ export function AyatPriceCalculator({
     bedrooms,
     areaSqm,
     floor,
-    completion,
+    effectiveCompletion,
     tierId,
     shopZoneId,
     shopFloor,
@@ -642,15 +662,19 @@ export function AyatPriceCalculator({
           </FormSelect>
         )}
 
-        {kind === 'residential' && project?.supportsCompletionChoice && (
+        {kind === 'residential' && completionChoices.length > 1 && (
           <FormSelect
             id="calc-completion"
             label={t('calculator.compactFieldCompletion')}
-            value={completion}
+            value={effectiveCompletion}
             onChange={(v) => setCompletion(v as CompletionKind)}
           >
-            <option value="unstarted">{t('calculator.completionUnstarted')}</option>
-            <option value="near_completion">{t('calculator.completionNear')}</option>
+            {completionChoices.includes('unstarted') ? (
+              <option value="unstarted">{t('calculator.completionUnstarted')}</option>
+            ) : null}
+            {completionChoices.includes('near_completion') ? (
+              <option value="near_completion">{t('calculator.completionNear')}</option>
+            ) : null}
           </FormSelect>
         )}
 
@@ -828,22 +852,26 @@ export function AyatPriceCalculator({
       </div>
       <p className="mb-4 text-sm text-fg-muted">{t('calculator.embeddedAdjustHint')}</p>
 
-      {presetProject.supportsCompletionChoice && (
+      {completionChoices.length > 1 && (
         <div className="mb-5 space-y-2">
           <p className="text-sm font-medium text-fg">{t('calculator.completionLabel')}</p>
           <div className="flex flex-wrap gap-2">
-            <ChoiceButton
-              selected={completion === 'unstarted'}
-              onClick={() => setCompletion('unstarted')}
-            >
-              {t('calculator.completionUnstarted')}
-            </ChoiceButton>
-            <ChoiceButton
-              selected={completion === 'near_completion'}
-              onClick={() => setCompletion('near_completion')}
-            >
-              {t('calculator.completionNear')}
-            </ChoiceButton>
+            {completionChoices.includes('unstarted') ? (
+              <ChoiceButton
+                selected={effectiveCompletion === 'unstarted'}
+                onClick={() => setCompletion('unstarted')}
+              >
+                {t('calculator.completionUnstarted')}
+              </ChoiceButton>
+            ) : null}
+            {completionChoices.includes('near_completion') ? (
+              <ChoiceButton
+                selected={effectiveCompletion === 'near_completion'}
+                onClick={() => setCompletion('near_completion')}
+              >
+                {t('calculator.completionNear')}
+              </ChoiceButton>
+            ) : null}
           </div>
         </div>
       )}
@@ -863,7 +891,7 @@ export function AyatPriceCalculator({
           ? floorOptionsForResidential(
               config,
               preset.projectId,
-              preset.completion ?? completion,
+              effectiveCompletion,
               bedrooms,
               RESIDENTIAL_FINISH,
             )
@@ -934,22 +962,26 @@ export function AyatPriceCalculator({
                   </ChoiceButton>
                 ))}
               </div>
-              {project?.supportsCompletionChoice && (
+              {completionChoices.length > 1 && (
                 <div className="mt-5 space-y-2">
                   <p className="text-sm font-medium text-fg">{t('calculator.completionLabel')}</p>
                   <div className="flex flex-wrap gap-2">
-                    <ChoiceButton
-                      selected={completion === 'unstarted'}
-                      onClick={() => setCompletion('unstarted')}
-                    >
-                      {t('calculator.completionUnstarted')}
-                    </ChoiceButton>
-                    <ChoiceButton
-                      selected={completion === 'near_completion'}
-                      onClick={() => setCompletion('near_completion')}
-                    >
-                      {t('calculator.completionNear')}
-                    </ChoiceButton>
+                    {completionChoices.includes('unstarted') ? (
+                      <ChoiceButton
+                        selected={effectiveCompletion === 'unstarted'}
+                        onClick={() => setCompletion('unstarted')}
+                      >
+                        {t('calculator.completionUnstarted')}
+                      </ChoiceButton>
+                    ) : null}
+                    {completionChoices.includes('near_completion') ? (
+                      <ChoiceButton
+                        selected={effectiveCompletion === 'near_completion'}
+                        onClick={() => setCompletion('near_completion')}
+                      >
+                        {t('calculator.completionNear')}
+                      </ChoiceButton>
+                    ) : null}
                   </div>
                   <p className="text-xs text-fg-muted">{t('calculator.completionHint')}</p>
                 </div>

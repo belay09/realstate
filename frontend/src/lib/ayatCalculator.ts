@@ -56,16 +56,99 @@ function roundMoney(n: number): number {
   return Math.round(n)
 }
 
-function pricingProjectIds(
-  config: CalculatorRuntimeConfig,
-  projectId: string,
+/** Strategy table + optional shared rows on cmc-extension (both stages). */
+function priceRowProjectIdsForCompletion(
+  inventoryProjectId: string,
   completion: CompletionKind,
-): Set<string> {
-  const ids = new Set<string>([projectId])
-  ids.add(resolveResidentialProjectId(projectId, completion, config))
-  const strategyId = config.inventoryToStrategyLocation[projectId]
-  if (strategyId) ids.add(strategyId)
+  config: CalculatorRuntimeConfig,
+): string[] {
+  const strategyId = resolveResidentialProjectId(inventoryProjectId, completion, config)
+  const ids = [strategyId]
+  if (inventoryProjectId === 'cmc-extension' && strategyId !== 'cmc-extension') {
+    ids.push('cmc-extension')
+  }
   return ids
+}
+
+function rowMatchesUnitFinish(
+  row: CalculatorRuntimeConfig['residentialPriceRows'][number],
+  unitTypeCode: string,
+  finish: FinishKind,
+): boolean {
+  if (row.unitTypeCode === unitTypeCode && row.finishType === finish) return true
+  if (row.finishType === finish) return true
+  return false
+}
+
+function hasAnyRateForCompletion(
+  config: CalculatorRuntimeConfig,
+  inventoryProjectId: string,
+  completion: CompletionKind,
+  bedrooms: 1 | 2 | 3,
+  finish: FinishKind,
+): boolean {
+  const unitTypeCode = unitTypeForBedroomsFinish(bedrooms, finish)
+  const projectIds = new Set(
+    priceRowProjectIdsForCompletion(inventoryProjectId, completion, config),
+  )
+  return config.residentialPriceRows.some(
+    (row) => projectIds.has(row.projectId) && rowMatchesUnitFinish(row, unitTypeCode, finish),
+  )
+}
+
+/** Which construction-stage options have at least one admin rate row. */
+export function completionKindsWithRates(
+  config: CalculatorRuntimeConfig,
+  inventoryProjectId: string,
+  bedrooms: 1 | 2 | 3,
+  finish: FinishKind,
+): CompletionKind[] {
+  const project = getProject(config, inventoryProjectId)
+  if (!project?.supportsCompletionChoice) return []
+
+  const kinds: CompletionKind[] = []
+  if (hasAnyRateForCompletion(config, inventoryProjectId, 'unstarted', bedrooms, finish)) {
+    kinds.push('unstarted')
+  }
+  if (hasAnyRateForCompletion(config, inventoryProjectId, 'near_completion', bedrooms, finish)) {
+    kinds.push('near_completion')
+  }
+  return kinds
+}
+
+export function findResidentialPriceRowForCompletion(
+  config: CalculatorRuntimeConfig,
+  inventoryProjectId: string,
+  completion: CompletionKind,
+  unitTypeCode: string,
+  finish: FinishKind,
+  floor: number,
+) {
+  const projectIds = priceRowProjectIdsForCompletion(inventoryProjectId, completion, config)
+  for (const pid of projectIds) {
+    const row = findResidentialPriceRow(config, pid, unitTypeCode, finish, floor)
+    if (row) return row
+  }
+  for (const pid of projectIds) {
+    const relaxed = config.residentialPriceRows.filter(
+      (r) =>
+        r.projectId === pid &&
+        r.finishType === finish &&
+        floor >= r.floorBand.floorMin &&
+        floor <= r.floorBand.floorMax,
+    )
+    if (relaxed[0]) return relaxed[0]
+  }
+  for (const pid of projectIds) {
+    const any = config.residentialPriceRows.filter(
+      (r) =>
+        r.projectId === pid &&
+        floor >= r.floorBand.floorMin &&
+        floor <= r.floorBand.floorMax,
+    )
+    if (any[0]) return any[0]
+  }
+  return null
 }
 
 /** Floors that have at least one published rate row for this location (from admin price bands). */
@@ -76,7 +159,7 @@ export function floorOptionsForResidential(
   bedrooms: 1 | 2 | 3,
   finish: FinishKind,
 ): number[] {
-  const projectIds = pricingProjectIds(config, projectId, completion)
+  const projectIds = new Set(priceRowProjectIdsForCompletion(projectId, completion, config))
   const unitTypeCode = unitTypeForBedroomsFinish(bedrooms, finish)
 
   const matchProject = (rowProjectId: string) => projectIds.has(rowProjectId)
@@ -205,13 +288,24 @@ export function calculateResidential(
   if (!project || !tier) return null
 
   const unitTypeCode = unitTypeForBedroomsFinish(input.bedrooms, input.finish)
-  const priceProjectId = resolveResidentialProjectId(input.projectId, input.completion, config)
-  const completionSpecific = project.supportsCompletionChoice && priceProjectId !== input.projectId
-  const row = completionSpecific
-    ? findResidentialPriceRow(config, priceProjectId, unitTypeCode, input.finish, input.floor) ??
+  const row = project.supportsCompletionChoice
+    ? findResidentialPriceRowForCompletion(
+        config,
+        input.projectId,
+        input.completion,
+        unitTypeCode,
+        input.finish,
+        input.floor,
+      )
+    : findResidentialPriceRowForCompletion(
+        config,
+        input.projectId,
+        'unstarted',
+        unitTypeCode,
+        input.finish,
+        input.floor,
+      ) ??
       findResidentialPriceRow(config, input.projectId, unitTypeCode, input.finish, input.floor)
-    : findResidentialPriceRow(config, input.projectId, unitTypeCode, input.finish, input.floor) ??
-      findResidentialPriceRow(config, priceProjectId, unitTypeCode, input.finish, input.floor)
 
   const notes: string[] = []
   if (!row) {
