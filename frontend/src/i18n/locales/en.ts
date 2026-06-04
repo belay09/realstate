@@ -411,6 +411,8 @@ export const en = {
       'Apartment areas from Ayat strategy Section 10 (Lideta, Kazanchis, Bole, CMC, Ayat Hills). Price per square meter depends on floor range and construction stage.',
     shopLocationsHint:
       'Shop areas from Ayat strategy Section 11 (Ledeta, Kazanchis, Bole Air, Zone 2, Meri Luke 1, Summit, and more). Different from apartment locations.',
+    pricingLoadFailed:
+      'Live apartment rates could not be loaded from the server. Open Admin → Pricing and confirm CMC rows are saved, then restart the API. Until that works, the calculator cannot show a price.',
     loadingRates: 'Loading apartment rates from admin Pricing…',
     noRatesLoaded:
       'Live apartment rates did not load. Open Admin → Pricing, confirm CMC rows are saved with Construction stage “Near completion”, then restart the API and refresh this page.',

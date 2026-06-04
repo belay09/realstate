@@ -16,7 +16,7 @@ from app.data.ayat_official_loader import (
 from app.models.company import Company
 from app.models.inventory import Project
 from app.models.pricing import PriceTableRow, PricingVersion
-from app.services.pricing_engine import get_active_published_version
+from app.services.live_pricing import get_live_pricing_version
 
 
 class CalculatorConfigError(Exception):
@@ -162,8 +162,8 @@ def build_public_calculator_config(
     company_id: UUID,
     as_of: date | None = None,
 ) -> dict[str, Any]:
-    as_of = as_of or date.today()
-    version = get_active_published_version(db, company_id=company_id, as_of=as_of)
+    # Same version admin edits under Pricing (not a separate “published” snapshot).
+    version = get_live_pricing_version(db, company_id=company_id)
     if version is None:
         raise CalculatorConfigError(
             "NO_PUBLISHED_PRICING",

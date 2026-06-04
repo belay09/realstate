@@ -53,6 +53,17 @@ def filter_calculator_config_by_visibility(
         if is_location_active({"shop": shop_map}, "shop", z["id"])
     ]
     active_project_ids = {p["id"] for p in projects}
+    price_project_ids = set(active_project_ids)
+    inv_map = config.get("inventory_to_strategy_location") or {}
+    for inv_slug, strategy_id in inv_map.items():
+        if is_location_active({"apartment": apartment_map}, "apartment", inv_slug):
+            price_project_ids.add(inv_slug)
+            if strategy_id:
+                price_project_ids.add(strategy_id)
+    if is_location_active({"apartment": apartment_map}, "apartment", "cmc-extension"):
+        price_project_ids.update(
+            {"cmc-extension", "cmc-unstarted", "cmc-near-completion"},
+        )
 
     filtered = dict(config)
     filtered["residential_projects"] = projects
@@ -61,6 +72,6 @@ def filter_calculator_config_by_visibility(
         filtered["residential_price_rows"] = [
             row
             for row in filtered["residential_price_rows"]
-            if row.get("project_id") in active_project_ids
+            if row.get("project_id") in price_project_ids
         ]
     return filtered

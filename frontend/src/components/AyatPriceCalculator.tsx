@@ -1268,8 +1268,7 @@ export function AyatPriceCalculator({
 
       {configError ? (
         <p className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-950 dark:border-amber-800 dark:bg-amber-950/50 dark:text-amber-100">
-          Live pricing could not be loaded; showing last known rates. Check that a pricing version is
-          published in admin.
+          {t('calculator.pricingLoadFailed')}
         </p>
       ) : !configLoading ? (
         <p className="text-xs text-fg-muted">{t('calculator.liveRatesNote')}</p>
