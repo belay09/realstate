@@ -206,9 +206,12 @@ export function calculateResidential(
 
   const unitTypeCode = unitTypeForBedroomsFinish(input.bedrooms, input.finish)
   const priceProjectId = resolveResidentialProjectId(input.projectId, input.completion, config)
-  const row =
-    findResidentialPriceRow(config, input.projectId, unitTypeCode, input.finish, input.floor) ??
-    findResidentialPriceRow(config, priceProjectId, unitTypeCode, input.finish, input.floor)
+  const completionSpecific = project.supportsCompletionChoice && priceProjectId !== input.projectId
+  const row = completionSpecific
+    ? findResidentialPriceRow(config, priceProjectId, unitTypeCode, input.finish, input.floor) ??
+      findResidentialPriceRow(config, input.projectId, unitTypeCode, input.finish, input.floor)
+    : findResidentialPriceRow(config, input.projectId, unitTypeCode, input.finish, input.floor) ??
+      findResidentialPriceRow(config, priceProjectId, unitTypeCode, input.finish, input.floor)
 
   const notes: string[] = []
   if (!row) {

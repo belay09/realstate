@@ -6,6 +6,14 @@ import { toast } from 'sonner'
 import { api } from '../../api/client'
 import { AdminCompanySelect } from '../../components/AdminCompanySelect'
 import type { Paginated, Project } from '../../api/types'
+import {
+  buildPriceRowPayload,
+  CMC_CONSTRUCTION_OPTIONS,
+  constructionStageFromRow,
+  constructionStageLabel,
+  isCmcInventoryProject,
+  projectSlugById,
+} from '../../lib/adminPricingCompletion'
 import { CalculatorConfigEditor } from './CalculatorConfigEditor'
 
 type LivePricing = {
@@ -45,6 +53,93 @@ function projectLabel(
   return projectNameById.get(projectId) ?? 'Unknown project'
 }
 
+function PriceRowEditForm({
+  row,
+  sortedProjects,
+  projectSlugByIdMap,
+  defaultConstructionStage,
+  onSave,
+  onCancel,
+  pending,
+}: {
+  row: PriceRow
+  sortedProjects: Project[]
+  projectSlugByIdMap: Map<string, string>
+  defaultConstructionStage: string
+  onSave: (fields: {
+    project_id: string
+    unit_type_code: string
+    floor_band: string
+    price_per_sqm: string
+    construction_stage?: string
+  }) => void
+  onCancel: () => void
+  pending: boolean
+}) {
+  const [editProjectId, setEditProjectId] = useState(row.project_id ?? '')
+
+  return (
+    <form
+      className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3"
+      onSubmit={(e) => {
+        e.preventDefault()
+        const fd = new FormData(e.currentTarget)
+        onSave({
+          project_id: String(fd.get('project_id')),
+          construction_stage: String(fd.get('construction_stage') || 'both'),
+          unit_type_code: String(fd.get('unit_type_code')),
+          floor_band: String(fd.get('floor_band')),
+          price_per_sqm: String(fd.get('price_per_sqm')),
+        })
+      }}
+    >
+      <select
+        name="project_id"
+        className="input"
+        defaultValue={row.project_id ?? ''}
+        onChange={(e) => setEditProjectId(e.target.value)}
+      >
+        <option value="">Strategy location only</option>
+        {sortedProjects.map((p) => (
+          <option key={p.id} value={p.id}>
+            {p.name}
+          </option>
+        ))}
+      </select>
+      {isCmcInventoryProject(editProjectId, projectSlugByIdMap) ? (
+        <select
+          name="construction_stage"
+          className="input"
+          defaultValue={defaultConstructionStage}
+        >
+          {CMC_CONSTRUCTION_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      ) : null}
+      <select name="unit_type_code" required className="input" defaultValue={row.unit_type_code ?? 'SFCA'}>
+        {UNIT_TYPE_OPTIONS.map((opt) => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
+          </option>
+        ))}
+      </select>
+      <input name="floor_band" required className="input" defaultValue={row.floor_band ?? ''} />
+      <input name="price_per_sqm" required className="input" defaultValue={row.price_per_sqm ?? ''} />
+      <div className="flex gap-2 sm:col-span-2 lg:col-span-3">
+        <button type="submit" className="btn-secondary whitespace-nowrap" disabled={pending}>
+          Save
+        </button>
+        <button type="button" className="text-xs text-stone-500 hover:underline" onClick={onCancel}>
+          Cancel edit
+        </button>
+      </div>
+    </form>
+  )
+}
+
 function groupRowsByProject(
   rows: PriceRow[],
   projectNameById: Map<string, string>,
@@ -70,6 +165,7 @@ export function AdminPricingPage() {
   const [companyId, setCompanyId] = useState('')
   const [editingRowId, setEditingRowId] = useState<string | null>(null)
   const [locationFilter, setLocationFilter] = useState(ALL_LOCATIONS_FILTER)
+  const [addProjectId, setAddProjectId] = useState('')
 
   const livePricing = useQuery({
     queryKey: ['admin', 'pricing-live', companyId],
@@ -102,23 +198,24 @@ export function AdminPricingPage() {
     return fallback
   }
 
+  const projectSlugByIdMap = useMemo(
+    () => projectSlugById(projects.data?.items ?? []),
+    [projects.data?.items],
+  )
+
   const addRow = useMutation({
     mutationFn: (body: {
       unit_type_code: string
       floor_band: string
       price_per_sqm: string
       project_id: string
-    }) =>
-      api.post(
-        '/admin/pricing/live/price-rows',
-        {
-          project_id: body.project_id || undefined,
-          unit_type_code: body.unit_type_code || undefined,
-          floor_band: body.floor_band || undefined,
-          price_per_sqm: body.price_per_sqm,
-        },
-        { params: { company_id: companyId } },
-      ),
+      construction_stage?: string
+    }) => {
+      const payload = buildPriceRowPayload(body, projectSlugByIdMap)
+      return api.post('/admin/pricing/live/price-rows', payload, {
+        params: { company_id: companyId },
+      })
+    },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin', 'pricing-live', companyId] })
       qc.invalidateQueries({ queryKey: ['public', 'calculator-config'] })
@@ -147,17 +244,13 @@ export function AdminPricingPage() {
       floor_band: string
       price_per_sqm: string
       project_id: string
-    }) =>
-      api.patch(
-        `/admin/pricing/live/price-rows/${body.row_id}`,
-        {
-          project_id: body.project_id || undefined,
-          unit_type_code: body.unit_type_code || undefined,
-          floor_band: body.floor_band || undefined,
-          price_per_sqm: body.price_per_sqm,
-        },
-        { params: { company_id: companyId } },
-      ),
+      construction_stage?: string
+    }) => {
+      const payload = buildPriceRowPayload(body, projectSlugByIdMap)
+      return api.patch(`/admin/pricing/live/price-rows/${body.row_id}`, payload, {
+        params: { company_id: companyId },
+      })
+    },
     onSuccess: () => {
       setEditingRowId(null)
       qc.invalidateQueries({ queryKey: ['admin', 'pricing-live', companyId] })
@@ -244,6 +337,7 @@ export function AdminPricingPage() {
               const fd = new FormData(e.currentTarget)
               addRow.mutate({
                 project_id: String(fd.get('project_id')),
+                construction_stage: String(fd.get('construction_stage') || 'both'),
                 unit_type_code: String(fd.get('unit_type_code')),
                 floor_band: String(fd.get('floor_band')),
                 price_per_sqm: String(fd.get('price_per_sqm')),
@@ -257,6 +351,8 @@ export function AdminPricingPage() {
             <p className="text-xs text-stone-500">
               Unit codes: SFCA, SFCR (semi-finished), RFCA, RFCR (regular). Floor band examples:{' '}
               <span className="font-mono">3-10</span>, <span className="font-mono">1-16</span>.
+              For <strong>CMC</strong>, use <em>Construction stage</em> to set different rates for
+              “not started” vs “near completion” (same choices as on the public calculator).
             </p>
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
@@ -266,6 +362,7 @@ export function AdminPricingPage() {
                   className="input"
                   key={addFormDefaultProjectId}
                   defaultValue={addFormDefaultProjectId}
+                  onChange={(e) => setAddProjectId(e.target.value)}
                 >
                   <option value="">Strategy location only</option>
                   {sortedProjects.map((p) => (
@@ -275,6 +372,18 @@ export function AdminPricingPage() {
                   ))}
                 </select>
               </label>
+              {isCmcInventoryProject(addProjectId || addFormDefaultProjectId, projectSlugByIdMap) ? (
+                <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 sm:col-span-2">
+                  Construction stage (CMC calculator)
+                  <select name="construction_stage" className="input" defaultValue="both">
+                    {CMC_CONSTRUCTION_OPTIONS.map((opt) => (
+                      <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              ) : null}
               <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
                 Unit type code
                 <select name="unit_type_code" required className="input">
@@ -372,9 +481,14 @@ export function AdminPricingPage() {
                                   ? `fixed ${Number(r.fixed_price).toLocaleString('en-ET')}`
                                   : '-'}
                             </p>
-                            {typeof r.conditions?.calculator_project_id === 'string' ? (
+                            {constructionStageLabel(
+                              constructionStageFromRow(r, projectSlugByIdMap),
+                            ) ? (
                               <p className="mt-1 text-xs text-stone-600 dark:text-stone-400">
-                                Calculator id: {r.conditions.calculator_project_id}
+                                Construction stage:{' '}
+                                {constructionStageLabel(
+                                  constructionStageFromRow(r, projectSlugByIdMap),
+                                )}
                               </p>
                             ) : null}
                           </div>
@@ -407,66 +521,17 @@ export function AdminPricingPage() {
                           </div>
                         </div>
                         {editingRowId === r.id ? (
-                          <form
-                            className="mt-3 grid gap-2 sm:grid-cols-4"
-                            onSubmit={(e) => {
-                              e.preventDefault()
-                              const fd = new FormData(e.currentTarget)
-                              updateRow.mutate({
-                                row_id: r.id,
-                                project_id: String(fd.get('project_id')),
-                                unit_type_code: String(fd.get('unit_type_code')),
-                                floor_band: String(fd.get('floor_band')),
-                                price_per_sqm: String(fd.get('price_per_sqm')),
-                              })
-                            }}
-                          >
-                            <select
-                              name="project_id"
-                              className="input"
-                              defaultValue={r.project_id ?? ''}
-                            >
-                              <option value="">Strategy location only</option>
-                              {sortedProjects.map((p) => (
-                                <option key={p.id} value={p.id}>
-                                  {p.name}
-                                </option>
-                              ))}
-                            </select>
-                            <select
-                              name="unit_type_code"
-                              required
-                              className="input"
-                              defaultValue={r.unit_type_code ?? 'SFCA'}
-                            >
-                              {UNIT_TYPE_OPTIONS.map((opt) => (
-                                <option key={opt.value} value={opt.value}>
-                                  {opt.label}
-                                </option>
-                              ))}
-                            </select>
-                            <input
-                              name="floor_band"
-                              required
-                              className="input"
-                              defaultValue={r.floor_band ?? ''}
-                            />
-                            <div className="flex gap-2">
-                              <input
-                                name="price_per_sqm"
-                                required
-                                className="input"
-                                defaultValue={r.price_per_sqm ?? ''}
-                              />
-                              <button
-                                type="submit"
-                                className="btn-secondary whitespace-nowrap"
-                                disabled={updateRow.isPending}
-                              >
-                                Save
-                              </button>
-                            </div>
-                          </form>
+                          <PriceRowEditForm
+                            row={r}
+                            sortedProjects={sortedProjects}
+                            projectSlugByIdMap={projectSlugByIdMap}
+                            defaultConstructionStage={
+                              constructionStageFromRow(r, projectSlugByIdMap) ?? 'both'
+                            }
+                            onSave={(fields) => updateRow.mutate({ row_id: r.id, ...fields })}
+                            onCancel={() => setEditingRowId(null)}
+                            pending={updateRow.isPending}
+                          />
                         ) : null}
                       </li>
                     ))}
