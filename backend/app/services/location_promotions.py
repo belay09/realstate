@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from uuid import UUID
 
 from sqlalchemy.orm import Session
@@ -12,8 +12,8 @@ from app.models.promotions import LocationPromotion
 
 def _as_utc(dt: datetime) -> datetime:
     if dt.tzinfo is None:
-        return dt.replace(tzinfo=timezone.utc)
-    return dt.astimezone(timezone.utc)
+        return dt.replace(tzinfo=UTC)
+    return dt.astimezone(UTC)
 
 
 def promotion_applies_to_location(
@@ -25,7 +25,7 @@ def promotion_applies_to_location(
 ) -> bool:
     if not promotion.is_active or promotion.kind != kind:
         return False
-    now = _as_utc(as_of or datetime.now(timezone.utc))
+    now = _as_utc(as_of or datetime.now(UTC))
     if now < _as_utc(promotion.starts_at) or now > _as_utc(promotion.ends_at):
         return False
     ids = {str(x).strip().lower() for x in (promotion.location_ids or [])}
@@ -64,7 +64,7 @@ def load_active_public_promotions(
     *,
     as_of: datetime | None = None,
 ) -> list[LocationPromotion]:
-    now = _as_utc(as_of or datetime.now(timezone.utc))
+    now = _as_utc(as_of or datetime.now(UTC))
     return (
         db.query(LocationPromotion)
         .filter(
