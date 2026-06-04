@@ -1,12 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
+import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
 
 import { api } from '../../api/client'
 import { AdminCompanySelect } from '../../components/AdminCompanySelect'
 import type { Paginated, Project } from '../../api/types'
 import { CalculatorConfigEditor } from './CalculatorConfigEditor'
-import { useState } from 'react'
 
 type LivePricing = {
   id: string
@@ -32,10 +32,44 @@ const UNIT_TYPE_OPTIONS = [
   { value: 'RFCR', label: 'RFCR (regular-finished)' },
 ] as const
 
+const STRATEGY_FILTER = '__strategy__'
+const ALL_LOCATIONS_FILTER = 'all'
+
+type PriceRow = LivePricing['price_rows'][number]
+
+function projectLabel(
+  projectId: string | null,
+  projectNameById: Map<string, string>,
+): string {
+  if (!projectId) return 'Strategy location only'
+  return projectNameById.get(projectId) ?? 'Unknown project'
+}
+
+function groupRowsByProject(
+  rows: PriceRow[],
+  projectNameById: Map<string, string>,
+): Array<{ projectId: string | null; label: string; rows: PriceRow[] }> {
+  const byProject = new Map<string | null, PriceRow[]>()
+  for (const row of rows) {
+    const key = row.project_id ?? null
+    const list = byProject.get(key)
+    if (list) list.push(row)
+    else byProject.set(key, [row])
+  }
+  return Array.from(byProject.entries())
+    .map(([projectId, groupRows]) => ({
+      projectId,
+      label: projectLabel(projectId, projectNameById),
+      rows: groupRows,
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base' }))
+}
+
 export function AdminPricingPage() {
   const qc = useQueryClient()
   const [companyId, setCompanyId] = useState('')
   const [editingRowId, setEditingRowId] = useState<string | null>(null)
+  const [locationFilter, setLocationFilter] = useState(ALL_LOCATIONS_FILTER)
 
   const livePricing = useQuery({
     queryKey: ['admin', 'pricing-live', companyId],
@@ -133,6 +167,48 @@ export function AdminPricingPage() {
     onError: (err) => toast.error(actionError(err, 'Could not update price row.')),
   })
 
+  const projectNameById = useMemo(() => {
+    const map = new Map<string, string>()
+    for (const p of projects.data?.items ?? []) {
+      map.set(p.id, p.name)
+    }
+    return map
+  }, [projects.data?.items])
+
+  const sortedProjects = useMemo(
+    () =>
+      [...(projects.data?.items ?? [])].sort((a, b) =>
+        a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
+      ),
+    [projects.data?.items],
+  )
+
+  const rowCountByProject = useMemo(() => {
+    const counts = new Map<string | null, number>()
+    for (const row of livePricing.data?.price_rows ?? []) {
+      const key = row.project_id ?? null
+      counts.set(key, (counts.get(key) ?? 0) + 1)
+    }
+    return counts
+  }, [livePricing.data?.price_rows])
+
+  const filteredRows = useMemo(() => {
+    const rows = livePricing.data?.price_rows ?? []
+    if (locationFilter === ALL_LOCATIONS_FILTER) return rows
+    if (locationFilter === STRATEGY_FILTER) return rows.filter((r) => !r.project_id)
+    return rows.filter((r) => r.project_id === locationFilter)
+  }, [livePricing.data?.price_rows, locationFilter])
+
+  const groupedRows = useMemo(
+    () => groupRowsByProject(filteredRows, projectNameById),
+    [filteredRows, projectNameById],
+  )
+
+  const addFormDefaultProjectId =
+    locationFilter !== ALL_LOCATIONS_FILTER && locationFilter !== STRATEGY_FILTER
+      ? locationFilter
+      : ''
+
   return (
     <div className="space-y-8 text-left">
       <h1 className="text-2xl font-semibold text-stone-900 dark:text-stone-50">Pricing</h1>
@@ -143,7 +219,11 @@ export function AdminPricingPage() {
 
       <AdminCompanySelect
         value={companyId}
-        onChange={(id) => setCompanyId(id)}
+        onChange={(id) => {
+          setCompanyId(id)
+          setLocationFilter(ALL_LOCATIONS_FILTER)
+          setEditingRowId(null)
+        }}
       />
 
       {companyId && livePricing.isLoading ? (
@@ -181,9 +261,14 @@ export function AdminPricingPage() {
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
                 Project
-                <select name="project_id" className="input">
+                <select
+                  name="project_id"
+                  className="input"
+                  key={addFormDefaultProjectId}
+                  defaultValue={addFormDefaultProjectId}
+                >
                   <option value="">Strategy location only</option>
-                  {projects.data?.items.map((p) => (
+                  {sortedProjects.map((p) => (
                     <option key={p.id} value={p.id}>
                       {p.name}
                     </option>
@@ -214,126 +299,182 @@ export function AdminPricingPage() {
             </button>
           </form>
 
-          <ul className="space-y-2 text-sm">
-            {livePricing.data.price_rows.length === 0 ? (
-              <li className="text-stone-500">No apartment rates yet — add at least one row.</li>
-            ) : (
-              livePricing.data.price_rows.map((r) => (
-                <li
-                  key={r.id}
-                  className="rounded-lg bg-stone-100 px-3 py-3 dark:bg-stone-900"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="font-medium text-stone-800 dark:text-stone-100">
-                        {r.unit_type_code ?? 'any type'} · floor {r.floor_band ?? 'any'} ·{' '}
-                        {r.price_per_sqm
-                          ? `${Number(r.price_per_sqm).toLocaleString('en-ET')}/sqm`
-                          : r.fixed_price
-                            ? `fixed ${Number(r.fixed_price).toLocaleString('en-ET')}`
-                            : '-'}
-                      </p>
-                      <p className="mt-1 text-xs text-stone-600 dark:text-stone-400">
-                        Location: {projects.data?.items.find((p) => p.id === r.project_id)?.name ?? 'Strategy location only'}
-                        {typeof r.conditions?.calculator_project_id === 'string'
-                          ? ` (${r.conditions.calculator_project_id})`
-                          : ''}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      {editingRowId === r.id ? (
-                        <button
-                          type="button"
-                          className="text-xs text-stone-500 hover:underline"
-                          onClick={() => setEditingRowId(null)}
-                        >
-                          Cancel
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          className="text-xs text-brand-700 hover:underline"
-                          onClick={() => setEditingRowId(r.id)}
-                        >
-                          Edit
-                        </button>
-                      )}
-                      <button
-                        type="button"
-                        className="text-xs text-red-600 hover:underline"
-                        disabled={deleteRow.isPending}
-                        onClick={() => deleteRow.mutate(r.id)}
-                      >
-                        Remove
-                      </button>
-                    </div>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
+              Filter by location
+              <select
+                className="input mt-1 min-w-[14rem]"
+                value={locationFilter}
+                onChange={(e) => {
+                  setLocationFilter(e.target.value)
+                  setEditingRowId(null)
+                }}
+              >
+                <option value={ALL_LOCATIONS_FILTER}>
+                  All locations ({livePricing.data.price_rows.length})
+                </option>
+                {(rowCountByProject.get(null) ?? 0) > 0 ? (
+                  <option value={STRATEGY_FILTER}>
+                    Strategy location only ({rowCountByProject.get(null)})
+                  </option>
+                ) : null}
+                {sortedProjects.map((p) => {
+                  const count = rowCountByProject.get(p.id) ?? 0
+                  if (count === 0) return null
+                  return (
+                    <option key={p.id} value={p.id}>
+                      {p.name} ({count})
+                    </option>
+                  )
+                })}
+              </select>
+            </label>
+            {locationFilter !== ALL_LOCATIONS_FILTER ? (
+              <button
+                type="button"
+                className="text-xs text-brand-700 hover:underline sm:mb-2"
+                onClick={() => setLocationFilter(ALL_LOCATIONS_FILTER)}
+              >
+                Show all locations
+              </button>
+            ) : null}
+          </div>
+
+          {livePricing.data.price_rows.length === 0 ? (
+            <p className="text-sm text-stone-500">No apartment rates yet — add at least one row.</p>
+          ) : filteredRows.length === 0 ? (
+            <p className="text-sm text-stone-500">No rates for this location.</p>
+          ) : (
+            <div className="space-y-8">
+              {groupedRows.map((group) => (
+                <section key={group.projectId ?? STRATEGY_FILTER}>
+                  <div className="mb-3 flex items-baseline justify-between gap-4 border-b border-stone-200 pb-2 dark:border-stone-700">
+                    <h3 className="text-sm font-semibold text-stone-900 dark:text-stone-100">
+                      {group.label}
+                    </h3>
+                    <span className="text-xs text-stone-500">
+                      {group.rows.length} {group.rows.length === 1 ? 'rate' : 'rates'}
+                    </span>
                   </div>
-                  {editingRowId === r.id ? (
-                    <form
-                      className="mt-3 grid gap-2 sm:grid-cols-4"
-                      onSubmit={(e) => {
-                        e.preventDefault()
-                        const fd = new FormData(e.currentTarget)
-                        updateRow.mutate({
-                          row_id: r.id,
-                          project_id: String(fd.get('project_id')),
-                          unit_type_code: String(fd.get('unit_type_code')),
-                          floor_band: String(fd.get('floor_band')),
-                          price_per_sqm: String(fd.get('price_per_sqm')),
-                        })
-                      }}
-                    >
-                      <select
-                        name="project_id"
-                        className="input"
-                        defaultValue={r.project_id ?? ''}
+                  <ul className="space-y-2 text-sm">
+                    {group.rows.map((r) => (
+                      <li
+                        key={r.id}
+                        className="rounded-lg bg-stone-100 px-3 py-3 dark:bg-stone-900"
                       >
-                        <option value="">Strategy location only</option>
-                        {projects.data?.items.map((p) => (
-                          <option key={p.id} value={p.id}>
-                            {p.name}
-                          </option>
-                        ))}
-                      </select>
-                      <select
-                        name="unit_type_code"
-                        required
-                        className="input"
-                        defaultValue={r.unit_type_code ?? 'SFCA'}
-                      >
-                        {UNIT_TYPE_OPTIONS.map((opt) => (
-                          <option key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </option>
-                        ))}
-                      </select>
-                      <input
-                        name="floor_band"
-                        required
-                        className="input"
-                        defaultValue={r.floor_band ?? ''}
-                      />
-                      <div className="flex gap-2">
-                        <input
-                          name="price_per_sqm"
-                          required
-                          className="input"
-                          defaultValue={r.price_per_sqm ?? ''}
-                        />
-                        <button
-                          type="submit"
-                          className="btn-secondary whitespace-nowrap"
-                          disabled={updateRow.isPending}
-                        >
-                          Save
-                        </button>
-                      </div>
-                    </form>
-                  ) : null}
-                </li>
-              ))
-            )}
-          </ul>
+                        <div className="flex items-start justify-between gap-4">
+                          <div>
+                            <p className="font-medium text-stone-800 dark:text-stone-100">
+                              {r.unit_type_code ?? 'any type'} · floor {r.floor_band ?? 'any'} ·{' '}
+                              {r.price_per_sqm
+                                ? `${Number(r.price_per_sqm).toLocaleString('en-ET')}/sqm`
+                                : r.fixed_price
+                                  ? `fixed ${Number(r.fixed_price).toLocaleString('en-ET')}`
+                                  : '-'}
+                            </p>
+                            {typeof r.conditions?.calculator_project_id === 'string' ? (
+                              <p className="mt-1 text-xs text-stone-600 dark:text-stone-400">
+                                Calculator id: {r.conditions.calculator_project_id}
+                              </p>
+                            ) : null}
+                          </div>
+                          <div className="flex shrink-0 items-center gap-3">
+                            {editingRowId === r.id ? (
+                              <button
+                                type="button"
+                                className="text-xs text-stone-500 hover:underline"
+                                onClick={() => setEditingRowId(null)}
+                              >
+                                Cancel
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                className="text-xs text-brand-700 hover:underline"
+                                onClick={() => setEditingRowId(r.id)}
+                              >
+                                Edit
+                              </button>
+                            )}
+                            <button
+                              type="button"
+                              className="text-xs text-red-600 hover:underline"
+                              disabled={deleteRow.isPending}
+                              onClick={() => deleteRow.mutate(r.id)}
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                        {editingRowId === r.id ? (
+                          <form
+                            className="mt-3 grid gap-2 sm:grid-cols-4"
+                            onSubmit={(e) => {
+                              e.preventDefault()
+                              const fd = new FormData(e.currentTarget)
+                              updateRow.mutate({
+                                row_id: r.id,
+                                project_id: String(fd.get('project_id')),
+                                unit_type_code: String(fd.get('unit_type_code')),
+                                floor_band: String(fd.get('floor_band')),
+                                price_per_sqm: String(fd.get('price_per_sqm')),
+                              })
+                            }}
+                          >
+                            <select
+                              name="project_id"
+                              className="input"
+                              defaultValue={r.project_id ?? ''}
+                            >
+                              <option value="">Strategy location only</option>
+                              {sortedProjects.map((p) => (
+                                <option key={p.id} value={p.id}>
+                                  {p.name}
+                                </option>
+                              ))}
+                            </select>
+                            <select
+                              name="unit_type_code"
+                              required
+                              className="input"
+                              defaultValue={r.unit_type_code ?? 'SFCA'}
+                            >
+                              {UNIT_TYPE_OPTIONS.map((opt) => (
+                                <option key={opt.value} value={opt.value}>
+                                  {opt.label}
+                                </option>
+                              ))}
+                            </select>
+                            <input
+                              name="floor_band"
+                              required
+                              className="input"
+                              defaultValue={r.floor_band ?? ''}
+                            />
+                            <div className="flex gap-2">
+                              <input
+                                name="price_per_sqm"
+                                required
+                                className="input"
+                                defaultValue={r.price_per_sqm ?? ''}
+                              />
+                              <button
+                                type="submit"
+                                className="btn-secondary whitespace-nowrap"
+                                disabled={updateRow.isPending}
+                              >
+                                Save
+                              </button>
+                            </div>
+                          </form>
+                        ) : null}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+            </div>
+          )}
 
           <CalculatorConfigEditor
             companyId={companyId}

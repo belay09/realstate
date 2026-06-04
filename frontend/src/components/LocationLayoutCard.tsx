@@ -95,21 +95,9 @@ export function LocationLayoutCard({ listing, index = 0 }: Props) {
             </Link>
           </h3>
 
-          <dl className="mt-4 grid grid-cols-2 gap-2 @md:grid-cols-4">
+          <dl className="mt-4 grid grid-cols-2 gap-2">
             <SpecItem label={t('layoutCard.bedrooms')} value={beds ?? t('layoutCard.notSpecified')} />
             <SpecItem label={t('layoutCard.finish')} value={finishLabel} />
-            <SpecItem
-              label={t('layoutCard.size')}
-              value={listing.property_size ?? t('layoutCard.notSpecified')}
-            />
-            <SpecItem
-              label={t('layoutCard.floor')}
-              value={
-                listing.floor_number != null
-                  ? String(listing.floor_number)
-                  : t('layoutCard.notSpecified')
-              }
-            />
           </dl>
 
           {listing.description_preview ? (
