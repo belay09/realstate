@@ -14,7 +14,9 @@ import type {
   Project,
   PropertyImage,
 } from '../../api/types'
+import { CopyListingsPanel } from '../../components/admin/CopyListingsPanel'
 import { AdminCreateListingModal } from '../../components/admin/AdminCreateListingModal'
+import { DuplicateListingModal } from '../../components/admin/DuplicateListingModal'
 import { AdminPhotoUploadField } from '../../components/admin/AdminPhotoUploadField'
 import { AdminPropertyLocationVideoTab } from '../../components/admin/AdminPropertyLocationVideoTab'
 import { AdminCompanySelect } from '../../components/AdminCompanySelect'
@@ -118,6 +120,7 @@ export function AdminPropertyListingsPage() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editTab, setEditTab] = useState<EditTab>('basics')
   const [showCreate, setShowCreate] = useState(false)
+  const [duplicateSource, setDuplicateSource] = useState<AdminPropertyListingSummary | null>(null)
 
   const companies = useQuery({
     queryKey: ['admin', 'companies'],
@@ -155,6 +158,16 @@ export function AdminPropertyListingsPage() {
     const rows = [...(projects.data?.items ?? [])].sort((a, b) => a.name.localeCompare(b.name))
     return rows
   }, [projects.data?.items])
+
+  const locationPages = useQuery({
+    queryKey: ['admin', 'location-content', 'properties-copy'],
+    queryFn: async () => {
+      const { data } = await api.get<Paginated<AdminLocationContent>>('/admin/location-content', {
+        params: { limit: 200 },
+      })
+      return data
+    },
+  })
 
   const listings = useQuery({
     queryKey: ['admin', 'property-listings', companyId, search, projectSlug, publicOnly],
@@ -195,7 +208,9 @@ export function AdminPropertyListingsPage() {
           <Link to="/admin/listings" className="font-medium text-brand-700 underline dark:text-brand-300">
             Location pages
           </Link>{' '}
-          for zone hero, video, and description (not for assigning homes).
+          for zone hero, video, and description (not for assigning homes). Use{' '}
+          <strong>Copy</strong> on a row or the blue <strong>Copy all listings</strong> box when a
+          location is selected — same idea as Pricing.
         </p>
       </div>
 
@@ -274,6 +289,19 @@ export function AdminPropertyListingsPage() {
         </div>
       ) : null}
 
+      {projectSlug && listings.data && listings.data.total > 0 && locationPages.data ? (
+        <CopyListingsPanel
+          companyId={companyId}
+          sourceProjectSlug={projectSlug}
+          sourceProjectName={
+            projectOptions.find((p) => p.slug === projectSlug)?.name ?? projectSlug
+          }
+          listings={listings.data.items}
+          locationPages={locationPages.data.items}
+          onSuccess={() => qc.invalidateQueries({ queryKey: ['admin', 'property-listings'] })}
+        />
+      ) : null}
+
       {listings.data && listings.data.total > 0 ? (
         <div className="overflow-x-auto rounded-xl border border-stone-200 bg-white dark:border-stone-800 dark:bg-stone-950">
           <table className="min-w-full text-left text-sm">
@@ -347,16 +375,25 @@ export function AdminPropertyListingsPage() {
                     </label>
                   </td>
                   <td className="px-3 py-2 text-right">
-                    <button
-                      type="button"
-                      className="text-sm font-semibold text-brand-700 hover:underline dark:text-brand-300"
-                      onClick={() => {
-                        setEditingId(row.id)
-                        setEditTab('basics')
-                      }}
-                    >
-                      Edit
-                    </button>
+                    <div className="flex justify-end gap-2">
+                      <button
+                        type="button"
+                        className="rounded border border-stone-300 px-2 py-1 text-xs font-medium text-stone-700 hover:bg-stone-50 dark:border-stone-600 dark:text-stone-300 dark:hover:bg-stone-800"
+                        onClick={() => setDuplicateSource(row)}
+                      >
+                        Copy
+                      </button>
+                      <button
+                        type="button"
+                        className="text-sm font-semibold text-brand-700 hover:underline dark:text-brand-300"
+                        onClick={() => {
+                          setEditingId(row.id)
+                          setEditTab('basics')
+                        }}
+                      >
+                        Edit
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -389,6 +426,20 @@ export function AdminPropertyListingsPage() {
           tab={editTab}
           onTabChange={setEditTab}
           onClose={() => setEditingId(null)}
+        />
+      ) : null}
+
+      {duplicateSource && companyId ? (
+        <DuplicateListingModal
+          companyId={companyId}
+          sourceSummary={duplicateSource}
+          onClose={() => setDuplicateSource(null)}
+          onCreated={(id) => {
+            setDuplicateSource(null)
+            qc.invalidateQueries({ queryKey: ['admin', 'property-listings'] })
+            setEditingId(id)
+            setEditTab('basics')
+          }}
         />
       ) : null}
     </div>
