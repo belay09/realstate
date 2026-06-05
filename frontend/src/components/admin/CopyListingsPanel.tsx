@@ -7,7 +7,6 @@ import type {
   AdminPropertyListingDetail,
   AdminPropertyListingSummary,
   ListingMetadata,
-  Paginated,
   PropertyUnit,
 } from '../../api/types'
 import { duplicatePropertyListing } from '../../lib/duplicatePropertyListing'
