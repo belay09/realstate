@@ -66,12 +66,14 @@ export async function duplicatePropertyListing(opts: {
   copyImages: boolean
 }): Promise<string> {
   const loc = opts.locationPages.find((row) => row.location_id === opts.locationId)
+  const targetCity = 'Addis Ababa'
+  const targetArea = loc?.subtitle?.trim() || loc?.title?.trim() || null
   const { blockId } = await ensureProjectAndBlock(
     opts.companyId,
     opts.locationId,
     loc,
-    opts.city,
-    opts.area,
+    targetCity,
+    targetArea,
   )
 
   const number =
@@ -90,8 +92,8 @@ export async function duplicatePropertyListing(opts: {
     unit_id: unit.id,
     title: opts.title.trim(),
     description: opts.description,
-    city: opts.city,
-    area: opts.area,
+    city: targetCity,
+    area: targetArea,
     is_public: opts.isPublic,
     listing_metadata: opts.listingMetadata,
     location_kind: opts.locationKind,

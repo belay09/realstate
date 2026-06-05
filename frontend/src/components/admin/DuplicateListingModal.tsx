@@ -73,7 +73,7 @@ export function DuplicateListingModal({ companyId, sourceSummary, onClose, onCre
   const [floorNumber, setFloorNumber] = useState('')
   const [unitNumber, setUnitNumber] = useState('')
   const [copyImages, setCopyImages] = useState(true)
-  const [isPublic, setIsPublic] = useState(false)
+  const [isPublic, setIsPublic] = useState(true)
 
   useEffect(() => {
     if (!detail.data) return
@@ -242,8 +242,17 @@ export function DuplicateListingModal({ companyId, sourceSummary, onClose, onCre
                 checked={isPublic}
                 onChange={(e) => setIsPublic(e.target.checked)}
               />
-              Show on public site immediately
+              Show on public site (required for visitors to see this listing)
             </label>
+            {locationId ? (
+              <p className="text-xs text-stone-500">
+                Appears on{' '}
+                <span className="font-mono text-stone-700 dark:text-stone-300">
+                  /apartments/{locationId}
+                </span>{' '}
+                when Public is on.
+              </p>
+            ) : null}
 
             <div className="flex justify-end gap-2 border-t border-stone-200 pt-4 dark:border-stone-800">
               <button type="button" className="btn-secondary" onClick={onClose}>

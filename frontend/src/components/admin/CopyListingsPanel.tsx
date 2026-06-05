@@ -42,7 +42,7 @@ export function CopyListingsPanel({
 
   const [targetLocationId, setTargetLocationId] = useState('')
   const [copyImages, setCopyImages] = useState(true)
-  const [isPublic, setIsPublic] = useState(false)
+  const [isPublic, setIsPublic] = useState(true)
   const [pending, setPending] = useState(false)
 
   const sourceKind: LocationKind =
@@ -137,7 +137,7 @@ export function CopyListingsPanel({
         </label>
         <label className="flex items-center gap-2 text-xs text-stone-600">
           <input type="checkbox" checked={isPublic} onChange={(e) => setIsPublic(e.target.checked)} />
-          Public
+          Public (show on site)
         </label>
         <button
           type="button"
@@ -148,6 +148,15 @@ export function CopyListingsPanel({
           {pending ? 'Copying…' : `Copy ${sourceListings.length} listings`}
         </button>
       </div>
+      {targetLocationId ? (
+        <p className="mt-2 text-xs text-stone-500">
+          Listings will show at{' '}
+          <span className="font-mono text-stone-700 dark:text-stone-300">
+            /apartments/{targetLocationId}
+          </span>{' '}
+          — must match the location page URL exactly.
+        </p>
+      ) : null}
       {targetOptions.length === 0 ? (
         <p className="mt-2 text-xs text-stone-500">
           Add another Active {sourceKind} location under Location pages first.

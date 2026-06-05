@@ -289,6 +289,14 @@ export function AdminPropertyListingsPage() {
         </div>
       ) : null}
 
+      {listings.data && listings.data.items.some((row) => !row.is_public) ? (
+        <div className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-950 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100">
+          <strong>Hidden listings:</strong> copied listings default to off until you tick{' '}
+          <strong>Public</strong> in the table (or re-copy with Public checked). The site only shows
+          listings where Public = Yes and the unit is available.
+        </div>
+      ) : null}
+
       {projectSlug && listings.data && listings.data.total > 0 && locationPages.data ? (
         <CopyListingsPanel
           companyId={companyId}
@@ -341,7 +349,22 @@ export function AdminPropertyListingsPage() {
                       </div>
                     </div>
                   </td>
-                  <td className="px-3 py-2 text-stone-700 dark:text-stone-300">{row.project_name}</td>
+                  <td className="px-3 py-2 text-stone-700 dark:text-stone-300">
+                    <p>{row.project_name}</p>
+                    <p className="font-mono text-[11px] text-stone-500">{row.project_slug}</p>
+                    {row.is_public ? (
+                      <Link
+                        to={`/apartments/${row.project_slug}`}
+                        className="text-[11px] text-brand-700 hover:underline dark:text-brand-400"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        View on site
+                      </Link>
+                    ) : (
+                      <span className="text-[11px] text-amber-700 dark:text-amber-300">Hidden</span>
+                    )}
+                  </td>
                   <td className="px-3 py-2">
                     {row.building_type ? (
                       <span
