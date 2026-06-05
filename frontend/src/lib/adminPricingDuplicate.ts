@@ -1,5 +1,6 @@
 import {
   buildPriceRowPayload,
+  CMC_INVENTORY_SLUG,
   constructionStageFromRow,
   type CmcConstructionStage,
 } from './adminPricingCompletion'
@@ -38,7 +39,11 @@ export function duplicateRowPayload(
   targetProjectId: string,
   slugById: Map<string, string>,
 ) {
-  const stage = constructionStageFromRow(row, slugById) ?? ('both' as CmcConstructionStage)
+  const targetSlug = slugById.get(targetProjectId)
+  const stage: CmcConstructionStage =
+    targetSlug === CMC_INVENTORY_SLUG
+      ? (constructionStageFromRow(row, slugById) ?? 'both')
+      : 'both'
   return buildPriceRowPayload(
     {
       project_id: targetProjectId,

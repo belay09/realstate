@@ -247,6 +247,19 @@ export function resolveCalculatorProject(
   if (strategyId) {
     return config.residentialProjects.find((p) => p.id === strategyId)
   }
+  const rowMaxFloor = config.residentialPriceRows
+    .filter((r) => r.projectId === projectId)
+    .reduce((max, r) => Math.max(max, r.floorBand.floorMax), 0)
+  if (rowMaxFloor > 0) {
+    return {
+      id: projectId,
+      areaLabelKey: projectId,
+      nameKey: projectId,
+      maxFloor: rowMaxFloor,
+      supportsCompletionChoice: false,
+      usesStrategyFloorTable: false,
+    }
+  }
   return undefined
 }
 

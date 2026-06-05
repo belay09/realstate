@@ -40,10 +40,15 @@ def _parse_floor_band(band: str) -> dict[str, Any]:
 
 def _project_id_for_row(row: PriceTableRow, slug_by_id: dict[UUID, str]) -> str | None:
     conditions = row.conditions or {}
+    if row.project_id is not None:
+        slug = slug_by_id.get(row.project_id)
+        if slug:
+            # Only CMC inventory rows use Ayat strategy calculator ids in conditions.
+            if slug == "cmc-extension" and conditions.get("calculator_project_id"):
+                return str(conditions["calculator_project_id"])
+            return slug
     if conditions.get("calculator_project_id"):
         return str(conditions["calculator_project_id"])
-    if row.project_id is not None:
-        return slug_by_id.get(row.project_id)
     if conditions.get("project_slug"):
         return str(conditions["project_slug"])
     return None
@@ -227,12 +232,28 @@ def build_public_calculator_config(
         )
     base["residential_price_rows"] = api_rows
 
-    for proj in base.get("residential_projects", []):
-        pid = proj.get("id")
-        if pid and pid in max_floor_by_project:
-            proj["maxFloor"] = max_floor_by_project[pid]
-            if proj.get("usesStrategyFloorTable"):
-                proj["floorMin"] = min_floor_by_project.get(pid, 3)
+    projects: list[dict[str, Any]] = list(base.get("residential_projects", []))
+    known_ids = {str(p.get("id")) for p in projects if p.get("id")}
+    for pid, max_floor in max_floor_by_project.items():
+        for proj in projects:
+            if proj.get("id") == pid:
+                proj["maxFloor"] = max_floor
+                if proj.get("usesStrategyFloorTable"):
+                    proj["floorMin"] = min_floor_by_project.get(pid, 3)
+                break
+        else:
+            projects.append(
+                {
+                    "id": pid,
+                    "areaLabelKey": pid,
+                    "nameKey": pid,
+                    "maxFloor": max_floor,
+                    "supportsCompletionChoice": False,
+                    "usesStrategyFloorTable": False,
+                }
+            )
+            known_ids.add(pid)
+    base["residential_projects"] = projects
     return base
 
 
