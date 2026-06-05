@@ -14,6 +14,7 @@ import {
   isCmcInventoryProject,
   projectSlugById,
 } from '../../lib/adminPricingCompletion'
+import { CopyRatesPanel } from '../../components/admin/CopyRatesPanel'
 import { DuplicatePricingModal } from '../../components/admin/DuplicatePricingModal'
 import type { AdminPriceRow } from '../../lib/adminPricingDuplicate'
 import { CalculatorConfigEditor } from './CalculatorConfigEditor'
@@ -461,6 +462,18 @@ export function AdminPricingPage() {
             ) : null}
           </div>
 
+          <CopyRatesPanel
+            companyId={companyId}
+            allRows={livePricing.data.price_rows}
+            sortedProjects={sortedProjects}
+            projectSlugByIdMap={projectSlugByIdMap}
+            rowCountByProject={rowCountByProject}
+            onSuccess={() => {
+              qc.invalidateQueries({ queryKey: ['admin', 'pricing-live', companyId] })
+              qc.invalidateQueries({ queryKey: ['public', 'calculator-config'] })
+            }}
+          />
+
           {livePricing.data.price_rows.length === 0 ? (
             <p className="text-sm text-stone-500">No apartment rates yet — add at least one row.</p>
           ) : filteredRows.length === 0 ? (
@@ -480,7 +493,7 @@ export function AdminPricingPage() {
                       {group.projectId ? (
                         <button
                           type="button"
-                          className="text-xs font-medium text-brand-700 hover:underline dark:text-brand-400"
+                          className="btn-secondary px-2 py-1 text-xs"
                           onClick={() =>
                             setDuplicateState({
                               sourceLabel: group.label,
@@ -489,7 +502,7 @@ export function AdminPricingPage() {
                             })
                           }
                         >
-                          Copy all to other locations…
+                          Copy all rates
                         </button>
                       ) : null}
                     </div>
@@ -542,7 +555,7 @@ export function AdminPricingPage() {
                             {r.project_id ? (
                               <button
                                 type="button"
-                                className="text-xs text-stone-600 hover:underline dark:text-stone-400"
+                                className="rounded border border-stone-300 px-2 py-0.5 text-xs font-medium text-stone-700 hover:bg-stone-50 dark:border-stone-600 dark:text-stone-300 dark:hover:bg-stone-800"
                                 onClick={() =>
                                   setDuplicateState({
                                     sourceLabel: `${group.label} · ${r.unit_type_code} ${r.floor_band}`,
@@ -551,7 +564,7 @@ export function AdminPricingPage() {
                                   })
                                 }
                               >
-                                Copy to…
+                                Copy
                               </button>
                             ) : null}
                             <button

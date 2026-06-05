@@ -133,10 +133,9 @@ export function CalculatorConfigEditor({ companyId, initialConfig }: Props) {
           </p>
         ) : (
           <>
-            {zones.length > 1 ? (
-              <div className="rounded-lg border border-dashed border-stone-300 bg-stone-50/80 p-3 dark:border-stone-700 dark:bg-stone-900/40">
-                <p className="text-xs font-medium text-stone-700 dark:text-stone-300">
-                  Copy floor rates between shops
+            <div className="rounded-xl border-2 border-brand-300/80 bg-brand-50/70 p-3 dark:border-brand-700/60 dark:bg-brand-950/30">
+                <p className="text-sm font-bold text-brand-900 dark:text-brand-100">
+                  Copy shop floor rates to another location
                 </p>
                 <p className="mt-1 text-[11px] text-stone-500">
                   Reuse the same GF–3F ETB/m² values without retyping each shop.
@@ -166,7 +165,7 @@ export function CalculatorConfigEditor({ companyId, initialConfig }: Props) {
                   {copyFromZoneId ? (
                     <>
                       <div className="min-w-[12rem] flex-1">
-                        <p className="text-xs text-stone-600 dark:text-stone-400">To</p>
+                        <p className="text-xs text-stone-600 dark:text-stone-400">Copy to</p>
                         <div className="mt-1 flex flex-wrap gap-2">
                           {zones
                             .filter((z) => z.id !== copyFromZoneId)
@@ -195,7 +194,7 @@ export function CalculatorConfigEditor({ companyId, initialConfig }: Props) {
                       </div>
                       <button
                         type="button"
-                        className="btn-secondary text-xs"
+                        className="btn-primary text-xs"
                         disabled={copyToZoneIds.length === 0}
                         onClick={() => {
                           const source = zones.find((z) => z.id === copyFromZoneId)
@@ -217,10 +216,13 @@ export function CalculatorConfigEditor({ companyId, initialConfig }: Props) {
                         Apply copy
                       </button>
                     </>
+                  ) : zones.length <= 1 ? (
+                    <p className="text-xs text-stone-500">
+                      Add another Active shop under Location pages to copy rates between shops.
+                    </p>
                   ) : null}
                 </div>
               </div>
-            ) : null}
             <div className="overflow-x-auto">
             <table className="w-full min-w-[32rem] text-left text-sm">
               <thead>
