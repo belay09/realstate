@@ -14,6 +14,8 @@ import {
   isCmcInventoryProject,
   projectSlugById,
 } from '../../lib/adminPricingCompletion'
+import { DuplicatePricingModal } from '../../components/admin/DuplicatePricingModal'
+import type { AdminPriceRow } from '../../lib/adminPricingDuplicate'
 import { CalculatorConfigEditor } from './CalculatorConfigEditor'
 
 type LivePricing = {
@@ -166,6 +168,11 @@ export function AdminPricingPage() {
   const [editingRowId, setEditingRowId] = useState<string | null>(null)
   const [locationFilter, setLocationFilter] = useState(ALL_LOCATIONS_FILTER)
   const [addProjectId, setAddProjectId] = useState('')
+  const [duplicateState, setDuplicateState] = useState<{
+    sourceLabel: string
+    sourceProjectId: string | null
+    rows: AdminPriceRow[]
+  } | null>(null)
 
   const livePricing = useQuery({
     queryKey: ['admin', 'pricing-live', companyId],
@@ -306,8 +313,10 @@ export function AdminPricingPage() {
     <div className="space-y-8 text-left">
       <h1 className="text-2xl font-semibold text-stone-900 dark:text-stone-50">Pricing</h1>
       <p className="text-sm text-stone-600 dark:text-stone-400">
-        Edit apartment rates and calculator settings for the live site. When Ayat changes prices,
-        update the numbers here and save — no drafts or publishing step.
+        Edit apartment rates and calculator settings for the live site. Use{' '}
+        <strong>Copy to…</strong> or <strong>Copy all to other locations</strong> to reuse the same
+        rates on another project without retyping. When Ayat changes prices, update here — no drafts
+        or publishing step.
       </p>
 
       <AdminCompanySelect
@@ -460,13 +469,30 @@ export function AdminPricingPage() {
             <div className="space-y-8">
               {groupedRows.map((group) => (
                 <section key={group.projectId ?? STRATEGY_FILTER}>
-                  <div className="mb-3 flex items-baseline justify-between gap-4 border-b border-stone-200 pb-2 dark:border-stone-700">
+                  <div className="mb-3 flex flex-wrap items-baseline justify-between gap-3 border-b border-stone-200 pb-2 dark:border-stone-700">
                     <h3 className="text-sm font-semibold text-stone-900 dark:text-stone-100">
                       {group.label}
                     </h3>
-                    <span className="text-xs text-stone-500">
-                      {group.rows.length} {group.rows.length === 1 ? 'rate' : 'rates'}
-                    </span>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span className="text-xs text-stone-500">
+                        {group.rows.length} {group.rows.length === 1 ? 'rate' : 'rates'}
+                      </span>
+                      {group.projectId ? (
+                        <button
+                          type="button"
+                          className="text-xs font-medium text-brand-700 hover:underline dark:text-brand-400"
+                          onClick={() =>
+                            setDuplicateState({
+                              sourceLabel: group.label,
+                              sourceProjectId: group.projectId,
+                              rows: group.rows,
+                            })
+                          }
+                        >
+                          Copy all to other locations…
+                        </button>
+                      ) : null}
+                    </div>
                   </div>
                   <ul className="space-y-2 text-sm">
                     {group.rows.map((r) => (
@@ -505,14 +531,29 @@ export function AdminPricingPage() {
                                 Cancel
                               </button>
                             ) : (
+                            <button
+                              type="button"
+                              className="text-xs text-brand-700 hover:underline"
+                              onClick={() => setEditingRowId(r.id)}
+                            >
+                              Edit
+                            </button>
+                            )}
+                            {r.project_id ? (
                               <button
                                 type="button"
-                                className="text-xs text-brand-700 hover:underline"
-                                onClick={() => setEditingRowId(r.id)}
+                                className="text-xs text-stone-600 hover:underline dark:text-stone-400"
+                                onClick={() =>
+                                  setDuplicateState({
+                                    sourceLabel: `${group.label} · ${r.unit_type_code} ${r.floor_band}`,
+                                    sourceProjectId: r.project_id,
+                                    rows: [r],
+                                  })
+                                }
                               >
-                                Edit
+                                Copy to…
                               </button>
-                            )}
+                            ) : null}
                             <button
                               type="button"
                               className="text-xs text-red-600 hover:underline"
@@ -555,6 +596,23 @@ export function AdminPricingPage() {
         </div>
       ) : companyId && livePricing.isError ? (
         <p className="text-sm text-red-600">Could not load pricing. Try again.</p>
+      ) : null}
+
+      {duplicateState && companyId && livePricing.data ? (
+        <DuplicatePricingModal
+          companyId={companyId}
+          sourceLabel={duplicateState.sourceLabel}
+          sourceProjectId={duplicateState.sourceProjectId}
+          rows={duplicateState.rows}
+          allRows={livePricing.data.price_rows}
+          sortedProjects={sortedProjects}
+          projectSlugByIdMap={projectSlugByIdMap}
+          onClose={() => setDuplicateState(null)}
+          onSuccess={() => {
+            qc.invalidateQueries({ queryKey: ['admin', 'pricing-live', companyId] })
+            qc.invalidateQueries({ queryKey: ['public', 'calculator-config'] })
+          }}
+        />
       ) : null}
     </div>
   )

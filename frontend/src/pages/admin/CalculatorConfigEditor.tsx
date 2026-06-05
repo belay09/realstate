@@ -51,6 +51,8 @@ export function CalculatorConfigEditor({ companyId, initialConfig }: Props) {
   const [zones, setZones] = useState<CommercialZoneStored[]>([])
   const [tiers, setTiers] = useState<DownPaymentTierStored[]>([])
   const [dirty, setDirty] = useState(false)
+  const [copyFromZoneId, setCopyFromZoneId] = useState('')
+  const [copyToZoneIds, setCopyToZoneIds] = useState<string[]>([])
 
   const shopLocations = useQuery({
     queryKey: ['admin', 'location-content', 'shop', 'calculator-editor'],
@@ -130,7 +132,96 @@ export function CalculatorConfigEditor({ companyId, initialConfig }: Props) {
             No Active shop locations. Create one under Location pages and mark it Active.
           </p>
         ) : (
-          <div className="overflow-x-auto">
+          <>
+            {zones.length > 1 ? (
+              <div className="rounded-lg border border-dashed border-stone-300 bg-stone-50/80 p-3 dark:border-stone-700 dark:bg-stone-900/40">
+                <p className="text-xs font-medium text-stone-700 dark:text-stone-300">
+                  Copy floor rates between shops
+                </p>
+                <p className="mt-1 text-[11px] text-stone-500">
+                  Reuse the same GF–3F ETB/m² values without retyping each shop.
+                </p>
+                <div className="mt-3 flex flex-wrap items-end gap-3">
+                  <label className="text-xs text-stone-600 dark:text-stone-400">
+                    From
+                    <select
+                      className="input mt-1 min-w-[10rem]"
+                      value={copyFromZoneId}
+                      onChange={(e) => {
+                        setCopyFromZoneId(e.target.value)
+                        setCopyToZoneIds([])
+                      }}
+                    >
+                      <option value="">Select shop…</option>
+                      {zones.map((z) => {
+                        const shop = activeShops.find((s) => s.location_id === z.id)
+                        return (
+                          <option key={z.id} value={z.id}>
+                            {shop?.title ?? z.id}
+                          </option>
+                        )
+                      })}
+                    </select>
+                  </label>
+                  {copyFromZoneId ? (
+                    <>
+                      <div className="min-w-[12rem] flex-1">
+                        <p className="text-xs text-stone-600 dark:text-stone-400">To</p>
+                        <div className="mt-1 flex flex-wrap gap-2">
+                          {zones
+                            .filter((z) => z.id !== copyFromZoneId)
+                            .map((z) => {
+                              const shop = activeShops.find((s) => s.location_id === z.id)
+                              const checked = copyToZoneIds.includes(z.id)
+                              return (
+                                <label
+                                  key={z.id}
+                                  className="flex cursor-pointer items-center gap-1.5 rounded-md border border-stone-200 bg-white px-2 py-1 text-xs dark:border-stone-700 dark:bg-stone-950"
+                                >
+                                  <input
+                                    type="checkbox"
+                                    checked={checked}
+                                    onChange={() =>
+                                      setCopyToZoneIds((prev) =>
+                                        checked ? prev.filter((id) => id !== z.id) : [...prev, z.id],
+                                      )
+                                    }
+                                  />
+                                  {shop?.title ?? z.id}
+                                </label>
+                              )
+                            })}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        className="btn-secondary text-xs"
+                        disabled={copyToZoneIds.length === 0}
+                        onClick={() => {
+                          const source = zones.find((z) => z.id === copyFromZoneId)
+                          if (!source) return
+                          setZones((prev) =>
+                            prev.map((z) =>
+                              copyToZoneIds.includes(z.id)
+                                ? { ...z, floors: { ...source.floors } }
+                                : z,
+                            ),
+                          )
+                          setDirty(true)
+                          toast.success(
+                            `Copied floor rates to ${copyToZoneIds.length} shop${copyToZoneIds.length === 1 ? '' : 's'}. Save to publish.`,
+                          )
+                          setCopyToZoneIds([])
+                        }}
+                      >
+                        Apply copy
+                      </button>
+                    </>
+                  ) : null}
+                </div>
+              </div>
+            ) : null}
+            <div className="overflow-x-auto">
             <table className="w-full min-w-[32rem] text-left text-sm">
               <thead>
                 <tr className="border-b border-stone-200 dark:border-stone-700">
@@ -175,6 +266,7 @@ export function CalculatorConfigEditor({ companyId, initialConfig }: Props) {
               </tbody>
             </table>
           </div>
+          </>
         )}
       </div>
 

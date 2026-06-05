@@ -16,6 +16,7 @@ import { AYAT_DEVELOPMENT_ZONES } from '../../lib/listingDisplay'
 import { defaultBuildingSettings } from '../../lib/buildingTypes'
 import { useCalculatorConfig } from '../../hooks/useCalculatorConfig'
 import { shopLocationsFromConfig } from '../../lib/shopLocations'
+import { DuplicateLocationModal } from '../../components/admin/DuplicateLocationModal'
 import { LocationBuildingSettingsForm } from '../../components/admin/LocationBuildingSettingsForm'
 
 type LocationKind = 'apartment' | 'shop'
@@ -60,6 +61,9 @@ export function AdminListingsPage() {
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<AdminLocationContent | null>(null)
+  const [duplicateSource, setDuplicateSource] = useState<AdminLocationContent | null>(null)
+  const [createTemplateId, setCreateTemplateId] = useState('')
+  const [createSettings, setCreateSettings] = useState<LocationBuildingSettings | null>(null)
   const [createSubmitError, setCreateSubmitError] = useState<string | null>(null)
   const [createPendingMedia, setCreatePendingMedia] = useState<PendingMedia[]>([])
   const [homeCardForms, setHomeCardForms] = useState<HomeCardFormState[]>([])
@@ -102,6 +106,7 @@ export function AdminListingsPage() {
       description?: string
       video_url?: string
       cards: LocationCard[]
+      settings?: LocationBuildingSettings | null
       is_public: boolean
     }) =>
       api.post<AdminLocationContent>('/admin/location-content', body).then((res) => res.data),
@@ -143,6 +148,8 @@ export function AdminListingsPage() {
     setCreateSubmitError(null)
     setCreatePendingMedia([])
     setCreateLocationPreset('')
+    setCreateTemplateId('')
+    setCreateSettings(null)
     setCreateForm({
       kind: 'apartment',
       location_id: '',
@@ -439,6 +446,13 @@ export function AdminListingsPage() {
                         </button>
                         <button
                           type="button"
+                          className="text-xs text-stone-600 hover:underline dark:text-stone-400"
+                          onClick={() => setDuplicateSource(row)}
+                        >
+                          Duplicate
+                        </button>
+                        <button
+                          type="button"
                           className="text-xs text-red-600 hover:underline dark:text-red-400"
                           onClick={() => setDeleteTarget(row)}
                         >
@@ -478,6 +492,7 @@ export function AdminListingsPage() {
                     createForm.kind === 'shop'
                       ? createForm.cards.filter((c) => c.title.trim().length > 0)
                       : [],
+                  settings: createSettings ?? undefined,
                   is_public: createForm.is_public,
                 })
                 for (const media of createPendingMedia) {
@@ -500,6 +515,8 @@ export function AdminListingsPage() {
                 value={createForm.kind}
                 onChange={(e) => {
                   setCreateLocationPreset('')
+                  setCreateTemplateId('')
+                  setCreateSettings(null)
                   setCreateForm((prev) => ({
                     ...prev,
                     kind: e.target.value as LocationKind,
@@ -529,6 +546,63 @@ export function AdminListingsPage() {
                 listings (e.g. ayat-hills). Shops use zone ids like ledeta.
               </span>
             </label>
+            {(locationContent.data?.items ?? []).filter((row) => row.kind === createForm.kind)
+              .length > 0 ? (
+              <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
+                Copy page content from existing location (optional)
+                <select
+                  className="input mt-1"
+                  value={createTemplateId}
+                  onChange={async (e) => {
+                    const templateId = e.target.value
+                    setCreateTemplateId(templateId)
+                    if (!templateId) return
+                    const template = locationContent.data?.items.find((row) => row.id === templateId)
+                    if (!template) return
+                    setCreateForm((prev) => ({
+                      ...prev,
+                      subtitle: template.subtitle ?? '',
+                      description: template.description ?? '',
+                      video_url: template.video_url ?? '',
+                      cards:
+                        template.cards?.length > 0
+                          ? template.cards.map((c) => ({ ...c }))
+                          : prev.cards,
+                    }))
+                    setCreateSettings(template.settings ?? null)
+                    try {
+                      const { data: media } = await api.get<LocationMedia[]>(
+                        `/admin/location-content/${template.id}/media`,
+                      )
+                      setCreatePendingMedia(
+                        media.map((m) => ({
+                          url: m.url,
+                          media_type: m.media_type,
+                          caption: m.caption ?? '',
+                          sort_order: m.sort_order,
+                          is_primary: m.is_primary,
+                        })),
+                      )
+                      pushToast('success', `Copied content from “${template.title}”. Set a new slug above.`)
+                    } catch {
+                      pushToast('error', 'Could not load template media.')
+                    }
+                  }}
+                >
+                  <option value="">— Start blank —</option>
+                  {(locationContent.data?.items ?? [])
+                    .filter((row) => row.kind === createForm.kind)
+                    .map((row) => (
+                      <option key={row.id} value={row.id}>
+                        {row.title} ({row.location_id})
+                      </option>
+                    ))}
+                </select>
+                <span className="mt-1 block text-[11px] text-stone-500 dark:text-stone-400">
+                  Copies subtitle, description, cards, and media — you still choose a new location ID.
+                </span>
+              </label>
+            ) : null}
             {locationOptions.length > 0 ? (
               <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">
                 Quick fill from known locations (optional)
@@ -686,6 +760,16 @@ export function AdminListingsPage() {
             if (!deleteLocationContent.isPending) setDeleteTarget(null)
           }}
           onConfirm={() => deleteLocationContent.mutate(deleteTarget.id)}
+        />
+      ) : null}
+      {duplicateSource ? (
+        <DuplicateLocationModal
+          source={duplicateSource}
+          onClose={() => setDuplicateSource(null)}
+          onSuccess={() => {
+            qc.invalidateQueries({ queryKey: ['admin', 'location-content'] })
+            qc.invalidateQueries({ queryKey: ['public-location-content'] })
+          }}
         />
       ) : null}
     </div>
