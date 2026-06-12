@@ -5,10 +5,10 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { api } from '../api/client'
 import type { Paginated, PublicListingSummary } from '../api/types'
 import { ProjectLocationCard } from '../components/ProjectLocationCard'
-import { TemerListingCard } from '../components/TemerListingCard'
 import { SITE_CONTACT, siteWhatsAppHref } from '../content/siteContact'
 import { AYAT_PARTNER, TEMER_PARTNER } from '../content/partners'
 import { useTranslation } from '../context/LocaleContext'
+import { filterApartmentBrowseListings } from '../lib/apartmentBrowseListings'
 import { groupListingsByProject } from '../lib/groupListingsByProject'
 import { mergeApartmentBrowseGroups } from '../lib/mergeApartmentBrowseGroups'
 import { usePageTitle } from '../hooks/usePageTitle'
@@ -24,23 +24,6 @@ function PhoneIcon({ className = 'h-5 w-5' }: { className?: string }) {
         d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
       />
     </svg>
-  )
-}
-
-function TemerCardSkeleton() {
-  return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
-      <div className="aspect-[4/3] animate-pulse bg-surface-muted" />
-      <div className="space-y-3 p-5">
-        <div className="h-5 w-4/5 animate-pulse rounded bg-surface-muted" />
-        <div className="h-4 w-full animate-pulse rounded bg-surface-muted" />
-        <div className="grid grid-cols-3 gap-2 py-2">
-          <div className="h-10 animate-pulse rounded bg-surface-muted" />
-          <div className="h-10 animate-pulse rounded bg-surface-muted" />
-          <div className="h-10 animate-pulse rounded bg-surface-muted" />
-        </div>
-      </div>
-    </div>
   )
 }
 
@@ -117,7 +100,8 @@ export function ApartmentsPage() {
   })
 
   const projectGroups = React.useMemo(() => {
-    const groups = groupListingsByProject(query.data?.items ?? [])
+    const residential = filterApartmentBrowseListings(query.data?.items ?? [])
+    const groups = groupListingsByProject(residential)
     return mergeApartmentBrowseGroups(
       groups,
       locationSummariesQuery.data,
@@ -127,9 +111,7 @@ export function ApartmentsPage() {
   }, [query.data?.items, visibilityQuery.data, locationSummariesQuery.data, companySlug])
 
   const isTemerBrowse = companySlug === TEMER_PARTNER.slug
-  const listings = query.data?.items ?? []
-
-  const showTemerLocationCards = isTemerBrowse && projectGroups.length > 0
+  const listings = filterApartmentBrowseListings(query.data?.items ?? [])
 
   const heroCopy = React.useMemo(() => {
     if (companySlug === AYAT_PARTNER.slug) {
@@ -154,18 +136,15 @@ export function ApartmentsPage() {
   }, [companySlug, t])
 
   const countHint =
-    query.data && !query.isLoading
+    query.data && !query.isLoading && !locationSummariesQuery.isLoading
       ? t('apartments.resultsHint', {
-          developments: showTemerLocationCards ? projectGroups.length : isTemerBrowse ? listings.length : projectGroups.length,
-          homes: query.data.total,
+          developments: projectGroups.length,
+          homes: listings.length,
         })
       : null
 
-  const hasResults = showTemerLocationCards
-    ? projectGroups.length > 0
-    : isTemerBrowse
-      ? listings.length > 0
-      : projectGroups.length > 0
+  const hasResults = projectGroups.length > 0
+  const pageLoading = query.isLoading || locationSummariesQuery.isLoading
 
   return (
     <div className="space-y-10 text-left">
@@ -266,15 +245,17 @@ export function ApartmentsPage() {
         </p>
       )}
 
-      {query.isLoading && (
+      {pageLoading && (
         <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
-            <li key={i}>{isTemerBrowse ? <TemerCardSkeleton /> : <LocationSkeleton />}</li>
+            <li key={i}>
+              <LocationSkeleton />
+            </li>
           ))}
         </ul>
       )}
 
-      {!query.isLoading && showTemerLocationCards && (
+      {!pageLoading && projectGroups.length > 0 && (
         <ul className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
           {projectGroups.map((group) => (
             <li key={`${group.company_slug}-${group.project_slug}`} className="animate-fade-in">
@@ -287,30 +268,7 @@ export function ApartmentsPage() {
         </ul>
       )}
 
-      {!query.isLoading && isTemerBrowse && !showTemerLocationCards && listings.length > 0 && (
-        <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {listings.map((item) => (
-            <li key={item.slug} className="animate-fade-in">
-              <TemerListingCard listing={item} />
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {!query.isLoading && !isTemerBrowse && projectGroups.length > 0 && (
-        <ul className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
-          {projectGroups.map((group) => (
-            <li key={`${group.company_slug}-${group.project_slug}`} className="animate-fade-in">
-              <ProjectLocationCard
-                group={group}
-                locationCms={locationSummariesQuery.data?.get(group.project_slug)}
-              />
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {query.data && !hasResults && !query.isLoading && (
+      {query.data && !hasResults && !pageLoading && (
         <div className="surface flex flex-col items-center px-6 py-20 text-center">
           <p className="text-h2">{t('listings.emptyTitle')}</p>
           <p className="mt-2 max-w-md text-body-sm">{t('listings.emptyDescription')}</p>
