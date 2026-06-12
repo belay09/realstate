@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Run on EC2 in ~/realstate after Cloudflare DNS A records point to this server.
-# Usage: ./scripts/switch-production-https.sh realtor.belay-sirak.com api.realtor.belay-sirak.com
+# Usage: ./scripts/switch-production-https.sh habesha-homes.com habesha-homes.com
 set -euo pipefail
 
 SITE_DOMAIN="${1:?Usage: $0 SITE_DOMAIN API_DOMAIN (e.g. realtor.belay-sirak.com api.realtor.belay-sirak.com)}"
@@ -11,6 +11,7 @@ cd "$ROOT"
 
 export SITE_DOMAIN API_DOMAIN
 export VITE_API_BASE_URL="https://${SITE_DOMAIN}/api/v1"
+export VITE_SITE_URL="https://${SITE_DOMAIN}"
 export CADDYFILE="${CADDYFILE:-Caddyfile.cloudflare}"
 
 POSTGRES_DB=belay_properties
@@ -41,11 +42,12 @@ POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 SITE_DOMAIN=${SITE_DOMAIN}
 API_DOMAIN=${API_DOMAIN}
 VITE_API_BASE_URL=${VITE_API_BASE_URL}
+VITE_SITE_URL=${VITE_SITE_URL}
 CADDYFILE=${CADDYFILE}
 ENV
 
 cat > backend/.env.production <<BENV
-APP_NAME=Belay Properties API
+APP_NAME=Habesha Real Estate Advisory API
 APP_ENV=production
 DEBUG=false
 API_V1_PREFIX=/api/v1
@@ -76,7 +78,7 @@ curl -sf -H "Host: ${API_DOMAIN}" http://127.0.0.1/api/v1/health || true
 
 echo ""
 echo "Done. In Cloudflare:"
-echo "  1. A record: realtor -> EC2 IP (proxied)"
+echo "  1. A record: @ (and www) -> EC2 IP (proxied)"
 echo "  2. SSL/TLS -> Full (or Flexible)"
 echo "  3. Always Use HTTPS -> On"
 echo ""
