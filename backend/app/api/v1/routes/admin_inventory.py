@@ -1039,12 +1039,15 @@ def update_listing_image(
 def list_location_content(
     db: Session = Depends(get_db),
     kind: str | None = Query(default=None),
+    company_slug: str | None = Query(default=None),
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=200),
 ) -> Paginated[LocationContentRead]:
     q = db.query(LocationContent)
     if kind in {"apartment", "shop"}:
         q = q.filter(LocationContent.kind == kind)
+    if company_slug:
+        q = q.filter(LocationContent.company_slug == company_slug)
     total = q.count()
     rows = (
         q.order_by(LocationContent.kind, LocationContent.location_id)

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { toast } from 'sonner'
 
 import { api } from '../../api/client'
@@ -55,7 +55,52 @@ type HomeCardFormState = {
 
 type NotifyLevel = 'success' | 'error'
 
+type CompanyFilter = '' | typeof AYAT_PARTNER.slug | typeof TEMER_PARTNER.slug
+type KindFilter = '' | LocationKind
+
 const EMPTY_CARD: LocationCard = { title: '', body: '', image_url: '' }
+
+const COMPANY_TABS: { slug: CompanyFilter; label: string }[] = [
+  { slug: '', label: 'All developers' },
+  { slug: AYAT_PARTNER.slug, label: AYAT_PARTNER.brandName },
+  { slug: TEMER_PARTNER.slug, label: TEMER_PARTNER.brandName },
+]
+
+const KIND_TABS: { slug: KindFilter; label: string }[] = [
+  { slug: '', label: 'All kinds' },
+  { slug: 'apartment', label: 'Apartments' },
+  { slug: 'shop', label: 'Shops' },
+]
+
+function companyLabel(slug: string) {
+  if (slug === TEMER_PARTNER.slug) return TEMER_PARTNER.brandName
+  if (slug === AYAT_PARTNER.slug) return AYAT_PARTNER.brandName
+  return slug
+}
+
+function AdminFilterTab({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean
+  onClick: () => void
+  children: ReactNode
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+        active
+          ? 'bg-slate-950 text-white dark:bg-white dark:text-slate-950'
+          : 'border border-stone-200 bg-white text-stone-600 hover:border-brand-400 hover:text-stone-900 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-300 dark:hover:text-stone-50'
+      }`}
+    >
+      {children}
+    </button>
+  )
+}
 
 export function AdminListingsPage() {
   const qc = useQueryClient()
@@ -70,6 +115,8 @@ export function AdminListingsPage() {
   const [createPendingMedia, setCreatePendingMedia] = useState<PendingMedia[]>([])
   const [homeCardForms, setHomeCardForms] = useState<HomeCardFormState[]>([])
   const [createLocationPreset, setCreateLocationPreset] = useState('')
+  const [companyFilter, setCompanyFilter] = useState<CompanyFilter>('')
+  const [kindFilter, setKindFilter] = useState<KindFilter>('')
   const [createForm, setCreateForm] = useState<CreateFormState>({
     kind: 'apartment',
     company_slug: AYAT_PARTNER.slug,
@@ -144,6 +191,45 @@ export function AdminListingsPage() {
     }
     return out
   }, [locationContent.data?.items, shopOptions])
+
+  const allLocations = locationContent.data?.items ?? []
+
+  const filteredLocations = useMemo(() => {
+    return allLocations.filter((row) => {
+      if (companyFilter && row.company_slug !== companyFilter) return false
+      if (kindFilter && row.kind !== kindFilter) return false
+      return true
+    })
+  }, [allLocations, companyFilter, kindFilter])
+
+  const companyCounts = useMemo(() => {
+    const counts: Record<string, number> = { '': allLocations.length }
+    for (const row of allLocations) {
+      counts[row.company_slug] = (counts[row.company_slug] ?? 0) + 1
+    }
+    return counts
+  }, [allLocations])
+
+  const kindCounts = useMemo(() => {
+    const base = companyFilter
+      ? allLocations.filter((row) => row.company_slug === companyFilter)
+      : allLocations
+    return {
+      '': base.length,
+      apartment: base.filter((row) => row.kind === 'apartment').length,
+      shop: base.filter((row) => row.kind === 'shop').length,
+    }
+  }, [allLocations, companyFilter])
+
+  const openCreateModal = () => {
+    setCreateForm((prev) => ({
+      ...prev,
+      company_slug: companyFilter || prev.company_slug,
+      kind: kindFilter || prev.kind,
+    }))
+    setShowCreateModal(true)
+  }
+
   const locationOptions = createForm.kind === 'apartment' ? apartmentOptions : shopOptions
   const createPrimaryImageUrl =
     createPendingMedia.find((m) => m.is_primary && m.media_type === 'image')?.url ?? ''
@@ -260,11 +346,181 @@ export function AdminListingsPage() {
 
   return (
     <div className="space-y-8 text-left">
-      <h1 className="text-2xl font-semibold text-stone-900 dark:text-stone-50">Location details CMS</h1>
-      <p className="text-sm text-stone-600 dark:text-stone-400">
-        Manage apartment and shop locations: toggle Active to show or hide each zone on the
-        apartments/shops pages and calculator. Edit media, description, and bedroom cards below.
-      </p>
+      <div className="space-y-4">
+        <div>
+          <h1 className="text-2xl font-semibold text-stone-900 dark:text-stone-50">Location pages</h1>
+          <p className="mt-1 text-sm text-stone-600 dark:text-stone-400">
+            Manage apartment and shop location pages by developer. Toggle Active to show or hide each
+            zone on the public site and calculator.
+          </p>
+        </div>
+
+        <div className="sticky top-0 z-20 space-y-3 rounded-xl border border-stone-200 bg-white/95 p-4 shadow-sm backdrop-blur dark:border-stone-800 dark:bg-stone-950/95">
+          <div className="space-y-2">
+            <p className="text-[0.65rem] font-bold uppercase tracking-[0.16em] text-stone-500 dark:text-stone-400">
+              Developer
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {COMPANY_TABS.map((tab) => (
+                <AdminFilterTab
+                  key={tab.slug || 'all-companies'}
+                  active={companyFilter === tab.slug}
+                  onClick={() => setCompanyFilter(tab.slug)}
+                >
+                  {tab.label}
+                  <span className="ml-1.5 tabular-nums opacity-75">
+                    ({companyCounts[tab.slug] ?? 0})
+                  </span>
+                </AdminFilterTab>
+              ))}
+            </div>
+          </div>
+          <div className="space-y-2">
+            <p className="text-[0.65rem] font-bold uppercase tracking-[0.16em] text-stone-500 dark:text-stone-400">
+              Page type
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {KIND_TABS.map((tab) => (
+                <AdminFilterTab
+                  key={tab.slug || 'all-kinds'}
+                  active={kindFilter === tab.slug}
+                  onClick={() => setKindFilter(tab.slug)}
+                >
+                  {tab.label}
+                  <span className="ml-1.5 tabular-nums opacity-75">({kindCounts[tab.slug]})</span>
+                </AdminFilterTab>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section className="space-y-4 rounded-xl border border-stone-200 bg-white p-4 dark:border-stone-800 dark:bg-stone-950">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="text-base font-semibold text-stone-900 dark:text-stone-50">
+              Location detail pages
+            </h2>
+            <p className="mt-1 text-sm text-stone-600 dark:text-stone-400">
+              {filteredLocations.length} location{filteredLocations.length === 1 ? '' : 's'}
+              {companyFilter ? ` · ${companyLabel(companyFilter)}` : ''}
+              {kindFilter ? ` · ${kindFilter}` : ''}. Configure title, media, cards, and building
+              settings. Shop rates live under{' '}
+              <a href="/admin/pricing" className="font-medium text-brand-700 underline dark:text-brand-400">
+                Pricing
+              </a>
+              ; promotions under{' '}
+              <a href="/admin/promotions" className="font-medium text-brand-700 underline dark:text-brand-400">
+                Promotions
+              </a>
+              .
+            </p>
+          </div>
+          <button type="button" className="btn-primary shrink-0" onClick={openCreateModal}>
+            Create location page
+          </button>
+        </div>
+        {!selectedContentId ? (
+          <p className="text-xs text-brand-700 dark:text-brand-300">
+            Tip: click “Edit media/details” in the table to upload photos and edit copy.
+          </p>
+        ) : null}
+
+        <div className="rounded-xl border border-stone-200 dark:border-stone-800">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-stone-200 text-sm dark:divide-stone-800">
+              <thead className="bg-stone-100 dark:bg-stone-900">
+                <tr>
+                  <th className="px-3 py-2 text-left font-medium">Developer</th>
+                  <th className="px-3 py-2 text-left font-medium">Kind</th>
+                  <th className="px-3 py-2 text-left font-medium">Location ID</th>
+                  <th className="px-3 py-2 text-left font-medium">Title</th>
+                  <th className="px-3 py-2 text-left font-medium">Active</th>
+                  <th className="px-3 py-2 text-left font-medium">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-stone-100 bg-white dark:divide-stone-800 dark:bg-stone-950">
+                {locationContent.isLoading ? (
+                  <tr>
+                    <td colSpan={6} className="px-3 py-8 text-center text-stone-500">
+                      Loading locations…
+                    </td>
+                  </tr>
+                ) : filteredLocations.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="px-3 py-8 text-center text-stone-500">
+                      No location pages match these filters.
+                    </td>
+                  </tr>
+                ) : (
+                  filteredLocations.map((row) => (
+                    <tr key={row.id}>
+                      <td className="px-3 py-2">
+                        <span
+                          className={`inline-flex rounded-full px-2.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-wide ${
+                            row.company_slug === TEMER_PARTNER.slug
+                              ? 'bg-amber-100 text-amber-950 dark:bg-amber-950/50 dark:text-amber-100'
+                              : 'bg-red-50 text-red-950 dark:bg-red-950/40 dark:text-red-100'
+                          }`}
+                        >
+                          {companyLabel(row.company_slug)}
+                        </span>
+                      </td>
+                      <td className="px-3 py-2 capitalize">{row.kind}</td>
+                      <td className="px-3 py-2 font-mono text-xs">{row.location_id}</td>
+                      <td className="px-3 py-2">{row.title}</td>
+                      <td className="px-3 py-2">
+                        <label className="flex items-center gap-2 text-xs text-stone-600 dark:text-stone-400">
+                          <input
+                            type="checkbox"
+                            checked={row.is_public}
+                            disabled={toggleLocationActive.isPending}
+                            onChange={(e) =>
+                              toggleLocationActive.mutate({
+                                id: row.id,
+                                is_public: e.target.checked,
+                              })
+                            }
+                          />
+                          {row.is_public ? 'Visible' : 'Hidden'}
+                        </label>
+                      </td>
+                      <td className="px-3 py-2">
+                        <div className="flex flex-wrap items-center gap-3">
+                          <button
+                            type="button"
+                            className="text-xs text-brand-700 hover:underline dark:text-brand-400"
+                            onClick={() => {
+                              setSelectedContentId(row.id)
+                              setShowEditModal(true)
+                            }}
+                          >
+                            Edit media/details
+                          </button>
+                          <button
+                            type="button"
+                            className="text-xs text-stone-600 hover:underline dark:text-stone-400"
+                            onClick={() => setDuplicateSource(row)}
+                          >
+                            Duplicate
+                          </button>
+                          <button
+                            type="button"
+                            className="text-xs text-red-600 hover:underline dark:text-red-400"
+                            onClick={() => setDeleteTarget(row)}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
 
       <section className="space-y-4 rounded-xl border border-stone-200 bg-white p-4 dark:border-stone-800 dark:bg-stone-950">
         <h2 className="text-base font-semibold text-stone-900 dark:text-stone-50">Home page cards CMS</h2>
@@ -374,105 +630,6 @@ export function AdminListingsPage() {
         </div>
       </section>
 
-      <section className="space-y-4 rounded-xl border border-stone-200 bg-white p-4 dark:border-stone-800 dark:bg-stone-950">
-        <h2 className="text-base font-semibold text-stone-900 dark:text-stone-50">
-          Location detail pages (apartments + shops)
-        </h2>
-        <p className="text-sm text-stone-600 dark:text-stone-400">
-          Configure the content users see after clicking a location: title, description, video, photos,
-          and highlight cards.           For <strong>shops</strong>, only <strong>Active</strong> rows appear on{' '}
-          <span className="font-mono">/shops</span>. Add shop rates under Pricing. For a limited-time
-          extra discount, use{' '}
-          <a href="/admin/promotions" className="font-medium text-brand-700 underline dark:text-brand-400">
-            Admin → Promotions
-          </a>
-          .
-        </p>
-        {!selectedContentId ? (
-          <p className="text-xs text-brand-700 dark:text-brand-300">
-            Tip: click “Edit media/details” in the table below to open the upload section.
-          </p>
-        ) : null}
-        <div>
-          <button
-            type="button"
-            className="btn-primary"
-            onClick={() => setShowCreateModal(true)}
-          >
-            Create location content
-          </button>
-        </div>
-
-        <div className="rounded-xl border border-stone-200 dark:border-stone-800">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-stone-200 text-sm dark:divide-stone-800">
-              <thead className="bg-stone-100 dark:bg-stone-900">
-                <tr>
-                  <th className="px-3 py-2 text-left font-medium">Kind</th>
-                  <th className="px-3 py-2 text-left font-medium">Location ID</th>
-                  <th className="px-3 py-2 text-left font-medium">Title</th>
-                  <th className="px-3 py-2 text-left font-medium">Active</th>
-                  <th className="px-3 py-2 text-left font-medium">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-stone-100 bg-white dark:divide-stone-800 dark:bg-stone-950">
-                {locationContent.data?.items.map((row) => (
-                  <tr key={row.id}>
-                    <td className="px-3 py-2">{row.kind}</td>
-                    <td className="px-3 py-2 font-mono text-xs">{row.location_id}</td>
-                    <td className="px-3 py-2">{row.title}</td>
-                    <td className="px-3 py-2">
-                      <label className="flex items-center gap-2 text-xs text-stone-600 dark:text-stone-400">
-                        <input
-                          type="checkbox"
-                          checked={row.is_public}
-                          disabled={toggleLocationActive.isPending}
-                          onChange={(e) =>
-                            toggleLocationActive.mutate({
-                              id: row.id,
-                              is_public: e.target.checked,
-                            })
-                          }
-                        />
-                        {row.is_public ? 'Visible' : 'Hidden'}
-                      </label>
-                    </td>
-                    <td className="px-3 py-2">
-                      <div className="flex flex-wrap items-center gap-3">
-                        <button
-                          type="button"
-                          className="text-xs text-brand-700 hover:underline dark:text-brand-400"
-                          onClick={() => {
-                            setSelectedContentId(row.id)
-                            setShowEditModal(true)
-                          }}
-                        >
-                          Edit media/details
-                        </button>
-                        <button
-                          type="button"
-                          className="text-xs text-stone-600 hover:underline dark:text-stone-400"
-                          onClick={() => setDuplicateSource(row)}
-                        >
-                          Duplicate
-                        </button>
-                        <button
-                          type="button"
-                          className="text-xs text-red-600 hover:underline dark:text-red-400"
-                          onClick={() => setDeleteTarget(row)}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-      </section>
       {showCreateModal ? (
         <ModalShell title="Create location content" onClose={closeCreateModal}>
           <form
@@ -896,9 +1053,20 @@ function LocationContentEditor({
 
   return (
     <div className="space-y-3 rounded-xl border border-stone-200 p-4 dark:border-stone-800">
-      <h3 className="font-semibold text-stone-900 dark:text-stone-50">
-        Edit {content.kind}: {content.location_id}
-      </h3>
+      <div className="flex flex-wrap items-center gap-2">
+        <h3 className="font-semibold text-stone-900 dark:text-stone-50">
+          Edit {content.kind}: {content.location_id}
+        </h3>
+        <span
+          className={`inline-flex rounded-full px-2.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-wide ${
+            content.company_slug === TEMER_PARTNER.slug
+              ? 'bg-amber-100 text-amber-950 dark:bg-amber-950/50 dark:text-amber-100'
+              : 'bg-red-50 text-red-950 dark:bg-red-950/40 dark:text-red-100'
+          }`}
+        >
+          {companyLabel(content.company_slug)}
+        </span>
+      </div>
       <form
         className="grid gap-3 md:grid-cols-2"
         onSubmit={async (e) => {
