@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "description": "Ayat Share Company inventory for Belay Properties. Pricing, discounts, commissions, and milestones are loaded from backend/data/ayat_official_2018.json when you run the seed script (official scanned strategy pages).",
+    "description": "Ayat Share Company inventory for Habesha Real Estate Advisory. Pricing, discounts, commissions, and milestones are loaded from backend/data/ayat_official_2018.json when you run the seed script (official scanned strategy pages).",
     "reference_doc": "Ayat/116/2018 — see ayat_official_2018.json",
     "pricing_source": "ayat_official_2018.json",
     "currency": "ETB"
@@ -19,7 +19,7 @@
     "name": "Ayat Share Company",
     "phone": "+251115583838",
     "website": "https://www.ayatshare.com",
-    "description": "Ethiopia's leading real estate developer. Belay Properties is an authorized sales partner for selected Ayat residential projects in Addis Ababa."
+    "description": "Ethiopia's leading real estate developer. Habesha Real Estate Advisory is an authorized sales partner for selected Ayat residential projects in Addis Ababa."
   },
   "projects": [
     {
@@ -225,7 +225,7 @@
       "unit_ref": { "project_slug": "ayat-hills", "block_code": "A", "unit_number": "501" },
       "slug": "ayat-hills-3br-semi-finished-block-a",
       "title": "Three-bedroom semi-finished apartment, Ayat Hills, Block A",
-      "description": "Three-bedroom semi-finished apartment on floor 5 at Ayat Hills in the Ayat (Main Village) zone. East-facing corner layout. Prices follow official Ayat floor-band tables including value added tax. Contact Belay Properties for a formal quote and payment plan options.",
+      "description": "Three-bedroom semi-finished apartment on floor 5 at Ayat Hills in the Ayat (Main Village) zone. East-facing corner layout. Prices follow official Ayat floor-band tables including value added tax. Contact Habesha Real Estate Advisory for a formal quote and payment plan options.",
       "city": "Addis Ababa",
       "area": "Ayat (Main Village)",
       "is_public": true,
@@ -239,7 +239,7 @@
       "unit_ref": { "project_slug": "ayat-hills", "block_code": "B", "unit_number": "302" },
       "slug": "ayat-hills-2br-semi-finished-block-b",
       "title": "Two-bedroom semi-finished apartment, Ayat Hills, Block B",
-      "description": "Two-bedroom semi-finished apartment on floor 3 at Ayat Hills in the Ayat (Main Village) zone. Ideal starter home with Belay Properties sales support.",
+      "description": "Two-bedroom semi-finished apartment on floor 3 at Ayat Hills in the Ayat (Main Village) zone. Ideal starter home with Habesha Real Estate Advisory sales support.",
       "city": "Addis Ababa",
       "area": "Ayat (Main Village)",
       "is_public": true,
@@ -368,7 +368,7 @@
     }
   ],
   "pricing": {
-    "document_title": "Ayat Share Company residential price list (Belay entry 2026-Q1)",
+    "document_title": "Ayat Share Company residential price list (Habesha entry 2026-Q1)",
     "version_name": "Ayat residential pricing Q1 2026",
     "effective_from": "2026-01-01",
     "includes_vat": true,

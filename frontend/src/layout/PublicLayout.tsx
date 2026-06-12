@@ -37,7 +37,7 @@ export function PublicLayout() {
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-600 to-brand-800 text-sm font-bold text-white shadow-lg shadow-brand-900/25 transition group-hover:scale-105"
               aria-hidden
             >
-              B
+              H
             </span>
             <div className="min-w-0 leading-tight">
               <span className="block truncate text-lg font-bold text-fg sm:text-xl">{brand.name}</span>

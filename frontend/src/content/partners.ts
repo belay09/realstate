@@ -14,8 +14,6 @@ export const TEMER_PARTNER = {
   legalName: 'Temer Properties',
   brandName: 'Temer Properties',
   website: 'https://temerproperties.com/',
-  hotline: '6033',
-  phone: '+251975666699',
   logoUrl:
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBSnuQ_vYSyLKopmM2ylazSbKkdxR2loqEaw&s',
 } as const

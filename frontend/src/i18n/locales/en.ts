@@ -1,6 +1,6 @@
 export const en = {
   brand: {
-    name: 'Belay Realtor',
+    name: 'Habesha Real Estate Advisory',
     tagline: 'Compare developers',
     headerNote: 'Not a developer',
   },
@@ -22,7 +22,7 @@ export const en = {
     call: 'Call',
     whatsapp: 'WhatsApp',
     bannerHint: 'Call or WhatsApp for any listing enquiry.',
-    regionLabel: 'Contact Belay Realtor',
+    regionLabel: 'Contact Habesha Real Estate Advisory',
   },
   footer: {
     contact: 'Contact',
@@ -64,7 +64,7 @@ export const en = {
     heroTitle: 'Pick a',
     heroTitleAccent: 'location',
     heroBody:
-      'Each card is one development. The badge shows the developer (Ayat or Temer). Open a card to see layouts and contact Belay.',
+      'Each card is one development. The badge shows the developer (Ayat or Temer). Open a card to see layouts and contact us.',
     heroEyebrowAyat: 'Ayat Real Estate',
     heroEyebrowTemer: 'Temer Properties',
     heroTitleFiltered: 'Browse',
@@ -111,10 +111,10 @@ export const en = {
     heroTitleAccent: 'your',
     heroTitleEnd: 'lifestyle.',
     heroBody:
-      'Compare premium apartments from {{ayatBrand}} and {{temerBrand}} on one site. {{belayNotAyat}} See who built each project, then enquire through Belay.',
-    belayNotAyat: 'Belay Realtor is not a developer.',
+      'Compare premium apartments from {{ayatBrand}} and {{temerBrand}} on one site. {{advisoryNotAyat}} See who built each project, then enquire through us.',
+    advisoryNotAyat: 'Habesha Real Estate Advisory is not a developer.',
     exploreListings: 'Explore locations',
-    marqueeTagline: 'Trusted partner developers on Belay Realtor',
+    marqueeTagline: 'Trusted partner developers on Habesha Real Estate Advisory',
     ayatHomes: 'Ayat homes',
     priceCalculator: 'Estimate Ayat price',
     statDevelopers: 'Partner developers',
@@ -123,7 +123,7 @@ export const en = {
     inventoryEyebrow: 'Inventory',
     inventoryTitle: 'Properties from partner developers',
     partnersEyebrow: 'Our partners',
-    partnersTitle: 'Developers you can compare on Belay',
+    partnersTitle: 'Developers you can compare with us',
     partnersDescription:
       'Browse listings from Ayat Share Company and Temer Properties. Each home shows the developer name.',
     inventoryDescription:
@@ -145,7 +145,7 @@ export const en = {
     credibilityEyebrow: 'Partner credibility',
     credibilityTitle: 'Trusted partner developers',
     credibilityDescription:
-      'Ayat and Temer each publish their own projects. Belay helps you compare both on one site.',
+      'Ayat and Temer each publish their own projects. We help you compare both on one site.',
     ctaEyebrow: 'Get in touch',
     ctaTitle: 'Ready to find your home?',
     ctaDescription: 'Browse available units, see price previews, and message us when you are ready.',
@@ -154,19 +154,17 @@ export const en = {
   },
   temer: {
     featuredEyebrow: 'Featured partner developer',
-    hotlineLabel: 'Hotline',
-    body: 'Temer Properties builds modern apartments in Sarbet, Aware, Ayat, Piyassa, and across Addis Ababa. On Belay you browse their available units and enquire; purchase stays with Temer.',
+    body: 'Temer Properties builds modern apartments in Sarbet, Aware, Ayat, Piyassa, and across Addis Ababa. Here you browse their available units and enquire; purchase stays with Temer.',
     browseTemer: 'Browse Temer homes here',
     officialSite: 'Official Temer site ↗',
-    hotline: 'Temer sales hotline {{hotline}}',
     highlights: [
       'Sarbet City Plus & Blue Point',
       'Aware & Ayat area projects',
-      'Addis Ababa · contact Belay to enquire',
+      'Addis Ababa · contact us to enquire',
     ],
     priceOnRequestTitle: 'Price on request',
     priceOnRequestBody:
-      'Temer pricing is confirmed with their sales team. Contact Belay on 0962750710 and we will help you reach Temer.',
+      'Temer pricing is confirmed with their sales team. Call {{phone}} and we will help you reach Temer.',
     temerCalculatorLink: 'Temer’s online estimator ↗',
   },
   temerCard: {
@@ -176,13 +174,13 @@ export const en = {
     specDash: '—',
     viewDetails: 'View details',
     browseIntro:
-      'Discover Temer apartments for sale in Addis Ababa — residential and commercial listings through Belay Realtor.',
+      'Discover Temer apartments for sale in Addis Ababa — residential and commercial listings through Habesha Real Estate Advisory.',
   },
   ayat: {
     years: 'Years',
     featuredEyebrow: 'Featured partner developer',
     reputation: 'That reputation belongs to Ayat.',
-    body: "Ethiopia's established developer: Ayat Hills, CMC, Grand Mall, and communities built over decades. {{reputation}} On Belay Realtor you only browse and compare. Purchase and contracts stay with the developer you choose.",
+    body: "Ethiopia's established developer: Ayat Hills, CMC, Grand Mall, and communities built over decades. {{reputation}} Here you only browse and compare. Purchase and contracts stay with the developer you choose.",
     browseAyat: 'Browse Ayat homes here',
     officialSite: 'Official Ayat site ↗',
     highlights: [
@@ -198,9 +196,9 @@ export const en = {
   },
   belayRole: {
     eyebrow: 'How we work',
-    title: 'What Belay Realtor is',
+    title: 'What Habesha Real Estate Advisory is',
     summary:
-      'Belay Realtor is not a developer and we do not replace brands like Ayat Real Estate. We are a comparison website where you browse homes from multiple companies, see who built each project, and choose the developer you trust. Ayat earns its reputation over decades; we simply help you find and compare their listings alongside others.',
+      'Habesha Real Estate Advisory is not a developer and we do not replace brands like Ayat Real Estate. We are a comparison website where you browse homes from multiple companies, see who built each project, and choose the developer you trust. Ayat earns its reputation over decades; we simply help you find and compare their listings alongside others.',
     feature1Title: 'Developer on every listing',
     feature1Text:
       'Every listing shows the developer name. You always know who built the project and who you buy from.',
@@ -208,13 +206,13 @@ export const en = {
     feature2Text: 'Compare areas, unit types, and indicative prices in one place before you enquire.',
     feature3Title: 'Enquire without confusion',
     feature3Text:
-      'Send one enquiry through Belay and we help you reach the right developer. No pressure to pick one brand.',
+      'Send one enquiry through us and we help you reach the right developer. No pressure to pick one brand.',
   },
   listings: {
     heroEyebrow: 'Browse · Compare · Enquire',
     heroTitle: 'Homes from Ayat, Temer, and more',
     heroBody:
-      'Each listing names the builder — {{ayatBrand}} or {{temerBrand}}. Belay Realtor helps you compare. We do not replace the developer on your purchase.',
+      'Each listing names the builder — {{ayatBrand}} or {{temerBrand}}. Habesha Real Estate Advisory helps you compare. We do not replace the developer on your purchase.',
     loadError: 'Could not load listings. Check that the API is running, then refresh.',
     emptyTitle: 'No matches yet',
     emptyDescription: 'Try another area or bedroom count, or browse all partner homes.',
@@ -407,7 +405,7 @@ export const en = {
     eyebrow: 'Ayat pricing · Self-service estimate',
     title: 'Calculate an indicative Ayat price',
     intro:
-      'Ayat uses two different location lists: apartments (Section 10 of their sales strategy) and commercial shops (Section 11). Start by choosing apartment or shop, then pick the location, size, and floor. Belay does not sell property. This tool helps you compare before you contact Ayat or our team.',
+      'Ayat uses two different location lists: apartments (Section 10 of their sales strategy) and commercial shops (Section 11). Start by choosing apartment or shop, then pick the location, size, and floor. We do not sell property. This tool helps you compare before you contact Ayat or our team.',
     propertyKindTabsLabel: 'Property type',
     apartmentTab: 'Apartments',
     shopTab: 'Commercial shops',
@@ -424,7 +422,7 @@ export const en = {
     noFloorsForRates: 'No floors priced for this selection',
     liveRatesNote: 'Rates reflect current admin pricing (updated when you save in Pricing).',
     disclaimer:
-      'Indicative only. Figures follow Ayat’s published sales strategy structure and Belay’s current price table estimates. Official quotes from Ayat Share Company are required before purchase. Prices may change quarterly.',
+      'Indicative only. Figures follow Ayat’s published sales strategy structure and our current price table estimates. Official quotes from Ayat Share Company are required before purchase. Prices may change quarterly.',
     step1Title: 'What are you looking for?',
     kindHome: 'Apartment (home)',
     kindHomeHint: 'One, two, or three bedrooms · semi-finished or regular finished',
@@ -592,7 +590,7 @@ export const en = {
     how2: 'We apply the client discount percentage for the down payment level you selected.',
     how3:
       'We show either the cash due now (partial upfront payment) or Ayat’s milestone schedule (full payment or sixty-forty plan).',
-    how4: 'Contact Ayat Share Company or Belay for a formal quote before signing.',
+    how4: 'Contact Ayat Share Company or us at +251962750710 for a formal quote before signing.',
     milestones: {
       signing: 'On signing contract',
       month4: 'Within 4 months',

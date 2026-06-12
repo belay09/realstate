@@ -38,7 +38,7 @@ export function AdminLoginPage() {
       </div>
       <div className="surface p-8">
         <h1 className="text-h3">Admin sign in</h1>
-        <p className="mt-1 text-body-sm">Belay Realtor staff</p>
+        <p className="mt-1 text-body-sm">Habesha Real Estate Advisory staff</p>
         <form
           className="mt-6 space-y-4"
           onSubmit={(e) => {

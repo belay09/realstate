@@ -88,7 +88,7 @@ export function PublicFooter({ brandName, adminPath }: PublicFooterProps) {
           <div className="lg:col-span-5">
             <Link to="/" className="group inline-flex items-center gap-3">
               <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-brand-800 text-lg font-bold text-white shadow-lg transition group-hover:scale-105">
-                B
+                H
               </span>
               <span className="text-2xl font-bold text-white">{brandName}</span>
             </Link>

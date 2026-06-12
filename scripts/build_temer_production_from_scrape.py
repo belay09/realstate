@@ -149,7 +149,7 @@ def main() -> None:
     out = {
         "_meta": {
             "description": (
-                "Temer inventory for Belay Properties — Ayat-style layout: area location pages "
+                "Temer inventory for Habesha Real Estate Advisory — Ayat-style layout: area location pages "
                 "(apartment + shop), building blocks within each area project, rich listing metadata."
             ),
             "source": data.get("source", "https://temerproperties.com/"),
@@ -169,7 +169,7 @@ def main() -> None:
             "phone": company_src.get("phones", ["+251975666699"])[0],
             "website": company_src.get("website", "https://temerproperties.com/"),
             "description": (
-                "Addis Ababa real estate developer. Belay Properties lists Temer apartments and "
+                "Addis Ababa real estate developer. Habesha Real Estate Advisory lists Temer apartments and "
                 "commercial units by area (Sarbet, Aware, Ayat, Gelan, Garment, Piyassa); "
                 "purchase and contracts are with Temer Properties."
             ),

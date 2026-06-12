@@ -314,7 +314,9 @@ export function ListingDetailLayout({
           ) : isTemerListing ? (
             <div className="surface-muted p-6 sm:p-8">
               <p className="section-eyebrow">{t('temer.priceOnRequestTitle')}</p>
-              <p className="mt-2 text-body-sm">{t('temer.priceOnRequestBody')}</p>
+              <p className="mt-2 text-body-sm">
+                {t('temer.priceOnRequestBody', { phone: SITE_CONTACT.phoneDisplay })}
+              </p>
               <p className="mt-3 text-sm font-semibold text-fg">
                 {t('contact.label')}:{' '}
                 <a href={SITE_CONTACT.telHref} className="text-brand-700 dark:text-brand-300">

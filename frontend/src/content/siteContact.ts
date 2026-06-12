@@ -1,6 +1,10 @@
-/** Belay Realtor contact — shown site-wide. */
+/** Habesha Real Estate Advisory — site-wide contact. */
+export const SITE_BRAND = {
+  name: 'Habesha Real Estate Advisory',
+} as const
+
 export const SITE_CONTACT = {
-  phoneDisplay: '0962750710',
+  phoneDisplay: '+251962750710',
   phoneE164: '251962750710',
   telHref: 'tel:+251962750710',
 } as const

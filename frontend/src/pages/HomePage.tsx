@@ -57,7 +57,7 @@ export function HomePage() {
               {t('home.heroBody', {
                 ayatBrand: AYAT_PARTNER.brandName,
                 temerBrand: TEMER_PARTNER.brandName,
-                belayNotAyat: t('home.belayNotAyat'),
+                advisoryNotAyat: t('home.advisoryNotAyat'),
               })}
             </p>
             <div className="mt-10 flex flex-wrap gap-4">

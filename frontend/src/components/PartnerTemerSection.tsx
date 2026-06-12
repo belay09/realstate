@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 
 import { useTranslation } from '../context/LocaleContext'
 import { TEMER_PARTNER } from '../content/partners'
+import { SITE_CONTACT } from '../content/siteContact'
 import { PartnerLogo } from './PartnerLogo'
 
 type PartnerTemerSectionProps = {
@@ -25,9 +26,12 @@ export function PartnerTemerSection({ compact = false }: PartnerTemerSectionProp
           <p className="mt-3 text-center text-xs font-semibold text-brand-700 dark:text-brand-300">
             {TEMER_PARTNER.brandName}
           </p>
-          <p className="text-center text-xs text-fg-muted">
-            {t('temer.hotline', { hotline: TEMER_PARTNER.hotline })}
-          </p>
+          <a
+            href={SITE_CONTACT.telHref}
+            className="text-center text-xs font-semibold text-brand-700 hover:underline dark:text-brand-300"
+          >
+            {SITE_CONTACT.phoneDisplay}
+          </a>
         </div>
 
         <div className="min-w-0 flex-1">

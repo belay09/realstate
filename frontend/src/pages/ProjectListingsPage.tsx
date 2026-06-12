@@ -13,6 +13,7 @@ import { SiteContactStrip } from '../components/SiteContactStrip'
 import { TemerListingCard } from '../components/TemerListingCard'
 import { useTranslation } from '../context/LocaleContext'
 import { AYAT_PARTNER, TEMER_PARTNER } from '../content/partners'
+import { SITE_CONTACT } from '../content/siteContact'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { useLocationVisibility } from '../hooks/useLocationVisibility'
 import {
@@ -265,7 +266,9 @@ export function ProjectListingsPage() {
       {isTemer ? (
         <section className="surface-muted space-y-3 p-6">
           <p className="section-eyebrow">{t('temer.priceOnRequestTitle')}</p>
-          <p className="text-body-sm">{t('temer.priceOnRequestBody')}</p>
+          <p className="text-body-sm">
+            {t('temer.priceOnRequestBody', { phone: SITE_CONTACT.phoneDisplay })}
+          </p>
           <a
             href="https://temerproperties.com/price-calculator/"
             target="_blank"

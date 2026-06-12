@@ -118,7 +118,9 @@ def clean_description(prop: dict, area: str) -> str:
         parts.append(f"Building type: {details['Building Type']}.")
     pid = prop.get("property_id")
     if pid:
-        parts.append(f"Temer listing ref. {pid}. Price on request — contact Belay Properties.")
+        parts.append(
+            f"Temer listing ref. {pid}. Price on request — contact Habesha Real Estate Advisory."
+        )
     return " ".join(parts)[:2000]
 
 
@@ -129,7 +131,7 @@ def _area_description(scraped_area: dict | None, label: str) -> str:
             return meta[:1200]
     return (
         f"Browse Temer Properties apartments and commercial units in {label}, Addis Ababa. "
-        "Prices are on request — Belay Properties helps you compare layouts and "
+        "Prices are on request — Habesha Real Estate Advisory helps you compare layouts and "
         "contact Temer sales."
     )
 
