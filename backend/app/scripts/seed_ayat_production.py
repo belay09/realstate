@@ -433,6 +433,7 @@ def _upsert_location_content(
     subtitle: str,
     description: str,
     cards: list[dict[str, str | None]],
+    company_slug: str = "ayat-real-estate",
 ) -> None:
     row = (
         db.query(LocationContent)
@@ -448,12 +449,15 @@ def _upsert_location_content(
         for c in cards
     ]
     if row:
+        if row.company_slug != company_slug:
+            row.company_slug = company_slug
         # Keep admin-edited copy, media, and Active toggle after the first seed.
         return
     db.add(
         LocationContent(
             kind=kind,
             location_id=location_id,
+            company_slug=company_slug,
             title=title,
             subtitle=subtitle,
             description=description,

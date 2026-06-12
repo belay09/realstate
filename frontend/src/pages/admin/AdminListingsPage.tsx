@@ -13,6 +13,7 @@ import type {
 } from '../../api/types'
 import { getAccessToken } from '../../lib/auth'
 import { AYAT_DEVELOPMENT_ZONES } from '../../lib/listingDisplay'
+import { AYAT_PARTNER, TEMER_PARTNER } from '../../content/partners'
 import { defaultBuildingSettings } from '../../lib/buildingTypes'
 import { useCalculatorConfig } from '../../hooks/useCalculatorConfig'
 import { shopLocationsFromConfig } from '../../lib/shopLocations'
@@ -23,6 +24,7 @@ type LocationKind = 'apartment' | 'shop'
 
 type CreateFormState = {
   kind: LocationKind
+  company_slug: string
   location_id: string
   title: string
   subtitle: string
@@ -70,6 +72,7 @@ export function AdminListingsPage() {
   const [createLocationPreset, setCreateLocationPreset] = useState('')
   const [createForm, setCreateForm] = useState<CreateFormState>({
     kind: 'apartment',
+    company_slug: AYAT_PARTNER.slug,
     location_id: '',
     title: '',
     subtitle: '',
@@ -100,6 +103,7 @@ export function AdminListingsPage() {
   const createLocationContent = useMutation({
     mutationFn: (body: {
       kind: 'apartment' | 'shop'
+      company_slug: string
       location_id: string
       title: string
       subtitle?: string
@@ -152,6 +156,7 @@ export function AdminListingsPage() {
     setCreateSettings(null)
     setCreateForm({
       kind: 'apartment',
+      company_slug: AYAT_PARTNER.slug,
       location_id: '',
       title: '',
       subtitle: '',
@@ -483,6 +488,7 @@ export function AdminListingsPage() {
               try {
                 const created = await createLocationContent.mutateAsync({
                   kind: createForm.kind,
+                  company_slug: createForm.company_slug,
                   location_id: locationId,
                   title: createForm.title,
                   subtitle: createForm.subtitle,
@@ -526,6 +532,20 @@ export function AdminListingsPage() {
               >
                 <option value="apartment">Apartment</option>
                 <option value="shop">Shop</option>
+              </select>
+            </label>
+            <label className="text-xs font-medium text-stone-600 dark:text-stone-400">
+              Developer
+              <select
+                name="company_slug"
+                className="input mt-1"
+                value={createForm.company_slug}
+                onChange={(e) =>
+                  setCreateForm((prev) => ({ ...prev, company_slug: e.target.value }))
+                }
+              >
+                <option value={AYAT_PARTNER.slug}>{AYAT_PARTNER.brandName}</option>
+                <option value={TEMER_PARTNER.slug}>{TEMER_PARTNER.brandName}</option>
               </select>
             </label>
             <label className="text-xs font-medium text-stone-600 dark:text-stone-400 md:col-span-2">

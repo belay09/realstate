@@ -208,6 +208,7 @@ class LocationContent(Base, TimestampMixin):
     video_url: Mapped[str | None] = mapped_column(String(2048), nullable=True)
     cards: Mapped[list[dict]] = mapped_column(JSON, nullable=False, default=list)
     settings: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
+    company_slug: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
     is_public: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False, index=True)
 
     media: Mapped[list["LocationMedia"]] = relationship(

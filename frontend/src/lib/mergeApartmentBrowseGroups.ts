@@ -1,5 +1,5 @@
 import type { PublicLocationBrowseSummary, PublicLocationVisibility } from '../api/types'
-import { AYAT_PARTNER, TEMER_APARTMENT_LOCATION_IDS, TEMER_PARTNER } from '../content/partners'
+import { AYAT_PARTNER, TEMER_PARTNER } from '../content/partners'
 import type { ProjectListingGroup } from './groupListingsByProject'
 import { isLocationActive } from './locationVisibility'
 
@@ -8,10 +8,10 @@ const PARTNER_BY_SLUG = {
   [TEMER_PARTNER.slug]: TEMER_PARTNER,
 } as const
 
-const TEMER_LOCATION_IDS = new Set<string>(TEMER_APARTMENT_LOCATION_IDS)
-
-function partnerForLocationId(locationId: string) {
-  if (TEMER_LOCATION_IDS.has(locationId)) return TEMER_PARTNER
+function partnerFromSlug(slug: string | undefined) {
+  if (slug && slug in PARTNER_BY_SLUG) {
+    return PARTNER_BY_SLUG[slug as keyof typeof PARTNER_BY_SLUG]
+  }
   return AYAT_PARTNER
 }
 
@@ -34,7 +34,7 @@ export function mergeApartmentBrowseGroups(
   if (summaries && (!companySlugFilter || cmsPartner)) {
     for (const [locationId, cms] of summaries) {
       if (!isLocationActive(visibility, 'apartment', locationId)) continue
-      const inferredPartner = cmsPartner ?? partnerForLocationId(locationId)
+      const inferredPartner = cmsPartner ?? partnerFromSlug(cms.company_slug)
       if (companySlugFilter && inferredPartner.slug !== companySlugFilter) continue
       seen.add(locationId)
       const existing = bySlug.get(locationId)

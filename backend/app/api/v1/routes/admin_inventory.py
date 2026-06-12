@@ -1067,6 +1067,7 @@ def create_location_content(
     row = LocationContent(
         kind=body.kind,
         location_id=body.location_id,
+        company_slug=body.company_slug,
         title=body.title,
         subtitle=body.subtitle,
         description=body.description,

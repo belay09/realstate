@@ -163,6 +163,7 @@ export type AdminLocationContent = {
   id: string
   kind: 'apartment' | 'shop'
   location_id: string
+  company_slug: string
   title: string
   subtitle: string | null
   description: string | null
@@ -282,6 +283,7 @@ export type PublicLocationVisibility = {
 
 export type PublicLocationBrowseSummary = {
   location_id: string
+  company_slug: string
   title: string
   subtitle: string | null
   description: string | null

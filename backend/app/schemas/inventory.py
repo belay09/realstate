@@ -365,6 +365,7 @@ class LocationCard(BaseModel):
 class LocationContentCreate(BaseModel):
     kind: str = Field(pattern="^(apartment|shop)$")
     location_id: str = Field(min_length=1, max_length=255)
+    company_slug: str = Field(min_length=1, max_length=64)
     title: str = Field(min_length=1, max_length=255)
     subtitle: str | None = Field(default=None, max_length=255)
     description: str | None = None
@@ -382,6 +383,7 @@ class LocationContentUpdate(BaseModel):
     cards: list[LocationCard] | None = None
     settings: LocationBuildingSettings | None = None
     is_public: bool | None = None
+    company_slug: str | None = Field(default=None, min_length=1, max_length=64)
 
 
 class LocationContentRead(BaseModel):
@@ -390,6 +392,7 @@ class LocationContentRead(BaseModel):
     id: UUID
     kind: str
     location_id: str
+    company_slug: str
     title: str
     subtitle: str | None
     description: str | None
@@ -531,6 +534,7 @@ class PublicLocationBrowseSummary(BaseModel):
     """Title, description, and cover for location cards on /apartments and /shops."""
 
     location_id: str
+    company_slug: str
     title: str
     subtitle: str | None
     description: str | None

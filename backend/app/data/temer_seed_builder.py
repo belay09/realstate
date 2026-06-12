@@ -222,7 +222,7 @@ def build_location_content(
         apartments.append(
             {
                 "location_id": area_slug,
-                "title": label,
+                "title": "Ayat area" if area_slug == "ayat-area" else label,
                 "subtitle": f"Temer Properties — {label}",
                 "description": _area_description(scraped_area, label),
                 "video_url": None,

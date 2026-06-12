@@ -420,6 +420,7 @@ def list_public_location_summaries(
     return [
         PublicLocationBrowseSummary(
             location_id=row.location_id,
+            company_slug=row.company_slug,
             title=row.title,
             subtitle=row.subtitle,
             description=row.description,

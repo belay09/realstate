@@ -53,6 +53,7 @@ def _upsert_location_content(
     *,
     kind: str,
     location_id: str,
+    company_slug: str,
     title: str,
     subtitle: str,
     description: str,
@@ -75,10 +76,13 @@ def _upsert_location_content(
         for c in cards
     ]
     if row:
+        if row.company_slug != company_slug:
+            row.company_slug = company_slug
         return row
     row = LocationContent(
         kind=kind,
         location_id=location_id,
+        company_slug=company_slug,
         title=title,
         subtitle=subtitle,
         description=description,
@@ -118,6 +122,7 @@ def _seed_location_content(db: Session, data: dict) -> None:
             db,
             kind="apartment",
             location_id=entry["location_id"],
+            company_slug=data["company"]["slug"],
             title=entry["title"],
             subtitle=entry.get("subtitle") or entry["title"],
             description=entry.get("description") or "",
@@ -131,6 +136,7 @@ def _seed_location_content(db: Session, data: dict) -> None:
             db,
             kind="shop",
             location_id=entry["location_id"],
+            company_slug=data["company"]["slug"],
             title=entry["title"],
             subtitle=entry.get("subtitle") or "Temer commercial",
             description=entry.get("description") or "",

@@ -36,6 +36,7 @@ export function DuplicateLocationModal({ source, onClose, onSuccess }: Props) {
       const { data: created } = await api.post<AdminLocationContent>('/admin/location-content', {
         kind: source.kind,
         location_id: nextId,
+        company_slug: source.company_slug,
         title: title.trim(),
         subtitle: source.subtitle ?? undefined,
         description: source.description ?? undefined,
