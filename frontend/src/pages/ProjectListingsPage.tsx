@@ -59,7 +59,11 @@ export function ProjectListingsPage() {
 
   const zone = projectSlug ? resolveDevelopmentZone(projectSlug, firstListing?.area ?? null) : ''
   const pageTitle = content?.title || firstListing?.project_name || zone || t('pageTitles.apartments')
-  usePageTitle(pageTitle)
+  const seoDescription =
+    content?.description?.trim()?.slice(0, 160) ||
+    content?.subtitle?.trim() ||
+    t('seo.projectDescriptionFallback')
+  usePageTitle(pageTitle, seoDescription)
 
   const backTo = isTemer ? `/apartments?company_slug=${TEMER_PARTNER.slug}` : '/apartments'
 

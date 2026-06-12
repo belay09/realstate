@@ -15,7 +15,7 @@ function initialKindFromSearch(params: URLSearchParams): PropertyKind | null {
 export function AyatCalculatorPage() {
   const { t } = useTranslation()
   const [searchParams] = useSearchParams()
-  usePageTitle(t('pageTitles.calculator'))
+  usePageTitle(t('pageTitles.calculator'), t('seo.calculatorDescription'))
   const kind = initialKindFromSearch(searchParams)
   const zone = searchParams.get('zone') ?? searchParams.get('shop_zone')
   return (

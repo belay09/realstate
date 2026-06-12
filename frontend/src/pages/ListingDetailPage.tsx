@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 import { api } from '../api/client'
@@ -12,7 +12,9 @@ import type {
 import { ListingDetailLayout } from '../components/ListingDetailLayout'
 import { AYAT_PARTNER, TEMER_PARTNER } from '../content/partners'
 import { useTranslation } from '../context/LocaleContext'
-import { usePageTitle } from '../hooks/usePageTitle'
+import { usePageSeo } from '../hooks/usePageSeo'
+import { absoluteUrl } from '../content/siteSeo'
+import { listingJsonLd } from '../lib/seoMeta'
 import { siteWhatsAppHref } from '../content/siteContact'
 import { presetFromListing } from '../lib/listingCalculatorPreset'
 import { formatListingCardTitle } from '../lib/listingDisplay'
@@ -59,8 +61,38 @@ export function ListingDetailPage() {
     onSuccess: () => setLeadSent(true),
   })
 
-  const pageTitle = query.data ? formatListingCardTitle(query.data, t) : t('pageTitles.listing')
-  usePageTitle(pageTitle)
+  const detail = query.data
+  const pageTitle = detail ? formatListingCardTitle(detail, t) : t('pageTitles.listing')
+  const seoDescription =
+    detail?.description_preview?.trim() ||
+    detail?.description?.trim()?.slice(0, 160) ||
+    t('seo.listingDescriptionFallback')
+  const seoImage = detail?.cover_image_url ?? detail?.primary_image_url ?? null
+
+  const listingSchema = useMemo(
+    () =>
+      detail
+        ? listingJsonLd({
+            name: detail.title,
+            description: seoDescription,
+            url: absoluteUrl(`/listings/${detail.slug}`),
+            image: seoImage,
+            bedrooms: detail.bedrooms,
+            floorSize: detail.area_sqm ? Number.parseFloat(detail.area_sqm) : null,
+            sellerName: detail.company_name,
+          })
+        : undefined,
+    [detail, seoDescription, seoImage],
+  )
+
+  usePageSeo({
+    title: pageTitle,
+    description: seoDescription,
+    image: seoImage,
+    path: slug ? `/listings/${slug}` : '/listings',
+    type: 'article',
+    jsonLd: listingSchema,
+  })
 
   const priceOk = !priceQuery.isError && Boolean(priceQuery.data)
 

@@ -12,7 +12,7 @@ import { shopLocationsFromConfig } from '../lib/shopLocations'
 
 export function ShopLocationsPage() {
   const { t } = useTranslation()
-  usePageTitle(t('pageTitles.shops'))
+  usePageTitle(t('pageTitles.shops'), t('seo.shopsDescription'))
   const { data: config } = useCalculatorConfig()
   const { data: visibility } = useLocationVisibility()
   const summariesQuery = useLocationBrowseSummaries('shop')

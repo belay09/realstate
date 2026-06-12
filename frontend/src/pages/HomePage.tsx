@@ -7,14 +7,19 @@ import { SectionHeader } from '../components/SectionHeader'
 import { useTranslation } from '../context/LocaleContext'
 import { AYAT_PARTNER, TEMER_PARTNER } from '../content/partners'
 import { SITE_CONTACT } from '../content/siteContact'
-import { usePageTitle } from '../hooks/usePageTitle'
+import { usePageSeo } from '../hooks/usePageSeo'
 
 const HERO_IMAGE =
   'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=85'
 
 export function HomePage() {
   const { t, messages } = useTranslation()
-  usePageTitle(t('pageTitles.home'))
+  usePageSeo({
+    title: t('pageTitles.home'),
+    description: t('seo.homeDescription'),
+    path: '/',
+    includeSiteJsonLd: true,
+  })
 
   const heroStats = [
     { value: '2+', label: t('home.statDevelopers') },

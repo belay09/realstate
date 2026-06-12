@@ -68,7 +68,7 @@ function FilterChip({
 
 export function ApartmentsPage() {
   const { t } = useTranslation()
-  usePageTitle(t('pageTitles.apartments'))
+  usePageTitle(t('pageTitles.apartments'), t('seo.apartmentsDescription'))
   const [searchParams, setSearchParams] = useSearchParams()
   const companySlug = (searchParams.get('company_slug') || '') as DeveloperFilter
 

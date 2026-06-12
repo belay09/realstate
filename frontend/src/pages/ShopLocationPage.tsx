@@ -47,7 +47,10 @@ export function ShopLocationPage() {
       return data
     },
   })
-  usePageTitle(title)
+  usePageTitle(
+    title,
+    contentQuery.data?.description?.trim()?.slice(0, 160) || t('seo.shopsDescription'),
+  )
 
   if (!zoneId || !location) {
     return (

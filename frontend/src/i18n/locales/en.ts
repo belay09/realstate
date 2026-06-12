@@ -59,6 +59,22 @@ export const en = {
     listing: 'Home details',
     calculator: 'Price calculator',
   },
+  seo: {
+    defaultDescription:
+      'Free real estate advisory in Addis Ababa. Compare Ayat and Temer apartments and shops. No buyer fees, no commission — Habesha Real Estate Advisory.',
+    homeDescription:
+      'Habesha Real Estate Advisory helps you find the best home for your budget and lifestyle in Addis Ababa. Compare Ayat and Temer listings — 100% free, no commission from buyers.',
+    apartmentsDescription:
+      'Browse apartment locations from Ayat Share Company and Temer Properties in Addis Ababa. Free advisory to help you pick the right area and layout.',
+    shopsDescription:
+      'Ayat commercial shop locations in Addis Ababa with official floor rates and price estimates. Free guidance from Habesha Real Estate Advisory.',
+    calculatorDescription:
+      'Estimate indicative Ayat apartment and shop prices in Addis Ababa using official strategy bands. Free tool — confirm quotes with Ayat before purchase.',
+    listingDescriptionFallback:
+      'View photos, specs, and pricing for this home in Addis Ababa. Free enquiry through Habesha Real Estate Advisory — no buyer fees.',
+    projectDescriptionFallback:
+      'Browse homes and layouts at this Addis Ababa development. Free buyer advisory from Habesha Real Estate Advisory.',
+  },
   apartments: {
     heroEyebrow: 'Partner apartments',
     heroTitle: 'Pick a',
