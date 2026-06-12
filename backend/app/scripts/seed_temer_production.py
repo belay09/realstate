@@ -10,6 +10,7 @@ from pathlib import Path
 
 from sqlalchemy.orm import Session
 
+from app.data.temer_constants import TEMER_COMPANY_SLUG
 from app.data.temer_listing_metadata import build_metadata
 from app.db.session import SessionLocal
 from app.models.company import Company
@@ -77,7 +78,12 @@ def _upsert_location_content(
     ]
     if row:
         if row.company_slug != company_slug:
-            row.company_slug = company_slug
+            print(
+                f"  skip location {kind}/{location_id}: "
+                f"already owned by {row.company_slug} (will not change)"
+            )
+            return row
+        # Existing Temer CMS — preserve admin edits.
         return row
     row = LocationContent(
         kind=kind,
@@ -148,6 +154,9 @@ def _seed_location_content(db: Session, data: dict) -> None:
 
 
 def seed_from_data(db: Session, data: dict) -> None:
+    if data["company"]["slug"] != TEMER_COMPANY_SLUG:
+        raise ValueError(f"temer_production.json company must be {TEMER_COMPANY_SLUG}")
+
     admin = db.query(User).filter(User.email == "admin@example.com").first()
 
     company_data = data["company"]
@@ -219,6 +228,10 @@ def seed_from_data(db: Session, data: dict) -> None:
         ref = listing_data["unit_ref"]
         key = _unit_key(ref["project_slug"], ref["block_code"], ref["unit_number"])
         unit = unit_by_key[key]
+        listing_slug = listing_data["slug"]
+        existing_listing = (
+            db.query(PropertyListing).filter(PropertyListing.slug == listing_slug).first()
+        )
         property_kind = listing_data.get("property_kind", "residential")
         location_kind = listing_data.get("location_kind") or (
             "shop" if property_kind == "commercial" else "apartment"
@@ -239,7 +252,7 @@ def seed_from_data(db: Session, data: dict) -> None:
         row = _upsert_listing(
             db,
             unit=unit,
-            slug=listing_data["slug"],
+            slug=listing_slug,
             title=listing_data["title"],
             description=listing_data["description"],
             city=listing_data["city"],
@@ -250,7 +263,7 @@ def seed_from_data(db: Session, data: dict) -> None:
             image_urls=listing_data.get("images") or [],
             listing_metadata=listing_meta,
         )
-        if row and location_kind and location_id:
+        if row and existing_listing is None and location_kind and location_id:
             try:
                 reassign_listing_location(
                     db,

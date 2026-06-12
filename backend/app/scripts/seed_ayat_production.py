@@ -449,9 +449,7 @@ def _upsert_location_content(
         for c in cards
     ]
     if row:
-        if row.company_slug != company_slug:
-            row.company_slug = company_slug
-        # Keep admin-edited copy, media, and Active toggle after the first seed.
+        # Never modify existing CMS rows (Ayat admin edits or prior Temer seed).
         return
     db.add(
         LocationContent(
