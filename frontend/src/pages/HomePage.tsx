@@ -1,4 +1,5 @@
 import { BelayRoleSection } from '../components/BelayRoleSection'
+import { HomeAdvisorySection } from '../components/HomeAdvisorySection'
 import { ButtonArrow } from '../components/ButtonArrow'
 import { HomeDevelopersSection } from '../components/HomeDevelopersSection'
 import { PartnerMarquee } from '../components/PartnerMarquee'
@@ -60,6 +61,12 @@ export function HomePage() {
                 advisoryNotAyat: t('home.advisoryNotAyat'),
               })}
             </p>
+            <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-brand-300/60 bg-brand-50/90 px-4 py-2 text-sm font-semibold text-brand-900 dark:border-brand-700 dark:bg-brand-950/60 dark:text-brand-100">
+              <span className="text-brand-600 dark:text-brand-400" aria-hidden>
+                ✓
+              </span>
+              {t('home.heroFreeLine')}
+            </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <ButtonArrow to="/apartments">{t('home.exploreListings')}</ButtonArrow>
               <ButtonArrow to={`/apartments?company_slug=${TEMER_PARTNER.slug}`} variant="outline">
@@ -80,6 +87,8 @@ export function HomePage() {
       </section>
 
       <div className="mx-auto max-w-[90rem] space-y-24 px-4 pb-24 pt-20 sm:px-8 sm:pt-28">
+        <HomeAdvisorySection />
+
         <section className="space-y-6">
           <SectionHeader
             eyebrow={t('home.partnersEyebrow')}

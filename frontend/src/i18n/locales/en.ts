@@ -1,7 +1,7 @@
 export const en = {
   brand: {
     name: 'Habesha Real Estate Advisory',
-    tagline: 'Compare developers',
+    tagline: 'Free real estate advisory',
     headerNote: 'Not a developer',
   },
   nav: {
@@ -111,8 +111,25 @@ export const en = {
     heroTitleAccent: 'your',
     heroTitleEnd: 'lifestyle.',
     heroBody:
-      'Compare premium apartments from {{ayatBrand}} and {{temerBrand}} on one site. {{advisoryNotAyat}} See who built each project, then enquire through us.',
-    advisoryNotAyat: 'Habesha Real Estate Advisory is not a developer.',
+      'We advise you on the best homes from {{ayatBrand}} and {{temerBrand}} based on your budget, area, and lifestyle. {{advisoryNotAyat}} Compare developers, then enquire through us.',
+    advisoryNotAyat: 'We are not a developer.',
+    heroFreeLine: '100% free advice — no fees and no commission from you.',
+    advisoryEyebrow: 'Free advisory',
+    advisoryTitle: 'The right home for your preferences — completely free',
+    advisorySummary:
+      'Tell us what you are looking for. We compare trusted developers and guide you to the best match. Our service is free for buyers: no advisory fees and no commission charged to you.',
+    advisoryPoint1Title: 'Matched to your preferences',
+    advisoryPoint1Text:
+      'Bedrooms, neighbourhood, budget, and payment plan — we shortlist options that fit what you want, not a one-size-fits-all pitch.',
+    advisoryPoint2Title: 'No fees from you',
+    advisoryPoint2Text:
+      'You never pay Habesha Real Estate Advisory for guidance, comparisons, or enquiries.',
+    advisoryPoint3Title: 'No buyer commission',
+    advisoryPoint3Text:
+      'We do not take any commission from buyers. Everything we offer is free.',
+    advisoryCta: 'Get free advice',
+    advisoryCtaHint: 'Call or WhatsApp — always free for you.',
+    freeBadge: '100% free',
     exploreListings: 'Explore locations',
     marqueeTagline: 'Trusted partner developers on Habesha Real Estate Advisory',
     ayatHomes: 'Ayat homes',
@@ -198,7 +215,7 @@ export const en = {
     eyebrow: 'How we work',
     title: 'What Habesha Real Estate Advisory is',
     summary:
-      'Habesha Real Estate Advisory is not a developer and we do not replace brands like Ayat Real Estate. We are a comparison website where you browse homes from multiple companies, see who built each project, and choose the developer you trust. Ayat earns its reputation over decades; we simply help you find and compare their listings alongside others.',
+      'Habesha Real Estate Advisory is not a developer. We advise buyers on the best real estate for their preferences, compare homes from multiple companies, and connect you with the right developer — all at no cost to you.',
     feature1Title: 'Developer on every listing',
     feature1Text:
       'Every listing shows the developer name. You always know who built the project and who you buy from.',
