@@ -129,7 +129,8 @@ def _area_description(scraped_area: dict | None, label: str) -> str:
             return meta[:1200]
     return (
         f"Browse Temer Properties apartments and commercial units in {label}, Addis Ababa. "
-        "Prices are on request — Belay Properties helps you compare layouts and contact Temer sales."
+        "Prices are on request — Belay Properties helps you compare layouts and "
+        "contact Temer sales."
     )
 
 
@@ -143,10 +144,11 @@ def build_location_cards(
     if kind == "shop":
         for prop in props_in_area[:4]:
             size = parse_area_sqm(prop)
+            ref = prop.get("property_id", "—")
             cards.append(
                 {
                     "title": prop.get("title", "Commercial unit"),
-                    "body": f"Approx. {size} m² — price on request. Temer ref. {prop.get('property_id', '—')}.",
+                    "body": f"Approx. {size} m² — price on request. Temer ref. {ref}.",
                     "image_url": (prop.get("images") or [None])[0],
                 }
             )
@@ -173,7 +175,11 @@ def build_location_cards(
                     "image_url": (sample.get("images") or [None])[0],
                 }
             )
-        buildings = {infer_building(p["title"], area_slug)[1] for p in props_in_area if not p.get("is_commercial")}
+        buildings = {
+            infer_building(p["title"], area_slug)[1]
+            for p in props_in_area
+            if not p.get("is_commercial")
+        }
         if buildings:
             cards.append(
                 {

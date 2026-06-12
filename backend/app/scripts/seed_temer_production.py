@@ -14,7 +14,14 @@ from app.data.temer_listing_metadata import build_metadata
 from app.db.session import SessionLocal
 from app.models.company import Company
 from app.models.identity import User
-from app.models.inventory import Block, LocationContent, LocationMedia, Project, PropertyListing, PropertyUnit
+from app.models.inventory import (
+    Block,
+    LocationContent,
+    LocationMedia,
+    Project,
+    PropertyListing,
+    PropertyUnit,
+)
 from app.scripts.seed_demo_data import (
     _get_company,
     _upsert_block,
@@ -24,7 +31,10 @@ from app.scripts.seed_demo_data import (
     _upsert_unit,
     _upsert_unit_type,
 )
-from app.services.listing_location_service import ListingLocationError, reassign_listing_location
+from app.services.listing_location_service import (
+    ListingLocationError,
+    reassign_listing_location,
+)
 
 DEFAULT_DATA_PATH = Path(__file__).resolve().parents[2] / "data" / "temer_production.json"
 
