@@ -39,21 +39,14 @@ export function mergeApartmentBrowseGroups(
   const bySlug = new Map(groups.map((g) => [g.project_slug, g]))
   const merged: ProjectListingGroup[] = []
 
-  const cmsPartner =
-    companySlugFilter && companySlugFilter in PARTNER_BY_SLUG
-      ? PARTNER_BY_SLUG[companySlugFilter as keyof typeof PARTNER_BY_SLUG]
-      : null
-
   for (const [locationId, cms] of summaries) {
     if (!isLocationActive(visibility, 'apartment', locationId)) continue
-    const inferredPartner = cmsPartner ?? partnerFromSlug(cms.company_slug)
-    if (companySlugFilter && inferredPartner.slug !== companySlugFilter) continue
+    // Developer comes from admin Location pages (company_slug), not from listings.
+    const partner = partnerFromSlug(cms.company_slug)
+    if (companySlugFilter && partner.slug !== companySlugFilter) continue
 
     const existing = bySlug.get(locationId)
-    const partner = existing
-      ? PARTNER_BY_SLUG[existing.company_slug as keyof typeof PARTNER_BY_SLUG] ?? inferredPartner
-      : inferredPartner
-    const listings = existing?.listings ?? []
+    const listings = (existing?.listings ?? []).filter((l) => l.company_slug === partner.slug)
 
     merged.push({
       project_slug: locationId,
