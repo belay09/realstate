@@ -1,4 +1,4 @@
-"""Load Temer Properties pilot inventory from backend/data/temer_production.json."""
+"""Load Temer Properties inventory from backend/data/temer_production.json (Ayat-style)."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ from app.data.temer_listing_metadata import build_metadata
 from app.db.session import SessionLocal
 from app.models.company import Company
 from app.models.identity import User
-from app.models.inventory import Block, Project, PropertyListing, PropertyUnit
+from app.models.inventory import Block, LocationContent, LocationMedia, Project, PropertyListing, PropertyUnit
 from app.scripts.seed_demo_data import (
     _get_company,
     _upsert_block,
@@ -24,6 +24,7 @@ from app.scripts.seed_demo_data import (
     _upsert_unit,
     _upsert_unit_type,
 )
+from app.services.listing_location_service import ListingLocationError, reassign_listing_location
 
 DEFAULT_DATA_PATH = Path(__file__).resolve().parents[2] / "data" / "temer_production.json"
 
@@ -37,17 +38,112 @@ def _unit_key(project_slug: str, block_code: str, unit_number: str) -> tuple[str
     return (project_slug, block_code, unit_number)
 
 
+def _upsert_location_content(
+    db: Session,
+    *,
+    kind: str,
+    location_id: str,
+    title: str,
+    subtitle: str,
+    description: str,
+    cards: list[dict[str, str | None]],
+    video_url: str | None = None,
+    is_public: bool = True,
+    cover_image_url: str | None = None,
+) -> LocationContent | None:
+    row = (
+        db.query(LocationContent)
+        .filter(LocationContent.kind == kind, LocationContent.location_id == location_id)
+        .first()
+    )
+    payload_cards = [
+        {
+            "title": c.get("title") or "",
+            "body": c.get("body"),
+            "image_url": c.get("image_url"),
+        }
+        for c in cards
+    ]
+    if row:
+        return row
+    row = LocationContent(
+        kind=kind,
+        location_id=location_id,
+        title=title,
+        subtitle=subtitle,
+        description=description,
+        video_url=video_url,
+        cards=payload_cards,
+        is_public=is_public,
+    )
+    db.add(row)
+    db.flush()
+    if cover_image_url:
+        existing = (
+            db.query(LocationMedia)
+            .filter(
+                LocationMedia.location_content_id == row.id,
+                LocationMedia.is_primary.is_(True),
+            )
+            .first()
+        )
+        if existing is None:
+            db.add(
+                LocationMedia(
+                    location_content_id=row.id,
+                    url=cover_image_url,
+                    media_type="image",
+                    caption=f"{title} cover",
+                    sort_order=0,
+                    is_primary=True,
+                )
+            )
+    return row
+
+
+def _seed_location_content(db: Session, data: dict) -> None:
+    loc = data.get("location_content") or {}
+    for entry in loc.get("apartments") or []:
+        _upsert_location_content(
+            db,
+            kind="apartment",
+            location_id=entry["location_id"],
+            title=entry["title"],
+            subtitle=entry.get("subtitle") or entry["title"],
+            description=entry.get("description") or "",
+            cards=entry.get("cards") or [],
+            video_url=entry.get("video_url"),
+            is_public=entry.get("is_public", True),
+            cover_image_url=entry.get("cover_image_url"),
+        )
+    for entry in loc.get("shops") or []:
+        _upsert_location_content(
+            db,
+            kind="shop",
+            location_id=entry["location_id"],
+            title=entry["title"],
+            subtitle=entry.get("subtitle") or "Temer commercial",
+            description=entry.get("description") or "",
+            cards=entry.get("cards") or [],
+            video_url=entry.get("video_url"),
+            is_public=entry.get("is_public", True),
+            cover_image_url=entry.get("cover_image_url"),
+        )
+
+
 def seed_from_data(db: Session, data: dict) -> None:
     admin = db.query(User).filter(User.email == "admin@example.com").first()
 
     company_data = data["company"]
     company = _upsert_company(db, **company_data)
 
-    project_by_slug: dict[str, object] = {}
-    block_by_key: dict[tuple[str, str], object] = {}
+    project_by_slug: dict[str, Project] = {}
+    block_by_key: dict[tuple[str, str], Block] = {}
 
     for project_data in data["projects"]:
         blocks = project_data.pop("blocks", [])
+        project_data.pop("location_kind", None)
+        project_data.pop("location_id", None)
         project = _upsert_project(
             db,
             company=company,
@@ -80,7 +176,7 @@ def seed_from_data(db: Session, data: dict) -> None:
         )
         unit_type_by_code[ut["code"]] = unit_type
 
-    unit_by_key: dict[tuple[str, str, str], object] = {}
+    unit_by_key: dict[tuple[str, str, str], PropertyUnit] = {}
     for unit_data in data["units"]:
         block = block_by_key[(unit_data["project_slug"], unit_data["block_code"])]
         unit_type = unit_type_by_code[unit_data["unit_type_code"]]
@@ -101,11 +197,18 @@ def seed_from_data(db: Session, data: dict) -> None:
             )
         ] = unit
 
+    _seed_location_content(db, data)
+
     for listing_data in data["listings"]:
         ref = listing_data["unit_ref"]
         key = _unit_key(ref["project_slug"], ref["block_code"], ref["unit_number"])
         unit = unit_by_key[key]
         property_kind = listing_data.get("property_kind", "residential")
+        location_kind = listing_data.get("location_kind") or (
+            "shop" if property_kind == "commercial" else "apartment"
+        )
+        location_id = listing_data.get("location_id") or ref["project_slug"]
+
         listing_meta = build_metadata(
             property_kind=property_kind,
             area=listing_data["area"],
@@ -114,8 +217,10 @@ def seed_from_data(db: Session, data: dict) -> None:
             external_property_id=listing_data.get("external_property_id"),
             features=listing_data.get("feature_groups") or listing_data.get("features"),
             map_point=listing_data.get("map"),
+            location_kind=location_kind,
+            location_id=location_id,
         )
-        _upsert_listing(
+        row = _upsert_listing(
             db,
             unit=unit,
             slug=listing_data["slug"],
@@ -129,6 +234,16 @@ def seed_from_data(db: Session, data: dict) -> None:
             image_urls=listing_data.get("images") or [],
             listing_metadata=listing_meta,
         )
+        if row and location_kind and location_id:
+            try:
+                reassign_listing_location(
+                    db,
+                    row,
+                    location_kind=location_kind,
+                    location_id=location_id,
+                )
+            except ListingLocationError as exc:
+                print(f"  warning: {listing_data['slug']}: {exc.message}")
 
     new_slugs = {listing_data["slug"] for listing_data in data.get("listings", [])}
     if new_slugs:
@@ -150,12 +265,21 @@ def seed_from_data(db: Session, data: dict) -> None:
 
     db.commit()
 
+    loc = data.get("location_content") or {}
     print("\n=== Temer production seed complete ===\n")
     print(f"Company: {company.name} ({company.slug})")
-    print(f"Projects: {', '.join(project_by_slug.keys())}")
+    print(f"Area projects: {', '.join(project_by_slug.keys())}")
+    print(f"Apartment location pages: {len(loc.get('apartments') or [])}")
+    print(f"Shop location pages: {len(loc.get('shops') or [])}")
     print(f"Public listings: {len(data.get('listings', []))}")
-    print("\nPublic URLs:")
-    for listing in data.get("listings", []):
+    print("\nLocation pages (apartments):")
+    for entry in loc.get("apartments") or []:
+        print(f"  /apartments/{entry['location_id']}")
+    print("\nLocation pages (shops):")
+    for entry in loc.get("shops") or []:
+        print(f"  /shops/{entry['location_id']}")
+    print("\nSample listings:")
+    for listing in data.get("listings", [])[:5]:
         if listing.get("is_public", True):
             print(f"  /listings/{listing['slug']}")
     print("\nFilter: GET /api/v1/public/listings?company_slug=temer-properties")
@@ -163,7 +287,7 @@ def seed_from_data(db: Session, data: dict) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Seed Temer Properties inventory")
+    parser = argparse.ArgumentParser(description="Seed Temer Properties (Ayat-style JSON)")
     parser.add_argument(
         "--data",
         type=Path,

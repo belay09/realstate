@@ -35,6 +35,8 @@ def build_metadata(
     external_property_id: str | None = None,
     features: dict[str, list[str]] | None = None,
     map_point: dict | None = None,
+    location_kind: str | None = None,
+    location_id: str | None = None,
 ) -> dict:
     lat, lng = AREA_MAP_COORDS.get(area, (9.0100, 38.7800))
     feat = features or (
@@ -52,6 +54,8 @@ def build_metadata(
     return {
         "property_kind": property_kind,
         "external_property_id": external_property_id,
+        "location_kind": location_kind,
+        "location_id": location_id,
         "specs": specs,
         "features": feat,
         "map": map_meta,

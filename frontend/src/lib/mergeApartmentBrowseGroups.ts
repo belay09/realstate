@@ -1,7 +1,19 @@
 import type { PublicLocationBrowseSummary, PublicLocationVisibility } from '../api/types'
-import { AYAT_PARTNER } from '../content/partners'
+import { AYAT_PARTNER, TEMER_APARTMENT_LOCATION_IDS, TEMER_PARTNER } from '../content/partners'
 import type { ProjectListingGroup } from './groupListingsByProject'
 import { isLocationActive } from './locationVisibility'
+
+const PARTNER_BY_SLUG = {
+  [AYAT_PARTNER.slug]: AYAT_PARTNER,
+  [TEMER_PARTNER.slug]: TEMER_PARTNER,
+} as const
+
+const TEMER_LOCATION_IDS = new Set<string>(TEMER_APARTMENT_LOCATION_IDS)
+
+function partnerForLocationId(locationId: string) {
+  if (TEMER_LOCATION_IDS.has(locationId)) return TEMER_PARTNER
+  return AYAT_PARTNER
+}
 
 /** Merge CMS apartment locations with listing groups so new zones appear before any homes are listed. */
 export function mergeApartmentBrowseGroups(
@@ -14,11 +26,21 @@ export function mergeApartmentBrowseGroups(
   const merged: ProjectListingGroup[] = []
   const seen = new Set<string>()
 
-  if (summaries && (!companySlugFilter || companySlugFilter === AYAT_PARTNER.slug)) {
+  const cmsPartner =
+    companySlugFilter && companySlugFilter in PARTNER_BY_SLUG
+      ? PARTNER_BY_SLUG[companySlugFilter as keyof typeof PARTNER_BY_SLUG]
+      : null
+
+  if (summaries && (!companySlugFilter || cmsPartner)) {
     for (const [locationId, cms] of summaries) {
       if (!isLocationActive(visibility, 'apartment', locationId)) continue
+      const inferredPartner = cmsPartner ?? partnerForLocationId(locationId)
+      if (companySlugFilter && inferredPartner.slug !== companySlugFilter) continue
       seen.add(locationId)
       const existing = bySlug.get(locationId)
+      const partner = existing
+        ? PARTNER_BY_SLUG[existing.company_slug as keyof typeof PARTNER_BY_SLUG] ?? inferredPartner
+        : inferredPartner
       if (existing) {
         merged.push({
           ...existing,
@@ -30,8 +52,8 @@ export function mergeApartmentBrowseGroups(
           project_name: cms.title.trim() || locationId,
           area: cms.subtitle?.trim() || null,
           city: 'Addis Ababa',
-          company_name: AYAT_PARTNER.legalName,
-          company_slug: AYAT_PARTNER.slug,
+          company_name: partner.legalName,
+          company_slug: partner.slug,
           primary_image_url: cms.cover_image_url ?? null,
           listings: [],
           bedroomCounts: [],
@@ -43,10 +65,8 @@ export function mergeApartmentBrowseGroups(
   for (const group of groups) {
     if (seen.has(group.project_slug)) continue
     if (companySlugFilter && group.company_slug !== companySlugFilter) continue
-    if (
-      group.company_slug === AYAT_PARTNER.slug &&
-      !isLocationActive(visibility, 'apartment', group.project_slug)
-    ) {
+    const partner = PARTNER_BY_SLUG[group.company_slug as keyof typeof PARTNER_BY_SLUG]
+    if (partner && !isLocationActive(visibility, 'apartment', group.project_slug)) {
       continue
     }
     merged.push(group)

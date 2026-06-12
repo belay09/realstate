@@ -129,6 +129,8 @@ export function ApartmentsPage() {
   const isTemerBrowse = companySlug === TEMER_PARTNER.slug
   const listings = query.data?.items ?? []
 
+  const showTemerLocationCards = isTemerBrowse && projectGroups.length > 0
+
   const heroCopy = React.useMemo(() => {
     if (companySlug === AYAT_PARTNER.slug) {
       return {
@@ -154,12 +156,16 @@ export function ApartmentsPage() {
   const countHint =
     query.data && !query.isLoading
       ? t('apartments.resultsHint', {
-          developments: isTemerBrowse ? listings.length : projectGroups.length,
+          developments: showTemerLocationCards ? projectGroups.length : isTemerBrowse ? listings.length : projectGroups.length,
           homes: query.data.total,
         })
       : null
 
-  const hasResults = isTemerBrowse ? listings.length > 0 : projectGroups.length > 0
+  const hasResults = showTemerLocationCards
+    ? projectGroups.length > 0
+    : isTemerBrowse
+      ? listings.length > 0
+      : projectGroups.length > 0
 
   return (
     <div className="space-y-10 text-left">
@@ -268,7 +274,20 @@ export function ApartmentsPage() {
         </ul>
       )}
 
-      {!query.isLoading && isTemerBrowse && listings.length > 0 && (
+      {!query.isLoading && showTemerLocationCards && (
+        <ul className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+          {projectGroups.map((group) => (
+            <li key={`${group.company_slug}-${group.project_slug}`} className="animate-fade-in">
+              <ProjectLocationCard
+                group={group}
+                locationCms={locationSummariesQuery.data?.get(group.project_slug)}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {!query.isLoading && isTemerBrowse && !showTemerLocationCards && listings.length > 0 && (
         <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {listings.map((item) => (
             <li key={item.slug} className="animate-fade-in">

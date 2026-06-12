@@ -20,6 +20,16 @@ export const TEMER_PARTNER = {
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBSnuQ_vYSyLKopmM2ylazSbKkdxR2loqEaw&s',
 } as const
 
+/** Apartment location page ids seeded from backend/data/temer_production.json */
+export const TEMER_APARTMENT_LOCATION_IDS = [
+  'sarbet',
+  'aware-area',
+  'ayat-area',
+  'gelan-area',
+  'garment-area',
+  'piyassa-area',
+] as const
+
 export const PARTNER_SLUGS = [AYAT_PARTNER.slug, TEMER_PARTNER.slug] as const
 
 export type PartnerSlug = (typeof PARTNER_SLUGS)[number]
