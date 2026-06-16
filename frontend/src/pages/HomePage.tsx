@@ -1,7 +1,7 @@
 import { BelayRoleSection } from '../components/BelayRoleSection'
 import { HomeAdvisorySection } from '../components/HomeAdvisorySection'
 import { ButtonArrow } from '../components/ButtonArrow'
-import { HomeDevelopersSection } from '../components/HomeDevelopersSection'
+import { HomeCmsCardsSection } from '../components/HomeCmsCardsSection'
 import { PartnerMarquee } from '../components/PartnerMarquee'
 import { SectionHeader } from '../components/SectionHeader'
 import { useTranslation } from '../context/LocaleContext'
@@ -96,12 +96,12 @@ export function HomePage() {
 
         <section className="space-y-6">
           <SectionHeader
-            eyebrow={t('home.partnersEyebrow')}
-            title={t('home.partnersTitle')}
-            description={t('home.partnersDescription')}
+            eyebrow={t('home.inventoryEyebrow')}
+            title={t('home.inventoryTitle')}
+            description={t('home.inventoryDescription')}
             large
           />
-          <HomeDevelopersSection />
+          <HomeCmsCardsSection />
         </section>
 
         <BelayRoleSection />
