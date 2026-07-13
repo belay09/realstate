@@ -1,6 +1,5 @@
-import { Link } from 'react-router-dom'
-
 import type { PublicListingSummary } from '../api/types'
+import { SITE_CONTACT, siteWhatsAppHref } from '../content/siteContact'
 import { useTranslation } from '../context/LocaleContext'
 import {
   formatListingBedrooms,
@@ -42,11 +41,11 @@ function SpecItem({ label, value }: { label: string; value: string }) {
   )
 }
 
+/** Inline layout summary for the location terminal page — no listing-detail hop required. */
 export function LocationLayoutCard({ listing, index = 0 }: Props) {
   const { t } = useTranslation()
   const title = formatListingCardTitle(listing, t)
   const location = formatListingLocation(listing, t)
-  const detailHref = `/listings/${listing.slug}`
   const imageUrls =
     listing.image_urls && listing.image_urls.length > 0
       ? listing.image_urls
@@ -64,11 +63,13 @@ export function LocationLayoutCard({ listing, index = 0 }: Props) {
         : listing.unit_type_name
 
   const buildingLabel = buildingTypeLabel(listing.building_type, listing.use_segment, t)
+  const size = listing.property_size?.trim() || null
+  const waMessage = t('listingDetail.interestedIn', { title })
 
   return (
-    <article className="group overflow-hidden rounded-2xl border border-border bg-surface shadow-sm transition duration-300 hover:border-brand-400/40 hover:shadow-lg hover:shadow-brand-900/10 dark:hover:border-brand-600/35">
+    <article className="group overflow-hidden rounded-2xl border border-border bg-surface transition duration-300 hover:border-brand-400/40 hover:shadow-[0_20px_48px_-28px_rgba(15,23,42,0.2)] dark:hover:border-brand-600/35">
       <div className="flex flex-col @md:flex-row">
-        <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-gradient-to-br from-slate-800 to-slate-950 @md:aspect-auto @md:w-48 @lg:w-56">
+        <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-gradient-to-br from-slate-800 to-slate-950 @md:aspect-auto @md:w-52 @lg:w-60">
           {imageUrls.length > 0 ? (
             <ListingCardImageCarousel urls={imageUrls} alt={title} startOffset={index} />
           ) : (
@@ -79,25 +80,22 @@ export function LocationLayoutCard({ listing, index = 0 }: Props) {
           )}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-transparent @md:bg-gradient-to-r @md:from-slate-950/30" />
           {buildingLabel ? (
-            <span className="absolute left-3 top-3 z-[2] rounded-full bg-violet-600/95 px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-wide text-white shadow">
+            <span className="absolute left-3 top-3 z-[2] rounded-full bg-slate-950/85 px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-wide text-white shadow backdrop-blur-sm">
               {buildingLabel}
             </span>
           ) : null}
         </div>
 
         <div className="flex min-w-0 flex-1 flex-col p-5 @md:p-6">
-          <p className="text-xs font-semibold uppercase tracking-wide text-brand-600 dark:text-brand-400">
+          <p className="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-brand-700 dark:text-brand-300">
             {location}
           </p>
-          <h3 className="mt-2 text-lg font-bold leading-snug tracking-tight text-fg @lg:text-xl">
-            <Link to={detailHref} className="hover:text-brand-700 dark:hover:text-brand-300">
-              {title}
-            </Link>
-          </h3>
+          <h3 className="mt-2 text-lg font-bold leading-snug tracking-tight text-fg @lg:text-xl">{title}</h3>
 
-          <dl className="mt-4 grid grid-cols-2 gap-2">
+          <dl className={`mt-4 grid gap-2 ${size ? 'grid-cols-3' : 'grid-cols-2'}`}>
             <SpecItem label={t('layoutCard.bedrooms')} value={beds ?? t('layoutCard.notSpecified')} />
             <SpecItem label={t('layoutCard.finish')} value={finishLabel} />
+            {size ? <SpecItem label={t('layoutCard.size')} value={size} /> : null}
           </dl>
 
           {listing.description_preview ? (
@@ -106,11 +104,18 @@ export function LocationLayoutCard({ listing, index = 0 }: Props) {
             </p>
           ) : null}
 
-          <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-border pt-4">
-            <Link to={detailHref} className="btn-primary text-sm">
-              {t('layoutCard.viewDetails')}
-            </Link>
-            <span className="hidden text-xs text-fg-muted @lg:inline">{t('layoutCard.viewDetailsHint')}</span>
+          <div className="mt-5 flex flex-col gap-2 border-t border-border pt-4 sm:flex-row sm:flex-wrap sm:items-center">
+            <a href={SITE_CONTACT.telHref} className="btn-primary w-full justify-center text-sm sm:w-auto">
+              {t('contact.call')}
+            </a>
+            <a
+              href={siteWhatsAppHref(waMessage)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-secondary w-full justify-center text-sm sm:w-auto"
+            >
+              {t('contact.whatsapp')}
+            </a>
           </div>
         </div>
       </div>

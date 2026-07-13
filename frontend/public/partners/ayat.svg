@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 56" role="img" aria-label="Ayat Real Estate">
-  <rect width="200" height="56" rx="8" fill="#0c4a6e"/>
-  <text x="100" y="36" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="22" font-weight="700" fill="#ffffff">AYAT</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 48" role="img" aria-label="Ayat Real Estate">
+  <rect width="160" height="48" rx="10" fill="#7f1d1d"/>
+  <circle cx="28" cy="24" r="12" fill="#fef2f2"/>
+  <text x="28" y="29" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="16" font-weight="700" fill="#7f1d1d">A</text>
+  <text x="52" y="30" font-family="system-ui,Segoe UI,sans-serif" font-size="18" font-weight="700" letter-spacing="0.04em" fill="#ffffff">AYAT</text>
 </svg>

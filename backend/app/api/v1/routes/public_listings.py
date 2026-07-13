@@ -23,6 +23,7 @@ from app.schemas.inventory import (
     ListingMetadataPublic,
     LocationBuildingSettings,
     Paginated,
+    PublicCompany,
     PublicFilterOption,
     PublicHomeCard,
     PublicListingDetail,
@@ -638,4 +639,16 @@ def get_public_home_cards(db: Session = Depends(get_db)) -> list[PublicHomeCard]
         )
         for r in rows
     ]
+
+
+@router.get("/companies", response_model=list[PublicCompany])
+def list_public_companies(db: Session = Depends(get_db)) -> list[PublicCompany]:
+    """Active companies for the home developers section and partner pages."""
+    rows = (
+        db.query(Company)
+        .filter(Company.is_active.is_(True))
+        .order_by(Company.name)
+        .all()
+    )
+    return [PublicCompany.model_validate(r) for r in rows]
 

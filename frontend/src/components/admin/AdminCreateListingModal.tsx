@@ -289,7 +289,7 @@ export function AdminCreateListingModal({ companyId, onClose, onCreated }: Props
               </label>
             </div>
             <p className="mt-2 text-xs text-stone-500">
-              Only locations marked <strong>Active</strong> under Location pages appear here.
+              Only locations marked <strong>Active</strong> under Locations appear here.
             </p>
           </div>
 

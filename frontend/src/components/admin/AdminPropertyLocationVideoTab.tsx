@@ -63,7 +63,7 @@ export function AdminPropertyLocationVideoTab({
         <p className="text-amber-900/90 dark:text-amber-200/90">
           Create zone content under{' '}
           <Link to="/admin/listings" className="font-semibold underline">
-            Location pages
+            Locations
           </Link>{' '}
           with location ID <span className="font-mono">{projectSlug}</span>, then set the video here.
         </p>

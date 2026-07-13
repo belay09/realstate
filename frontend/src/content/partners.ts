@@ -6,7 +6,8 @@ export const AYAT_PARTNER = {
   brandName: 'Ayat Real Estate',
   website: 'https://ayatrealestate.com/',
   yearsEstablished: '25+',
-  logoUrl: 'https://ayatrealestate.com/_next/static/media/ayat_logo.daf534f7.webp',
+  // Hosted locally — remote ayatrealestate.com logo URL is unreliable / often blocked.
+  logoUrl: '/partners/ayat.svg',
 } as const
 
 export const TEMER_PARTNER = {
@@ -14,8 +15,7 @@ export const TEMER_PARTNER = {
   legalName: 'Temer Properties',
   brandName: 'Temer Properties',
   website: 'https://temerproperties.com/',
-  logoUrl:
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBSnuQ_vYSyLKopmM2ylazSbKkdxR2loqEaw&s',
+  logoUrl: '/partners/temer.svg',
 } as const
 
 export const PARTNER_SLUGS = [AYAT_PARTNER.slug, TEMER_PARTNER.slug] as const

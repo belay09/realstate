@@ -15,15 +15,17 @@ export function LanguageSwitcher({ className = '' }: { className?: string }) {
           key={id}
           type="button"
           onClick={() => setLocale(id)}
-          className={`rounded-full px-2.5 py-1.5 transition sm:px-3 ${
+          className={`rounded-full px-2 py-1 transition sm:px-3 sm:py-1.5 ${
             locale === id
               ? 'bg-brand-600 text-white shadow-sm'
               : 'text-fg-muted hover:text-brand-700 dark:hover:text-brand-300'
           }`}
           aria-pressed={locale === id}
+          aria-label={nativeLabel}
           lang={id}
         >
-          {nativeLabel}
+          <span className="sm:hidden">{id.toUpperCase()}</span>
+          <span className="hidden sm:inline">{nativeLabel}</span>
         </button>
       ))}
     </div>

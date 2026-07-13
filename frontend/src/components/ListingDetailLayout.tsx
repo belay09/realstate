@@ -7,6 +7,7 @@ import { ListingMapEmbed } from './ListingMapEmbed'
 import { PartnerLogo } from './PartnerLogo'
 import { SITE_CONTACT } from '../content/siteContact'
 import { useTranslation } from '../context/LocaleContext'
+import { SHOW_PUBLIC_CALCULATOR } from '../lib/featureFlags'
 import type { ListingCalculatorPreset } from '../lib/listingCalculatorPreset'
 import {
   formatListingBedrooms,
@@ -305,7 +306,7 @@ export function ListingDetailLayout({
             </div>
           )}
 
-          {isAyatListing && ayatPreset ? (
+          {SHOW_PUBLIC_CALCULATOR && isAyatListing && ayatPreset ? (
             <AyatPriceCalculator
               variant="embedded"
               listingPreset={ayatPreset}

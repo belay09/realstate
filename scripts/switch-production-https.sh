@@ -28,8 +28,14 @@ if [ -z "$POSTGRES_PASSWORD" ]; then
 fi
 
 JWT_SECRET_KEY=""
+CLOUDINARY_CLOUD_NAME=""
+CLOUDINARY_API_KEY=""
+CLOUDINARY_API_SECRET=""
 if [ -f backend/.env.production ]; then
   JWT_SECRET_KEY=$(grep -E '^JWT_SECRET_KEY=' backend/.env.production | cut -d= -f2- || true)
+  CLOUDINARY_CLOUD_NAME=$(grep -E '^CLOUDINARY_CLOUD_NAME=' backend/.env.production | cut -d= -f2- || true)
+  CLOUDINARY_API_KEY=$(grep -E '^CLOUDINARY_API_KEY=' backend/.env.production | cut -d= -f2- || true)
+  CLOUDINARY_API_SECRET=$(grep -E '^CLOUDINARY_API_SECRET=' backend/.env.production | cut -d= -f2- || true)
 fi
 if [ -z "$JWT_SECRET_KEY" ]; then
   JWT_SECRET_KEY="CHANGE_ME"
@@ -61,6 +67,9 @@ DEFAULT_CURRENCY=ETB
 QUOTE_EXPIRY_DAYS=7
 MAX_UPLOAD_SIZE_MB=5
 ENABLE_OCR_IMPORT=false
+CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
 BENV
 
 echo "==> Stopping IP-test stack (ports 8000/8080)..."

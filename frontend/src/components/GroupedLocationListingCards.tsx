@@ -89,9 +89,7 @@ export function GroupedLocationListingCards({
         if (items.length === 0) return null
         const mixed = type === 'mixed'
         const shopLink =
-          mixed && shopZoneId
-            ? `/calculator?kind=shop&zone=${encodeURIComponent(shopZoneId)}`
-            : null
+          mixed && shopZoneId ? `/shops/${encodeURIComponent(shopZoneId)}` : null
 
         return (
           <div key={type} className="scroll-mt-28 border-t border-border pt-10 first:border-t-0 first:pt-0">
@@ -106,7 +104,7 @@ export function GroupedLocationListingCards({
               <p className="mt-4 text-sm text-fg-muted">
                 {t('buildingType.shopFloorsHint')}{' '}
                 <Link to={shopLink} className="font-medium text-fg underline underline-offset-2">
-                  {t('buildingType.shopCalculatorLink')}
+                  {t('buildingType.shopRatesLink')}
                 </Link>
               </p>
             ) : null}

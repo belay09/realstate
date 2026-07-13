@@ -1,5 +1,6 @@
 import { useTranslation } from '../context/LocaleContext'
 import { AYAT_PARTNER, TEMER_PARTNER } from '../content/partners'
+import { developerKindPath } from '../lib/developerRoutes'
 import { DeveloperShowcasePanel } from './DeveloperShowcasePanel'
 
 const SHOWCASE_IMAGES = {
@@ -21,12 +22,8 @@ export function HomeDevelopersSection() {
         highlights={messages.ayat.highlights}
         image={SHOWCASE_IMAGES.ayat}
         imageTitle={t('home.cardAyatTitle')}
-        browseTo={`/apartments?company_slug=${AYAT_PARTNER.slug}`}
-        browseLabel={t('ayat.browseAyat')}
-        secondaryTo="/shops"
-        secondaryLabel={t('home.cardCommercialTitle')}
-        officialHref={AYAT_PARTNER.website}
-        officialLabel={t('ayat.officialSite')}
+        browseTo={developerKindPath(AYAT_PARTNER.slug)}
+        browseLabel={t('home.ctaAyat')}
       />
       <DeveloperShowcasePanel
         index={1}
@@ -38,10 +35,8 @@ export function HomeDevelopersSection() {
         highlights={messages.temer.highlights}
         image={SHOWCASE_IMAGES.temer}
         imageTitle={t('home.cardTemerTitle')}
-        browseTo={`/apartments?company_slug=${TEMER_PARTNER.slug}`}
-        browseLabel={t('temer.browseTemer')}
-        officialHref={TEMER_PARTNER.website}
-        officialLabel={t('temer.officialSite')}
+        browseTo={developerKindPath(TEMER_PARTNER.slug)}
+        browseLabel={t('home.ctaTemer')}
       />
     </section>
   )

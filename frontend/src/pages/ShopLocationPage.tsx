@@ -1,14 +1,18 @@
 import * as React from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 
 import { AyatPriceCalculator } from '../components/AyatPriceCalculator'
+import { FloorRateTable } from '../components/FloorRateTable'
 import { LocationDetailSections } from '../components/LocationDetailSections'
+import { SiteContactBanner } from '../components/SiteContactStrip'
 import { api } from '../api/client'
 import type { PublicLocationContent } from '../api/types'
+import { AYAT_PARTNER, partnerForSlug } from '../content/partners'
 import { useTranslation } from '../context/LocaleContext'
-import { formatMoney } from '../lib/format'
 import { formatShopFloorLabel } from '../lib/ayatLabels'
+import { SHOW_PUBLIC_CALCULATOR } from '../lib/featureFlags'
+import { developerShopsPath } from '../lib/developerRoutes'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { useCalculatorConfig } from '../hooks/useCalculatorConfig'
 import { useLocationBrowseSummaries } from '../hooks/useLocationBrowseSummaries'
@@ -24,6 +28,7 @@ import {
 export function ShopLocationPage() {
   const { t } = useTranslation()
   const { zoneId } = useParams<{ zoneId: string }>()
+  const [searchParams] = useSearchParams()
   const { data: config } = useCalculatorConfig()
   const { data: visibility } = useLocationVisibility()
   const summariesQuery = useLocationBrowseSummaries('shop')
@@ -37,6 +42,13 @@ export function ShopLocationPage() {
     [config, summariesQuery.data, visibility],
   )
   const location = zoneId ? getShopLocationById(zoneId, shopLocations) : undefined
+  const cmsSummary = zoneId ? summariesQuery.data?.get(zoneId) : undefined
+  const companySlug =
+    cmsSummary?.company_slug ||
+    searchParams.get('company_slug') ||
+    AYAT_PARTNER.slug
+  const partner = partnerForSlug(companySlug)
+  const shopsBackTo = partner ? developerShopsPath(partner.slug) : '/shops'
 
   const title = location ? shopLocationTitle(location, t) : t('pageTitles.shops')
   const contentQuery = useQuery({
@@ -47,9 +59,10 @@ export function ShopLocationPage() {
       return data
     },
   })
+  const content = contentQuery.data
   usePageTitle(
     title,
-    contentQuery.data?.description?.trim()?.slice(0, 160) || t('seo.shopsDescription'),
+    content?.description?.trim()?.slice(0, 160) || t('seo.shopsDescription'),
   )
 
   if (!zoneId || !location) {
@@ -57,7 +70,7 @@ export function ShopLocationPage() {
       <div className="surface p-6 text-center">
         <p className="text-h3">{t('shops.notFoundTitle')}</p>
         <p className="mt-2 text-body-sm text-fg-muted">{t('shops.notFoundBody')}</p>
-        <Link to="/shops" className="btn-primary mt-6 inline-flex">
+        <Link to={shopsBackTo} className="btn-primary mt-6 inline-flex">
           {t('shops.backToLocations')}
         </Link>
       </div>
@@ -67,75 +80,87 @@ export function ShopLocationPage() {
   const floors = shopFloorKeys(location)
   const hasRateTable = floors.length > 0
   const isBoleAir = location.id === 'bole-air'
+  const displayTitle = content?.title || title
+  const primaryImage =
+    content?.media?.find((m) => m.is_primary && m.media_type === 'image')?.url ??
+    content?.media?.find((m) => m.media_type === 'image')?.url ??
+    location.coverImageUrl ??
+    cmsSummary?.cover_image_url ??
+    null
+  const contactPrefill = t('shops.whatsappPrefill', { location: displayTitle })
 
   return (
-    <div className="space-y-10 text-left">
+    <div className="space-y-10 pb-8 text-left md:space-y-12">
       <nav className="text-sm text-fg-muted">
-        <Link to="/shops" className="font-medium text-brand-700 hover:underline dark:text-brand-300">
-          {t('shops.backToLocations')}
+        <Link
+          to={shopsBackTo}
+          className="font-medium text-brand-700 hover:underline dark:text-brand-300"
+        >
+          ← {t('shops.backToLocations')}
         </Link>
-        <span className="mx-2">/</span>
-        <span className="text-fg">{title}</span>
       </nav>
 
+      {primaryImage ? (
+        <div className="overflow-hidden rounded-[1.5rem] border border-border shadow-[0_24px_56px_-28px_rgba(15,23,42,0.22)]">
+          <img src={primaryImage} alt="" className="aspect-[21/9] w-full object-cover sm:aspect-[2.4/1]" />
+        </div>
+      ) : null}
+
       <header className="max-w-2xl">
-        <p className="text-eyebrow text-brand-700 dark:text-brand-300">{t('shops.commercial')}</p>
-        <h1 className="mt-2 text-h1">{contentQuery.data?.title || title}</h1>
-        {contentQuery.data?.subtitle ? (
-          <p className="mt-1 text-lg text-fg-muted">{contentQuery.data.subtitle}</p>
+        <p className="text-eyebrow">
+          {partner
+            ? t('shops.developerBadge', { developer: partner.brandName })
+            : t('shops.commercial')}
+        </p>
+        <h1 className="mt-3 text-h1">{displayTitle}</h1>
+        {content?.subtitle ? (
+          <p className="mt-3 text-lg font-medium text-fg-muted">{content.subtitle}</p>
         ) : null}
-        <p className="mt-4 text-body-sm">
-          {contentQuery.data?.description || t('shops.locationDetailIntro')}
+        <p className="mt-5 whitespace-pre-line text-base leading-relaxed text-fg-muted">
+          {content?.description || t('shops.locationDetailIntro')}
         </p>
         {isBoleAir ? (
-          <p className="mt-3 text-sm text-amber-800 dark:text-amber-200">{t('calculator.boleAirGroundOnly')}</p>
+          <p className="mt-3 text-sm text-amber-800 dark:text-amber-200">
+            {t('calculator.boleAirGroundOnly')}
+          </p>
         ) : null}
       </header>
 
       <LocationDetailSections
-        content={contentQuery.data}
+        content={content}
         mediaTitle={t('projectBrowse.mediaTitle')}
         cardsTitle={t('projectBrowse.layoutsTitle')}
       />
 
       {hasRateTable ? (
-        <section className="surface overflow-hidden">
-          <h2 className="border-b border-border px-5 py-4 text-sm font-semibold text-fg">
-            {t('shops.officialRatesTitle')}
-          </h2>
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[280px] text-left text-sm">
-              <thead>
-                <tr className="border-b border-border bg-surface-muted">
-                  <th className="px-5 py-3 font-semibold text-fg">{t('shops.floorColumn')}</th>
-                  <th className="px-5 py-3 font-semibold text-fg">{t('shops.pricePerSqmColumn')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {floors.map((f) => (
-                  <tr key={f} className="border-b border-border last:border-0">
-                    <td className="px-5 py-3 text-fg">{formatShopFloorLabel(f, t)}</td>
-                    <td className="px-5 py-3 font-medium text-fg">
-                      {formatMoney(location.floors[f], 'ETB')}
-                      <span className="text-fg-muted"> / m²</span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p className="px-5 py-3 text-xs text-fg-muted">{t('shops.ratesNote')}</p>
-        </section>
+        <FloorRateTable
+          id="shop-rates"
+          title={t('shops.officialRatesTitle')}
+          floorColumnLabel={t('shops.floorColumn')}
+          priceColumnLabel={t('shops.pricePerSqmColumn')}
+          note={t('shops.ratesNote')}
+          rows={floors.map((f) => ({
+            key: f,
+            floorLabel: formatShopFloorLabel(f, t),
+            pricePerSqm: location.floors[f],
+          }))}
+        />
       ) : (
-        <p className="text-sm text-fg-muted">{t('shops.ratesPending')}</p>
+        <p id="shop-rates" className="scroll-mt-28 rounded-2xl border border-border bg-surface-muted px-5 py-4 text-sm text-fg-muted">
+          {t('shops.ratesPending')}
+        </p>
       )}
 
-      {hasRateTable ? (
+      {SHOW_PUBLIC_CALCULATOR && hasRateTable ? (
         <section className="space-y-4">
           <h2 className="text-h3">{t('shops.estimateTitle')}</h2>
           <AyatPriceCalculator variant="page" initialKind="commercial" initialShopZoneId={location.id} />
         </section>
       ) : null}
+
+      <div id="shop-contact" className="scroll-mt-28">
+        <SiteContactBanner whatsAppMessage={contactPrefill} hint={t('shops.contactHint')} />
+      </div>
     </div>
   )
 }

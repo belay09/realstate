@@ -1,30 +1,29 @@
 import { Link } from 'react-router-dom'
 
-const ACTIONS = [
+const CHECKLIST = [
   {
-    title: 'Properties',
-    href: '/admin/properties',
-    desc: 'Edit Temer (and other) homes — photos, detail tabs, and public visibility.',
+    step: '1',
+    title: 'Companies',
+    href: '/admin/companies',
+    desc: 'Name, logo, description — Active partners appear on the home page.',
   },
   {
-    title: 'Location pages',
+    step: '2',
+    title: 'Locations',
     href: '/admin/listings',
-    desc: 'Ayat apartment and shop browse pages — media, descriptions, and highlight cards.',
+    desc: 'Residential or Shops pages: media, description, Active / Visible.',
   },
   {
+    step: '3',
+    title: 'Floor m² rates',
+    href: '/admin/pricing',
+    desc: 'ETB per m² rows shown on each location terminal page.',
+  },
+  {
+    step: '4',
     title: 'Leads',
     href: '/admin/leads',
-    desc: 'Read enquiries from the website and follow up with buyers.',
-  },
-  {
-    title: 'Pricing',
-    href: '/admin/pricing',
-    desc: 'Publish Ayat price tables used by the calculator and quotes.',
-  },
-  {
-    title: 'Promotions',
-    href: '/admin/promotions',
-    desc: 'Time-limited extra % off for chosen apartment or shop locations (calculator).',
+    desc: 'Optional — follow up Call / WhatsApp enquiries from the site.',
   },
 ] as const
 
@@ -33,30 +32,30 @@ export function AdminDashboardPage() {
     <div className="space-y-6 text-left">
       <h1 className="text-2xl font-semibold text-fg">Dashboard</h1>
       <p className="text-sm text-fg-muted">
-        Manage property listings (Temer and others), Ayat location pages, leads, and official Ayat
-        pricing. The public site reads listing data directly from the database.
+        How to publish — same path buyers take: home developers → location pages → floor rates.
       </p>
-      <ul className="grid gap-4 sm:grid-cols-1">
-        {ACTIONS.map(({ title, href, desc }) => (
+      <ol className="space-y-3">
+        {CHECKLIST.map(({ step, title, href, desc }) => (
           <li key={href}>
             <Link
               to={href}
-              className="surface block p-5 transition hover:border-brand-400 dark:hover:border-brand-600"
+              className="flex gap-4 rounded-lg border border-border bg-surface p-4 transition hover:border-brand-400 dark:hover:border-brand-600"
             >
-              <span className="text-lg font-semibold text-fg">{title}</span>
-              <p className="mt-2 text-sm text-fg-muted">{desc}</p>
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-50 text-sm font-semibold text-brand-800 dark:bg-brand-950 dark:text-brand-200">
+                {step}
+              </span>
+              <span>
+                <span className="text-base font-semibold text-fg">{title}</span>
+                <p className="mt-1 text-sm text-fg-muted">{desc}</p>
+              </span>
             </Link>
           </li>
         ))}
-      </ul>
+      </ol>
       <p className="text-xs text-fg-muted">
-        Public preview:{' '}
-        <Link to="/apartments" className="font-medium text-brand-700 underline dark:text-brand-300">
-          Apartments
-        </Link>
-        {' · '}
-        <Link to="/shops" className="font-medium text-brand-700 underline dark:text-brand-300">
-          Shops
+        Preview:{' '}
+        <Link to="/" className="font-medium text-brand-700 underline dark:text-brand-300">
+          Home
         </Link>
       </p>
     </div>

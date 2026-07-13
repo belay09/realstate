@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom'
-
 import type { PublicListingSummary } from '../api/types'
 import { SITE_CONTACT, siteWhatsAppHref } from '../content/siteContact'
 import { useTranslation } from '../context/LocaleContext'
@@ -18,17 +16,14 @@ function SpecCell({ label, value }: { label: string; value: string }) {
   )
 }
 
+/** Inline Temer home summary on the location terminal page. */
 export function TemerListingCard({ listing }: TemerListingCardProps) {
   const { t } = useTranslation()
-  const detailHref = `/listings/${listing.slug}`
   const imageUrl = listing.cover_image_url ?? listing.primary_image_url
   const location = formatListingLocation(listing, t)
   const waMessage = t('listingDetail.interestedIn', { title: listing.title })
 
-  const beds =
-    listing.bedrooms != null
-      ? String(listing.bedrooms)
-      : t('temerCard.specDash')
+  const beds = listing.bedrooms != null ? String(listing.bedrooms) : t('temerCard.specDash')
   const baths = listing.bathrooms ?? t('temerCard.specDash')
   const size = listing.property_size ?? t('temerCard.specDash')
 
@@ -41,7 +36,7 @@ export function TemerListingCard({ listing }: TemerListingCardProps) {
             alt=""
             loading="lazy"
             decoding="async"
-            className="h-full w-full object-cover object-center transition duration-500 group-hover:scale-105"
+            className="h-full w-full object-cover object-center"
           />
         ) : (
           <div className="flex h-full items-center justify-center text-sm text-slate-500">
@@ -54,17 +49,10 @@ export function TemerListingCard({ listing }: TemerListingCardProps) {
             {t('listingCard.forSale')}
           </span>
         </div>
-        <Link to={detailHref} className="absolute inset-0 z-[1]" aria-label={listing.title}>
-          <span className="sr-only">{listing.title}</span>
-        </Link>
       </div>
 
       <div className="flex flex-1 flex-col p-5">
-        <h3 className="text-base font-bold leading-snug text-slate-900 dark:text-slate-50">
-          <Link to={detailHref} className="hover:text-emerald-700 dark:hover:text-emerald-400">
-            {listing.title}
-          </Link>
-        </h3>
+        <h3 className="text-base font-bold leading-snug text-slate-900 dark:text-slate-50">{listing.title}</h3>
 
         {listing.description_preview ? (
           <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
@@ -88,21 +76,14 @@ export function TemerListingCard({ listing }: TemerListingCardProps) {
             <PhoneIcon className="h-4 w-4 shrink-0" />
             {t('contact.call')}
           </a>
-          <Link
-            to={detailHref}
-            className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2.5 text-sm font-semibold text-emerald-900 transition hover:bg-emerald-100 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-100 dark:hover:bg-emerald-900"
-          >
-            <CalendarIcon className="h-4 w-4 shrink-0" />
-            {t('temerCard.viewDetails')}
-          </Link>
           <a
             href={siteWhatsAppHref(waMessage)}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-lg bg-[#25D366] text-white shadow-sm transition hover:brightness-110"
-            aria-label={t('contact.whatsapp')}
+            className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#25D366] px-3 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:brightness-110"
           >
-            <WhatsAppIcon className="h-5 w-5" />
+            <WhatsAppIcon className="h-4 w-4 shrink-0" />
+            {t('contact.whatsapp')}
           </a>
         </div>
       </div>
@@ -117,18 +98,6 @@ function PhoneIcon({ className }: { className?: string }) {
         strokeLinecap="round"
         strokeLinejoin="round"
         d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-      />
-    </svg>
-  )
-}
-
-function CalendarIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
       />
     </svg>
   )

@@ -1,6 +1,7 @@
 export const en = {
   brand: {
     name: 'Habesha Real Estate Advisory',
+    shortName: 'Habesha Homes',
     tagline: 'Free real estate advisory',
     headerNote: 'Not a developer',
   },
@@ -28,6 +29,7 @@ export const en = {
     contact: 'Contact',
     contactHint: 'Call or WhatsApp for any listing enquiry.',
     explore: 'Explore',
+    developers: 'Developers',
     partners: 'Partner sites',
     tagline: 'Compare homes · Choose your developer',
     allListings: 'All listings',
@@ -40,6 +42,8 @@ export const en = {
     officialTemer: 'Official Temer website ↗',
     description:
       'A comparison platform for Ethiopian real estate. We are not a developer. Listings come from partners such as {{ayatBrand}} and {{temerBrand}}. Each home shows who built it so you can choose with confidence.',
+    descriptionSlim:
+      'Free buyer advisory for {{ayatBrand}} and {{temerBrand}}. We are not a developer.',
     copyright: 'Compare homes from multiple developers',
   },
   theme: {
@@ -58,6 +62,9 @@ export const en = {
     shops: 'Shop locations',
     listing: 'Home details',
     calculator: 'Price calculator',
+    calculatorPaused: 'Pricing guidance',
+    developerKind: '{{brand}} — choose type',
+    developerShops: '{{brand}} shop locations',
   },
   seo: {
     defaultDescription:
@@ -67,9 +74,15 @@ export const en = {
     apartmentsDescription:
       'Browse apartment locations from Ayat Share Company and Temer Properties in Addis Ababa. Free advisory to help you pick the right area and layout.',
     shopsDescription:
-      'Ayat commercial shop locations in Addis Ababa with official floor rates and price estimates. Free guidance from Habesha Real Estate Advisory.',
+      'Ayat commercial shop locations in Addis Ababa with official floor rates. Free guidance from Habesha Real Estate Advisory.',
+    developerKindDescription:
+      'Choose Residential or Shops from {{brand}}. Free buyer advisory from Habesha Real Estate Advisory.',
+    developerShopsDescription:
+      'Browse {{brand}} shop locations in Addis Ababa. Free guidance from Habesha Real Estate Advisory.',
     calculatorDescription:
       'Estimate indicative Ayat apartment and shop prices in Addis Ababa using official strategy bands. Free tool — confirm quotes with Ayat before purchase.',
+    calculatorPausedDescription:
+      'Call or WhatsApp Habesha Real Estate Advisory for indicative Ayat and Temer pricing guidance in Addis Ababa. Free advisory — no buyer fees.',
     listingDescriptionFallback:
       'View photos, specs, and pricing for this home in Addis Ababa. Free enquiry through Habesha Real Estate Advisory — no buyer fees.',
     projectDescriptionFallback:
@@ -77,10 +90,10 @@ export const en = {
   },
   apartments: {
     heroEyebrow: 'Partner apartments',
-    heroTitle: 'Pick a',
+    heroTitle: 'Residential',
     heroTitleAccent: 'location',
-    heroBody:
-      'Each card is one development. The badge shows the developer (Ayat or Temer). Open a card to see layouts and contact us.',
+    heroBody: 'Choose a location to browse homes.',
+    heroBodyFiltered: 'Choose a location to browse homes.',
     heroEyebrowAyat: 'Ayat Real Estate',
     heroEyebrowTemer: 'Temer Properties',
     heroTitleFiltered: 'Browse',
@@ -96,38 +109,46 @@ export const en = {
   },
   shops: {
     heroEyebrow: 'Ayat commercial shops',
-    heroTitle: 'Pick a shop location',
-    heroBody:
-      'Each card is one Ayat shop zone from the official strategy. Open it for floor rates and a price estimate.',
-    pickLocation: 'Tap a location to see official rates and estimate your shop price.',
+    heroTitle: 'Shops',
+    heroTitleFiltered: 'Shop locations',
+    heroBody: 'Choose a location for floor rates.',
+    heroBodyFiltered: 'Choose a location for floor rates.',
+    pickLocation: 'Tap a location to see official floor rates per m².',
     loading: 'Loading shop locations…',
     noLocations:
-      'No shop locations are published yet. In Admin → Location pages, create a shop, set Active, and refresh.',
+      'No shop locations are published yet. Call or WhatsApp us for guidance.',
+    emptyTitleFiltered: 'No {{brand}} shops published yet',
+    emptyBodyFiltered:
+      'We do not list shop locations for {{brand}} yet. Call or WhatsApp Habesha Real Estate Advisory for guidance — or browse residential locations instead.',
     commercial: 'Commercial shop',
     developer: 'Ayat Share Company',
-    tapForDetails: 'View rates & estimate',
+    tapForDetails: 'View floor rates',
     calculatorNote: 'You can also open the full shop calculator for any zone.',
     openCalculator: 'Open shop calculator',
     backToLocations: 'All shop locations',
     notFoundTitle: 'Location not found',
     notFoundBody: 'This shop zone is not in our catalogue.',
     locationDetailIntro:
-      'Official Ayat Section 11 rates per floor. Use the calculator below for your shop size and payment plan.',
+      'Official Ayat Section 11 rates per floor. Call or WhatsApp us for a quote on your shop size.',
     officialRatesTitle: 'Official price per m²',
     floorColumn: 'Floor',
     pricePerSqmColumn: 'Price',
-    ratesNote: 'Prices include VAT where applicable. Full payment discount applies in the calculator.',
+    ratesNote: 'Prices include VAT where applicable. Final quotes are confirmed with Ayat through our advisors.',
     ratesPending:
-      'Floor rates for this zone are not in the calculator yet. Add shop price rows in Admin → Pricing, or contact us for a quote.',
+      'Floor rates for this zone are not published yet. Call or WhatsApp us for a quote.',
     estimateTitle: 'Estimate your shop',
+    developerBadge: '{{developer}} shops',
+    whatsappPrefill: 'Hello, I am interested in shops at {{location}} on Habesha Real Estate Advisory.',
+    contactHint: 'Call or WhatsApp for a quote on this shop location.',
   },
   home: {
     heroEyebrow: 'Modern real estate · Addis Ababa',
-    heroTitle: 'Homes designed for',
-    heroTitleAccent: 'your',
-    heroTitleEnd: 'lifestyle.',
+    heroTitle: 'Pick a',
+    heroTitleAccent: 'developer',
+    heroTitleEnd: 'to begin.',
     heroBody:
       'We advise you on the best homes from {{ayatBrand}} and {{temerBrand}} based on your budget, area, and lifestyle. {{advisoryNotAyat}} Compare developers, then enquire through us.',
+    heroMinimalBody: 'Compare Ayat and Temer real estate — then open residential or shops.',
     advisoryNotAyat: 'We are not a developer.',
     heroFreeLine: '100% free advice — no fees and no commission from you.',
     advisoryEyebrow: 'Free advisory',
@@ -147,20 +168,35 @@ export const en = {
     advisoryCtaHint: 'Call or WhatsApp — always free for you.',
     freeBadge: '100% free',
     exploreListings: 'Explore locations',
+    pickDeveloperTitle: 'Choose a partner developer',
+    pickDeveloperHint: 'Residential or shops next',
+    ctaAyat: 'See Ayat homes & shops',
+    ctaTemer: 'See Temer homes & shops',
     marqueeTagline: 'Trusted partner developers on Habesha Real Estate Advisory',
     ayatHomes: 'Ayat homes',
     priceCalculator: 'Estimate Ayat price',
     statDevelopers: 'Partner developers',
     statExperience: 'Years of Ayat experience',
     statYou: 'Choose without limits',
-    inventoryEyebrow: 'Inventory',
-    inventoryTitle: 'Properties from partner developers',
+    inventoryEyebrow: 'Partner developers',
+    inventoryTitle: 'Start with Ayat or Temer',
     partnersEyebrow: 'Our partners',
     partnersTitle: 'Developers you can compare with us',
     partnersDescription:
-      'Browse listings from Ayat Share Company and Temer Properties. Each home shows the developer name.',
+      'Each partner below is a full showcase — browse residential homes or commercial shops. New partners appear here when published in the CMS.',
+    browseDevelopers: 'Browse developers',
+    developersCta: 'View {{name}}',
+    developersOfficialSite: 'Official website',
+    developersCardFallbackDescription:
+      'Explore residential and commercial options from {{name}} with free Habesha advice.',
+    developersEmptyTitle: 'Developers coming soon',
+    developersEmptyBody:
+      'Partner developers are not published yet. Call or WhatsApp us and we will guide you personally.',
+    developersErrorTitle: 'Could not load developers',
+    developersErrorBody: 'Please try again shortly, or contact us for free advice.',
+    developersContactPrefill: 'Hello — I would like help choosing a developer on Habesha Homes.',
     inventoryDescription:
-      'Browse by developer: Ayat Share Company and Temer Properties. Ayat commercial shops are listed separately.',
+      'Pick a developer, then choose Residential or Shops to see that company’s locations.',
     cardAyatTitle: 'Ayat apartments & shops',
     cardAyatDescription:
       'Ayat Hills, CMC, and other Ayat developments. Commercial shops use Ayat Section 11 locations.',
@@ -184,6 +220,24 @@ export const en = {
     ctaDescription: 'Browse available units, see price previews, and message us when you are ready.',
     browseListings: 'Browse listings',
     staffLogin: 'Staff login',
+  },
+  developer: {
+    heroEyebrow: 'Partner developer',
+    heroBody: 'What would you like to browse from {{brand}}?',
+    chooseKindHint: 'Residential homes or commercial shops',
+    kindSwitcherLabel: 'Product type',
+    kindResidential: 'Residential',
+    kindResidentialEyebrow: 'Apartments & homes',
+    kindResidentialBody: 'Browse this developer’s residential locations and layouts.',
+    kindShops: 'Shops',
+    kindShopsEyebrow: 'Commercial',
+    kindShopsBody: 'Browse this developer’s shop locations and floor rates.',
+    browseResidential: 'See residential locations',
+    browseShops: 'See shop locations',
+    backHome: '← Back to home',
+    backToKind: '← Residential or shops',
+    contactHint: 'Call or WhatsApp anytime — advisory is free for buyers.',
+    whatsappPrefill: 'Hello, I am interested in {{brand}} on Habesha Real Estate Advisory.',
   },
   temer: {
     featuredEyebrow: 'Featured partner developer',
@@ -269,9 +323,9 @@ export const en = {
     developerApartments: '{{developer}} apartments',
     homesHere: 'Homes at this location',
     tapForLayouts: 'View location details',
-    locationIntroFallback: 'Browse layouts, media, and pricing for this development below.',
+    locationIntroFallback: 'Browse layouts, media, and floor rates for this development below.',
     ayatLocationIntro:
-      'Explore home types at this Ayat development, watch progress photos and video, and get an indicative price.',
+      'Explore home types at this Ayat development, watch progress photos and video, and review floor rates — then call or WhatsApp us.',
     layoutsAvailable: 'layouts available',
     layoutAvailable: 'layout available',
     viewLayouts: 'View layouts',
@@ -289,11 +343,24 @@ export const en = {
     homeCount: '{{count}} example homes',
     bedroomCount: '{{count}} bedrooms',
     chooseLayout:
-      'Each layout below is a real home type at this development. Compare bedrooms, finish, and size — then open a layout for full photos, indicative Ayat pricing, and enquiry.',
+      'Each layout below is a real home type at this development. Compare bedrooms, finish, and size — then call or WhatsApp us for guidance.',
     layoutsIntro:
-      'Homes are grouped by building type. Open any layout for photos and pricing details.',
+      'Homes are grouped by building type. Specs and photos are on this page; floor rates and contact are below.',
     filterBedrooms: 'Bedrooms',
     priceEstimate: 'Price estimate',
+    officialRatesTitle: 'Official price per m² by floor',
+    floorColumn: 'Floor band',
+    homeTypeColumn: 'Home type',
+    pricePerSqmColumn: 'Price',
+    ratesNote:
+      'Indicative ETB/m² including VAT where applicable. Final quotes are confirmed through Habesha Real Estate Advisory.',
+    ratesNav: 'Floor rates',
+    contactNav: 'Contact',
+    whatsappPrefill: 'Hello, I am interested in {{location}} on Habesha Real Estate Advisory.',
+    contactHint: 'Call or WhatsApp about this location — advisory is free.',
+    priceOnRequestTitle: 'Price on request',
+    priceOnRequestBody:
+      'Floor rates for this location are not published yet. Call {{phone}} or WhatsApp us for an indicative quote.',
     backToLocations: 'All locations',
     loading: 'Loading homes…',
     missingProject: 'Missing location.',
@@ -313,6 +380,7 @@ export const en = {
     flatIntro: 'Residential-only towers — no shop floors.',
     shopFloorsHint: 'For shop floors in mixed towers,',
     shopCalculatorLink: 'use the shop price calculator',
+    shopRatesLink: 'view shop floor rates',
     otherLayouts: 'Other layouts',
     otherLayoutsHint: 'Homes not yet tagged with a building type.',
   },
@@ -435,6 +503,12 @@ export const en = {
     temerSales: 'Temer sales',
   },
   calculator: {
+    pausedEyebrow: 'Pricing guidance',
+    pausedTitle: 'Contact us for pricing',
+    pausedBody:
+      'The self-service price calculator is paused for now. Floor rates still appear on location pages where published. Call or WhatsApp our free advisory team for an indicative quote.',
+    pausedBrowseHomes: 'Browse apartments',
+    pausedBrowseShops: 'Browse shops',
     eyebrow: 'Ayat pricing · Self-service estimate',
     title: 'Calculate an indicative Ayat price',
     intro:

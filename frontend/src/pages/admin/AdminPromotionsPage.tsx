@@ -251,28 +251,28 @@ export function AdminPromotionsPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-stone-900 dark:text-stone-50">Location promotions</h1>
+        <h1 className="text-2xl font-bold text-stone-900 dark:text-stone-50">
+          Promotions <span className="text-base font-normal text-stone-500">(advanced)</span>
+        </h1>
         <p className="mt-2 text-sm text-stone-600 dark:text-stone-400">
-          Limited-time <strong>extra</strong> discount (%) for specific apartment or shop locations.
-          Visitors see it on the price calculator after the normal Ayat down-payment discount.
+          Limited-time extra discount (%) for apartment or shop locations. The public payment
+          calculator is paused — these offers mainly matter for staff tools / when the calculator is
+          restored. Public buyers rely on location m² tables + Call / WhatsApp.
         </p>
       </div>
 
       <ol className="list-decimal space-y-2 rounded-xl border border-brand-200/80 bg-brand-50/60 p-4 pl-8 text-sm text-stone-700 dark:border-brand-800/50 dark:bg-brand-950/30 dark:text-stone-300">
         <li>
-          Open <strong className="text-stone-900 dark:text-stone-100">Location pages</strong> first and
-          make sure each location you want is <strong>Active</strong> (apartment or shop).
+          Open <strong className="text-stone-900 dark:text-stone-100">Locations</strong> first and
+          make sure each location you want is <strong>Active</strong> (Residential or Shops).
         </li>
         <li>
           Here, pick <strong>Apartments</strong> or <strong>Shops</strong>, set the extra % and dates,
           then tick which locations get the offer.
         </li>
         <li>
-          Click <strong>Create promotion</strong>. Test on the public{' '}
-          <a href="/calculator" className="font-medium text-brand-700 underline dark:text-brand-400">
-            calculator
-          </a>{' '}
-          or a location page — look for the amber &quot;Special offer&quot; line.
+          Click <strong>Create promotion</strong>. For public v1, confirm location pages and rates
+          look right; calculator testing is optional (staff restore path).
         </li>
       </ol>
 
@@ -382,7 +382,7 @@ export function AdminPromotionsPage() {
                 </div>
               </div>
               <p className="mt-1 text-[11px] text-stone-500">
-                Slug must match Location pages (e.g. <span className="font-mono">cmc-extension</span>{' '}
+                Slug must match Locations (e.g. <span className="font-mono">cmc-extension</span>{' '}
                 for apartments, <span className="font-mono">cmc-extension-shop</span> for shops).
               </p>
               <div className="mt-2 max-h-48 overflow-y-auto rounded-lg border border-stone-200 p-2 dark:border-stone-700">

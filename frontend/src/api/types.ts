@@ -9,7 +9,17 @@ export type Company = {
   slug: string
   phone: string | null
   website: string | null
+  logo_url: string | null
+  description: string | null
   is_active: boolean
+}
+
+export type PublicCompany = {
+  slug: string
+  name: string
+  website: string | null
+  logo_url: string | null
+  description: string | null
 }
 
 export type Project = {

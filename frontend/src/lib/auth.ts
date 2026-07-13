@@ -20,7 +20,7 @@ export function isLoggedIn(): boolean {
 }
 
 export function adminEntryPath(): string {
-  return isLoggedIn() ? '/admin' : '/admin/login'
+  return isLoggedIn() ? '/admin/companies' : '/admin/login'
 }
 
 function subscribeAuth(callback: () => void): () => void {

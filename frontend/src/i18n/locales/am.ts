@@ -3,6 +3,7 @@ import type { Messages } from './en'
 export const am = {
   brand: {
     name: 'ሐበሻ ሪል ኢስቴት አድቫይዘሪ',
+    shortName: 'ሐበሻ ሆምስ',
     tagline: 'ነጻ የሪል ኢስቴት ምክር',
     headerNote: 'እኛ ሪል እስቴት አልሚ አይደለንም',
   },
@@ -30,6 +31,7 @@ export const am = {
     contact: 'እውቂያ',
     contactHint: 'ስለ ማንኛውም ዝርዝር ይደውሉ ወይም በዋትስአፕ ይጻፉ።',
     explore: 'ያስሱ',
+    developers: 'አልሚዎች',
     partners: 'የአጋር ድረ-ገጾች',
     tagline: 'ቤቶችን ያወዳድሩ · አልሚውን ይምረጡ',
     allListings: 'ሁሉም ዝርዝሮች',
@@ -42,6 +44,7 @@ export const am = {
     officialTemer: 'የቴመር ኦፊሴላዊ ድረ-ገጽ ↗',
     description:
       'ለኢትዮጵያ ንብረት ማወዳደሪያ መድረክ ነን። እኛ ራሳችን አልሚ አይደለንም። የቤቶቹ ዝርዝር ከ{{ayatBrand}} እና {{temerBrand}} ይመጣል፤ እያንዳንዱን ቤት ማን እንደገነባው በግልጽ ያሳያል።',
+    descriptionSlim: 'ለ{{ayatBrand}} እና {{temerBrand}} ነጻ የገዢ ምክር። እኛ አልሚ አይደለንም።',
     copyright: 'ከተለያዩ አልሚዎች ቤቶችን ያወዳድሩ',
   },
   theme: {
@@ -60,6 +63,9 @@ export const am = {
     shops: 'የመደብር ቦታዎች',
     listing: 'የቤት ዝርዝር',
     calculator: 'የዋጋ ስሌት',
+    calculatorPaused: 'የዋጋ መመሪያ',
+    developerKind: '{{brand}} — ዓይነት ይምረጡ',
+    developerShops: 'የ{{brand}} መደብር ቦታዎች',
   },
   seo: {
     defaultDescription:
@@ -70,8 +76,14 @@ export const am = {
       'በአዲስ አበባ ከአያት አክሲዮን ማኅበር እና ቴመር ፕሮፐርቲስ የአፓርታማ ቦታዎችን ያስሱ። ትክክለኛውን አካባቢ እና አቀማመጥ ለመምረጥ ነጻ ምክር።',
     shopsDescription:
       'በአዲስ አበባ የአያት ንግድ መደብር ቦታዎች ከኦፊሴላዊ የወለል ዋጋ ጋር። ከሐበሻ ሪል ኢስቴት አድቫይዘሪ ነጻ መመሪያ።',
+    developerKindDescription:
+      'ከ{{brand}} የመኖሪያ ወይም መደብር ይምረጡ። ከሐበሻ ሪል ኢስቴት አድቫይዘሪ ነጻ የገዢ ምክር።',
+    developerShopsDescription:
+      'በአዲስ አበባ የ{{brand}} መደብር ቦታዎችን ያስሱ። ከሐበሻ ሪል ኢስቴት አድቫይዘሪ ነጻ መመሪያ።',
     calculatorDescription:
       'በአዲስ አበባ የአያት አፓርታማ እና መደብር ዋጋ ቅድመ ስሌት። ነጻ መሳሪያ — ከመግዛትዎ በፊት ከአያት ያረጋግጡ።',
+    calculatorPausedDescription:
+      'ለአያት እና ቴመር ዋጋ መመሪያ ወደ ሐበሻ ሪል ኢስቴት አድቫይዘሪ ይደውሉ ወይም በዋትስአፕ ይጻፉ። ነጻ ምክር — ከገዢ ክፍያ የለም።',
     listingDescriptionFallback:
       'በአዲስ አበባ ለዚህ ቤት ፎቶ፣ ዝርዝር እና ዋጋ ይመልከቱ። ከሐበሻ ሪል ኢስቴት አድቫይዘሪ ነጻ ጥያቄ — ከገዢ ክፍያ የለም።',
     projectDescriptionFallback:
@@ -79,9 +91,10 @@ export const am = {
   },
   apartments: {
     heroEyebrow: 'የአጋር አፓርታማ',
-    heroTitle: 'ቦታ',
+    heroTitle: 'መኖሪያ',
     heroTitleAccent: 'ይምረጡ',
-    heroBody: 'እያንዳንዱ ካርድ አንድ ፕሮጀክት ነው። ባጅ ላይ አልሚው (አያት ወይም ቴመር) ይታያል። ቤቶችን ለማየት ይክፈቱ።',
+    heroBody: 'ቤቶችን ለማሰስ ቦታ ይምረጡ።',
+    heroBodyFiltered: 'ቤቶችን ለማሰስ ቦታ ይምረጡ።',
     heroEyebrowAyat: 'አያት ሪል እስቴት',
     heroEyebrowTemer: 'ቴመር ፕሮፐርቲዝ',
     heroTitleFiltered: 'ያስሱ',
@@ -97,36 +110,44 @@ export const am = {
   },
   shops: {
     heroEyebrow: 'የአያት ንግድ መደብሮች',
-    heroTitle: 'የመደብር ቦታ ይምረጡ',
-    heroBody: 'እያንዳንዱ ካርድ ከኦፊሴላዊ ስትራቴጂ የመደብር ቦታ ነው። የወለል ዋጋ እና ቅድመ ስሌት ለማየት ይክፈቱ።',
-    pickLocation: 'የወለል ዋጋ እና የመደብርዎን ዋጋ ለማየት ቦታውን ይንኩ።',
+    heroTitle: 'መደብሮች',
+    heroTitleFiltered: 'የመደብር ቦታዎች',
+    heroBody: 'የወለል ዋጋ ለማየት ቦታ ይምረጡ።',
+    heroBodyFiltered: 'የወለል ዋጋ ለማየት ቦታ ይምረጡ።',
+    pickLocation: 'ኦፊሴላዊ የወለል ዋጋ በካሬ ሜትር ለማየት ቦታውን ይንኩ።',
     loading: 'የመደብር ቦታዎች በመጫን ላይ…',
-    noLocations:
-      'የታየ መደብር ቦታ የለም። በአስተዳዳሪ → Location pages መደብር ይፍጠሩ፣ Active ያድርጉ እና ያድሱ።',
+    noLocations: 'የታየ መደብር ቦታ የለም። ለመመሪያ ይደውሉ ወይም በዋትስአፕ ይጻፉ።',
+    emptyTitleFiltered: 'የ{{brand}} መደብሮች ገና አልታተሙም',
+    emptyBodyFiltered:
+      'ለ{{brand}} የመደብር ቦታዎች ገና አልተዘረዘሩም። ለመመሪያ ወደ ሐበሻ ሪል ኢስቴት አድቫይዘሪ ይደውሉ ወይም በዋትስአፕ ይጻፉ — ወይም የመኖሪያ ቦታዎችን ያስሱ።',
     commercial: 'የንግድ መደብር',
     developer: 'አያት አክሲዮን ማኅበር',
-    tapForDetails: 'ዋጋ እና ስሌት ይመልከቱ',
+    tapForDetails: 'የወለል ዋጋ ይመልከቱ',
     calculatorNote: 'ለማንኛውም ቦታ ሙሉ የመደብር ስሌትም ማስፈንጠር ይቻላል።',
     openCalculator: 'የመደብር ስሌት ክፈት',
     backToLocations: 'ሁሉም የመደብር ቦታዎች',
     notFoundTitle: 'ቦታ አልተገኘም',
     notFoundBody: 'ይህ የመደብር ቦታ በካታሎጋችን ውስጥ የለም።',
-    locationDetailIntro: 'የአያት ክፍል 11 ኦፊሴላዊ ዋጋ በወለል። የመደብርዎን ስፋት እና የክፍያ ዕቅድ ከታች ያስሉ።',
+    locationDetailIntro:
+      'የአያት ክፍል 11 ኦፊሴላዊ ዋጋ በወለል። ለመደብርዎ ስፋት ዋጋ ለማግኘት ይደውሉ ወይም በዋትስአፕ ይጻፉ።',
     officialRatesTitle: 'ኦፊሴላዊ ዋጋ በካሬ ሜትር',
     floorColumn: 'ወለል',
     pricePerSqmColumn: 'ዋጋ',
-    ratesNote: 'ዋጋዎች ተገቢ ሲሆን ቫት ይጨምራሉ። ሙሉ ክፍያ ቅናሽ በስሌቱ ውስጥ ይታያል።',
-    ratesPending:
-      'ለዚህ ቦታ የወለድ ዋጋ በስሌቱ ውስጥ አልተገኘም። በአስተዳዳሪ → Pricing ይጨምሩ ወይም ዋጋ ለመጠየቅ ያግኙን።',
+    ratesNote: 'ዋጋዎች ተገቢ ሲሆን ቫት ይጨምራሉ። የመጨረሻ ዋጋ ከአያት በአማካሪዎቻችን በኩል ይረጋገጣል።',
+    ratesPending: 'ለዚህ ቦታ የወለል ዋጋ ገና አልታተመም። ዋጋ ለመጠየቅ ይደውሉ ወይም በዋትስአፕ ይጻፉ።',
     estimateTitle: 'የመደብርዎን ዋጋ ያስሁ',
+    developerBadge: 'የ{{developer}} መደብሮች',
+    whatsappPrefill: 'ሰላም፣ በሐበሻ ሪል ኢስቴት አድቫይዘሪ ስለ {{location}} መደብሮች ፍላጎት አለኝ።',
+    contactHint: 'ለዚህ የመደብር ቦታ ዋጋ ይደውሉ ወይም በዋትስአፕ ይጻፉ።',
   },
   home: {
     heroEyebrow: 'ዘመናዊ ሪል እስቴት · አዲስ አበባ',
-    heroTitle: 'ለእርስዎ',
-    heroTitleAccent: 'ኑሮ',
-    heroTitleEnd: 'የተነደፉ ቤቶች።',
+    heroTitle: 'ለመጀመር',
+    heroTitleAccent: 'አልሚ',
+    heroTitleEnd: 'ይምረጡ።',
     heroBody:
       'በበጀትዎ፣ በቦታ እና በኑሮ ተስማሚ የሆኑትን ከ{{ayatBrand}} እና {{temerBrand}} ምርጥ ቤቶች እንመክራለን። {{advisoryNotAyat}} አልሚዎችን ያወዳድሩና ያግኙን።',
+    heroMinimalBody: 'የአያትና የቴመር ሪል እስቴት ያወዳድሩ — ከዚያ መኖሪያ ወይም መደብር ይክፈቱ።',
     advisoryNotAyat: 'እኛ አልሚ አይደለንም።',
     heroFreeLine: '100% ነጻ ምክር — ከእርስዎ ምንም ክፍያ ወይም ኮሚሽን የለም።',
     advisoryEyebrow: 'ነጻ ምክር',
@@ -145,20 +166,34 @@ export const am = {
     advisoryCtaHint: 'ይደውሉ ወይም በዋትስአፕ ይጻፉ — ሁልጊዜ ነጻ።',
     freeBadge: '100% ነጻ',
     exploreListings: 'ቦታዎችን ያስሱ',
+    pickDeveloperTitle: 'አጋር አልሚ ይምረጡ',
+    pickDeveloperHint: 'መኖሪያ ወይም መደብር ቀጥሎ',
+    ctaAyat: 'የአያት ቤቶችና መደብሮች',
+    ctaTemer: 'የቴመር ቤቶችና መደብሮች',
     marqueeTagline: 'በሐበሻ ሪል ኢስቴት አድቫይዘሪ ላይ ታመኑ አጋር አልሚዎች',
     ayatHomes: 'የአያት ቤቶች',
     priceCalculator: 'የአያት ዋጋ ያስሉ',
     statDevelopers: 'አጋር አልሚዎች',
     statExperience: 'የአያት ልምድ (ዓመታት)',
     statYou: 'ያለ ገደብ ይምረጡ',
-    inventoryEyebrow: 'ዝርዝር',
-    inventoryTitle: 'ከአጋር አልሚዎች የቀረቡ ቤቶች',
+    inventoryEyebrow: 'አጋር አልሚዎች',
+    inventoryTitle: 'ከአያት ወይም ቴመር ይጀምሩ',
     partnersEyebrow: 'አጋሮቻችን',
     partnersTitle: 'ከእኛ ጋር የሚወዳደሩ አልሚዎች',
     partnersDescription:
-      'ከአያት አክሲዮን ማኅበር እና ቴመር ፕሮፐርቲስ ዝርዝሮችን ያስሱ። እያንዳንዱ ቤት አልሚውን ያሳያል።',
-    inventoryDescription:
-      'በአልሚ ይለዩ፡ አያት አክሲዮን ማኅበር እና ቴመር ፕሮፐርቲስ። የአያት መደብሮች በተለየ ይታያሉ።',
+      'ከዚህ በታች ያለው እያንዳንዱ አጋር ሙሉ ትዕይንት ነው — የመኖሪያ ቤቶችን ወይም የንግድ መደብሮችን ያስሱ። አዲስ አጋሮች በCMS ሲታተሙ እዚህ ይታያሉ።',
+    browseDevelopers: 'አልሚዎችን ይመልከቱ',
+    developersCta: '{{name}}ን ይመልከቱ',
+    developersOfficialSite: 'ኦፊሴላዊ ድረ-ገጽ',
+    developersCardFallbackDescription:
+      'ከ{{name}} የመኖሪያና የንግድ አማራጮችን በነጻ የሐበሻ ምክር ያስሱ።',
+    developersEmptyTitle: 'አልሚዎች በቅርቡ',
+    developersEmptyBody:
+      'አጋር አልሚዎች ገና አልታተሙም። ይደውሉ ወይም በዋትስአፕ ይጻፉ — በግል እንመራዎታለን።',
+    developersErrorTitle: 'አልሚዎችን መጫን አልተቻለም',
+    developersErrorBody: 'እባክዎ ትንሽ ቆይተው እንደገና ይሞክሩ፣ ወይም ለነጻ ምክር ያግኙን።',
+    developersContactPrefill: 'ሰላም — በሐበሻ ሆምስ አልሚ ለመምረጥ እርዳታ እፈልጋለሁ።',
+    inventoryDescription: 'አልሚ ይምረጡ፣ ከዚያ የመኖሪያ ወይም መደብር በመምረጥ የዚያን ኩባንያ ቦታዎች ይመልከቱ።',
     cardAyatTitle: 'የአያት አፓርታማዎች እና መደብሮች',
     cardAyatDescription:
       'አያት ሂልስ፣ ሲኤምሲ እና ሌሎች የአያት ፕሮጀክቶች። መደብሮች ከአያት ክፍል 11 ቦታዎች ይጠቀማሉ።',
@@ -166,9 +201,6 @@ export const am = {
     cardTemerTitle: 'የቴመር አፓርታማዎች',
     cardTemerDescription:
       'ሳርቤት ሲቲ ፕላስ፣ ብሉ ፖይንት፣ አዋሬ፣ ገላን ሾፒንግ ሴንተር እና ሌሎች የቴመር ዝርዝሮች።',
-    cardResidentialTitle: 'አፓርታማዎች',
-    cardResidentialDescription:
-      'አያት ሂልስ፣ ሲኤምሲ እና ሌሎች ቤቶች። ቦታዎች ከአያት ስትራቴጂ ክፍል 10 ጋር ይጣጣማሉ።',
     cardCommercialTitle: 'የንግድ መደብሮች',
     cardCommercialDescription:
       'ልደታ፣ ካዛንቺስ፣ ቦሌ ኤር እና ሌሎች ክፍል 11 ቦታዎች — ከአፓርታማዎች የተለየ።',
@@ -185,6 +217,24 @@ export const am = {
     ctaDescription: 'የሚገኙ ክፍሎችን ያስሱ፣ የዋጋ ቅድመ እይታዎችን ይመልከቱ፣ ዝግጁ ሲሆኑ ይጠይቁን።',
     browseListings: 'ዝርዝሮችን ያስሱ',
     staffLogin: 'የሰራተኛ መግቢያ',
+  },
+  developer: {
+    heroEyebrow: 'አጋር አልሚ',
+    heroBody: 'ከ{{brand}} ምን ማሰስ ይፈልጋሉ?',
+    chooseKindHint: 'የመኖሪያ ቤቶች ወይም የንግድ መደብሮች',
+    kindSwitcherLabel: 'የምርት ዓይነት',
+    kindResidential: 'መኖሪያ',
+    kindResidentialEyebrow: 'አፓርታማዎች እና ቤቶች',
+    kindResidentialBody: 'የዚህ አልሚ የመኖሪያ ቦታዎችን እና አቀማመጦችን ያስሱ።',
+    kindShops: 'መደብሮች',
+    kindShopsEyebrow: 'ንግድ',
+    kindShopsBody: 'የዚህ አልሚ የመደብር ቦታዎችን እና የወለል ዋጋ ያስሱ።',
+    browseResidential: 'የመኖሪያ ቦታዎችን ይመልከቱ',
+    browseShops: 'የመደብር ቦታዎችን ይመልከቱ',
+    backHome: '← ወደ መነሻ',
+    backToKind: '← መኖሪያ ወይም መደብር',
+    contactHint: 'በማንኛውም ጊዜ ይደውሉ ወይም በዋትስአፕ ይጻፉ — ለገዢዎች ምክር ነጻ ነው።',
+    whatsappPrefill: 'ሰላም፣ በሐበሻ ሪል ኢስቴት አድቫይዘሪ ስለ {{brand}} ፍላጎት አለኝ።',
   },
   temer: {
     featuredEyebrow: 'ዋና አጋር አልሚ',
@@ -269,8 +319,9 @@ export const am = {
     developerApartments: '{{developer}} አፓርታማ',
     homesHere: 'በዚህ ቦታ ያሉ ቤቶች',
     tapForLayouts: 'የቦታ ዝርዝር ይመልከቱ',
-    locationIntroFallback: 'ከታች ለዚህ ቦታ የቤት አይነቶች፣ ሚዲያ እና ዋጋ ይመልከቱ።',
-    ayatLocationIntro: 'በዚህ የአያት ልማት የቤት አይነቶች፣ ፎቶ/ቪዲዮ እና አመልካች ዋጋ ይመልከቱ።',
+    locationIntroFallback: 'ከታች ለዚህ ቦታ የቤት አይነቶች፣ ሚዲያ እና የወለል ዋጋ ይመልከቱ።',
+    ayatLocationIntro:
+      'በዚህ የአያት ልማት የቤት አይነቶች፣ ፎቶ/ቪዲዮ እና የወለል ዋጋ ይመልከቱ — ከዚያ ይደውሉ ወይም በዋትስአፕ ይጻፉ።',
     layoutsAvailable: 'የቤት አይነቶች',
     layoutAvailable: 'የቤት አይነት',
     viewLayouts: 'አይነቶችን ይመልከቱ',
@@ -288,11 +339,24 @@ export const am = {
     homeCount: '{{count}} የምሳሌ ቤቶች',
     bedroomCount: '{{count}} መኝታ',
     chooseLayout:
-      'ከታች ያሉት እያንዳንዱ በዚህ ቦታ ያለው የምሳሌ ክፍል ነው። የሚፈልጉትን የመኝታ ብዛት እና ጨረታ ይምረጡ፤ ፎቶ፣ ዋጋ እና ጥያቄ ለመላክ ይክፈቱ።',
+      'ከታች ያሉት እያንዳንዱ በዚህ ቦታ ያለው የምሳሌ ክፍል ነው። የመኝታ ብዛት፣ ጨረታ እና ስፋት ያወዳድሩ — ከዚያ ይደውሉ ወይም በዋትስአፕ ይጻፉ።',
     layoutsIntro:
-      'ቤቶች በየየህንፃ አይነት ተመድበዋል። ማንኛውንም አማራጭ ለፎቶ እና ዋጋ ይክፈቱ።',
+      'ቤቶች በየየህንፃ አይነት ተመድበዋል። ዝርዝር እና ፎቶ በዚህ ገጽ ላይ ናቸው፤ የወለል ዋጋ እና ግንኙነት ከታች ናቸው።',
     filterBedrooms: 'መኝታ',
     priceEstimate: 'የዋጋ ቅድመ ስሌት',
+    officialRatesTitle: 'ኦፊሴላዊ ዋጋ በካሬ ሜትር በወለል',
+    floorColumn: 'የወለል ክልል',
+    homeTypeColumn: 'የቤት አይነት',
+    pricePerSqmColumn: 'ዋጋ',
+    ratesNote:
+      'አመልካች ETB/m² — ተገቢ ሲሆን ቫት ይጨምራል። የመጨረሻ ዋጋ በሐበሻ ሪል ኢስቴት አድቫይዘሪ በኩል ይረጋገጣል።',
+    ratesNav: 'የወለል ዋጋ',
+    contactNav: 'ግንኙነት',
+    whatsappPrefill: 'ሰላም፣ በሐበሻ ሪል ኢስቴት አድቫይዘሪ ስለ {{location}} ፍላጎት አለኝ።',
+    contactHint: 'ስለዚህ ቦታ ይደውሉ ወይም በዋትስአፕ ይጻፉ — ምክር ነጻ ነው።',
+    priceOnRequestTitle: 'ዋጋ በጥያቄ',
+    priceOnRequestBody:
+      'ለዚህ ቦታ የወለል ዋጋ ገና አልታተመም። አመልካች ዋጋ ለማግኘት በ {{phone}} ይደውሉ ወይም በዋትስአፕ ይጻፉ።',
     backToLocations: 'ሁሉም ቦታዎች',
     loading: 'ቤቶች በመጫን ላይ…',
     missingProject: 'ቦታ አልተገኘም።',
@@ -312,6 +376,7 @@ export const am = {
     flatIntro: 'Residential-only towers — no shop floors.',
     shopFloorsHint: 'For shop floors in mixed towers,',
     shopCalculatorLink: 'use the shop price calculator',
+    shopRatesLink: 'የመደብር የወለል ዋጋ ይመልከቱ',
     otherLayouts: 'Other layouts',
     otherLayoutsHint: 'Homes not yet tagged with a building type.',
   },
@@ -433,6 +498,12 @@ export const am = {
     temerSales: 'የቴመር ሽያጭ',
   },
   calculator: {
+    pausedEyebrow: 'የዋጋ መመሪያ',
+    pausedTitle: 'ለዋጋ ያግኙን',
+    pausedBody:
+      'የራስ አገልግሎት የዋጋ ስሌት ለጊዜው ቆሟል። የወለል ዋጋዎች በቦታ ገጾች ላይ ይታያሉ። ለቅድመ ዋጋ ነጻ አማካሪዎቻችንን ይደውሉ ወይም በዋትስአፕ ይጻፉ።',
+    pausedBrowseHomes: 'አፓርታማዎችን ያስሱ',
+    pausedBrowseShops: 'መደብሮችን ያስሱ',
     eyebrow: 'የአያት ዋጋ · የራስዎ ቅድመ ስሌት',
     title: 'የአያት ዋጋ ቅድመ ስሌት',
     intro:

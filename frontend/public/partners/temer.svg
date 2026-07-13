@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 56" role="img" aria-label="Temer Properties">
-  <rect width="200" height="56" rx="8" fill="#14532d"/>
-  <text x="100" y="36" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="20" font-weight="700" fill="#ffffff">TEMER</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 48" role="img" aria-label="Temer Properties">
+  <rect width="180" height="48" rx="10" fill="#14532d"/>
+  <rect x="12" y="12" width="24" height="24" rx="6" fill="#ecfdf5"/>
+  <path d="M18 30V18h4.2l3.3 8.2L29.8 18H34v12h-3.6v-7.1L26.8 30h-3.6l-3.5-7.1V30H18z" fill="#14532d"/>
+  <text x="48" y="30" font-family="system-ui,Segoe UI,sans-serif" font-size="17" font-weight="700" letter-spacing="0.03em" fill="#ffffff">TEMER</text>
 </svg>

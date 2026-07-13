@@ -18,7 +18,7 @@ export function AdminLoginPage() {
     onSuccess(token) {
       setAccessToken(token)
       setError(null)
-      navigate('/admin', { replace: true })
+      navigate('/admin/companies', { replace: true })
     },
     onError(err: unknown) {
       const ax = err as { response?: { data?: { error?: { message?: string } } } }
@@ -28,7 +28,7 @@ export function AdminLoginPage() {
   })
 
   if (getAccessToken()) {
-    return <Navigate to="/admin" replace />
+    return <Navigate to="/admin/companies" replace />
   }
 
   return (

@@ -50,14 +50,6 @@ export function PartnerAyatSection({ compact = false }: PartnerAyatSectionProps)
             <Link to="/shops" className="btn-secondary">
               {t('home.cardCommercialTitle')}
             </Link>
-            <a
-              href={AYAT_PARTNER.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-secondary"
-            >
-              {t('ayat.officialSite')}
-            </a>
           </div>
         </div>
       </div>

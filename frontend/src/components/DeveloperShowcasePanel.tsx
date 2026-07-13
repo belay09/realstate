@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 import type { PartnerSlug } from '../content/partners'
 import { AYAT_PARTNER, TEMER_PARTNER, partnerForSlug } from '../content/partners'
-import { ButtonArrow, ButtonArrowExternal } from './ButtonArrow'
+import { ButtonArrow } from './ButtonArrow'
 import { PartnerLogo } from './PartnerLogo'
 
 const ACCENT = {
@@ -28,8 +28,6 @@ type DeveloperShowcasePanelProps = {
   imageTitle?: string
   browseTo: string
   browseLabel: string
-  officialHref: string
-  officialLabel: string
   secondaryTo?: string
   secondaryLabel?: string
   reverse?: boolean
@@ -46,8 +44,6 @@ export function DeveloperShowcasePanel({
   imageTitle,
   browseTo,
   browseLabel,
-  officialHref,
-  officialLabel,
   secondaryTo,
   secondaryLabel,
   reverse = false,
@@ -117,9 +113,6 @@ export function DeveloperShowcasePanel({
                   {secondaryLabel.replace(/:$/, '')}
                 </ButtonArrow>
               ) : null}
-              <ButtonArrowExternal href={officialHref} variant="outline">
-                {officialLabel.replace(/ ↗$/, '')}
-              </ButtonArrowExternal>
             </div>
           </div>
 

@@ -159,7 +159,7 @@ export function CopyListingsPanel({
       ) : null}
       {targetOptions.length === 0 ? (
         <p className="mt-2 text-xs text-stone-500">
-          Add another Active {sourceKind} location under Location pages first.
+          Add another Active {sourceKind} location under Locations first.
         </p>
       ) : null}
     </section>

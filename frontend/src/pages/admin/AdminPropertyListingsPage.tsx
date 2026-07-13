@@ -200,17 +200,20 @@ export function AdminPropertyListingsPage() {
   return (
     <div className="space-y-6 text-left">
       <div>
-        <h1 className="text-2xl font-semibold text-stone-900 dark:text-stone-50">Property listings</h1>
+        <h1 className="text-2xl font-semibold text-stone-900 dark:text-stone-50">
+          Properties <span className="text-base font-normal text-stone-500">(advanced)</span>
+        </h1>
         <p className="mt-2 text-sm text-stone-600 dark:text-stone-400">
-          Manage homes shown on the public site — titles, photos, detail tabs, and visibility. Each
-          listing is linked to a <strong>development (project)</strong> such as Kazanchis or CMC; see
-          the Location column and the Basics tab when editing. Use{' '}
+          Optional unit layouts and inventory. <strong>Not required</strong> to publish a public
+          location page — use{' '}
           <Link to="/admin/listings" className="font-medium text-brand-700 underline dark:text-brand-300">
-            Location pages
+            Locations
           </Link>{' '}
-          for zone hero, video, and description (not for assigning homes). Use{' '}
-          <strong>Copy</strong> on a row or the blue <strong>Copy all listings</strong> box when a
-          location is selected — same idea as Pricing.
+          for media, description, and visibility, and{' '}
+          <Link to="/admin/pricing" className="font-medium text-brand-700 underline dark:text-brand-300">
+            Floor m² rates
+          </Link>{' '}
+          for the public rate tables. Keep this screen for deep listing detail or internal inventory.
         </p>
       </div>
 
@@ -735,7 +738,7 @@ function ListingEditModal({
                       disabled={locationOptions.length === 0}
                     >
                       {locationOptions.length === 0 ? (
-                        <option value="">No active locations — add one under Location pages</option>
+                        <option value="">No active locations — add one under Locations</option>
                       ) : (
                         locationOptions.map((row) => (
                           <option key={row.id} value={row.location_id}>
@@ -749,7 +752,7 @@ function ListingEditModal({
                 <p className="mt-2 text-xs text-stone-500">
                   Only locations marked <strong>Active</strong> in{' '}
                   <Link to="/admin/listings" className="font-medium text-brand-700 underline dark:text-brand-300">
-                    Location pages
+                    Locations
                   </Link>{' '}
                   appear here. Saving creates the development project automatically if needed.
                 </p>
@@ -898,7 +901,7 @@ function ListingEditModal({
                   </div>
                   <p className="text-xs text-stone-500">
                     Mixed: shops on lower floors, apartments above. Enable types and floor rules on the
-                    location page under Admin → Location pages.
+                    location page under Admin → Locations.
                   </p>
                 </div>
               ) : null}

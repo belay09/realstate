@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 
 import { useTranslation } from '../context/LocaleContext'
 import { AYAT_PARTNER, TEMER_PARTNER } from '../content/partners'
+import { developerKindPath } from '../lib/developerRoutes'
 import { PartnerLogo } from './PartnerLogo'
 
 const PARTNERS = [AYAT_PARTNER, TEMER_PARTNER] as const
@@ -56,7 +57,7 @@ function HeroPartnerStrip({ heroImage, tagline }: { heroImage?: string; tagline:
       key={`${p.slug}-${i}`}
       slug={p.slug}
       name={p.brandName}
-      to={`/apartments?company_slug=${p.slug}`}
+      to={developerKindPath(p.slug)}
     />
   ))
 
@@ -123,7 +124,7 @@ export function PartnerMarquee({ variant = 'default', heroImage }: PartnerMarque
       key={p.slug}
       slug={p.slug}
       name={p.brandName}
-      to={`/apartments?company_slug=${p.slug}`}
+      to={developerKindPath(p.slug)}
     />
   ))
 

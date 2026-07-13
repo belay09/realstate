@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 
 import { api } from '../../api/client'
 import type { AdminLocationContent, Paginated } from '../../api/types'
+import { SHOW_ADMIN_ADVANCED } from '../../lib/featureFlags'
 
 type CommercialZoneStored = {
   id: string
@@ -112,12 +113,11 @@ export function CalculatorConfigEditor({ companyId, initialConfig }: Props) {
     <section className="space-y-4 rounded-xl border border-stone-200 bg-white p-4 dark:border-stone-800 dark:bg-stone-950">
       <div>
         <h2 className="text-sm font-semibold text-stone-800 dark:text-stone-200">
-          Calculator — shops & payment plans
+          Shop floor rates (ETB per m²)
         </h2>
         <p className="mt-1 text-sm text-stone-600 dark:text-stone-400">
-          Apartment rates are set in the price rows above. Here you set shop ETB/m² by floor and
-          client discount by down-payment tier. Only <strong>Active</strong> shop locations from
-          Location pages appear below; saving removes rates for hidden or deleted shops.
+          GF–3F rates shown on public shop location pages. Create Active shop locations first under
+          Locations.
         </p>
       </div>
 
@@ -129,7 +129,7 @@ export function CalculatorConfigEditor({ companyId, initialConfig }: Props) {
           <p className="text-sm text-stone-500">Loading shop locations…</p>
         ) : activeShops.length === 0 ? (
           <p className="text-sm text-stone-500">
-            No Active shop locations. Create one under Location pages and mark it Active.
+            No Active shop locations. Create one under Locations and mark it Active.
           </p>
         ) : (
           <>
@@ -218,7 +218,7 @@ export function CalculatorConfigEditor({ companyId, initialConfig }: Props) {
                     </>
                   ) : zones.length <= 1 ? (
                     <p className="text-xs text-stone-500">
-                      Add another Active shop under Location pages to copy rates between shops.
+                      Add another Active shop under Locations to copy rates between shops.
                     </p>
                   ) : null}
                 </div>
@@ -272,10 +272,16 @@ export function CalculatorConfigEditor({ companyId, initialConfig }: Props) {
         )}
       </div>
 
+      {/* Phase4+ slim: payment-tier complexity hidden; shop zone rows stay editable */}
+      {SHOW_ADMIN_ADVANCED ? (
       <div className="space-y-3">
         <h3 className="text-xs font-semibold uppercase tracking-wide text-stone-500">
-          Down payment tiers (client discount %)
+          Down payment tiers (staff / calculator restore)
         </h3>
+        <p className="text-xs text-stone-500">
+          Not required for public location m² tables. Kept so the calculator can be turned back on
+          later.
+        </p>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[28rem] text-left text-sm">
             <thead>
@@ -328,6 +334,7 @@ export function CalculatorConfigEditor({ companyId, initialConfig }: Props) {
           </table>
         </div>
       </div>
+      ) : null}
 
       <button
         type="button"
@@ -335,7 +342,7 @@ export function CalculatorConfigEditor({ companyId, initialConfig }: Props) {
         disabled={!dirty || save.isPending || activeShops.length === 0}
         onClick={() => save.mutate()}
       >
-        {save.isPending ? 'Saving…' : 'Save calculator settings'}
+        {save.isPending ? 'Saving…' : 'Save shop rates'}
       </button>
     </section>
   )

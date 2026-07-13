@@ -10,6 +10,7 @@ export function mergeShopBrowseLocations(
   zones: ShopLocationSummary[],
   summaries: Map<string, PublicLocationBrowseSummary> | undefined,
   visibility: PublicLocationVisibility | undefined,
+  companySlugFilter = '',
 ): ShopLocationSummary[] {
   if (!summaries) return []
 
@@ -18,6 +19,7 @@ export function mergeShopBrowseLocations(
 
   for (const [locationId, cms] of summaries) {
     if (!isLocationActive(visibility, 'shop', locationId)) continue
+    if (companySlugFilter && cms.company_slug !== companySlugFilter) continue
     const existing = byId.get(locationId)
     const displayTitle = cms.title.trim() || locationId
     if (existing) {

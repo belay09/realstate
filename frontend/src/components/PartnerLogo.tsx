@@ -35,14 +35,14 @@ export function PartnerLogo({
   }, [src])
 
   const isAyat = companySlug === AYAT_PARTNER.slug
-  const shapeClass = isAyat ? 'rounded-full' : 'rounded-xl'
-  const boxClass = `${SIZE_CLASS[size]} shrink-0 ${shapeClass} border border-border bg-surface object-contain p-1 shadow-sm ${className}`
+  const shapeClass = isAyat ? 'rounded-2xl' : 'rounded-xl'
+  const boxClass = `${SIZE_CLASS[size]} shrink-0 ${shapeClass} border border-border bg-surface object-contain p-1.5 shadow-sm ${className}`
 
   if (src && !failed) {
     return (
       <img
         src={src}
-        alt=""
+        alt={`${name} logo`}
         className={boxClass}
         onError={() => setFailed(true)}
       />
@@ -51,7 +51,7 @@ export function PartnerLogo({
 
   return (
     <span
-      className={`flex ${SIZE_CLASS[size]} shrink-0 items-center justify-center rounded-xl border border-border bg-brand-700 text-sm font-bold text-white shadow-sm ${className}`}
+      className={`flex ${SIZE_CLASS[size]} shrink-0 items-center justify-center ${shapeClass} border border-border bg-brand-700 text-sm font-bold text-white shadow-sm ${className}`}
       aria-hidden
     >
       {name.charAt(0)}

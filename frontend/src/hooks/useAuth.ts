@@ -8,5 +8,5 @@ export function useIsLoggedIn(): boolean {
 
 export function useAdminEntryPath(): string {
   const loggedIn = useIsLoggedIn()
-  return loggedIn ? '/admin' : '/admin/login'
+  return loggedIn ? '/admin/companies' : '/admin/login'
 }

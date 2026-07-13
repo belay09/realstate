@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import { useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 
 import { api } from '../../api/client'
@@ -312,13 +313,17 @@ export function AdminPricingPage() {
 
   return (
     <div className="space-y-8 text-left">
-      <h1 className="text-2xl font-semibold text-stone-900 dark:text-stone-50">Pricing</h1>
-      <p className="text-sm text-stone-600 dark:text-stone-400">
-        Edit apartment rates and calculator settings for the live site. Use{' '}
-        <strong>Copy to…</strong> or <strong>Copy all to other locations</strong> to reuse the same
-        rates on another project without retyping. When Ayat changes prices, update here — no drafts
-        or publishing step.
-      </p>
+      <div>
+        <h1 className="text-2xl font-semibold text-stone-900 dark:text-stone-50">Floor m² rates</h1>
+        <p className="mt-1 text-sm text-stone-600 dark:text-stone-400">
+          ETB per m² by floor band (residential) and floor (shops). These power the rate tables on
+          public location pages. Edit locations under{' '}
+          <Link to="/admin/listings" className="font-medium text-brand-700 underline dark:text-brand-400">
+            Locations
+          </Link>
+          .
+        </p>
+      </div>
 
       <AdminCompanySelect
         value={companyId}
@@ -356,16 +361,11 @@ export function AdminPricingPage() {
             }}
           >
             <h2 className="text-sm font-semibold text-stone-800 dark:text-stone-200">
-              Apartment price rows (ETB per m²)
+              Residential floor rates (ETB per m²)
             </h2>
             <p className="text-xs text-stone-500">
-              Unit codes: SFCA, SFCR (semi-finished), RFCA, RFCR (regular). Floor band examples:{' '}
-              <span className="font-mono">3-10</span>, <span className="font-mono">1-16</span>.
-              For <strong>CMC</strong>, use <em>Construction stage</em> for not started vs near
-              completion. Cover every floor band you need (e.g. add <span className="font-mono">SFCA
-              11-18</span> if floors 11–18 are missing between 3–10 and 19–26). Use{' '}
-              <span className="font-mono">SFCR</span> for 3-bedroom semi-finished, or{' '}
-              <span className="font-mono">SFCA</span> if you use one rate for all semi-finished beds.
+              Unit codes: SFCA, SFCR, RFCA, RFCR. Floor band e.g. <span className="font-mono">3-10</span>.
+              For CMC, set Construction stage when needed.
             </p>
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
@@ -387,7 +387,7 @@ export function AdminPricingPage() {
               </label>
               {isCmcInventoryProject(addProjectId || addFormDefaultProjectId, projectSlugByIdMap) ? (
                 <label className="block text-xs font-medium text-stone-600 dark:text-stone-400 sm:col-span-2">
-                  Construction stage (CMC calculator)
+                  Construction stage (CMC)
                   <select name="construction_stage" className="input" defaultValue="both">
                     {CMC_CONSTRUCTION_OPTIONS.map((opt) => (
                       <option key={opt.value} value={opt.value}>

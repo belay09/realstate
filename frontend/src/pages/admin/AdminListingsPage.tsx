@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 
 import { api } from '../../api/client'
@@ -19,6 +20,7 @@ import { useCalculatorConfig } from '../../hooks/useCalculatorConfig'
 import { shopLocationsFromConfig } from '../../lib/shopLocations'
 import { DuplicateLocationModal } from '../../components/admin/DuplicateLocationModal'
 import { LocationBuildingSettingsForm } from '../../components/admin/LocationBuildingSettingsForm'
+import { SHOW_ADMIN_ADVANCED } from '../../lib/featureFlags'
 
 type LocationKind = 'apartment' | 'shop'
 
@@ -68,7 +70,7 @@ const COMPANY_TABS: { slug: CompanyFilter; label: string }[] = [
 
 const KIND_TABS: { slug: KindFilter; label: string }[] = [
   { slug: '', label: 'All kinds' },
-  { slug: 'apartment', label: 'Apartments' },
+  { slug: 'apartment', label: 'Residential' },
   { slug: 'shop', label: 'Shops' },
 ]
 
@@ -141,6 +143,8 @@ export function AdminListingsPage() {
   const { data: calculatorConfig } = useCalculatorConfig()
   const homeCards = useQuery({
     queryKey: ['admin', 'home-cards'],
+    // Phase4+ slim: legacy home cards unused on public home (Companies CMS instead)
+    enabled: SHOW_ADMIN_ADVANCED,
     queryFn: async () => {
       const { data } = await api.get<HomePageCard[]>('/admin/home-cards')
       return data
@@ -348,10 +352,14 @@ export function AdminListingsPage() {
     <div className="space-y-8 text-left">
       <div className="space-y-4">
         <div>
-          <h1 className="text-2xl font-semibold text-stone-900 dark:text-stone-50">Location pages</h1>
+          <h1 className="text-2xl font-semibold text-stone-900 dark:text-stone-50">Locations</h1>
           <p className="mt-1 text-sm text-stone-600 dark:text-stone-400">
-            Manage apartment and shop location pages by developer. Toggle Active to show or hide each
-            zone on the public site and calculator.
+            Content for each public location page: media, description, Active / Visible. Filter by
+            developer and Residential / Shops. Floor rates:{' '}
+            <Link to="/admin/pricing" className="font-medium text-brand-700 underline dark:text-brand-400">
+              Floor m² rates
+            </Link>
+            .
           </p>
         </div>
 
@@ -377,7 +385,7 @@ export function AdminListingsPage() {
           </div>
           <div className="space-y-2">
             <p className="text-[0.65rem] font-bold uppercase tracking-[0.16em] text-stone-500 dark:text-stone-400">
-              Page type
+              Residential / Shops
             </p>
             <div className="flex flex-wrap gap-2">
               {KIND_TABS.map((tab) => (
@@ -399,32 +407,19 @@ export function AdminListingsPage() {
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <h2 className="text-base font-semibold text-stone-900 dark:text-stone-50">
-              Location detail pages
+              Locations
             </h2>
             <p className="mt-1 text-sm text-stone-600 dark:text-stone-400">
               {filteredLocations.length} location{filteredLocations.length === 1 ? '' : 's'}
               {companyFilter ? ` · ${companyLabel(companyFilter)}` : ''}
-              {kindFilter ? ` · ${kindFilter}` : ''}. Configure title, media, cards, and building
-              settings. Shop rates live under{' '}
-              <a href="/admin/pricing" className="font-medium text-brand-700 underline dark:text-brand-400">
-                Pricing
-              </a>
-              ; promotions under{' '}
-              <a href="/admin/promotions" className="font-medium text-brand-700 underline dark:text-brand-400">
-                Promotions
-              </a>
-              .
+              {kindFilter ? ` · ${kindFilter === 'apartment' ? 'Residential' : 'Shops'}` : ''}. Use
+              Edit media/details for what buyers see on the location page.
             </p>
           </div>
           <button type="button" className="btn-primary shrink-0" onClick={openCreateModal}>
-            Create location page
+            Create location
           </button>
         </div>
-        {!selectedContentId ? (
-          <p className="text-xs text-brand-700 dark:text-brand-300">
-            Tip: click “Edit media/details” in the table to upload photos and edit copy.
-          </p>
-        ) : null}
 
         <div className="rounded-xl border border-stone-200 dark:border-stone-800">
           <div className="overflow-x-auto">
@@ -466,7 +461,9 @@ export function AdminListingsPage() {
                           {companyLabel(row.company_slug)}
                         </span>
                       </td>
-                      <td className="px-3 py-2 capitalize">{row.kind}</td>
+                      <td className="px-3 py-2">
+                        {row.kind === 'apartment' ? 'Residential' : 'Shops'}
+                      </td>
                       <td className="px-3 py-2 font-mono text-xs">{row.location_id}</td>
                       <td className="px-3 py-2">{row.title}</td>
                       <td className="px-3 py-2">
@@ -497,6 +494,12 @@ export function AdminListingsPage() {
                           >
                             Edit media/details
                           </button>
+                          <Link
+                            to="/admin/pricing"
+                            className="text-xs text-brand-700 hover:underline dark:text-brand-400"
+                          >
+                            Edit m² rates
+                          </Link>
                           <button
                             type="button"
                             className="text-xs text-stone-600 hover:underline dark:text-stone-400"
@@ -522,10 +525,20 @@ export function AdminListingsPage() {
         </div>
       </section>
 
-      <section className="space-y-4 rounded-xl border border-stone-200 bg-white p-4 dark:border-stone-800 dark:bg-stone-950">
-        <h2 className="text-base font-semibold text-stone-900 dark:text-stone-50">Home page cards CMS</h2>
+      {/* Phase4+ slim: legacy home cards — unused on public home (Companies CMS). Restore via SHOW_ADMIN_ADVANCED */}
+      {SHOW_ADMIN_ADVANCED ? (
+      <section className="space-y-4 rounded-xl border border-dashed border-stone-300 bg-stone-50/80 p-4 dark:border-stone-700 dark:bg-stone-900/40">
+        <h2 className="text-base font-semibold text-stone-900 dark:text-stone-50">
+          Legacy home cards
+        </h2>
         <p className="text-sm text-stone-600 dark:text-stone-400">
-          Edit only the residential/commercial cards shown on the home page.
+          Home now uses <strong>Companies</strong> (developer cards). These inventory-style home
+          cards are unused on the public home page — keep only if you need them for other surfaces.
+          Prefer editing{' '}
+          <Link to="/admin/companies" className="font-medium text-brand-700 underline dark:text-brand-400">
+            Companies
+          </Link>
+          .
         </p>
         <div>
           <button
@@ -629,6 +642,7 @@ export function AdminListingsPage() {
           ))}
         </div>
       </section>
+      ) : null}
 
       {showCreateModal ? (
         <ModalShell title="Create location content" onClose={closeCreateModal}>
@@ -908,7 +922,7 @@ export function AdminListingsPage() {
                 checked={createForm.is_public}
                 onChange={(e) => setCreateForm((prev) => ({ ...prev, is_public: e.target.checked }))}
               />
-              Active — show on apartments/shops browse and calculator
+              Active — show on public Residential / Shops location lists
             </label>
             <button type="submit" className="btn-primary md:col-span-2" disabled={createLocationContent.isPending}>
               Create location content
@@ -1055,7 +1069,7 @@ function LocationContentEditor({
     <div className="space-y-3 rounded-xl border border-stone-200 p-4 dark:border-stone-800">
       <div className="flex flex-wrap items-center gap-2">
         <h3 className="font-semibold text-stone-900 dark:text-stone-50">
-          Edit {content.kind}: {content.location_id}
+          Edit {content.kind === 'apartment' ? 'Residential' : 'Shops'}: {content.location_id}
         </h3>
         <span
           className={`inline-flex rounded-full px-2.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-wide ${
@@ -1067,6 +1081,14 @@ function LocationContentEditor({
           {companyLabel(content.company_slug)}
         </span>
       </div>
+      <p className="rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 text-xs text-stone-600 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-400">
+        Public path: Home → {companyLabel(content.company_slug)} →{' '}
+        {content.kind === 'apartment' ? 'Residential' : 'Shops'} → this location. Floor ETB/m² table:{' '}
+        <Link to="/admin/pricing" className="font-medium text-brand-700 underline dark:text-brand-400">
+          Edit m² rates
+        </Link>
+        .
+      </p>
       <form
         className="grid gap-3 md:grid-cols-2"
         onSubmit={async (e) => {
@@ -1114,7 +1136,7 @@ function LocationContentEditor({
         </label>
         <div className="rounded border border-stone-200 p-2 dark:border-stone-800 md:col-span-2">
           <p className="text-xs font-medium text-stone-700 dark:text-stone-300">
-            Top location card image (shown on `/apartments`)
+            Cover image (location list + terminal page hero)
           </p>
           <InlineUploadToUrlField
             accept="image/*"
@@ -1190,8 +1212,8 @@ function LocationContentEditor({
             checked={form.is_public}
             onChange={(e) => setForm((prev) => ({ ...prev, is_public: e.target.checked }))}
           />
-          Active — show on apartments/shops browse, calculator, and location pages
-        </label>
+          Active — show on public Residential / Shops lists and this location page
+            </label>
         <button type="submit" className="btn-secondary md:col-span-2">
           Save location details
         </button>

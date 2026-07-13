@@ -549,3 +549,15 @@ class PublicHomeCard(BaseModel):
     image_url: str | None
     to_path: str
     sort_order: int
+
+
+class PublicCompany(BaseModel):
+    """Active partner developer for public home / developer pages."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    slug: str
+    name: str
+    website: str | None = None
+    logo_url: str | None = None
+    description: str | None = None

@@ -57,14 +57,6 @@ export function PartnerTemerSection({ compact = false }: PartnerTemerSectionProp
             >
               {t('temer.browseTemer')}
             </Link>
-            <a
-              href={TEMER_PARTNER.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-secondary"
-            >
-              {t('temer.officialSite')}
-            </a>
           </div>
         </div>
       </div>
