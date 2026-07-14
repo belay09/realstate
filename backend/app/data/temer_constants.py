@@ -1,4 +1,4 @@
-"""Temer-only location ids — never overlap Ayat Share Company slugs."""
+"""Temer-only location ids - never overlap Ayat Share Company slugs."""
 
 TEMER_COMPANY_SLUG = "temer-properties"
 AYAT_COMPANY_SLUG = "ayat-real-estate"

@@ -54,7 +54,7 @@ export interface CalculatorResult {
   areaSqm: number
   /** List total after Ayat tier discount, ÷ area. */
   effectivePricePerSqmAfterTier: number
-  /** Final price ÷ area — after tier and any location promotion. */
+  /** Final price ÷ area - after tier and any location promotion. */
   effectivePricePerSqm: number
   tier: DownPaymentTier
   upfrontCashDue: number

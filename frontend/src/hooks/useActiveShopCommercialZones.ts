@@ -7,7 +7,7 @@ import type { CalculatorRuntimeConfig } from '../lib/calculatorRuntime'
 import { mergeShopBrowseLocations } from '../lib/mergeShopBrowseLocations'
 import { shopLocationsFromConfig, type ShopLocationSummary } from '../lib/shopLocations'
 
-/** Shop locations for calculator UI — only Active pages on /shops, with rates when configured. */
+/** Shop locations for calculator UI - only Active pages on /shops, with rates when configured. */
 export function activeShopLocations(
   config: CalculatorRuntimeConfig,
   summaries: Map<string, PublicLocationBrowseSummary> | undefined,

@@ -209,7 +209,7 @@
   }
 
   /*
-   * Home hero — shorter cinematic band with full-bleed looping video.
+   * Home hero - shorter cinematic band with full-bleed looping video.
    * Soft directional scrim for copy contrast (not a heavy full-frame black mask).
    */
   .home-hero {
@@ -277,6 +277,27 @@
 
   .developer-showcase {
     animation: fade-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .partner-rich-card {
+    transition: box-shadow 0.45s ease, transform 0.45s ease;
+  }
+
+  .partner-rich-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 28px 64px -32px rgba(15, 23, 42, 0.38);
+  }
+
+  :is(.dark) .partner-rich-card:hover {
+    box-shadow: 0 28px 64px -32px rgba(0, 0, 0, 0.65);
+  }
+
+  .partner-rich-visual {
+    transition: filter 0.5s ease;
+  }
+
+  .partner-rich-card:hover .partner-rich-visual {
+    filter: brightness(1.04);
   }
 
   .developer-showcase-logo {

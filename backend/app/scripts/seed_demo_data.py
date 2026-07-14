@@ -256,7 +256,7 @@ def seed(db: Session) -> None:
         name="Ayat Real Estate",
         phone="+251111234567",
         website="https://example.com/ayat",
-        description="Demo seed — Ayat-style inventory for Belay Properties UI testing.",
+        description="Demo seed - Ayat-style inventory for Belay Properties UI testing.",
     )
     sunshine = _upsert_company(
         db,
@@ -372,7 +372,7 @@ def seed(db: Session) -> None:
         (
             u_501,
             "ayat-hills-3br-floor-5",
-            "Spacious 3BR at Ayat Hills — Block A, Floor 5",
+            "Spacious 3BR at Ayat Hills - Block A, Floor 5",
             "Corner unit, east orientation. Demo for public detail and filters (3 bed, Ayat).",
             True,
             True,
@@ -381,7 +381,7 @@ def seed(db: Session) -> None:
         (
             u_302,
             "ayat-hills-2br-block-b",
-            "2BR apartment — Ayat Hills Block B",
+            "2BR apartment - Ayat Hills Block B",
             "Mid-floor two bedroom. Filter by bedrooms=2 or area=Ayat.",
             True,
             False,
@@ -390,7 +390,7 @@ def seed(db: Session) -> None:
         (
             u_cmc_201,
             "cmc-extension-2br-floor-2",
-            "2BR at CMC Extension — Tower 1",
+            "2BR at CMC Extension - Tower 1",
             "CMC area demo. Try public filter area=CMC.",
             True,
             False,
@@ -399,7 +399,7 @@ def seed(db: Session) -> None:
         (
             u_lebu,
             "lebu-heights-studio",
-            "Studio at Lebu Heights — Sunshine Developers",
+            "Studio at Lebu Heights - Sunshine Developers",
             "Second company on the platform. Filter company_slug=sunshine-developers.",
             True,
             True,
@@ -426,7 +426,7 @@ def seed(db: Session) -> None:
         db,
         unit=u_sold,
         slug="ayat-hills-3br-sold-sample",
-        title="3BR Penthouse — SOLD (should not appear on public site)",
+        title="3BR Penthouse - SOLD (should not appear on public site)",
         description="Unit status is sold; public list/detail should 404 even if is_public is true.",
         city="Addis Ababa",
         area="Ayat",
@@ -441,7 +441,7 @@ def seed(db: Session) -> None:
         db,
         unit=u_draft,
         slug="ayat-hills-draft-internal",
-        title="Draft unit — not on public site",
+        title="Draft unit - not on public site",
         description="is_public=false for admin listings table testing.",
         city="Addis Ababa",
         area="Ayat",
@@ -472,7 +472,7 @@ def seed(db: Session) -> None:
     print("\nPublic listing slugs (browse at /listings/<slug>):")
     for _, slug, *_rest in listings_public:
         print(f"  - {slug}")
-    print("  - (hidden) ayat-hills-3br-sold-sample — sold unit, not on public API")
+    print("  - (hidden) ayat-hills-3br-sold-sample - sold unit, not on public API")
     print("\nFilter hints (public /listings):")
     print("  city=Addis  area=Ayat  bedrooms=3  company_slug=ayat-real-estate  unit_type_code=T3")
     print("  company_slug=sunshine-developers  area=Lebu  bedrooms=1")
@@ -605,7 +605,7 @@ def _seed_demo_pricing(
         document_type="price_list",
         storage_url="https://example.com/demo/ayat-price-list.pdf",
         ocr_status="skipped",
-        extracted_text="Demo document for UI testing — replace with real Ayat OCR text later.",
+        extracted_text="Demo document for UI testing - replace with real Ayat OCR text later.",
     )
     db.add(doc)
     db.flush()
@@ -663,7 +663,7 @@ def _seed_demo_pricing(
             rule_type="promotional",
             priority=10,
             discount_percent=Decimal("5"),
-            conditions={"note": "Demo 5% discount — select rule id when calculating"},
+            conditions={"note": "Demo 5% discount - select rule id when calculating"},
         )
     )
 

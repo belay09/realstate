@@ -303,7 +303,7 @@ def main() -> None:
     scraped_at = datetime.now(timezone.utc).isoformat()
     prior = _load_existing() if args.properties_only else None
     notes = [
-        "WordPress REST API (/wp-json/) returns 403 — scrape uses Yoast sitemaps + BeautifulSoup.",
+        "WordPress REST API (/wp-json/) returns 403 - scrape uses Yoast sitemaps + BeautifulSoup.",
         "Features parsed from Houzez feature_block sections; map from property_map JSON when in Ethiopia bbox.",
         "Public listing pages rarely show ETB prices; confirm pricing with Temer sales.",
     ]

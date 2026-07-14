@@ -1,5 +1,5 @@
 /**
- * Ayat pricing calculator — constants from official strategy (Ayat/116/2018).
+ * Ayat pricing calculator - constants from official strategy (Ayat/116/2018).
  * Data: frontend/src/data/ayat_official_2018.json (sync with backend/data/).
  */
 import {

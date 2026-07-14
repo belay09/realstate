@@ -3,7 +3,7 @@ type CardCoverMediaProps = {
   alt?: string
 }
 
-/** Full-bleed card thumbnail — standard real-estate crop. */
+/** Full-bleed card thumbnail - standard real-estate crop. */
 export function CardCoverMedia({ src, alt = '' }: CardCoverMediaProps) {
   return (
     <div className="relative aspect-[3/2] overflow-hidden bg-slate-200 dark:bg-slate-900">

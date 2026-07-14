@@ -1,4 +1,4 @@
-# habesha-homes.com — fix Cloudflare Error 521
+# habesha-homes.com - fix Cloudflare Error 521
 
 The EC2 stack serves **HTTP on port 80** only. Cloudflare **Full** SSL tries **HTTPS on port 443** to your server, which causes **Error 521**.
 

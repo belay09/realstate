@@ -106,7 +106,7 @@ export function DuplicatePricingModal({
       onSuccess()
       onClose()
     } catch {
-      toast.error('Could not copy all rates. Some rows may have been saved — refresh and try again.')
+      toast.error('Could not copy all rates. Some rows may have been saved - refresh and try again.')
     } finally {
       setPending(false)
     }
@@ -130,7 +130,7 @@ export function DuplicatePricingModal({
 
         <p className="text-xs text-fg-muted">
           Copies unit type, floor band, ETB/m², and CMC construction stage. Pick one or more
-          destinations — no need to re-type the same numbers.
+          destinations - no need to re-type the same numbers.
         </p>
 
         <div className="mt-4">
@@ -184,7 +184,7 @@ export function DuplicatePricingModal({
               onChange={() => setConflictMode('skip')}
             />
             <span>
-              <strong>Skip</strong> — keep existing rate (safe default)
+              <strong>Skip</strong> - keep existing rate (safe default)
             </span>
           </label>
           <label className="flex cursor-pointer items-start gap-2 text-sm text-fg">
@@ -195,7 +195,7 @@ export function DuplicatePricingModal({
               onChange={() => setConflictMode('replace')}
             />
             <span>
-              <strong>Replace</strong> — overwrite with copied values
+              <strong>Replace</strong> - overwrite with copied values
             </span>
           </label>
           <label className="flex cursor-pointer items-start gap-2 text-sm text-fg">
@@ -206,7 +206,7 @@ export function DuplicatePricingModal({
               onChange={() => setConflictMode('add')}
             />
             <span>
-              <strong>Add anyway</strong> — create duplicate rows (not recommended)
+              <strong>Add anyway</strong> - create duplicate rows (not recommended)
             </span>
           </label>
         </fieldset>

@@ -256,7 +256,7 @@ export function AdminPromotionsPage() {
         </h1>
         <p className="mt-2 text-sm text-stone-600 dark:text-stone-400">
           Limited-time extra discount (%) for apartment or shop locations. The public payment
-          calculator is paused — these offers mainly matter for staff tools / when the calculator is
+          calculator is paused - these offers mainly matter for staff tools / when the calculator is
           restored. Public buyers rely on location m² tables + Call / WhatsApp.
         </p>
       </div>
@@ -360,7 +360,7 @@ export function AdminPromotionsPage() {
             <div className="mt-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="text-xs font-medium text-stone-600 dark:text-stone-400">
-                  Locations — tick every place that gets this offer ({form.location_ids.length}{' '}
+                  Locations - tick every place that gets this offer ({form.location_ids.length}{' '}
                   selected)
                 </p>
                 <div className="flex gap-2">
@@ -471,7 +471,7 @@ export function AdminPromotionsPage() {
                         <p className="mt-1 font-mono text-xs text-stone-500">
                           {row.location_ids.length > 0
                             ? row.location_ids.join(', ')
-                            : '—'}
+                            : '-'}
                         </p>
                         <p className="mt-1 text-xs text-stone-500">
                           {new Date(row.starts_at).toLocaleString()} →{' '}

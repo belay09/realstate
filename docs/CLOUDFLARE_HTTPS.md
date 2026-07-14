@@ -8,7 +8,7 @@ Default hostname:
 |----------|---------|
 | `realtor.belay-sirak.com` | Public site, `/admin`, and API at `/api/v1` |
 
-**Do not use `api.realtor.belay-sirak.com` on Cloudflare Free** — Universal SSL only covers `*.belay-sirak.com`, not two-level names like `api.realtor.*` (causes `ERR_SSL_VERSION_OR_CIPHER_MISMATCH`).
+**Do not use `api.realtor.belay-sirak.com` on Cloudflare Free** - Universal SSL only covers `*.belay-sirak.com`, not two-level names like `api.realtor.*` (causes `ERR_SSL_VERSION_OR_CIPHER_MISMATCH`).
 
 ---
 
@@ -82,7 +82,7 @@ Use **your** site and API hostnames if different.
 - https://realtor.belay-sirak.com/admin/login  
 - https://api.realtor.belay-sirak.com/api/v1/health  
 
-If the site loads but API calls fail: check browser console for CORS — `BACKEND_CORS_ORIGINS` must be exactly `https://realtor.belay-sirak.com` (no trailing slash).
+If the site loads but API calls fail: check browser console for CORS - `BACKEND_CORS_ORIGINS` must be exactly `https://realtor.belay-sirak.com` (no trailing slash).
 
 ---
 

@@ -111,8 +111,8 @@ export function CopyListingsPanel({
         Copy all listings to another location
       </h2>
       <p className="mt-1 text-xs text-stone-600 dark:text-stone-400">
-        Copy every listing from <strong>{sourceProjectName}</strong> ({sourceListings.length}) —
-        titles, details, specs, and photos — without re-entering each one.
+        Copy every listing from <strong>{sourceProjectName}</strong> ({sourceListings.length}) -
+        titles, details, specs, and photos - without re-entering each one.
       </p>
 
       <div className="mt-4 flex flex-wrap items-end gap-3">
@@ -154,7 +154,7 @@ export function CopyListingsPanel({
           <span className="font-mono text-stone-700 dark:text-stone-300">
             /apartments/{targetLocationId}
           </span>{' '}
-          — must match the location page URL exactly.
+          - must match the location page URL exactly.
         </p>
       ) : null}
       {targetOptions.length === 0 ? (

@@ -1,4 +1,4 @@
-# Habesha Homes — Simple Listing UX Plan
+# Habesha Homes - Simple Listing UX Plan
 
 **Product:** Habesha Real Estate Advisory (habesha-homes.com)  
 **Status:** Phase 5 polish done (July 2026)  
@@ -10,7 +10,7 @@
 
 ## Goal (owner-clarified IA)
 
-Buyers pick a **partner developer** (Ayat or Temer), then **Residential** or **Shops**, then a **location**. That location page is the **terminal page**: all media, description, layouts/units or shop info, floor m² rates, and Call/WhatsApp — **no further hop** to `/listings/:slug` in the happy path.
+Buyers pick a **partner developer** (Ayat or Temer), then **Residential** or **Shops**, then a **location**. That location page is the **terminal page**: all media, description, layouts/units or shop info, floor m² rates, and Call/WhatsApp - **no further hop** to `/listings/:slug` in the happy path.
 
 The site stays **simple but beautiful**. The **Admin CMS** follows the same mental model (developer → residential/shops → one location with content + rates), not “many listing pages + calculator.”
 
@@ -22,7 +22,7 @@ The site stays **simple but beautiful**. The **Admin CMS** follows the same ment
 
 ```text
 HOME  (/)
-  Habesha Homes — free advisory
+  Habesha Homes - free advisory
   [ Ayat ]     [ Temer ]
   Call / WhatsApp always available
 
@@ -36,7 +36,7 @@ RESIDENTIAL LOCATIONS  (…/residential  or filtered apartment list)
 SHOP LOCATIONS  (…/shops  or filtered shop list)
   Cards: Ledeta · Kazanchis · … (that developer only)
 
-LOCATION DETAIL  — TERMINAL PAGE
+LOCATION DETAIL  - TERMINAL PAGE
   ┌─────────────────────────────────────────────┐
   │ Hero media · name · developer badge         │
   │ Description                                 │
@@ -53,8 +53,8 @@ LOCATION DETAIL  — TERMINAL PAGE
         └── No /listings/:slug required after this
 
 OUT OF HAPPY PATH (keep for deep links / SEO if needed):
-  /listings/:slug — optional, not primary nav
-  /calculator — paused / redirect
+  /listings/:slug - optional, not primary nav
+  /calculator - paused / redirect
 ```
 
 **What buyers never need for v1:** down-payment math, milestone schedules, multi-step calculator, or browsing “all apartments across all developers” as the primary door.
@@ -67,7 +67,7 @@ Prefer **query + existing path prefixes** over inventing `/ayat/...` URL trees, 
 
 | Step | Suggested route | Reuse / notes |
 |------|-----------------|---------------|
-| Home | `/` | `HomePage` — primary CTAs become Ayat + Temer cards/buttons |
+| Home | `/` | `HomePage` - primary CTAs become Ayat + Temer cards/buttons |
 | Developer + kind picker | `/apartments?company_slug=ayat-real-estate` (and Temer slug) **or** dedicated intermediate on same page | Least churn: land on filtered browse with a clear **Residential \| Shops** choice before location grids |
 | Residential locations | `/apartments?company_slug=…` (kind=apartment only) | Existing `ApartmentsPage` + `mergeApartmentBrowseGroups` |
 | Shop locations | `/shops?company_slug=…` | Existing `ShopLocationsPage`; add company filter if missing |
@@ -76,7 +76,7 @@ Prefer **query + existing path prefixes** over inventing `/ayat/...` URL trees, 
 | Legacy listing detail | `/listings/:slug` | Keep route; demote from cards (optional “more photos” later); not in happy path |
 | Calculator | `/calculator` | Redirect to developer browse or soft “paused” stub |
 
-**Optional later (more churn):** `/:company`, `/:company/residential`, `/:company/shops`, `/:company/residential/:slug` — only if query URLs feel wrong after Phase 2.
+**Optional later (more churn):** `/:company`, `/:company/residential`, `/:company/shops`, `/:company/residential/:slug` - only if query URLs feel wrong after Phase 2.
 
 **Nav (slim):** Home · Call / WhatsApp · Language. Developer choice lives on Home (and maybe footer). No Calculator, Staff, or duplicate “Ayat homes / Temer homes / Apartments / Shops” cluster.
 
@@ -97,7 +97,7 @@ One page per location. No second detail page required.
 
 ### Residential location
 
-- Layouts / homes **summary on this page** (beds, size, photos as cards or sections — not links that force `/listings/:slug`)  
+- Layouts / homes **summary on this page** (beds, size, photos as cards or sections - not links that force `/listings/:slug`)  
 - Floor-band **ETB/m² table** (from Admin Pricing / `residentialPriceRows`)  
 - Temer without rates: “price on request” + contact (no fake calculator)
 
@@ -131,18 +131,18 @@ Primary CMS nav matches the public 4-page flow: **Companies → Locations → Fl
 | Earlier UX doc | This plan |
 |----------------|-----------|
 | Slim nav; hide Staff; Call/WhatsApp first | **Aligned** |
-| Demote Calculator; keep as supporting tool | **Conflict** — owner: **hide/pause** calculator; m² tables only |
-| Happy path: apartments → location → **listing detail** | **Conflict** — location page is **terminal** |
-| Browse all locations first; developers as chips | **Conflict** — Home shows **Ayat + Temer** first, then Residential/Shops |
-| Separate top-level `/shops` in primary nav | Soft conflict — shops live **under** a developer; `/shops` may remain as filtered URL |
-| Empty “0 homes” / Admin copy in public UI | Still valid — fix in Phase 1–2 |
-| Progressive payment-plan disclosure | **Conflict** — no public payment-plan calculator for now |
+| Demote Calculator; keep as supporting tool | **Conflict** - owner: **hide/pause** calculator; m² tables only |
+| Happy path: apartments → location → **listing detail** | **Conflict** - location page is **terminal** |
+| Browse all locations first; developers as chips | **Conflict** - Home shows **Ayat + Temer** first, then Residential/Shops |
+| Separate top-level `/shops` in primary nav | Soft conflict - shops live **under** a developer; `/shops` may remain as filtered URL |
+| Empty “0 homes” / Admin copy in public UI | Still valid - fix in Phase 1–2 |
+| Progressive payment-plan disclosure | **Conflict** - no public payment-plan calculator for now |
 
 ---
 
 ## What we disable / hide (calculator)
 
-Do **not** delete calculator source if restore is easy — `SHOW_PUBLIC_CALCULATOR = false` (or equivalent).
+Do **not** delete calculator source if restore is easy - `SHOW_PUBLIC_CALCULATOR = false` (or equivalent).
 
 | Item | Action |
 |------|--------|
@@ -154,13 +154,13 @@ Do **not** delete calculator source if restore is easy — `SHOW_PUBLIC_CALCULAT
 | Home cards CTAs to `/calculator` | Content ops: retarget to developer or location |
 | Staff in public header/footer | Remove; `/admin/login` stays |
 
-**Keep in Admin:** Pricing, calculator config, payment plans — staff tools for when calculator returns.
+**Keep in Admin:** Pricing, calculator config, payment plans - staff tools for when calculator returns.
 
 ---
 
 ## Admin CMS simplification (same IA)
 
-Editors should create **one location** with everything the public terminal page needs — not a scatter of listing pages + calculator mental model.
+Editors should create **one location** with everything the public terminal page needs - not a scatter of listing pages + calculator mental model.
 
 ### Mental model
 
@@ -171,7 +171,7 @@ Developer (Ayat | Temer)
             ├─ Content: title, media, description, visibility
             ├─ Rates: floor / floor-band ETB/m²
             └─ (Residential) optional layout summary blocks
-                 — not “publish 12 listing URLs to make the page work”
+                 - not “publish 12 listing URLs to make the page work”
 ```
 
 ### Screens to keep / merge / hide
@@ -190,7 +190,7 @@ Developer (Ayat | Temer)
 1. Pick company (Ayat/Temer) + kind (Residential/Shops).  
 2. Create/edit Location page: title, photos, description, Active.  
 3. Set floor m² rates (inline or deep-link into Pricing rows / commercial zone).  
-4. Residential: add layout summary (beds/size/photos) on the same location record or a lightweight attached block — **without** needing `/listings/:slug` for the happy path.  
+4. Residential: add layout summary (beds/size/photos) on the same location record or a lightweight attached block - **without** needing `/listings/:slug` for the happy path.  
 5. Preview public terminal URL.
 
 ---
@@ -233,7 +233,7 @@ Developer (Ayat | Temer)
 
 **Touch:**
 
-- `HomePage` — primary doors: **Ayat** and **Temer** (plus Call/WhatsApp).  
+- `HomePage` - primary doors: **Ayat** and **Temer** (plus Call/WhatsApp).  
 - Intermediate kind picker (Residential | Shops) for that `company_slug`.  
 - Residential list filtered to that company; shop list filtered to that company.  
 - Slim nav already from Phase 1; footer partners ok.  
@@ -265,8 +265,8 @@ Home is **only** a short hero + Ayat / Temer cards → `/developers/:slug`. Remo
 
 **Touch:**
 
-- `ProjectListingsPage` — layouts/homes summary **inline**; residential floor m² table; contact; remove/hide “open listing” as required next step.  
-- `ShopLocationPage` — full CMS + rate table + contact; already mostly terminal.  
+- `ProjectListingsPage` - layouts/homes summary **inline**; residential floor m² table; contact; remove/hide “open listing” as required next step.  
+- `ShopLocationPage` - full CMS + rate table + contact; already mostly terminal.  
 - Shared presentational `FloorRateTable` / `ResidentialFloorRateTable`.  
 - Listing cards: if kept, expand inline or optional; do not require `/listings/:slug`.  
 - Keep `/listings/:slug` for bookmarks/SEO but demote.
@@ -281,7 +281,7 @@ Home is **only** a short hero + Ayat / Temer cards → `/developers/:slug`. Remo
 
 ### Phase 4: Admin CMS aligned to IA
 
-**Status:** done (July 2026) — **Phase 4+ slim:** admin primary nav is Companies / Locations / Floor m² rates / Leads only; advanced screens gated, not deleted.
+**Status:** done (July 2026) - **Phase 4+ slim:** admin primary nav is Companies / Locations / Floor m² rates / Leads only; advanced screens gated, not deleted.
 
 **Goal:** Editors work developer → kind → location content + rates.
 
@@ -321,7 +321,7 @@ Home is **only** a short hero + Ayat / Temer cards → `/developers/:slug`. Remo
 ## Open questions (short)
 
 1. **Temer rates:** Supply floor m² in Admin like Ayat, or “price on request” only?  
-2. **`/calculator` bookmarks:** Silent redirect, or one-line “paused — call/WhatsApp”?  
+2. **`/calculator` bookmarks:** Silent redirect, or one-line “paused - call/WhatsApp”?  
 3. **Pretty URLs later?** Stay on `?company_slug=` or add `/:company/...` after Phase 2?  
 4. **Layout photos:** Always inline on location, or allow optional `/listings/:slug` for large galleries only?
 
@@ -333,7 +333,7 @@ Home is **only** a short hero + Ayat / Temer cards → `/developers/:slug`. Remo
 
 **Scope = Phase 1 only:**
 
-1. `SHOW_PUBLIC_CALCULATOR = false` — gate all public `AyatPriceCalculator` mounts.  
+1. `SHOW_PUBLIC_CALCULATOR = false` - gate all public `AyatPriceCalculator` mounts.  
 2. Slim `PublicLayout` + `PublicFooter` (no Calculator / Staff / duplicate developer links).  
 3. Redirect or pause `/calculator`.  
 4. Remove shop/location/listing calculator sections; **keep** shop m² rate table.  
@@ -344,9 +344,9 @@ Home is **only** a short hero + Ayat / Temer cards → `/developers/:slug`. Remo
 
 **Test plan:**
 
-- [x] Header/footer — no Calculator/Staff  
-- [x] `/calculator` — redirect or paused  
-- [x] Ayat location + shop zone — no calculator; rates still visible where seeded  
+- [x] Header/footer - no Calculator/Staff  
+- [x] `/calculator` - redirect or paused  
+- [x] Ayat location + shop zone - no calculator; rates still visible where seeded  
 - [ ] `/admin/login` + `/admin/pricing` still work  
 - [ ] Call/WhatsApp strip unchanged  
 
@@ -354,7 +354,7 @@ Home is **only** a short hero + Ayat / Temer cards → `/developers/:slug`. Remo
 
 ---
 
-## Appendix — key file map
+## Appendix - key file map
 
 | Area | Paths |
 |------|--------|

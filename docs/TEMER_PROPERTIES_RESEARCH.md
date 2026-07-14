@@ -1,4 +1,4 @@
-# Temer Properties — scraped site documentation
+# Temer Properties - scraped site documentation
 
 > **Source:** [https://temerproperties.com](https://temerproperties.com)  
 > **Scraped (UTC):** 2026-05-29T06:26:10.247804+00:00  
@@ -31,7 +31,7 @@
 
 ## 2. Site map & navigation
 
-WordPress + Houzez theme. Public **REST API** (`/wp-json/`) returns 403 — data collected via **Yoast sitemaps** and HTML.
+WordPress + Houzez theme. Public **REST API** (`/wp-json/`) returns 403 - data collected via **Yoast sitemaps** and HTML.
 
 | Sitemap | Count | URL |
 |--------|-------|-----|
@@ -57,7 +57,7 @@ WordPress + Houzez theme. Public **REST API** (`/wp-json/`) returns 403 — data
 - [Construction update hub](https://temerproperties.com/construction-update/)
 - [Delivered projects](https://temerproperties.com/deliverd-projects/)
 - [Compare listings](https://temerproperties.com/compare-listings/)
-- [Price calculator on Temer site](https://temerproperties.com/price-calculator/) — see **§6.1** below
+- [Price calculator on Temer site](https://temerproperties.com/price-calculator/) - see **§6.1** below
 
 ### Lead capture on Temer site
 
@@ -156,42 +156,42 @@ Homepage highlights 18+ named developments. Below: **primary project landing pag
 
 ## 5. Property catalog (all 32 listings)
 
-Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely shown on listing pages** — sales via phone / office. Homepage/marketing sizes for key Sarbet City Plus units: 1BR **76 m²**, 2BR **99–100 m²**, 3BR **136–151 m²**; Blue Point 3BR **145 m²**; Aware 3BR **145 m²**, 1BR **80 m²**.
+Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely shown on listing pages** - sales via phone / office. Homepage/marketing sizes for key Sarbet City Plus units: 1BR **76 m²**, 2BR **99–100 m²**, 3BR **136–151 m²**; Blue Point 3BR **145 m²**; Aware 3BR **145 m²**, 1BR **80 m²**.
 
 | # | Title | Beds | Baths | Size | Area | Delivery | Temer ID | Path |
 |---|-------|------|-------|------|------|----------|----------|------|
-| 1 | Aware – One BedRoom Apartment | 1 | 9 | — | aware-area | 36 Months | 25920 | `/apartment-for-sale/aware-one-bedroom-apartment-3/` |
-| 2 | Aware – Three BedRoom Apartment | 3 | 2 | — | aware-area | 36 Months | 25934 | `/apartment-for-sale/aware-three-bedroom-apartment/` |
-| 3 | Aware-4 Kilo,Three BedRoom Apartment | 3 | 2 | — | aware-area | — | 21243 | `/apartment-for-sale/aware-4-kilo-three-bedroom-apartment/` |
-| 4 | Aware-4 kilo,Two BedRoom Apartment | 2 | 1 | — | aware-area | — | 21244 | `/apartment-for-sale/aware-4kilo-two-bedroom-apartment/` |
-| 5 | Achantan,Three BedRoom Apartment | 3 | 2 | — | ayat-area | 30 Months | 21263 | `/apartment-for-sale/achantan-three-bedroom-apartment/` |
-| 6 | Ayat Feres Bet,Three BedRoom Apartment | 3 | 2 | — | ayat-area | — | 21259 | `/apartment-for-sale/ayat-feres-betthree-bedroom-apartment/` |
-| 7 | Ayat Feres Bet,Two BedRoom Apartment | 2 | 1 | — | ayat-area | 30 Months | 21261 | `/apartment-for-sale/ayatferesbet-two-bedroom-apartment/` |
-| 8 | Ayat Lomiyad,Four BedRoom Apartment | 3 | 2 | — | ayat-area | — | 21247 | `/apartment-for-sale/ayat-lomiyad-four-bedroom-apartment/` |
-| 9 | Ayat Lomiyad,Three BedRoom Apartment | 3 | 2 | — | ayat-area | — | 21246 | `/apartment-for-sale/ayat-lomiyad-three-bedroom-apartment-2/` |
-| 10 | Ayat Lomiyad,Two BedRoom Apartment | 2 | 1 | — | ayat-area | — | 21245 | `/apartment-for-sale/ayatlomiyad-two-bedroom-apartment/` |
-| 11 | Ayat To Center,Three BedRoom Apartment | 3 | 2 | — | ayat-area | 30 Months | 21349 | `/apartment-for-sale/ayat-to-center-three-bedroom-apartment-2/` |
-| 12 | Haile Garment,Three BedRoom Apartment | 3 | 2 | — | garment-area | — | 21240 | `/apartment-for-sale/haile-garment-three-bedroom-apartment/` |
-| 13 | Gelan Shopping Center | 7 | 9 | — | gelan-area | 30 Months | 25918 | `/apartment-for-sale/gelan-shopping-center/` |
-| 14 | Adwa -ewket, Shops | 7 | 9 | — | piyassa-area | 16 Months | 21354 | `/apartment-for-sale/adwa-ewketshops-2/` |
-| 15 | Adwa-empire, Shops | 7 | 9 | — | piyassa-area | — | 21355 | `/apartment-for-sale/adwa-empire-shops/` |
-| 16 | Arada Site, Shops | 7 | 9 | — | piyassa-area | 16 Months | 21356 | `/apartment-for-sale/arada-site-shops-2/` |
-| 17 | LYCEE Seken- One BedRoom Apartment | 1 | 1 | — | piyassa-area | 30 Months | 22257 | `/apartment-for-sale/lycee-003-one-bedroom-apartment/` |
-| 18 | LYCEE Seken- Three BedRoom Apartment | 3 | 2 | — | piyassa-area | 30 Months | 22236 | `/apartment-for-sale/lycee-seken-seken-three-bedroom-2/` |
-| 19 | LYCEE Seken- Two BedRoom Apartment | 2 | 1 | — | piyassa-area | 30 Months | 22250 | `/apartment-for-sale/lycee-003-seken-three-bedroom/` |
-| 20 | Lycee Burat,One BedRoom Apartment | 1 | 1 | — | piyassa-area | — | 21234 | `/apartment-for-sale/lycee-burat-one-bedroom-apartment/` |
-| 21 | Lycee Burat,Three BedRoom Apartment | 3 | 2 | — | piyassa-area | — | 21237 | `/apartment-for-sale/lycee-burat-three-bedroom-apartment/` |
-| 22 | Lycee Burat,Two BedRoom Apartment | 2 | 1 | — | piyassa-area | — | 21236 | `/apartment-for-sale/lycee-burat-two-bedroom-apartment/` |
-| 23 | Lycee NewRoad,Three BedRoom Apartment | 3 | 2 | — | piyassa-area | — | 21239 | `/apartment-for-sale/lycee-newroad-three-bedroom-apartment-2-2/` |
-| 24 | Lycee NewRoad,Two BedRoom Apartment | 2 | 1 | — | piyassa-area | — | 21238 | `/apartment-for-sale/lycee-newroad-three-bedroom-apartment-2/` |
-| 25 | SumaleTera,Three BedRoom Apartment | 3 | 2 | — | piyassa-area | — | 21248 | `/apartment-for-sale/sumaletera-three-bedroom-apartment/` |
-| 26 | Sarbet -Au,Three BedRoom Apartment | 3 | 2 | — | sarbet | 30 months | 21653 | `/apartment-for-sale/sarbet-au-three-bedroom-apartment/` |
-| 27 | Sarbet -Au,Two BedRoom Apartment | 3 | 2 | — | sarbet | 30 Months | 21654 | `/apartment-for-sale/sarbet-au-two-bedroom-apartment/` |
-| 28 | Sarbet -Blue Point Three BedRoom Apartment | 3 | 2 | — | sarbet | 36 Months | 25947 | `/apartment-for-sale/sarbet-blue-point-three-bedroom-apartment/` |
-| 29 | Sarbet -City Plus One BedRoom Apartment | 1 | 1 | — | sarbet | 36 Months | 28908 | `/apartment-for-sale/sarbet-city-plus-one-bedroom-apartment/` |
-| 30 | Sarbet -City Plus Three BedRoom Apartment | 3 | 2 | — | sarbet | 36 Months | 28802 | `/apartment-for-sale/sarbet-city-plus-three-bedroom-apartment/` |
-| 31 | Sarbet -City Plus Two BedRoom Apartment | 2 | 2 | — | sarbet | 36 Months | 28893 | `/apartment-for-sale/sarbet-city-plus-two-bedroom/` |
-| 32 | Sarbet -Seken,Three BedRoom Apartment | 3 | 2 | — | sarbet | — | 21242 | `/apartment-for-sale/sarbet-three-bedroom-apartment-2/` |
+| 1 | Aware – One BedRoom Apartment | 1 | 9 | - | aware-area | 36 Months | 25920 | `/apartment-for-sale/aware-one-bedroom-apartment-3/` |
+| 2 | Aware – Three BedRoom Apartment | 3 | 2 | - | aware-area | 36 Months | 25934 | `/apartment-for-sale/aware-three-bedroom-apartment/` |
+| 3 | Aware-4 Kilo,Three BedRoom Apartment | 3 | 2 | - | aware-area | - | 21243 | `/apartment-for-sale/aware-4-kilo-three-bedroom-apartment/` |
+| 4 | Aware-4 kilo,Two BedRoom Apartment | 2 | 1 | - | aware-area | - | 21244 | `/apartment-for-sale/aware-4kilo-two-bedroom-apartment/` |
+| 5 | Achantan,Three BedRoom Apartment | 3 | 2 | - | ayat-area | 30 Months | 21263 | `/apartment-for-sale/achantan-three-bedroom-apartment/` |
+| 6 | Ayat Feres Bet,Three BedRoom Apartment | 3 | 2 | - | ayat-area | - | 21259 | `/apartment-for-sale/ayat-feres-betthree-bedroom-apartment/` |
+| 7 | Ayat Feres Bet,Two BedRoom Apartment | 2 | 1 | - | ayat-area | 30 Months | 21261 | `/apartment-for-sale/ayatferesbet-two-bedroom-apartment/` |
+| 8 | Ayat Lomiyad,Four BedRoom Apartment | 3 | 2 | - | ayat-area | - | 21247 | `/apartment-for-sale/ayat-lomiyad-four-bedroom-apartment/` |
+| 9 | Ayat Lomiyad,Three BedRoom Apartment | 3 | 2 | - | ayat-area | - | 21246 | `/apartment-for-sale/ayat-lomiyad-three-bedroom-apartment-2/` |
+| 10 | Ayat Lomiyad,Two BedRoom Apartment | 2 | 1 | - | ayat-area | - | 21245 | `/apartment-for-sale/ayatlomiyad-two-bedroom-apartment/` |
+| 11 | Ayat To Center,Three BedRoom Apartment | 3 | 2 | - | ayat-area | 30 Months | 21349 | `/apartment-for-sale/ayat-to-center-three-bedroom-apartment-2/` |
+| 12 | Haile Garment,Three BedRoom Apartment | 3 | 2 | - | garment-area | - | 21240 | `/apartment-for-sale/haile-garment-three-bedroom-apartment/` |
+| 13 | Gelan Shopping Center | 7 | 9 | - | gelan-area | 30 Months | 25918 | `/apartment-for-sale/gelan-shopping-center/` |
+| 14 | Adwa -ewket, Shops | 7 | 9 | - | piyassa-area | 16 Months | 21354 | `/apartment-for-sale/adwa-ewketshops-2/` |
+| 15 | Adwa-empire, Shops | 7 | 9 | - | piyassa-area | - | 21355 | `/apartment-for-sale/adwa-empire-shops/` |
+| 16 | Arada Site, Shops | 7 | 9 | - | piyassa-area | 16 Months | 21356 | `/apartment-for-sale/arada-site-shops-2/` |
+| 17 | LYCEE Seken- One BedRoom Apartment | 1 | 1 | - | piyassa-area | 30 Months | 22257 | `/apartment-for-sale/lycee-003-one-bedroom-apartment/` |
+| 18 | LYCEE Seken- Three BedRoom Apartment | 3 | 2 | - | piyassa-area | 30 Months | 22236 | `/apartment-for-sale/lycee-seken-seken-three-bedroom-2/` |
+| 19 | LYCEE Seken- Two BedRoom Apartment | 2 | 1 | - | piyassa-area | 30 Months | 22250 | `/apartment-for-sale/lycee-003-seken-three-bedroom/` |
+| 20 | Lycee Burat,One BedRoom Apartment | 1 | 1 | - | piyassa-area | - | 21234 | `/apartment-for-sale/lycee-burat-one-bedroom-apartment/` |
+| 21 | Lycee Burat,Three BedRoom Apartment | 3 | 2 | - | piyassa-area | - | 21237 | `/apartment-for-sale/lycee-burat-three-bedroom-apartment/` |
+| 22 | Lycee Burat,Two BedRoom Apartment | 2 | 1 | - | piyassa-area | - | 21236 | `/apartment-for-sale/lycee-burat-two-bedroom-apartment/` |
+| 23 | Lycee NewRoad,Three BedRoom Apartment | 3 | 2 | - | piyassa-area | - | 21239 | `/apartment-for-sale/lycee-newroad-three-bedroom-apartment-2-2/` |
+| 24 | Lycee NewRoad,Two BedRoom Apartment | 2 | 1 | - | piyassa-area | - | 21238 | `/apartment-for-sale/lycee-newroad-three-bedroom-apartment-2/` |
+| 25 | SumaleTera,Three BedRoom Apartment | 3 | 2 | - | piyassa-area | - | 21248 | `/apartment-for-sale/sumaletera-three-bedroom-apartment/` |
+| 26 | Sarbet -Au,Three BedRoom Apartment | 3 | 2 | - | sarbet | 30 months | 21653 | `/apartment-for-sale/sarbet-au-three-bedroom-apartment/` |
+| 27 | Sarbet -Au,Two BedRoom Apartment | 3 | 2 | - | sarbet | 30 Months | 21654 | `/apartment-for-sale/sarbet-au-two-bedroom-apartment/` |
+| 28 | Sarbet -Blue Point Three BedRoom Apartment | 3 | 2 | - | sarbet | 36 Months | 25947 | `/apartment-for-sale/sarbet-blue-point-three-bedroom-apartment/` |
+| 29 | Sarbet -City Plus One BedRoom Apartment | 1 | 1 | - | sarbet | 36 Months | 28908 | `/apartment-for-sale/sarbet-city-plus-one-bedroom-apartment/` |
+| 30 | Sarbet -City Plus Three BedRoom Apartment | 3 | 2 | - | sarbet | 36 Months | 28802 | `/apartment-for-sale/sarbet-city-plus-three-bedroom-apartment/` |
+| 31 | Sarbet -City Plus Two BedRoom Apartment | 2 | 2 | - | sarbet | 36 Months | 28893 | `/apartment-for-sale/sarbet-city-plus-two-bedroom/` |
+| 32 | Sarbet -Seken,Three BedRoom Apartment | 3 | 2 | - | sarbet | - | 21242 | `/apartment-for-sale/sarbet-three-bedroom-apartment-2/` |
 
 ### Per-listing details
 
@@ -202,7 +202,7 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **Temer property ID:** 25920
 - **Area:** aware-area · **Location label:** Aware
 - **Bedrooms / bathrooms:** 1 / 9
-- **Size:** —
+- **Size:** -
 - **Delivery:** 36 Months
 - **Building Size:** 2B+G+20+T
 - **Building Type:** Residential
@@ -219,7 +219,7 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **Temer property ID:** 25934
 - **Area:** aware-area · **Location label:** Aware
 - **Bedrooms / bathrooms:** 3 / 2
-- **Size:** —
+- **Size:** -
 - **Delivery:** 36 Months
 - **Building Size:** 2B+G+20+T
 - **Building Type:** Residential
@@ -234,13 +234,13 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **URL:** https://temerproperties.com/apartment-for-sale/aware-4-kilo-three-bedroom-apartment/
 - **Slug:** `aware-4-kilo-three-bedroom-apartment`
 - **Temer property ID:** 21243
-- **Area:** aware-area · **Location label:** —
+- **Area:** aware-area · **Location label:** -
 - **Bedrooms / bathrooms:** 3 / 2
-- **Size:** —
-- **Delivery:** —
+- **Size:** -
+- **Delivery:** -
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
-- **Summary:** Real estate in Ethiopia starts here—with Temer Real Estate. Explore the Aware - 4 kilo Three-bedroom apartment for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia starts here-with Temer Real Estate. Explore the Aware - 4 kilo Three-bedroom apartment for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### Aware-4 kilo,Two BedRoom Apartment
@@ -248,13 +248,13 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **URL:** https://temerproperties.com/apartment-for-sale/aware-4kilo-two-bedroom-apartment/
 - **Slug:** `aware-4kilo-two-bedroom-apartment`
 - **Temer property ID:** 21244
-- **Area:** aware-area · **Location label:** —
+- **Area:** aware-area · **Location label:** -
 - **Bedrooms / bathrooms:** 2 / 1
-- **Size:** —
-- **Delivery:** —
+- **Size:** -
+- **Delivery:** -
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
-- **Summary:** Real estate in Ethiopia starts here—with Temer Real Estate. Explore theAware - 4 kilo Two-bedroom apartment for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia starts here-with Temer Real Estate. Explore theAware - 4 kilo Two-bedroom apartment for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### Achantan,Three BedRoom Apartment
@@ -264,14 +264,14 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **Temer property ID:** 21263
 - **Area:** ayat-area · **Location label:** Ayat
 - **Bedrooms / bathrooms:** 3 / 2
-- **Size:** —
+- **Size:** -
 - **Delivery:** 30 Months
 - **Building Size:** B+G+10+T
 - **Building Type:** Residential
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
 - **Basement:** Yes
-- **Summary:** Real estate in Ethiopia at its best—explore Achantan, a modern three-bedroom apartment for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia at its best-explore Achantan, a modern three-bedroom apartment for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### Ayat Feres Bet,Three BedRoom Apartment
@@ -279,13 +279,13 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **URL:** https://temerproperties.com/apartment-for-sale/ayat-feres-betthree-bedroom-apartment/
 - **Slug:** `ayat-feres-betthree-bedroom-apartment`
 - **Temer property ID:** 21259
-- **Area:** ayat-area · **Location label:** —
+- **Area:** ayat-area · **Location label:** -
 - **Bedrooms / bathrooms:** 3 / 2
-- **Size:** —
-- **Delivery:** —
+- **Size:** -
+- **Delivery:** -
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
-- **Summary:** Real estate in Ethiopia starts here—with Temer Real Estate. Explore the Ayat Feres Bet three-bedroom apartment for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia starts here-with Temer Real Estate. Explore the Ayat Feres Bet three-bedroom apartment for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### Ayat Feres Bet,Two BedRoom Apartment
@@ -295,14 +295,14 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **Temer property ID:** 21261
 - **Area:** ayat-area · **Location label:** Ayat
 - **Bedrooms / bathrooms:** 2 / 1
-- **Size:** —
+- **Size:** -
 - **Delivery:** 30 Months
 - **Building Size:** 2B+G+16+T
 - **Building Type:** Residential
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
 - **Basement:** cement
-- **Summary:** Real estate in Ethiopia starts here— with Temer Real Estate. Explore the Ayat Feres Bet two-bedroom apartment for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia starts here- with Temer Real Estate. Explore the Ayat Feres Bet two-bedroom apartment for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### Ayat Lomiyad,Four BedRoom Apartment
@@ -310,13 +310,13 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **URL:** https://temerproperties.com/apartment-for-sale/ayat-lomiyad-four-bedroom-apartment/
 - **Slug:** `ayat-lomiyad-four-bedroom-apartment`
 - **Temer property ID:** 21247
-- **Area:** ayat-area · **Location label:** —
+- **Area:** ayat-area · **Location label:** -
 - **Bedrooms / bathrooms:** 3 / 2
-- **Size:** —
-- **Delivery:** —
+- **Size:** -
+- **Delivery:** -
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
-- **Summary:** Real estate in Ethiopia starts here—with Temer Real Estate. Explore the Ayat Lomiyad four-bedroom apartment for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia starts here-with Temer Real Estate. Explore the Ayat Lomiyad four-bedroom apartment for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### Ayat Lomiyad,Three BedRoom Apartment
@@ -324,13 +324,13 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **URL:** https://temerproperties.com/apartment-for-sale/ayat-lomiyad-three-bedroom-apartment-2/
 - **Slug:** `ayat-lomiyad-three-bedroom-apartment-2`
 - **Temer property ID:** 21246
-- **Area:** ayat-area · **Location label:** —
+- **Area:** ayat-area · **Location label:** -
 - **Bedrooms / bathrooms:** 3 / 2
-- **Size:** —
-- **Delivery:** —
+- **Size:** -
+- **Delivery:** -
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
-- **Summary:** Real estate in Ethiopia starts here—with Temer Real Estate. Explore the Ayat Lomiyad three-bedroom apartment for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia starts here-with Temer Real Estate. Explore the Ayat Lomiyad three-bedroom apartment for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### Ayat Lomiyad,Two BedRoom Apartment
@@ -338,13 +338,13 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **URL:** https://temerproperties.com/apartment-for-sale/ayatlomiyad-two-bedroom-apartment/
 - **Slug:** `ayatlomiyad-two-bedroom-apartment`
 - **Temer property ID:** 21245
-- **Area:** ayat-area · **Location label:** —
+- **Area:** ayat-area · **Location label:** -
 - **Bedrooms / bathrooms:** 2 / 1
-- **Size:** —
-- **Delivery:** —
+- **Size:** -
+- **Delivery:** -
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
-- **Summary:** Real estate in Ethiopia starts here—with Temer Real Estate. Explore the Ayat Lomiyad Two-bedroom apartment for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia starts here-with Temer Real Estate. Explore the Ayat Lomiyad Two-bedroom apartment for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### Ayat To Center,Three BedRoom Apartment
@@ -354,14 +354,14 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **Temer property ID:** 21349
 - **Area:** ayat-area · **Location label:** Ayat
 - **Bedrooms / bathrooms:** 3 / 2
-- **Size:** —
+- **Size:** -
 - **Delivery:** 30 Months
 - **Building Size:** 3B+G+15
 - **Building Type:** Residential
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
 - **Basement:** yes
-- **Summary:** Real estate in Ethiopia at its best—discover Ayat To Center, a spacious three-bedroom apartment for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia at its best-discover Ayat To Center, a spacious three-bedroom apartment for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### Haile Garment,Three BedRoom Apartment
@@ -369,13 +369,13 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **URL:** https://temerproperties.com/apartment-for-sale/haile-garment-three-bedroom-apartment/
 - **Slug:** `haile-garment-three-bedroom-apartment`
 - **Temer property ID:** 21240
-- **Area:** garment-area · **Location label:** —
+- **Area:** garment-area · **Location label:** -
 - **Bedrooms / bathrooms:** 3 / 2
-- **Size:** —
-- **Delivery:** —
+- **Size:** -
+- **Delivery:** -
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
-- **Summary:** Real estate in Ethiopia starts here—with Temer Real Estate. Explore the Haile-Garment Three-bedroom apartment for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia starts here-with Temer Real Estate. Explore the Haile-Garment Three-bedroom apartment for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### Gelan Shopping Center
@@ -385,14 +385,14 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **Temer property ID:** 25918
 - **Area:** gelan-area · **Location label:** Gelan
 - **Bedrooms / bathrooms:** 7 / 9
-- **Size:** —
+- **Size:** -
 - **Delivery:** 30 Months
 - **Building Size:** G+7
 - **Building Type:** Commercial
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
 - **Basement:** No
-- **Summary:** Real estate in Ethiopia at its best—discover -Gelan Shops , modern and luxury shops for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia at its best-discover -Gelan Shops , modern and luxury shops for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### Adwa -ewket, Shops
@@ -402,13 +402,13 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **Temer property ID:** 21354
 - **Area:** piyassa-area · **Location label:** Piyassa
 - **Bedrooms / bathrooms:** 7 / 9
-- **Size:** —
+- **Size:** -
 - **Delivery:** 16 Months
 - **Building Size:** 2B+G+5
 - **Building Type:** Commercial
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
-- **Summary:** Real estate in Ethiopia at its best—discover Adwa 001-Shops, modern and luxury shops for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia at its best-discover Adwa 001-Shops, modern and luxury shops for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### Adwa-empire, Shops
@@ -416,13 +416,13 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **URL:** https://temerproperties.com/apartment-for-sale/adwa-empire-shops/
 - **Slug:** `adwa-empire-shops`
 - **Temer property ID:** 21355
-- **Area:** piyassa-area · **Location label:** —
+- **Area:** piyassa-area · **Location label:** -
 - **Bedrooms / bathrooms:** 7 / 9
-- **Size:** —
-- **Delivery:** —
+- **Size:** -
+- **Delivery:** -
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
-- **Summary:** Real estate in Ethiopia at its best—discover Adwa 002-Shops , modern and luxury shops for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia at its best-discover Adwa 002-Shops , modern and luxury shops for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### Arada Site, Shops
@@ -432,13 +432,13 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **Temer property ID:** 21356
 - **Area:** piyassa-area · **Location label:** Piyassa
 - **Bedrooms / bathrooms:** 7 / 9
-- **Size:** —
+- **Size:** -
 - **Delivery:** 16 Months
 - **Building Size:** B+G+5
 - **Building Type:** Residential
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
-- **Summary:** Real estate in Ethiopia at its best—discover Mehamud Muzika Bet Project, modern shops for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia at its best-discover Mehamud Muzika Bet Project, modern shops for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### LYCEE Seken- One BedRoom Apartment
@@ -448,7 +448,7 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **Temer property ID:** 22257
 - **Area:** piyassa-area · **Location label:** Piyassa
 - **Bedrooms / bathrooms:** 1 / 1
-- **Size:** —
+- **Size:** -
 - **Delivery:** 30 Months
 - **Building Size:** B+G+19+ T
 - **Building Type:** Residential
@@ -465,14 +465,14 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **Temer property ID:** 22236
 - **Area:** piyassa-area · **Location label:** Piyassa
 - **Bedrooms / bathrooms:** 3 / 2
-- **Size:** —
+- **Size:** -
 - **Delivery:** 30 Months
 - **Building Size:** B+G+19+ T
 - **Building Type:** Residential
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
 - **Basement:** Yes
-- **Summary:** Real estate in Ethiopia at its best—discover LYCEE 003, a spacious one-bedroom apartment for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia at its best-discover LYCEE 003, a spacious one-bedroom apartment for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### LYCEE Seken- Two BedRoom Apartment
@@ -482,14 +482,14 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **Temer property ID:** 22250
 - **Area:** piyassa-area · **Location label:** Piyassa
 - **Bedrooms / bathrooms:** 2 / 1
-- **Size:** —
+- **Size:** -
 - **Delivery:** 30 Months
 - **Building Size:** B+G+19+ T
 - **Building Type:** Residential
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
 - **Basement:** Yes
-- **Summary:** Real estate in Ethiopia at its best—discover LYCEE 003, a spacious two-bedroom apartment for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia at its best-discover LYCEE 003, a spacious two-bedroom apartment for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### Lycee Burat,One BedRoom Apartment
@@ -497,14 +497,14 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **URL:** https://temerproperties.com/apartment-for-sale/lycee-burat-one-bedroom-apartment/
 - **Slug:** `lycee-burat-one-bedroom-apartment`
 - **Temer property ID:** 21234
-- **Area:** piyassa-area · **Location label:** —
+- **Area:** piyassa-area · **Location label:** -
 - **Bedrooms / bathrooms:** 1 / 1
-- **Size:** —
-- **Delivery:** —
+- **Size:** -
+- **Delivery:** -
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
 - **Basement:** cement
-- **Summary:** Real estate in Ethiopia starts here—with Temer Real Estate. Explore the Lycee 001 one-bedroom apartment for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia starts here-with Temer Real Estate. Explore the Lycee 001 one-bedroom apartment for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### Lycee Burat,Three BedRoom Apartment
@@ -512,14 +512,14 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **URL:** https://temerproperties.com/apartment-for-sale/lycee-burat-three-bedroom-apartment/
 - **Slug:** `lycee-burat-three-bedroom-apartment`
 - **Temer property ID:** 21237
-- **Area:** piyassa-area · **Location label:** —
+- **Area:** piyassa-area · **Location label:** -
 - **Bedrooms / bathrooms:** 3 / 2
-- **Size:** —
-- **Delivery:** —
+- **Size:** -
+- **Delivery:** -
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
 - **Basement:** cement
-- **Summary:** Real estate in Ethiopia starts here—with Temer Real Estate. Explore the Lycee 001 Three-bedroom apartment for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia starts here-with Temer Real Estate. Explore the Lycee 001 Three-bedroom apartment for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### Lycee Burat,Two BedRoom Apartment
@@ -527,14 +527,14 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **URL:** https://temerproperties.com/apartment-for-sale/lycee-burat-two-bedroom-apartment/
 - **Slug:** `lycee-burat-two-bedroom-apartment`
 - **Temer property ID:** 21236
-- **Area:** piyassa-area · **Location label:** —
+- **Area:** piyassa-area · **Location label:** -
 - **Bedrooms / bathrooms:** 2 / 1
-- **Size:** —
-- **Delivery:** —
+- **Size:** -
+- **Delivery:** -
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
 - **Basement:** cement
-- **Summary:** Real estate in Ethiopia starts here—with Temer Real Estate. Explore the Lycee 001 Two-bedroom apartment for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia starts here-with Temer Real Estate. Explore the Lycee 001 Two-bedroom apartment for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### Lycee NewRoad,Three BedRoom Apartment
@@ -542,14 +542,14 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **URL:** https://temerproperties.com/apartment-for-sale/lycee-newroad-three-bedroom-apartment-2-2/
 - **Slug:** `lycee-newroad-three-bedroom-apartment-2-2`
 - **Temer property ID:** 21239
-- **Area:** piyassa-area · **Location label:** —
+- **Area:** piyassa-area · **Location label:** -
 - **Bedrooms / bathrooms:** 3 / 2
-- **Size:** —
-- **Delivery:** —
+- **Size:** -
+- **Delivery:** -
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
 - **Basement:** cement
-- **Summary:** Real estate in Ethiopia starts here—with Temer Real Estate. Explore the Lycee 002 Three-bedroom apartment for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia starts here-with Temer Real Estate. Explore the Lycee 002 Three-bedroom apartment for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### Lycee NewRoad,Two BedRoom Apartment
@@ -557,14 +557,14 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **URL:** https://temerproperties.com/apartment-for-sale/lycee-newroad-three-bedroom-apartment-2/
 - **Slug:** `lycee-newroad-three-bedroom-apartment-2`
 - **Temer property ID:** 21238
-- **Area:** piyassa-area · **Location label:** —
+- **Area:** piyassa-area · **Location label:** -
 - **Bedrooms / bathrooms:** 2 / 1
-- **Size:** —
-- **Delivery:** —
+- **Size:** -
+- **Delivery:** -
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
 - **Basement:** cement
-- **Summary:** Real estate in Ethiopia starts here—with Temer Real Estate. Explore the Lycee 002 Two-bedroom apartment for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia starts here-with Temer Real Estate. Explore the Lycee 002 Two-bedroom apartment for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### SumaleTera,Three BedRoom Apartment
@@ -572,13 +572,13 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **URL:** https://temerproperties.com/apartment-for-sale/sumaletera-three-bedroom-apartment/
 - **Slug:** `sumaletera-three-bedroom-apartment`
 - **Temer property ID:** 21248
-- **Area:** piyassa-area · **Location label:** —
+- **Area:** piyassa-area · **Location label:** -
 - **Bedrooms / bathrooms:** 3 / 2
-- **Size:** —
-- **Delivery:** —
+- **Size:** -
+- **Delivery:** -
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
-- **Summary:** Real estate in Ethiopia starts here—with Temer Real Estate. Explore theSumale Tera three-bedroom apartment for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia starts here-with Temer Real Estate. Explore theSumale Tera three-bedroom apartment for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### Sarbet -Au,Three BedRoom Apartment
@@ -588,13 +588,13 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **Temer property ID:** 21653
 - **Area:** sarbet · **Location label:** sarbet
 - **Bedrooms / bathrooms:** 3 / 2
-- **Size:** —
+- **Size:** -
 - **Delivery:** 30 months
 - **Building Type:** Residential
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
 - **Basement:** yes
-- **Summary:** Real estate in Ethiopia at its best—discover Sarbet Au, a spacious three-bedroom apartment for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia at its best-discover Sarbet Au, a spacious three-bedroom apartment for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### Sarbet -Au,Two BedRoom Apartment
@@ -604,14 +604,14 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **Temer property ID:** 21654
 - **Area:** sarbet · **Location label:** Sarbet
 - **Bedrooms / bathrooms:** 3 / 2
-- **Size:** —
+- **Size:** -
 - **Delivery:** 30 Months
 - **Building Size:** 2B+G+20+T
 - **Building Type:** Residential
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
 - **Basement:** Yes
-- **Summary:** Real estate in Ethiopia at its best—discover Sarbet Au, a spacious two-bedroom apartment for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia at its best-discover Sarbet Au, a spacious two-bedroom apartment for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 #### Sarbet -Blue Point Three BedRoom Apartment
@@ -621,7 +621,7 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **Temer property ID:** 25947
 - **Area:** sarbet · **Location label:** Sarbet
 - **Bedrooms / bathrooms:** 3 / 2
-- **Size:** —
+- **Size:** -
 - **Delivery:** 36 Months
 - **Building Size:** B+G+21+T
 - **Building Type:** Residential
@@ -638,7 +638,7 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **Temer property ID:** 28908
 - **Area:** sarbet · **Location label:** Sarbet
 - **Bedrooms / bathrooms:** 1 / 1
-- **Size:** —
+- **Size:** -
 - **Delivery:** 36 Months
 - **Building Size:** 3B+G+23
 - **Building Type:** Mixed Use
@@ -655,7 +655,7 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **Temer property ID:** 28802
 - **Area:** sarbet · **Location label:** Sarbet
 - **Bedrooms / bathrooms:** 3 / 2
-- **Size:** —
+- **Size:** -
 - **Delivery:** 36 Months
 - **Building Size:** 3B+G+23
 - **Building Type:** Mixed Use
@@ -672,7 +672,7 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **Temer property ID:** 28893
 - **Area:** sarbet · **Location label:** Sarbet
 - **Bedrooms / bathrooms:** 2 / 2
-- **Size:** —
+- **Size:** -
 - **Delivery:** 36 Months
 - **Building Size:** 3B+G+23
 - **Building Type:** Mixed Use
@@ -687,13 +687,13 @@ Complete inventory from `estate_property-sitemap.xml`. **List prices are rarely 
 - **URL:** https://temerproperties.com/apartment-for-sale/sarbet-three-bedroom-apartment-2/
 - **Slug:** `sarbet-three-bedroom-apartment-2`
 - **Temer property ID:** 21242
-- **Area:** sarbet · **Location label:** —
+- **Area:** sarbet · **Location label:** -
 - **Bedrooms / bathrooms:** 3 / 2
-- **Size:** —
-- **Delivery:** —
+- **Size:** -
+- **Delivery:** -
 - **Parking Type:** Private Parking
 - **Garage Size:** 1 car
-- **Summary:** Real estate in Ethiopia starts here—with Temer Real Estate. Explore the Sarbet -Seken Three-bedroom apartment for sale in Addis Ababa.
+- **Summary:** Real estate in Ethiopia starts here-with Temer Real Estate. Explore the Sarbet -Seken Three-bedroom apartment for sale in Addis Ababa.
 - **Images:** 12 URLs (see JSON)
 
 ---
@@ -724,10 +724,10 @@ Pricing logic is loaded client-side (not in the public WordPress API). To mirror
 
 | Listing | Area | Notes |
 |---------|------|-------|
-| Arada Site, Shops | piyassa-area | Real estate in Ethiopia at its best—discover Mehamud Muzika Bet Project, modern shops for sale in Addis Ababa.… |
-| Adwa-empire, Shops | piyassa-area | Real estate in Ethiopia at its best—discover Adwa 002-Shops , modern and luxury shops for sale in Addis Ababa.… |
-| Adwa -ewket, Shops | piyassa-area | Real estate in Ethiopia at its best—discover Adwa 001-Shops, modern and luxury shops for sale in Addis Ababa.… |
-| Gelan Shopping Center | gelan-area | Real estate in Ethiopia at its best—discover -Gelan Shops , modern and luxury shops for sale in Addis Ababa.… |
+| Arada Site, Shops | piyassa-area | Real estate in Ethiopia at its best-discover Mehamud Muzika Bet Project, modern shops for sale in Addis Ababa.… |
+| Adwa-empire, Shops | piyassa-area | Real estate in Ethiopia at its best-discover Adwa 002-Shops , modern and luxury shops for sale in Addis Ababa.… |
+| Adwa -ewket, Shops | piyassa-area | Real estate in Ethiopia at its best-discover Adwa 001-Shops, modern and luxury shops for sale in Addis Ababa.… |
+| Gelan Shopping Center | gelan-area | Real estate in Ethiopia at its best-discover -Gelan Shops , modern and luxury shops for sale in Addis Ababa.… |
 
 ---
 
@@ -735,9 +735,9 @@ Pricing logic is loaded client-side (not in the public WordPress API). To mirror
 
 ### Partnerships & promos
 
-- **Ethiopian Airlines / ShebaMiles** — earn miles when buying with Temer ([blog](https://temerproperties.com/how-many-shebamiles-can-you-earn-with-temer-properties/))
+- **Ethiopian Airlines / ShebaMiles** - earn miles when buying with Temer ([blog](https://temerproperties.com/how-many-shebamiles-can-you-earn-with-temer-properties/))
 - **Tour the World** travel promo ([blog](https://temerproperties.com/tour-the-world-for-free-with-temer-properties/))
-- Site pop-ups mention Sarbet / diplomats village promos (e.g. “from 120,000 birr per m²”) — **verify with Temer before using on Belay**
+- Site pop-ups mention Sarbet / diplomats village promos (e.g. “from 120,000 birr per m²”) - **verify with Temer before using on Belay**
 
 ### Value propositions (homepage)
 
@@ -767,7 +767,7 @@ Recent / notable:
 - [Kabod EXPO 2025 Proves Market Demand, Key Steps for a Better One](https://temerproperties.com/kabod-expo-2025-proves-market-demand-key-steps-for-a-better-one/)
 - [Kabod Real Estate Expo: A Grand Opening at the Science Museum](https://temerproperties.com/kabod-real-estate-expo-a-grand-opening-at-the-science-museum/)
 
-*…and 65 more — full list in `temer_scraped.json` → `blog_posts`.*
+*…and 65 more - full list in `temer_scraped.json` → `blog_posts`.*
 
 ---
 
@@ -780,23 +780,23 @@ Recent / notable:
 
 ## 9. Data quality & exclusions
 
-- WordPress REST API (/wp-json/) returns 403 — scrape uses Yoast sitemaps + HTML only.
+- WordPress REST API (/wp-json/) returns 403 - scrape uses Yoast sitemaps + HTML only.
 - Public listing pages rarely show ETB prices; confirm pricing with Temer sales.
-- Homepage may contain theme demo content (e.g. Elara Estates luxury USD listings) — excluded from properties sitemap.
+- Homepage may contain theme demo content (e.g. Elara Estates luxury USD listings) - excluded from properties sitemap.
 - Some Temer projects use Ayat as a geographic area; not the same as Ayat Share Company partner data.
 
-- **Theme demo content:** Homepage sections referencing “Elara Estates”, USD luxury villas ($1M+), and fake client names are **WordPress theme placeholders** — not Temer inventory.
+- **Theme demo content:** Homepage sections referencing “Elara Estates”, USD luxury villas ($1M+), and fake client names are **WordPress theme placeholders** - not Temer inventory.
 - **Bathroom / bed counts:** Parsed from Houzez detail blocks; always cross-check listing page before seeding.
 - **Sizes:** Often in `meta_description` (e.g. “76 m²”) when the detail field is empty.
 - **Ayat name overlap:** Temer projects in the **Ayat** area are Temer developments, not Ayat Share Company (`ayat-real-estate`) unless you explicitly partner both.
 
 ---
 
-## 10. Belay Properties — suggested next steps
+## 10. Belay Properties - suggested next steps
 
 1. Add `TEMER_PARTNER` in `frontend/src/content/partners.ts` (mirror Ayat).
 2. Create `Company` row `temer-properties` + contacts (6033, mobiles, email).
 3. Map each listing above → `projects` + `listings` (use Temer ID as external reference).
 4. Obtain **official price lists** from Temer (site rarely shows ETB); optional `temer_production.json` like Ayat.
-5. Decide calculator scope: Temer has their own [`/price-calculator/`](https://temerproperties.com/price-calculator/) — Belay may link out or build separate config later.
+5. Decide calculator scope: Temer has their own [`/price-calculator/`](https://temerproperties.com/price-calculator/) - Belay may link out or build separate config later.
 6. Re-run scraper periodically: `python3 scripts/scrape_temer_properties.py`.

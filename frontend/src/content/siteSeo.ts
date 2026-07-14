@@ -14,7 +14,7 @@ export const SITE_URL = normalizeSiteUrl()
 export const SITE_SEO = {
   siteName: SITE_BRAND.name,
   defaultDescription:
-    'Free real estate advisory in Addis Ababa. Compare Ayat and Temer apartments and shops. No buyer fees, no commission — Habesha Real Estate Advisory.',
+    'Free real estate advisory in Addis Ababa. Compare Ayat and Temer apartments and shops. No buyer fees, no commission. Habesha Real Estate Advisory.',
   keywords:
     'Addis Ababa apartments, Ethiopia real estate, Ayat homes, Temer properties, free property advisory, Habesha homes, apartment for sale Addis Ababa',
   locale: 'en_ET',

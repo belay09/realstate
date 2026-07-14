@@ -97,6 +97,6 @@ See `http://localhost:8000/docs`. Highlights:
 
 After seeding, open the UI:
 
-- Public: `http://localhost:5173/listings` — try filters `area=Ayat`, `bedrooms=3`, `company_slug=sunshine-developers`
+- Public: `http://localhost:5173/listings` - try filters `area=Ayat`, `bedrooms=3`, `company_slug=sunshine-developers`
 - Detail examples: `/listings/ayat-hills-3br-floor-5`, `/listings/cmc-extension-2br-floor-2`
 - Admin: create inventory or use printed `company_id` / `project_id` query links in the seed output

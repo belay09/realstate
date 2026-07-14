@@ -1,6 +1,6 @@
 /**
  * Official Ayat strategy JSON (Ayat/116/2018).
- * Canonical file: backend/data/ayat_official_2018.json — keep in sync when editing.
+ * Canonical file: backend/data/ayat_official_2018.json - keep in sync when editing.
  */
 import raw from './ayat_official_2018.json'
 

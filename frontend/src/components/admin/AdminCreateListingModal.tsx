@@ -207,7 +207,7 @@ export function AdminCreateListingModal({ companyId, onClose, onCreated }: Props
     onSuccess: (id) => {
       qc.invalidateQueries({ queryKey: ['admin', 'property-listings'] })
       qc.invalidateQueries({ queryKey: ['admin', 'listing-unit-options'] })
-      toast.success('Listing created — add photos next')
+      toast.success('Listing created - add photos next')
       onCreated(id)
     },
     onError: (err) => toast.error(actionError(err, 'Could not create listing')),
@@ -228,7 +228,7 @@ export function AdminCreateListingModal({ companyId, onClose, onCreated }: Props
               Add listing
             </h2>
             <p className="mt-1 text-xs text-stone-500">
-              Same fields as edit — we create the inventory link automatically. Add photos after save.
+              Same fields as edit - we create the inventory link automatically. Add photos after save.
             </p>
           </div>
           <button type="button" className="text-sm text-stone-500 hover:underline" onClick={onClose}>
@@ -299,7 +299,7 @@ export function AdminCreateListingModal({ companyId, onClose, onCreated }: Props
               className="input mt-1 w-full"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. Three-bedroom semi-finished — floor 11"
+              placeholder="e.g. Three-bedroom semi-finished - floor 11"
               required
             />
           </label>
@@ -336,7 +336,7 @@ export function AdminCreateListingModal({ companyId, onClose, onCreated }: Props
               placeholder="11"
             />
             <span className="mt-1 block font-normal text-stone-500">
-              Shown on the public page and used internally — not the same as the listing title.
+              Shown on the public page and used internally - not the same as the listing title.
             </span>
           </label>
 
@@ -349,7 +349,7 @@ export function AdminCreateListingModal({ companyId, onClose, onCreated }: Props
                   value={buildingType}
                   onChange={(e) => setBuildingType(e.target.value as typeof buildingType)}
                 >
-                  <option value="">— not set —</option>
+                  <option value="">- not set -</option>
                   <option value="mixed">Mixed use</option>
                   <option value="duplex">Duplex</option>
                   <option value="flat">Flat</option>
@@ -363,7 +363,7 @@ export function AdminCreateListingModal({ companyId, onClose, onCreated }: Props
                     value={useSegment}
                     onChange={(e) => setUseSegment(e.target.value as typeof useSegment)}
                   >
-                    <option value="">— select —</option>
+                    <option value="">- select -</option>
                     <option value="retail">Retail / shop floor</option>
                     <option value="residential">Residential floor</option>
                   </select>
@@ -383,7 +383,7 @@ export function AdminCreateListingModal({ companyId, onClose, onCreated }: Props
             onToggle={(e) => setShowAdvanced((e.target as HTMLDetailsElement).open)}
           >
             <summary className="cursor-pointer px-4 py-3 text-xs font-semibold uppercase tracking-wide text-stone-500">
-              Advanced — import / inventory (optional)
+              Advanced - import / inventory (optional)
             </summary>
             <div className="space-y-3 border-t border-stone-200 px-4 py-3 dark:border-stone-800">
               <p className="text-xs text-stone-500">
@@ -401,7 +401,7 @@ export function AdminCreateListingModal({ companyId, onClose, onCreated }: Props
                     <option value="">Auto-create unit (recommended)</option>
                     {importUnits.map((u) => (
                       <option key={u.id} value={u.id}>
-                        {u.project_name} / {u.block_name} — #{u.unit_number} ({u.unit_type_name})
+                        {u.project_name} / {u.block_name} - #{u.unit_number} ({u.unit_type_name})
                       </option>
                     ))}
                   </select>
@@ -431,7 +431,7 @@ export function AdminCreateListingModal({ companyId, onClose, onCreated }: Props
                       className="input mt-1 w-full max-w-xs font-mono text-sm"
                       value={unitNumber}
                       onChange={(e) => setUnitNumber(e.target.value)}
-                      placeholder="Leave blank — uses floor or auto ID"
+                      placeholder="Leave blank - uses floor or auto ID"
                     />
                   </label>
                 </>

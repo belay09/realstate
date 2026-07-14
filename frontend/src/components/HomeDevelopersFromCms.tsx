@@ -11,24 +11,18 @@ import { ButtonArrow } from './ButtonArrow'
 import { PartnerLogo } from './PartnerLogo'
 import { SectionHeader } from './SectionHeader'
 
-/** Soft priority for known partners — does not hardcode which companies exist. */
+/** Soft priority for known partners - does not hardcode which companies exist. */
 const SLUG_PRIORITY = [AYAT_PARTNER.slug, TEMER_PARTNER.slug] as const
 
-const ACCENT_BY_SLUG: Record<string, { blob: string; line: string }> = {
-  [AYAT_PARTNER.slug]: {
-    blob: 'from-red-950/8 via-transparent to-brand-500/5',
-    line: 'bg-red-900/70',
-  },
-  [TEMER_PARTNER.slug]: {
-    blob: 'from-emerald-950/8 via-transparent to-emerald-500/5',
-    line: 'bg-emerald-700/70',
-  },
+const PANEL_TONE: Record<string, string> = {
+  [AYAT_PARTNER.slug]:
+    'bg-gradient-to-br from-red-950 via-slate-900 to-brand-950 dark:from-red-950 dark:via-slate-950 dark:to-slate-900',
+  [TEMER_PARTNER.slug]:
+    'bg-gradient-to-br from-emerald-950 via-slate-900 to-emerald-900 dark:from-emerald-950 dark:via-slate-950 dark:to-emerald-950',
 }
 
-const DEFAULT_ACCENT = {
-  blob: 'from-brand-500/10 via-transparent to-brand-700/5',
-  line: 'bg-brand-600/70',
-}
+const DEFAULT_PANEL_TONE =
+  'bg-gradient-to-br from-slate-900 via-slate-800 to-brand-950 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800'
 
 function sortCompanies(companies: PublicCompany[]): PublicCompany[] {
   return [...companies].sort((a, b) => {
@@ -46,20 +40,24 @@ function sortCompanies(companies: PublicCompany[]): PublicCompany[] {
 
 function DevelopersSkeleton() {
   return (
-    <div className="space-y-0" aria-hidden>
+    <div className="mx-auto max-w-[90rem] space-y-10 px-4 pb-16 sm:space-y-12 sm:px-8 sm:pb-24" aria-hidden>
       {Array.from({ length: 2 }).map((_, i) => (
-        <div key={i} className="border-t border-border py-16 sm:py-20">
-          <div className="mx-auto grid max-w-[90rem] gap-12 px-4 sm:px-8 lg:grid-cols-2 lg:gap-16">
-            <div className="space-y-5">
-              <div className="h-1 w-12 animate-pulse rounded-full bg-surface-muted" />
-              <div className="flex items-start gap-5">
-                <div className="h-28 w-28 animate-pulse rounded-2xl bg-surface-muted sm:h-32 sm:w-32" />
-                <div className="mt-3 h-10 w-48 animate-pulse rounded bg-surface-muted" />
-              </div>
-              <div className="h-24 max-w-xl animate-pulse rounded bg-surface-muted" />
-              <div className="h-12 w-40 animate-pulse rounded-full bg-surface-muted" />
+        <div
+          key={i}
+          className="overflow-hidden rounded-3xl border border-border bg-surface shadow-sm"
+        >
+          <div
+            className={`grid min-h-[28rem] lg:min-h-[32rem] lg:grid-cols-[minmax(0,0.45fr)_minmax(0,0.55fr)] ${
+              i % 2 === 1 ? 'lg:[&>*:first-child]:order-2' : ''
+            }`}
+          >
+            <div className="min-h-[18rem] animate-pulse bg-surface-muted lg:min-h-full" />
+            <div className="flex flex-col justify-center gap-5 p-8 sm:p-10 lg:p-14">
+              <div className="h-3 w-28 animate-pulse rounded bg-surface-muted" />
+              <div className="h-10 w-56 animate-pulse rounded bg-surface-muted sm:w-72" />
+              <div className="h-20 max-w-xl animate-pulse rounded bg-surface-muted" />
+              <div className="mt-2 h-12 w-44 animate-pulse rounded-full bg-surface-muted" />
             </div>
-            <div className="aspect-[4/5] animate-pulse rounded-[2rem] bg-surface-muted sm:aspect-[5/6] sm:rounded-[2.5rem]" />
           </div>
         </div>
       ))}
@@ -67,7 +65,60 @@ function DevelopersSkeleton() {
   )
 }
 
-function DeveloperBand({
+function PartnerVisual({
+  company,
+  browseTo,
+  browseLabel,
+}: {
+  company: PublicCompany
+  browseTo: string
+  browseLabel: string
+}) {
+  const { t } = useTranslation()
+  const isTemer = company.slug === TEMER_PARTNER.slug
+  const tone = PANEL_TONE[company.slug] ?? DEFAULT_PANEL_TONE
+
+  return (
+    <Link
+      to={browseTo}
+      className="partner-rich-visual relative block min-h-[18rem] overflow-hidden sm:min-h-[22rem] lg:min-h-full"
+      aria-label={browseLabel}
+    >
+      <div className={`absolute inset-0 ${tone}`}>
+        <div
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,rgba(255,255,255,0.14),transparent_55%)]"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute -bottom-20 -right-16 h-72 w-72 rounded-full bg-white/10 blur-3xl"
+          aria-hidden
+        />
+      </div>
+
+      <div className="relative z-[1] flex h-full min-h-[18rem] flex-col items-center justify-center px-8 py-12 sm:min-h-[22rem] lg:min-h-full lg:py-16">
+        <PartnerLogo
+          companySlug={company.slug}
+          companyName={company.name}
+          logoUrl={company.logo_url}
+          size="lg"
+          className={`!rounded-3xl !border-0 !bg-white/95 !p-3 shadow-2xl dark:!bg-white ${
+            isTemer
+              ? '!h-32 !w-44 sm:!h-40 sm:!w-56'
+              : '!h-32 !w-32 sm:!h-40 sm:!w-40'
+          }`}
+        />
+        <p className="mt-8 text-center text-xs font-semibold uppercase tracking-[0.22em] text-white/70">
+          {t('developer.heroEyebrow')}
+        </p>
+        <p className="mt-2 max-w-xs text-center text-xl font-bold text-white sm:text-2xl">
+          {company.name}
+        </p>
+      </div>
+    </Link>
+  )
+}
+
+function DeveloperCard({
   company,
   reverse,
   index,
@@ -77,111 +128,52 @@ function DeveloperBand({
   index: number
 }) {
   const { t } = useTranslation()
-  const accent = ACCENT_BY_SLUG[company.slug] ?? DEFAULT_ACCENT
   const description =
     company.description?.trim() || t('home.developersCardFallbackDescription', { name: company.name })
   const browseTo = developerKindPath(company.slug)
   const browseLabel = t('home.developersCta', { name: company.name })
-  const isTemer = company.slug === TEMER_PARTNER.slug
 
   return (
     <article
-      className="developer-showcase group relative overflow-hidden border-t border-border py-14 sm:py-20 lg:py-24"
-      style={{ animationDelay: `${index * 120}ms` }}
+      className="partner-rich-card developer-showcase group overflow-hidden rounded-3xl border border-border bg-surface shadow-[0_18px_50px_-28px_rgba(15,23,42,0.28)] dark:shadow-[0_18px_50px_-28px_rgba(0,0,0,0.55)]"
+      style={{ animationDelay: `${index * 100}ms` }}
     >
       <div
-        className={`pointer-events-none absolute -top-24 h-80 w-80 rounded-full bg-gradient-to-br blur-3xl ${accent.blob} ${
-          reverse ? '-left-24' : '-right-24'
+        className={`grid min-h-[28rem] lg:min-h-[32rem] lg:grid-cols-[minmax(0,0.45fr)_minmax(0,0.55fr)] ${
+          reverse ? 'lg:[&>*:first-child]:order-2' : ''
         }`}
-        aria-hidden
-      />
+      >
+        <PartnerVisual company={company} browseTo={browseTo} browseLabel={browseLabel} />
 
-      <div className="relative mx-auto max-w-[90rem] px-4 sm:px-8">
-        <div
-          className={`grid items-center gap-12 lg:grid-cols-2 lg:gap-16 xl:gap-20 ${
-            reverse ? 'lg:[&>*:first-child]:order-2' : ''
-          }`}
-        >
-          <div className="min-w-0">
-            <div className={`mb-6 h-1 w-12 rounded-full ${accent.line}`} aria-hidden />
-            <p className="section-eyebrow">{t('developer.heroEyebrow')}</p>
+        <div className="flex min-w-0 flex-col justify-center px-8 py-10 sm:px-10 sm:py-12 lg:px-14 lg:py-16 xl:px-16">
+          <p className="section-eyebrow">{t('developer.heroEyebrow')}</p>
 
-            <div className="mt-6 flex items-start gap-4 sm:gap-6">
-              <div className="developer-showcase-logo shrink-0">
-                <PartnerLogo
-                  companySlug={company.slug}
-                  companyName={company.name}
-                  logoUrl={company.logo_url}
-                  size="lg"
-                  className={`shadow-lg ring-4 ring-white dark:ring-slate-900 ${
-                    isTemer
-                      ? 'h-24 w-32 object-contain sm:h-32 sm:w-40'
-                      : 'h-24 w-24 sm:h-32 sm:w-32'
-                  }`}
-                />
-              </div>
-              <div className="min-w-0 pt-1">
-                <h3 className="text-h1 leading-tight">{company.name}</h3>
-              </div>
-            </div>
-
-            <p className="text-lead mt-6 max-w-xl">{description}</p>
-
-            <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap">
-              <ButtonArrow to={browseTo} className="w-full justify-between sm:w-auto">
-                {browseLabel}
-              </ButtonArrow>
-            </div>
-          </div>
-
-          <Link
-            to={browseTo}
-            className="developer-showcase-visual relative block overflow-hidden rounded-[2rem] sm:rounded-[2.5rem]"
-            aria-label={browseLabel}
-          >
-            <div
-              className={`relative flex aspect-[4/5] items-center justify-center overflow-hidden sm:aspect-[5/6] ${
-                company.slug === AYAT_PARTNER.slug
-                  ? 'bg-gradient-to-br from-red-950 via-slate-900 to-brand-950'
-                  : company.slug === TEMER_PARTNER.slug
-                    ? 'bg-gradient-to-br from-emerald-950 via-slate-900 to-emerald-900'
-                    : 'bg-gradient-to-br from-slate-900 via-slate-800 to-brand-950'
-              }`}
-            >
-              <div
-                className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,rgba(255,255,255,0.14),transparent_55%)]"
-                aria-hidden
-              />
-              <div
-                className="pointer-events-none absolute -bottom-16 -right-16 h-64 w-64 rounded-full bg-brand-400/20 blur-3xl"
-                aria-hidden
-              />
+          <div className="mt-6 flex items-start gap-4 sm:gap-5">
+            <div className="developer-showcase-logo shrink-0">
               <PartnerLogo
                 companySlug={company.slug}
                 companyName={company.name}
                 logoUrl={company.logo_url}
-                size="lg"
-                className={`relative z-[1] !h-36 !w-36 !rounded-3xl !border-0 !bg-white/95 !p-3 shadow-2xl sm:!h-44 sm:!w-44 ${
-                  isTemer ? '!w-52 sm:!w-60' : ''
+                size="md"
+                className={`shadow-md ring-4 ring-white dark:ring-slate-900 ${
+                  company.slug === TEMER_PARTNER.slug
+                    ? '!h-16 !w-24 object-contain sm:!h-20 sm:!w-28'
+                    : ''
                 }`}
               />
             </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/15 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-300">
-                {t('developer.heroEyebrow')}
-              </p>
-              <p className="mt-2 text-2xl font-bold text-white sm:text-3xl">{company.name}</p>
-              <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white/90 transition group-hover:gap-3">
-                {browseLabel}
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-slate-950">
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </span>
-              </span>
+            <div className="min-w-0 pt-1">
+              <h3 className="text-h1 leading-[1.1]">{company.name}</h3>
             </div>
-          </Link>
+          </div>
+
+          <p className="text-lead mt-6 max-w-xl text-fg-muted">{description}</p>
+
+          <div className="mt-10">
+            <ButtonArrow to={browseTo} className="w-full justify-between sm:w-auto">
+              {browseLabel}
+            </ButtonArrow>
+          </div>
         </div>
       </div>
     </article>
@@ -197,8 +189,8 @@ function StatusPanel({
 }) {
   const { t } = useTranslation()
   return (
-    <div className="mx-auto max-w-[90rem] px-4 py-16 sm:px-8 sm:py-20">
-      <div className="max-w-xl border-t border-border pt-10">
+    <div className="mx-auto max-w-[90rem] px-4 pb-16 sm:px-8 sm:pb-24">
+      <div className="max-w-xl rounded-3xl border border-border bg-surface px-8 py-10 sm:px-10 sm:py-12">
         <p className="text-lg font-semibold text-fg">{title}</p>
         <p className="mt-3 text-sm leading-relaxed text-fg-muted">{body}</p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -235,7 +227,7 @@ export function HomeDevelopersFromCms() {
 
   return (
     <section id="developers" className="scroll-mt-28 overflow-hidden">
-      <div className="mx-auto max-w-[90rem] px-4 pb-2 pt-16 sm:px-8 sm:pt-24">
+      <div className="mx-auto max-w-[90rem] px-4 pb-8 pt-16 sm:px-8 sm:pb-10 sm:pt-24">
         <SectionHeader
           eyebrow={t('home.partnersEyebrow')}
           title={t('home.partnersTitle')}
@@ -255,9 +247,9 @@ export function HomeDevelopersFromCms() {
       ) : null}
 
       {!query.isLoading && !query.isError && companies.length > 0 ? (
-        <div className="pb-16 sm:pb-24">
+        <div className="mx-auto max-w-[90rem] space-y-10 px-4 pb-16 sm:space-y-12 sm:px-8 sm:pb-24">
           {companies.map((company, index) => (
-            <DeveloperBand
+            <DeveloperCard
               key={company.slug}
               company={company}
               reverse={index % 2 === 1}

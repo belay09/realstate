@@ -1,4 +1,4 @@
-# Phases 13–14 — AWS EC2 + Cloudflare DNS
+# Phases 13–14 - AWS EC2 + Cloudflare DNS
 
 > **New AWS account?** Start with the step-by-step walkthrough: **[AWS_FIRST_DEPLOY.md](./AWS_FIRST_DEPLOY.md)** (EC2 launch, SSH, IP test, then Cloudflare).
 
@@ -20,8 +20,8 @@ Replace `realtor.belay-sirak.com` and `api.realtor.belay-sirak.com` with your re
 - Type: `t3.small` or larger for MVP
 - Disk: ≥ 30 GB
 - Security group:
-  - **22** — SSH, your IP only if possible
-  - **80**, **443** — public (Caddy)
+  - **22** - SSH, your IP only if possible
+  - **80**, **443** - public (Caddy)
   - Do **not** open **5432**
 
 ## 2. Server bootstrap

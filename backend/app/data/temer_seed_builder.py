@@ -110,7 +110,7 @@ def clean_description(prop: dict, area: str) -> str:
     if raw_desc and len(raw_desc) < 500 and not any(m in raw_desc for m in junk_markers):
         parts.append(raw_desc)
     else:
-        parts.append(f"{prop['title']} — Temer Properties, {area}, Addis Ababa.")
+        parts.append(f"{prop['title']} - Temer Properties, {area}, Addis Ababa.")
     details = prop.get("details") or {}
     if details.get("Delivery Time"):
         parts.append(f"Delivery: {details['Delivery Time']}.")
@@ -119,7 +119,7 @@ def clean_description(prop: dict, area: str) -> str:
     pid = prop.get("property_id")
     if pid:
         parts.append(
-            f"Temer listing ref. {pid}. Price on request — contact Habesha Real Estate Advisory."
+            f"Temer listing ref. {pid}. Price on request - contact Habesha Real Estate Advisory."
         )
     return " ".join(parts)[:2000]
 
@@ -131,7 +131,7 @@ def _area_description(scraped_area: dict | None, label: str) -> str:
             return meta[:1200]
     return (
         f"Browse Temer Properties apartments and commercial units in {label}, Addis Ababa. "
-        "Prices are on request — Habesha Real Estate Advisory helps you compare layouts and "
+        "Prices are on request - Habesha Real Estate Advisory helps you compare layouts and "
         "contact Temer sales."
     )
 
@@ -146,11 +146,11 @@ def build_location_cards(
     if kind == "shop":
         for prop in props_in_area[:4]:
             size = parse_area_sqm(prop)
-            ref = prop.get("property_id", "—")
+            ref = prop.get("property_id", "-")
             cards.append(
                 {
                     "title": prop.get("title", "Commercial unit"),
-                    "body": f"Approx. {size} m² — price on request. Temer ref. {ref}.",
+                    "body": f"Approx. {size} m² - price on request. Temer ref. {ref}.",
                     "image_url": (prop.get("images") or [None])[0],
                 }
             )
@@ -172,7 +172,7 @@ def build_location_cards(
                     "title": label,
                     "body": (
                         f"From {size} m² in {AREA_LABELS.get(area_slug, area_slug)}. "
-                        f"{len(by_beds[beds])} layout(s) listed — price on request."
+                        f"{len(by_beds[beds])} layout(s) listed - price on request."
                     ),
                     "image_url": (sample.get("images") or [None])[0],
                 }
@@ -193,7 +193,7 @@ def build_location_cards(
     cards.append(
         {
             "title": "Source",
-            "body": "Data from temerproperties.com — verify details with Temer before purchase.",
+            "body": "Data from temerproperties.com - verify details with Temer before purchase.",
             "image_url": None,
         }
     )
@@ -225,7 +225,7 @@ def build_location_content(
             {
                 "location_id": area_slug,
                 "title": "Ayat area (Temer)" if area_slug == "ayat-area" else label,
-                "subtitle": f"Temer Properties — {label}",
+                "subtitle": f"Temer Properties - {label}",
                 "description": _area_description(scraped_area, label),
                 "video_url": None,
                 "cards": build_location_cards(area_slug, props_in_area, kind="apartment"),
@@ -240,7 +240,7 @@ def build_location_content(
         shops.append(
             {
                 "location_id": area_slug,
-                "title": f"{label} — Shops",
+                "title": f"{label} - Shops",
                 "subtitle": "Temer commercial units",
                 "description": _area_description(areas_by_slug.get(area_slug), label),
                 "video_url": None,

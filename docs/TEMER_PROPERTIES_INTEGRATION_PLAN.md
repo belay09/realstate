@@ -1,4 +1,4 @@
-# Temer Properties — integration plan (Belay Properties)
+# Temer Properties - integration plan (Belay Properties)
 
 > **Prerequisites:** [`TEMER_PROPERTIES_RESEARCH.md`](TEMER_PROPERTIES_RESEARCH.md) and [`backend/data/temer_scraped.json`](../backend/data/temer_scraped.json)  
 > **Related:** [`AYAT_DATA_ENTRY.md`](AYAT_DATA_ENTRY.md), [`BELAY_PROPERTIES_IMPLEMENTATION_PLAN.md`](BELAY_PROPERTIES_IMPLEMENTATION_PLAN.md)
@@ -13,7 +13,7 @@
 |------|------|-----|
 | 1 | Add Temer as a second **company** in the database + a handful of **listings** (start with Sarbet City Plus + 1–2 other projects) | Seed script / admin |
 | 2 | Home page: small **“Also from Temer Properties”** block + link to filtered apartments | Frontend |
-| 3 | `/apartments`: same page as now — cards already show **developer name**; optional filter **Ayat \| Temer** | Frontend (light) |
+| 3 | `/apartments`: same page as now - cards already show **developer name**; optional filter **Ayat \| Temer** | Frontend (light) |
 | 4 | Listing page: photo, text, **contact Belay** (form / WhatsApp). **No price calculator** for Temer | Already mostly works |
 
 **Skip for now:** Temer pricing engine, `/shops` for Temer, 32 listings at once, location CMS videos, re-scrape automation.
@@ -31,12 +31,12 @@ Belay Properties is a **comparison and sales layer**: visitors browse verified i
 ```mermaid
 flowchart TB
   subgraph public [Public site]
-    Home["/ — Home"]
-    Apt["/apartments — location cards"]
-    Proj["/apartments/:projectSlug — media + calculator"]
-    Detail["/listings/:slug — unit detail"]
-    Shops["/shops — Ayat commercial zones"]
-    Calc["/calculator — Ayat price tool"]
+    Home["/ - Home"]
+    Apt["/apartments - location cards"]
+    Proj["/apartments/:projectSlug - media + calculator"]
+    Detail["/listings/:slug - unit detail"]
+    Shops["/shops - Ayat commercial zones"]
+    Calc["/calculator - Ayat price tool"]
   end
   subgraph api [FastAPI]
     List["GET /public/listings?company_slug=…"]
@@ -120,10 +120,10 @@ Once Temer has `companies`, `projects`, `units`, and `listings` in the DB:
 
 ### 2.1 Principles
 
-1. **Belay stays the broker** — “Verified listings · contact Belay” (not impersonating Temer’s site).
-2. **Clear attribution** — Every card/detail shows **developer** (Ayat vs Temer).
-3. **No fake pricing** — Do not show ETB totals until Temer provides official tables (scraped site rarely lists prices).
-4. **Ayat ≠ Temer “Ayat area”** — Temer projects in geographic Ayat (e.g. Ayat 49, Feres Bet) are **Temer inventory**, not Ayat Share Company stock.
+1. **Belay stays the broker** - “Verified listings · contact Belay” (not impersonating Temer’s site).
+2. **Clear attribution** - Every card/detail shows **developer** (Ayat vs Temer).
+3. **No fake pricing** - Do not show ETB totals until Temer provides official tables (scraped site rarely lists prices).
+4. **Ayat ≠ Temer “Ayat area”** - Temer projects in geographic Ayat (e.g. Ayat 49, Feres Bet) are **Temer inventory**, not Ayat Share Company stock.
 
 ### 2.2 Recommended UX (MVP)
 
@@ -134,7 +134,7 @@ Once Temer has `companies`, `projects`, `units`, and `listings` in the DB:
 | `/apartments` | **All developers** by default; filter chips: All \| Ayat \| Temer |
 | `/apartments?company_slug=temer-properties` | Temer-only browse (shareable) |
 | Project pages | Generic “Apartments at {location}” + developer badge; calculator only if company has config |
-| `/calculator` | **Phase 1:** Ayat only + short note “Temer estimates — contact us / Temer calculator”. **Phase 2:** `/calculator?developer=temer` when rates exist |
+| `/calculator` | **Phase 1:** Ayat only + short note “Temer estimates - contact us / Temer calculator”. **Phase 2:** `/calculator?developer=temer` when rates exist |
 | Listing detail | Temer: photos, specs, delivery, **lead form**, hotline 6033 in copy; link to [Temer calculator](https://temerproperties.com/price-calculator/) optional |
 | Shops | **Ayat-only** for now (Temer shops live under `/apartments` project pages or later `/shops` extension) |
 
@@ -167,7 +167,7 @@ Add `company_contacts`: hotline label `6033`, secondary phone, `info@temerproper
 
 ### 3.2 Projects (suggested slugs)
 
-Group listings by development — **one project per development**, multiple unit types/listings underneath.
+Group listings by development - **one project per development**, multiple unit types/listings underneath.
 
 | Temer area | Suggested `project.slug` | Listings (from scrape) |
 |------------|--------------------------|-------------------------|
@@ -192,7 +192,7 @@ Group listings by development — **one project per development**, multiple unit
 
 Use Temer **`property_id`** in listing `description` or internal admin notes for sync with their CRM.
 
-### 3.3 Unit types (Temer — not Ayat codes)
+### 3.3 Unit types (Temer - not Ayat codes)
 
 Do **not** reuse `SFCA` / `SFCR`. Use readable codes:
 
@@ -217,20 +217,20 @@ Set `category`: `residential` or `commercial` for shops/Gelan.
 | Calculator config | `calculator_config` on live pricing version | New JSON; sites: Gelan, Aware-Zuhran, Sarbet Blue-Point |
 | Public API | `?company_slug=temer-properties` | Same endpoint, different payload |
 
-**MVP:** Skip published pricing; listing detail shows “Price on request — contact Belay” and optional link to Temer’s calculator.
+**MVP:** Skip published pricing; listing detail shows “Price on request - contact Belay” and optional link to Temer’s calculator.
 
 ---
 
 ## 4. Implementation phases
 
-### Phase 0 — Decisions (you)
+### Phase 0 - Decisions (you)
 
 - [ ] **Launch scope:** all 32 listings or pilot (Sarbet + Aware)?
 - [ ] **Calculator:** link-out only vs build Temer config on Belay?
 - [ ] **Leads:** Belay WhatsApp only vs also surface Temer 6033?
 - [ ] **Images:** scrape URLs hotlink vs upload to Cloudinary?
 
-### Phase 1 — Data & backend (no UI theme rewrite)
+### Phase 1 - Data & backend (no UI theme rewrite)
 
 | # | Task | Files / notes |
 |---|------|----------------|
@@ -242,7 +242,7 @@ Set `category`: `residential` or `commercial` for shops/Gelan.
 
 **Acceptance:** Temer listings visible in API; filter-options includes Temer.
 
-### Phase 2 — Public UI: Temer alongside Ayat
+### Phase 2 - Public UI: Temer alongside Ayat
 
 | # | Task | Files / notes |
 |---|------|----------------|
@@ -253,11 +253,11 @@ Set `category`: `residential` or `commercial` for shops/Gelan.
 | 2.5 | `ApartmentsPage` | Developer filter chips; remove Ayat-only empty CTA |
 | 2.6 | `ProjectListingsPage` | Dynamic eyebrow: `{company_name}` |
 | 2.7 | `ListingDetailPage` | Temer branch: no Ayat calculator; CTA + optional external calc link |
-| 2.8 | `ProjectLocationCard` | Already shows `company_name` — ensure contrast for two brands |
+| 2.8 | `ProjectLocationCard` | Already shows `company_name` - ensure contrast for two brands |
 
 **Acceptance:** User can browse Ayat and Temer on one site; clear badges; Temer detail does not show Ayat calculator.
 
-### Phase 3 — Location content & media
+### Phase 3 - Location content & media
 
 | # | Task | Files / notes |
 |---|------|----------------|
@@ -267,7 +267,7 @@ Set `category`: `residential` or `commercial` for shops/Gelan.
 
 **Acceptance:** `/apartments/sarbet-city-plus` has hero text and gallery.
 
-### Phase 4 — Pricing & calculator (when Temer provides rates)
+### Phase 4 - Pricing & calculator (when Temer provides rates)
 
 | # | Task | Files / notes |
 |---|------|----------------|
@@ -278,7 +278,7 @@ Set `category`: `residential` or `commercial` for shops/Gelan.
 
 **Acceptance:** `/calculator?company_slug=temer-properties` produces estimates consistent with Temer sales.
 
-### Phase 5 — Admin & ops
+### Phase 5 - Admin & ops
 
 | # | Task | Files / notes |
 |---|------|----------------|

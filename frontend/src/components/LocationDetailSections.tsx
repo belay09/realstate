@@ -10,7 +10,7 @@ type LocationDetailSectionsProps = {
   mediaDescription?: string | null
   /** Apartment layouts use Properties listings instead of CMS cards. */
   showLayoutCards?: boolean
-  /** Main video is shown in the page hero — only gallery images here. */
+  /** Main video is shown in the page hero - only gallery images here. */
   hideMainVideo?: boolean
 }
 

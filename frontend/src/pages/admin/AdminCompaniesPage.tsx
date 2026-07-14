@@ -13,7 +13,7 @@ type CompanyEditFields = {
 }
 
 /**
- * Admin Companies — source of truth for the public home developers section.
+ * Admin Companies - source of truth for the public home developers section.
  *
  * Fill for each active partner shown on `/`:
  * - Name (required)
@@ -83,7 +83,7 @@ export function AdminCompaniesPage() {
       <div>
         <h1 className="text-2xl font-semibold text-stone-900 dark:text-stone-50">Companies</h1>
         <p className="mt-2 max-w-2xl text-sm text-stone-600 dark:text-stone-400">
-          Partner developers on the home page (Ayat, Temer, …). Appears on home page when Active —
+          Partner developers on the home page (Ayat, Temer, …). Appears on home page when Active -
           set logo, website, and short description. Next:{' '}
           <Link to="/admin/listings" className="font-medium text-brand-700 underline dark:text-brand-400">
             Locations
@@ -134,7 +134,7 @@ export function AdminCompaniesPage() {
         </label>
         <label className="flex items-center gap-2 text-sm text-stone-700 dark:text-stone-300">
           <input name="is_active" type="checkbox" defaultChecked className="rounded border-stone-400" />
-          Active — appears on home page
+          Active - appears on home page
         </label>
         <button type="submit" className="btn-primary" disabled={create.isPending}>
           Create
@@ -171,7 +171,7 @@ export function AdminCompaniesPage() {
                 </td>
                 <td className="px-3 py-2 text-stone-600 dark:text-stone-400">{c.slug}</td>
                 <td className="px-3 py-2 text-xs text-stone-600 dark:text-stone-400">
-                  {c.logo_url ? <div className="truncate max-w-[12rem]">{c.logo_url}</div> : '—'}
+                  {c.logo_url ? <div className="truncate max-w-[12rem]">{c.logo_url}</div> : '-'}
                   {c.website ? (
                     <a
                       href={c.website}
@@ -235,7 +235,7 @@ export function AdminCompaniesPage() {
                           onChange={(e) => setDraft({ ...draft, is_active: e.target.checked })}
                           className="rounded border-stone-400"
                         />
-                        Active — appears on home page
+                        Active - appears on home page
                       </label>
                       <button
                         type="button"

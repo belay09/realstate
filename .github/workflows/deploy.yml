@@ -1,5 +1,5 @@
 # Deploy to EC2 after CI passes on main (push only).
-# Configure repository secrets — see docs/GITHUB_DEPLOY.md
+# Configure repository secrets - see docs/GITHUB_DEPLOY.md
 
 name: Deploy
 
@@ -77,7 +77,7 @@ jobs:
               APP_DIR="/home/${{ secrets.EC2_USER }}/realstate"
             fi
             if [ ! -d "$APP_DIR/.git" ]; then
-              echo "ERROR: $APP_DIR is not a git repo. Clone on EC2 first — see docs/GITHUB_DEPLOY.md"
+              echo "ERROR: $APP_DIR is not a git repo. Clone on EC2 first - see docs/GITHUB_DEPLOY.md"
               exit 1
             fi
             cd "$APP_DIR"

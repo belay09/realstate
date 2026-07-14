@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+psycopg://belay:belay_dev_password@localhost:5432/belay_properties"
     jwt_secret_key: str = "change-this-before-production"
     jwt_algorithm: str = "HS256"
-    access_token_expire_minutes: int = 480  # 8 hours — admin dashboard sessions
+    access_token_expire_minutes: int = 480  # 8 hours - admin dashboard sessions
     refresh_token_expire_days: int = 7
     default_currency: str = "ETB"
     quote_expiry_days: int = 7

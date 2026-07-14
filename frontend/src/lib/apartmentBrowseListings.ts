@@ -1,6 +1,6 @@
 import type { PublicListingSummary } from '../api/types'
 
-/** Apartments browse — residential only; shop inventory uses /shops. */
+/** Apartments browse - residential only; shop inventory uses /shops. */
 export function filterApartmentBrowseListings(items: PublicListingSummary[]): PublicListingSummary[] {
   return items.filter(
     (item) =>

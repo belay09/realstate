@@ -83,7 +83,7 @@ def _upsert_location_content(
                 f"already owned by {row.company_slug} (will not change)"
             )
             return row
-        # Existing Temer CMS — preserve admin edits.
+        # Existing Temer CMS - preserve admin edits.
         return row
     row = LocationContent(
         kind=kind,

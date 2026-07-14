@@ -762,7 +762,7 @@ export function AyatPriceCalculator({
             }}
           >
             <option value="" disabled>
-              —
+              -
             </option>
             {config.residentialProjects.map((p) => (
               <option key={p.id} value={p.id}>
@@ -787,7 +787,7 @@ export function AyatPriceCalculator({
             }}
           >
             <option value="" disabled>
-              —
+              -
             </option>
             {shopLocations.map((z) => (
               <option key={z.id} value={z.id}>
@@ -920,7 +920,7 @@ export function AyatPriceCalculator({
           >
             {config.downPaymentTiers.map((tier) => (
               <option key={tier.id} value={tier.id}>
-                {t(tier.labelKey)} — {t('calculator.tierDiscount', { percent: tier.clientDiscountPercent })}
+                {t(tier.labelKey)} - {t('calculator.tierDiscount', { percent: tier.clientDiscountPercent })}
               </option>
             ))}
           </FormSelect>
@@ -1348,7 +1348,7 @@ export function AyatPriceCalculator({
             <div>
               <dt className="text-fg-muted">{t('calculator.embeddedSize')}</dt>
               <dd className="font-medium text-fg">
-                {areaSqm != null ? formatSquareMeters(areaSqm, t) : '—'}
+                {areaSqm != null ? formatSquareMeters(areaSqm, t) : '-'}
               </dd>
             </div>
             <div>

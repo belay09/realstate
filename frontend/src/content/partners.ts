@@ -6,7 +6,7 @@ export const AYAT_PARTNER = {
   brandName: 'Ayat Real Estate',
   website: 'https://ayatrealestate.com/',
   yearsEstablished: '25+',
-  // Hosted locally — remote ayatrealestate.com logo URL is unreliable / often blocked.
+  // Hosted locally - remote ayatrealestate.com logo URL is unreliable / often blocked.
   logoUrl: '/partners/ayat.svg',
 } as const
 

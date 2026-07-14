@@ -1,7 +1,7 @@
 {
   "_meta": {
     "description": "Ayat Share Company inventory for Habesha Real Estate Advisory. Pricing, discounts, commissions, and milestones are loaded from backend/data/ayat_official_2018.json when you run the seed script (official scanned strategy pages).",
-    "reference_doc": "Ayat/116/2018 — see ayat_official_2018.json",
+    "reference_doc": "Ayat/116/2018 - see ayat_official_2018.json",
     "pricing_source": "ayat_official_2018.json",
     "currency": "ETB"
   },
@@ -318,7 +318,7 @@
       "unit_ref": { "project_slug": "kazanchis-residential", "block_code": "B1", "unit_number": "602" },
       "slug": "kazanchis-3br-semi-finished-block-1",
       "title": "Three-bedroom semi-finished apartment, Kazanchis",
-      "description": "Three-bedroom semi-finished apartment on floor 6 in Kazanchis. Construction started — Section 10 started-column rates.",
+      "description": "Three-bedroom semi-finished apartment on floor 6 in Kazanchis. Construction started - Section 10 started-column rates.",
       "city": "Addis Ababa",
       "area": "Kazanchis",
       "is_public": true,

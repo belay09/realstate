@@ -89,7 +89,7 @@ function buildingTypeLabel(
   buildingType: AdminPropertyListingSummary['building_type'],
   useSegment: AdminPropertyListingSummary['use_segment'],
 ): string {
-  if (!buildingType) return '—'
+  if (!buildingType) return '-'
   const names: Record<string, string> = {
     mixed: 'Mixed',
     duplex: 'Duplex',
@@ -205,7 +205,7 @@ export function AdminPropertyListingsPage() {
         </h1>
         <p className="mt-2 text-sm text-stone-600 dark:text-stone-400">
           Optional unit layouts and inventory. <strong>Not required</strong> to publish a public
-          location page — use{' '}
+          location page - use{' '}
           <Link to="/admin/listings" className="font-medium text-brand-700 underline dark:text-brand-300">
             Locations
           </Link>{' '}
@@ -343,7 +343,7 @@ export function AdminPropertyListingsPage() {
                         />
                       ) : (
                         <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-stone-100 text-xs text-stone-400 dark:bg-stone-900">
-                          —
+                          -
                         </div>
                       )}
                       <div>
@@ -382,10 +382,10 @@ export function AdminPropertyListingsPage() {
                         {buildingTypeLabel(row.building_type, row.use_segment)}
                       </span>
                     ) : (
-                      <span className="text-stone-400">—</span>
+                      <span className="text-stone-400">-</span>
                     )}
                   </td>
-                  <td className="px-3 py-2 text-stone-600 dark:text-stone-400">{row.area ?? '—'}</td>
+                  <td className="px-3 py-2 text-stone-600 dark:text-stone-400">{row.area ?? '-'}</td>
                   <td className="px-3 py-2 text-stone-600 dark:text-stone-400">{row.image_count}</td>
                   <td className="px-3 py-2">
                     <label className="inline-flex items-center gap-2 text-xs">
@@ -738,7 +738,7 @@ function ListingEditModal({
                       disabled={locationOptions.length === 0}
                     >
                       {locationOptions.length === 0 ? (
-                        <option value="">No active locations — add one under Locations</option>
+                        <option value="">No active locations - add one under Locations</option>
                       ) : (
                         locationOptions.map((row) => (
                           <option key={row.id} value={row.location_id}>
@@ -797,12 +797,12 @@ function ListingEditModal({
                 <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
                   City
                   <input className="input mt-1 w-full" value={city} onChange={(e) => setCity(e.target.value)} />
-                  <span className="mt-1 block font-normal text-stone-500">Display label only — does not change location.</span>
+                  <span className="mt-1 block font-normal text-stone-500">Display label only - does not change location.</span>
                 </label>
                 <label className="block text-xs font-medium text-stone-600 dark:text-stone-400">
                   Area
                   <input className="input mt-1 w-full" value={area} onChange={(e) => setArea(e.target.value)} />
-                  <span className="mt-1 block font-normal text-stone-500">Display label only — does not change location.</span>
+                  <span className="mt-1 block font-normal text-stone-500">Display label only - does not change location.</span>
                 </label>
               </div>
               <div className="flex flex-wrap gap-6">
@@ -859,7 +859,7 @@ function ListingEditModal({
                           }))
                         }}
                       >
-                        <option value="">— not set —</option>
+                        <option value="">- not set -</option>
                         <option value="mixed">Mixed use</option>
                         <option value="duplex">Duplex</option>
                         <option value="flat">Flat (residential only)</option>
@@ -878,7 +878,7 @@ function ListingEditModal({
                             }))
                           }
                         >
-                          <option value="">— select —</option>
+                          <option value="">- select -</option>
                           <option value="retail">Retail / shop floor</option>
                           <option value="residential">Residential floor</option>
                         </select>
@@ -1017,7 +1017,7 @@ function ListingEditModal({
               </p>
 
               {images.length === 0 ? (
-                <p className="text-sm text-stone-500">No photos yet — upload above or add a URL.</p>
+                <p className="text-sm text-stone-500">No photos yet - upload above or add a URL.</p>
               ) : (
                 <ul className="grid gap-3 sm:grid-cols-2">
                   {images.map((img) => (

@@ -50,7 +50,7 @@ export default function App() {
           <Route path="listings" element={<AdminListingsPage />} />
           <Route path="leads" element={<AdminLeadsPage />} />
           <Route path="pricing" element={<AdminPricingPage />} />
-          {/* Phase4+ slim: Properties / Promotions — restore via SHOW_ADMIN_ADVANCED */}
+          {/* Phase4+ slim: Properties / Promotions - restore via SHOW_ADMIN_ADVANCED */}
           {SHOW_ADMIN_ADVANCED ? (
             <>
               <Route path="properties" element={<AdminPropertyListingsPage />} />

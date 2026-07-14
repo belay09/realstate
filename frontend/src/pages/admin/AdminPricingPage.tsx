@@ -475,7 +475,7 @@ export function AdminPricingPage() {
           />
 
           {livePricing.data.price_rows.length === 0 ? (
-            <p className="text-sm text-stone-500">No apartment rates yet — add at least one row.</p>
+            <p className="text-sm text-stone-500">No apartment rates yet - add at least one row.</p>
           ) : filteredRows.length === 0 ? (
             <p className="text-sm text-stone-500">No rates for this location.</p>
           ) : (

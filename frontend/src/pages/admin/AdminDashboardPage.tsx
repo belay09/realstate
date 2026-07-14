@@ -5,7 +5,7 @@ const CHECKLIST = [
     step: '1',
     title: 'Companies',
     href: '/admin/companies',
-    desc: 'Name, logo, description — Active partners appear on the home page.',
+    desc: 'Name, logo, description - Active partners appear on the home page.',
   },
   {
     step: '2',
@@ -23,7 +23,7 @@ const CHECKLIST = [
     step: '4',
     title: 'Leads',
     href: '/admin/leads',
-    desc: 'Optional — follow up Call / WhatsApp enquiries from the site.',
+    desc: 'Optional - follow up Call / WhatsApp enquiries from the site.',
   },
 ] as const
 
@@ -32,7 +32,7 @@ export function AdminDashboardPage() {
     <div className="space-y-6 text-left">
       <h1 className="text-2xl font-semibold text-fg">Dashboard</h1>
       <p className="text-sm text-fg-muted">
-        How to publish — same path buyers take: home developers → location pages → floor rates.
+        How to publish - same path buyers take: home developers → location pages → floor rates.
       </p>
       <ol className="space-y-3">
         {CHECKLIST.map(({ step, title, href, desc }) => (

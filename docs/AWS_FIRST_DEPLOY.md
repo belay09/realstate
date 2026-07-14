@@ -6,7 +6,7 @@ You already pushed the code to **GitHub** (`belay09/realstate`). This guide laun
 
 ---
 
-## Part A — AWS Console (new account)
+## Part A - AWS Console (new account)
 
 ### 1. Sign in and region
 
@@ -56,7 +56,7 @@ chmod 400 ~/Downloads/belay-realtor-key.pem
 8. **Storage:** 30 GB gp3.
 9. **Launch instance**.
 10. Wait until **Instance state** = **Running**.
-11. Copy **Public IPv4 address** (e.g. `3.120.45.67`) — you need it everywhere below.
+11. Copy **Public IPv4 address** (e.g. `3.120.45.67`) - you need it everywhere below.
 
 ### 5. Elastic IP (optional but recommended)
 
@@ -69,7 +69,7 @@ Use this IP as your server address from now on.
 
 ---
 
-## Part B — SSH into the server
+## Part B - SSH into the server
 
 From your laptop (replace IP and key path):
 
@@ -87,9 +87,9 @@ You should see a prompt like `ubuntu@...` or `ec2-user@...`.
 
 ---
 
-## Part C — Install app on the server
+## Part C - Install app on the server
 
-### Option 1 — HTTPS clone (if GitHub SSH keys are set on EC2)
+### Option 1 - HTTPS clone (if GitHub SSH keys are set on EC2)
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/belay09/realstate/main/scripts/ec2-bootstrap.sh -o bootstrap.sh
@@ -97,7 +97,7 @@ curl -fsSL https://raw.githubusercontent.com/belay09/realstate/main/scripts/ec2-
 bash scripts/ec2-bootstrap.sh
 ```
 
-### Option 2 — HTTPS clone (easiest on new EC2)
+### Option 2 - HTTPS clone (easiest on new EC2)
 
 ```bash
 git clone https://github.com/belay09/realstate.git
@@ -115,7 +115,7 @@ cd ~/realstate
 
 ---
 
-## Part D — Configure secrets
+## Part D - Configure secrets
 
 ### 1. Root `.env` (compose)
 
@@ -164,7 +164,7 @@ Paste into `JWT_SECRET_KEY`.
 
 ---
 
-## Part E — Start (IP test first, no domain)
+## Part E - Start (IP test first, no domain)
 
 ```bash
 cd ~/realstate
@@ -200,7 +200,7 @@ docker compose -f docker-compose.prod.yml -f docker-compose.prod.ip.yml exec api
 
 ---
 
-## Part F — Production with domain (Cloudflare)
+## Part F - Production with domain (Cloudflare)
 
 When `realtor.yourdomain.com` is ready:
 
@@ -233,7 +233,7 @@ Cloudflare SSL: try **Flexible** first (HTTP to origin on port 80), then **Full*
 
 ---
 
-## Part G — Daily commands
+## Part G - Daily commands
 
 ```bash
 cd ~/realstate

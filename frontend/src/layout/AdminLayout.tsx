@@ -65,7 +65,7 @@ export function AdminLayout() {
             Leads
           </NavLink>
 
-          {/* Phase4+ slim: Properties / Promotions — restore via SHOW_ADMIN_ADVANCED */}
+          {/* Phase4+ slim: Properties / Promotions - restore via SHOW_ADMIN_ADVANCED */}
           {SHOW_ADMIN_ADVANCED ? (
             <>
               <NavLink

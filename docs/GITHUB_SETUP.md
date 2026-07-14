@@ -1,4 +1,4 @@
-# Phase 12 — GitHub workflow
+# Phase 12 - GitHub workflow
 
 Remote (from the implementation plan): `git@github.com:belay09/realstate.git`
 
@@ -37,6 +37,6 @@ See `.github/workflows/ci.yml`.
 
 ## Branching (optional)
 
-- `main` — deployable
-- `develop` — integration
-- `feature/*` — larger changes
+- `main` - deployable
+- `develop` - integration
+- `feature/*` - larger changes

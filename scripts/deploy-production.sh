@@ -77,7 +77,7 @@ echo "==> Running database migrations..."
 ./scripts/deploy-migrate.sh
 
 if [[ "${SEED_ON_DEPLOY:-0}" == "1" ]]; then
-  echo "==> SEED_ON_DEPLOY=1 — seeding Ayat inventory from JSON (skips existing CMS rows)..."
+  echo "==> SEED_ON_DEPLOY=1 - seeding Ayat inventory from JSON (skips existing CMS rows)..."
   "${COMPOSE[@]}" exec -T api python -m app.scripts.seed_ayat_production
 else
   echo "==> Skipping Ayat seed (admin CMS edits are preserved)."

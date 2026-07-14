@@ -2,7 +2,7 @@
 
 **Product:** Habesha Real Estate Advisory (habesha-homes.com)  
 **Audience:** Product owner / content ops (non-technical friendly, with concrete actions)  
-**Scope:** Public buyer experience — Home → Apartments/Shops → location/project → listing detail → contact  
+**Scope:** Public buyer experience - Home → Apartments/Shops → location/project → listing detail → contact  
 **Date:** July 2026  
 **Codebase audited:** `frontend/src` routes, `PublicLayout`, public pages, i18n (`en`/`am`), home CMS cards, location browse merge
 
@@ -12,7 +12,7 @@
 
 - The **value proposition is clear and strong**: free buyer advisory, not a developer, compare Ayat + Temer, phone/WhatsApp always visible. That should stay front and center.
 - The **journey feels complicated** because the site mixes three mental models: advisory marketplace, multi-developer catalogue, and Ayat sales-strategy calculator (Section 10 / Section 11 language).
-- **Navigation is crowded**: Home, Apartments, Shops, Calculator, Ayat homes, Temer homes, Staff, phone, language, theme, and “Browse homes” — buyers see too many parallel doors to the same inventory.
+- **Navigation is crowded**: Home, Apartments, Shops, Calculator, Ayat homes, Temer homes, Staff, phone, language, theme, and “Browse homes” - buyers see too many parallel doors to the same inventory.
 - **Browse is location-first** (`/apartments` cards = Admin → Location pages), which is good for Addis, but **empty location cards** (0 homes) and admin-facing empty copy leak into the public UI.
 - **Comparable sites** (AddisRealtor, Property Finder, Temer/Ayat official sites) put **one primary CTA** (browse or talk to an advisor) and keep developer branding secondary to the buyer job.
 - **Biggest wins are copy + nav + CMS hygiene**, not a full redesign: hide Staff from public nav, simplify hero CTAs, demote Calculator, fix empty states, and make “Talk to us” the default next step after browsing.
@@ -63,7 +63,7 @@
 ### 1. Too many entry points to the same browse
 
 Public nav currently offers: Home, Apartments, Shops, Calculator, Ayat homes, Temer homes, Staff, phone, Browse homes, language, theme.  
-Buyers must decide: “Apartments vs Ayat homes vs Browse homes?” — they are largely the same inventory with different filters.
+Buyers must decide: “Apartments vs Ayat homes vs Browse homes?” - they are largely the same inventory with different filters.
 
 ### 2. Developer-oriented language on a buyer site
 
@@ -79,7 +79,7 @@ Examples in i18n / UI:
 
 ### 4. Calculator complexity vs advisory simplicity
 
-`/calculator` (`AyatPriceCalculator`) is a multi-step tool: apartment vs shop → area → bedrooms/finish → size → floor → down payment / plan. Useful for serious Ayat shoppers; intimidating as a primary nav item. It also repeats on Ayat project pages (`#location-calculator`), which is good — but top-nav promotion makes the whole site feel like a pricing engine.
+`/calculator` (`AyatPriceCalculator`) is a multi-step tool: apartment vs shop → area → bedrooms/finish → size → floor → down payment / plan. Useful for serious Ayat shoppers; intimidating as a primary nav item. It also repeats on Ayat project pages (`#location-calculator`), which is good - but top-nav promotion makes the whole site feel like a pricing engine.
 
 ### 5. Inconsistent depth: Ayat vs Temer
 
@@ -95,7 +95,7 @@ First-time buyers may think Temer is “less supported” rather than “ask us 
 
 ### 7. Homepage length and dual messaging
 
-Home already states free advisory (hero + badge + `HomeAdvisorySection` + `BelayRoleSection` + credibility). Strong message, but **repeated three times** before inventory — some buyers never reach CMS cards. Hero CTAs split “Explore locations” vs “Browse Temer” instead of one clear “Find a home” + “Talk to us.”
+Home already states free advisory (hero + badge + `HomeAdvisorySection` + `BelayRoleSection` + credibility). Strong message, but **repeated three times** before inventory - some buyers never reach CMS cards. Hero CTAs split “Explore locations” vs “Browse Temer” instead of one clear “Find a home” + “Talk to us.”
 
 ### 8. Amharic / EN is a strength, but density hurts both
 
@@ -107,7 +107,7 @@ Language switcher is present (`LanguageSwitcher`). Long English technical phrase
 
 Patterns below are from live site reviews (fetched July 2026). Use them as **buyer UX patterns**, not as a call to copy their brand or inventory model.
 
-### AddisRealtor — [addisrealtor.com](https://addisrealtor.com/)
+### AddisRealtor - [addisrealtor.com](https://addisrealtor.com/)
 
 - **One sentence job:** help diaspora / buyers buy in Addis; **no buyer fees** called out early (closest positioning match).
 - Homepage hierarchy: **identity → Browse homes / Speak to an agent** → simple filters (company, price, beds, size) → listings → “Book a strategy session.”
@@ -116,36 +116,36 @@ Patterns below are from live site reviews (fetched July 2026). Use them as **buy
 
 **Takeaway for Habesha:** Keep free advisory; make “Browse” and “Talk to us” the only primary actions; demote developer filters to chips on the browse page (already partly true on `/apartments`).
 
-### Property Finder (UAE) — [propertyfinder.ae](https://www.propertyfinder.ae/)
+### Property Finder (UAE) - [propertyfinder.ae](https://www.propertyfinder.ae/)
 
 - Hero: **“Your home search starts here”** + one search (Rent / Buy / New projects).
-- Filters are buyer language: property type, beds/baths, price, amenities — not developer org charts.
-- Secondary browse by **community/area** (similar to your location cards — a good pattern you already have).
+- Filters are buyer language: property type, beds/baths, price, amenities - not developer org charts.
+- Secondary browse by **community/area** (similar to your location cards - a good pattern you already have).
 
 **Takeaway:** Lead with **what / where / budget**, not **which company**. Keep location-first browse; add light preference filters later (beds, apartment vs shop).
 
-### Rightmove-style portals — [rightmove.co.uk](https://www.rightmove.co.uk/) (help: start with area + For sale)
+### Rightmove-style portals - [rightmove.co.uk](https://www.rightmove.co.uk/) (help: start with area + For sale)
 
 - Classic happy path: **area → for sale → filters (beds, price) → results → contact agent**.
 - Tools (calculators, AI search) are **supporting**, not equal to primary browse.
 
 **Takeaway:** Calculator should be “Estimate price” under Ayat locations / listing, not a peer of Apartments in the main menu.
 
-### Ayat official — [ayatrealestate.com](https://ayatrealestate.com/)
+### Ayat official - [ayatrealestate.com](https://ayatrealestate.com/)
 
 - Clear **Residential / Commercial** split, phone CTAs, “Request callback,” register.
 - Speaks as **the developer** (correct for them; wrong for Habesha to mirror fully).
 
-**Takeaway:** Habesha should keep differentiating: “We help you choose among partners — including Ayat.” Avoid sounding like Ayat’s second website (calculator + Section 11 language currently risks that).
+**Takeaway:** Habesha should keep differentiating: “We help you choose among partners - including Ayat.” Avoid sounding like Ayat’s second website (calculator + Section 11 language currently risks that).
 
-### Temer official — [temerproperties.com](https://temerproperties.com/)
+### Temer official - [temerproperties.com](https://temerproperties.com/)
 
 - Project/area search (Sarbet, Aware, Ayat…), bedroom filters, **Call / Book a tour** on cards, WhatsApp-style chat.
 - Inventory-first; heavy on projects and listings.
 
-**Takeaway:** Match their **contact frictionlessness** (Call / WhatsApp / enquire). You already have sticky Call/WhatsApp — keep it; make listing/location CTAs equally obvious for Temer “price on request.”
+**Takeaway:** Match their **contact frictionlessness** (Call / WhatsApp / enquire). You already have sticky Call/WhatsApp - keep it; make listing/location CTAs equally obvious for Temer “price on request.”
 
-### Realtor Ethiopia — [realtor.com.et](https://realtor.com.et/) (partially available in research)
+### Realtor Ethiopia - [realtor.com.et](https://realtor.com.et/) (partially available in research)
 
 - Preference-led allocation (budget, location, construction stage, optional developer).
 - Positions as **independent of any one developer’s interest**.
@@ -179,20 +179,20 @@ Home
   └─ Call sticky strip always available
 
 Side doors (not primary nav):
-  /shops — “Commercial shops” from Home card or footer
-  /calculator — linked from Ayat location / listing / shops note
+  /shops - “Commercial shops” from Home card or footer
+  /calculator - linked from Ayat location / listing / shops note
 ```
 
 **One-line product story on every key page:**  
-“Free advice to compare Ayat and Temer — tell us your budget and area.”
+“Free advice to compare Ayat and Temer - tell us your budget and area.”
 
 ---
 
 ## Prioritized suggestions
 
-### P0 — Quick wins (1–2 weeks)
+### P0 - Quick wins (1–2 weeks)
 
-#### P0.1 — Slim the public navigation
+#### P0.1 - Slim the public navigation
 
 | | |
 |--|--|
@@ -201,16 +201,16 @@ Side doors (not primary nav):
 | **Why** | Matches AddisRealtor / Property Finder “few doors”; reduces wrong clicks into Admin. |
 | **Scope** | Frontend: `PublicLayout.tsx`, `PublicFooter.tsx`. Copy: `nav.*` in `en.ts` / `am.ts`. |
 
-#### P0.2 — Fix public empty / error copy (no Admin instructions)
+#### P0.2 - Fix public empty / error copy (no Admin instructions)
 
 | | |
 |--|--|
 | **Problem** | Buyers see “Admin → Location pages / Pricing” (`shops.noLocations`, calculator rate errors). |
-| **Recommendation** | Public copy: “Shop locations coming soon — call or WhatsApp for availability.” Staff-facing detail stays in Admin UI or docs only. |
+| **Recommendation** | Public copy: “Shop locations coming soon - call or WhatsApp for availability.” Staff-facing detail stays in Admin UI or docs only. |
 | **Why** | Trust and professionalism; Admin leakage is a classic CMS smell. |
 | **Scope** | Copy/i18n primarily; optional tiny frontend if error components hardcode strings. |
 
-#### P0.3 — Hide or label empty location cards
+#### P0.3 - Hide or label empty location cards
 
 | | |
 |--|--|
@@ -219,7 +219,7 @@ Side doors (not primary nav):
 | **Why** | Empty catalogue cards kill confidence. |
 | **Scope** | Frontend: `mergeApartmentBrowseGroups.ts` / `ApartmentsPage.tsx` / `ProjectLocationCard.tsx`. CMS: optional “Coming soon” or only activate when listings exist. |
 
-#### P0.4 — Homepage: one primary browse CTA + one advice CTA
+#### P0.4 - Homepage: one primary browse CTA + one advice CTA
 
 | | |
 |--|--|
@@ -228,7 +228,7 @@ Side doors (not primary nav):
 | **Why** | Clearer first viewport; less brand competition in the hero. |
 | **Scope** | Frontend: `HomePage.tsx`, `HomeAdvisorySection.tsx`. Copy: `home.*`. CMS: ensure home cards point to `/apartments`, `/shops`, not calculator-first. |
 
-#### P0.5 — Demote Calculator in IA; keep the tool
+#### P0.5 - Demote Calculator in IA; keep the tool
 
 | | |
 |--|--|
@@ -239,9 +239,9 @@ Side doors (not primary nav):
 
 ---
 
-### P1 — Next sprint
+### P1 - Next sprint
 
-#### P1.1 — Buyer preference filters on `/apartments`
+#### P1.1 - Buyer preference filters on `/apartments`
 
 | | |
 |--|--|
@@ -250,7 +250,7 @@ Side doors (not primary nav):
 | **Why** | Rightmove / Property Finder core pattern; fits location-first model. |
 | **Scope** | Frontend: `ApartmentsPage.tsx` + listing group data. |
 
-#### P1.2 — Unify location page CTA bar (Ayat + Temer)
+#### P1.2 - Unify location page CTA bar (Ayat + Temer)
 
 | | |
 |--|--|
@@ -259,7 +259,7 @@ Side doors (not primary nav):
 | **Why** | Contact is the product; pricing tools are optional. |
 | **Scope** | Frontend: `ProjectListingsPage.tsx`, possibly shared component with `SiteContactBanner`. |
 
-#### P1.3 — Listing detail: WhatsApp-first, form-second
+#### P1.3 - Listing detail: WhatsApp-first, form-second
 
 | | |
 |--|--|
@@ -268,7 +268,7 @@ Side doors (not primary nav):
 | **Why** | Matches Temer/Ayat market behavior; lowers drop-off. |
 | **Scope** | Frontend: `ListingDetailLayout.tsx`. Copy: `listingDetail.*`. |
 
-#### P1.4 — Homepage CMS cards quality bar
+#### P1.4 - Homepage CMS cards quality bar
 
 | | |
 |--|--|
@@ -277,7 +277,7 @@ Side doors (not primary nav):
 | **Why** | Home is the brand moment; CMS is already the right lever (`HomeCmsCardsSection`). |
 | **Scope** | CMS content ops + light copy guidelines (this doc). |
 
-#### P1.5 — Softer calculator defaults / progressive disclosure
+#### P1.5 - Softer calculator defaults / progressive disclosure
 
 | | |
 |--|--|
@@ -288,29 +288,29 @@ Side doors (not primary nav):
 
 ---
 
-### P2 — Later
+### P2 - Later
 
-#### P2.1 — “Tell us what you want” advisory mini-flow
+#### P2.1 - “Tell us what you want” advisory mini-flow
 
 Short WhatsApp deep-link builder: beds + area + budget band → opens WhatsApp with a filled message. Optional simple form posting to `/public/leads` without a listing slug (`source: advisory`).  
 **Scope:** Frontend + small API/content. Positions Habesha closer to AddisRealtor “strategy session.”
 
-#### P2.2 — Cross-developer compare view
+#### P2.2 - Cross-developer compare view
 
 Side-by-side 2–3 shortlisted layouts (beds, area, developer, indicative price).  
 **Scope:** New UI; needs consistent price signals (harder for Temer on-request).
 
-#### P2.3 — Map / area explainer for Addis newcomers
+#### P2.3 - Map / area explainer for Addis newcomers
 
 Light map or neighbourhood blurbs on location CMS (not a full GIS product).  
 **Scope:** CMS fields + `LocationDetailSections`.
 
-#### P2.4 — Hide theme toggle from primary chrome (optional)
+#### P2.4 - Hide theme toggle from primary chrome (optional)
 
 Dark/light is nice for staff; buyers rarely need it in header. Move to footer settings.  
 **Scope:** `PublicLayout.tsx`.
 
-#### P2.5 — Analytics on funnel
+#### P2.5 - Analytics on funnel
 
 Track: Home CTA clicks → location open → listing open → WhatsApp/tel/lead. Use to confirm simplification worked.  
 **Scope:** Frontend analytics events.
@@ -328,7 +328,7 @@ Track: Home CTA clicks → location open → listing open → WhatsApp/tel/lead.
 | Amharic + English | `LanguageSwitcher`, `am.ts` / `en.ts` | Local buyer access |
 | Location-first browse | `/apartments` cards from CMS | Matches how Addis inventory is sold (by project/area) |
 | Ayat calculator as a **supporting** tool | Embedded on location/listing | Real value for Ayat shoppers when not over-promoted |
-| Admin CMS for locations & home cards | Admin listings / properties / home cards | Right ops model — improve content rules, don’t remove |
+| Admin CMS for locations & home cards | Admin listings / properties / home cards | Right ops model - improve content rules, don’t remove |
 
 ---
 
@@ -340,18 +340,18 @@ Track: Home CTA clicks → location open → listing open → WhatsApp/tel/lead.
 [ Habesha Real Estate Advisory · Free advisory · Not a developer ]
 
 Homes that fit your budget and lifestyle.
-100% free advice — no fees from you.
+100% free advice - no fees from you.
 
 [ Find a home ]   [ WhatsApp / Call ]
 
-(partner logos as quiet trust strip — not second CTAs)
+(partner logos as quiet trust strip - not second CTAs)
 ```
 
 ### Below fold (one section each)
 
 ```text
 1) How free advice works (3 short points + Call/WhatsApp)
-2) Browse by area — CMS cards: Ayat homes | Temer homes | Shops
+2) Browse by area - CMS cards: Ayat homes | Temer homes | Shops
 3) Footer: Apartments · Shops · Estimate Ayat price · Official partner sites
 ```
 
@@ -390,7 +390,7 @@ Optional short enquiry form
 
 ---
 
-## Implementation map (for engineers — optional)
+## Implementation map (for engineers - optional)
 
 | Change | Primary files |
 |--------|----------------|
@@ -408,9 +408,9 @@ Optional short enquiry form
 
 After P0–P1, a new visitor should be able to answer:
 
-1. **Who are you?** Free advisory — not a developer.  
+1. **Who are you?** Free advisory - not a developer.  
 2. **What do I do?** Browse locations or message you.  
-3. **Who builds the home?** Ayat or Temer — shown on every card.  
+3. **Who builds the home?** Ayat or Temer - shown on every card.  
 4. **Do I pay you?** No.
 
 If they can answer those without opening Staff, Calculator, or an empty “0 homes” card, the UX simplification succeeded.

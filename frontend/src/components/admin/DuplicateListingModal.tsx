@@ -121,7 +121,7 @@ export function DuplicateListingModal({ companyId, sourceSummary, onClose, onCre
       })
     },
     onSuccess: (id) => {
-      toast.success('Listing duplicated — review title and photos')
+      toast.success('Listing duplicated - review title and photos')
       onCreated(id)
     },
     onError: (err) => toast.error(actionError(err, 'Could not duplicate listing')),

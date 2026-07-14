@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "description": "Temer inventory for Habesha Real Estate Advisory — Ayat-style layout: area location pages (apartment + shop), building blocks within each area project, rich listing metadata.",
+    "description": "Temer inventory for Habesha Real Estate Advisory - Ayat-style layout: area location pages (apartment + shop), building blocks within each area project, rich listing metadata.",
     "source": "https://temerproperties.com",
     "generated_at": "2026-06-12T04:28:39.174515+00:00",
     "scraped_at": "2026-05-29T09:57:59.175522+00:00",
@@ -10,7 +10,7 @@
       "shops": 2
     },
     "currency": "ETB",
-    "pricing_note": "No calculator pricing — Temer listings show price on request."
+    "pricing_note": "No calculator pricing - Temer listings show price on request."
   },
   "company": {
     "slug": "temer-properties",
@@ -24,23 +24,23 @@
       {
         "location_id": "sarbet",
         "title": "Sarbet",
-        "subtitle": "Temer Properties — Sarbet",
+        "subtitle": "Temer Properties - Sarbet",
         "description": "Sarbet is a sought-after neighborhood in southwest Addis Ababa, known for its blend of tranquility and urban convenience.",
         "video_url": null,
         "cards": [
           {
             "title": "1 bedroom",
-            "body": "From 76.0 m² in Sarbet. 1 layout(s) listed — price on request.",
+            "body": "From 76.0 m² in Sarbet. 1 layout(s) listed - price on request.",
             "image_url": "https://temerproperties.com/wp-content/uploads/2026/05/onebedcityplus.jpg"
           },
           {
             "title": "2 bedrooms",
-            "body": "From 100.0 m² in Sarbet. 1 layout(s) listed — price on request.",
+            "body": "From 100.0 m² in Sarbet. 1 layout(s) listed - price on request.",
             "image_url": "https://temerproperties.com/wp-content/uploads/2026/05/twobedrooms.jpg"
           },
           {
             "title": "3 bedrooms",
-            "body": "From 145.0 m² in Sarbet. 5 layout(s) listed — price on request.",
+            "body": "From 145.0 m² in Sarbet. 5 layout(s) listed - price on request.",
             "image_url": "https://temerproperties.com/wp-content/uploads/2025/11/photo_2026-02-10_15-33-15.jpg"
           },
           {
@@ -50,7 +50,7 @@
           },
           {
             "title": "Source",
-            "body": "Data from temerproperties.com — verify details with Temer before purchase.",
+            "body": "Data from temerproperties.com - verify details with Temer before purchase.",
             "image_url": null
           }
         ],
@@ -60,23 +60,23 @@
       {
         "location_id": "aware-area",
         "title": "Aware",
-        "subtitle": "Temer Properties — Aware",
+        "subtitle": "Temer Properties - Aware",
         "description": "Aware Site is a modern mixed-use development located in a prime area of Addis Ababa. It features a variety of residential options, including one-, two-, and three-bedroom apartments, designed to provide comfort, convenience, and a stylish urban lifestyle. Combining residential and commercial spaces, Aware Site offers a vibrant and dynamic environment in one of the city’s most sought-after locations.",
         "video_url": null,
         "cards": [
           {
             "title": "1 bedroom",
-            "body": "From 80.0 m² in Aware. 1 layout(s) listed — price on request.",
+            "body": "From 80.0 m² in Aware. 1 layout(s) listed - price on request.",
             "image_url": "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-04.jpg"
           },
           {
             "title": "2 bedrooms",
-            "body": "From 120.0 m² in Aware. 1 layout(s) listed — price on request.",
+            "body": "From 120.0 m² in Aware. 1 layout(s) listed - price on request.",
             "image_url": "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-30.jpg"
           },
           {
             "title": "3 bedrooms",
-            "body": "From 145.0 m² in Aware. 2 layout(s) listed — price on request.",
+            "body": "From 145.0 m² in Aware. 2 layout(s) listed - price on request.",
             "image_url": "https://temerproperties.com/wp-content/uploads/2026/02/photo_2026-02-10_15-32-24.jpg"
           },
           {
@@ -86,7 +86,7 @@
           },
           {
             "title": "Source",
-            "body": "Data from temerproperties.com — verify details with Temer before purchase.",
+            "body": "Data from temerproperties.com - verify details with Temer before purchase.",
             "image_url": null
           }
         ],
@@ -96,18 +96,18 @@
       {
         "location_id": "ayat-area",
         "title": "Ayat",
-        "subtitle": "Temer Properties — Ayat",
+        "subtitle": "Temer Properties - Ayat",
         "description": "The Ayat To Center project is a premium residential development by Temer Properties, situated in the Ayat area of Addis Ababa.",
         "video_url": null,
         "cards": [
           {
             "title": "2 bedrooms",
-            "body": "From 86.0 m² in Ayat. 2 layout(s) listed — price on request.",
+            "body": "From 86.0 m² in Ayat. 2 layout(s) listed - price on request.",
             "image_url": "https://temerproperties.com/wp-content/uploads/2026/02/feres2.jpg"
           },
           {
             "title": "3 bedrooms",
-            "body": "From 137.0 m² in Ayat. 5 layout(s) listed — price on request.",
+            "body": "From 137.0 m² in Ayat. 5 layout(s) listed - price on request.",
             "image_url": "https://temerproperties.com/wp-content/uploads/2026/02/t-cenetr-3.jpg"
           },
           {
@@ -117,7 +117,7 @@
           },
           {
             "title": "Source",
-            "body": "Data from temerproperties.com — verify details with Temer before purchase.",
+            "body": "Data from temerproperties.com - verify details with Temer before purchase.",
             "image_url": null
           }
         ],
@@ -127,13 +127,13 @@
       {
         "location_id": "gelan-area",
         "title": "Gelan",
-        "subtitle": "Temer Properties — Gelan",
+        "subtitle": "Temer Properties - Gelan",
         "description": "Gelan Shopping Center is a modern commercial hub located in a prime area. Designed as a full-scale commercial center, it offers a variety of retail, office, and service spaces to meet the needs of businesses and shoppers alike. With its strategic location and vibrant layout, Gelan Shopping Center provides a dynamic environment that combines convenience, accessibility, and a premier shopping and business experience in one of the city’s most sought-after areas.",
         "video_url": null,
         "cards": [
           {
             "title": "Source",
-            "body": "Data from temerproperties.com — verify details with Temer before purchase.",
+            "body": "Data from temerproperties.com - verify details with Temer before purchase.",
             "image_url": null
           }
         ],
@@ -143,13 +143,13 @@
       {
         "location_id": "garment-area",
         "title": "Garment",
-        "subtitle": "Temer Properties — Garment",
+        "subtitle": "Temer Properties - Garment",
         "description": "Haile Garment is a modern residential apartment project by Temer Real Estate, located in a prime area of Addis Ababa. It offers quality homes with top amenities, ideal for comfortable urban living.",
         "video_url": null,
         "cards": [
           {
             "title": "3 bedrooms",
-            "body": "From 139.0 m² in Garment. 1 layout(s) listed — price on request.",
+            "body": "From 139.0 m² in Garment. 1 layout(s) listed - price on request.",
             "image_url": "https://temerproperties.com/wp-content/uploads/2025/05/HAILE3.jpg"
           },
           {
@@ -159,7 +159,7 @@
           },
           {
             "title": "Source",
-            "body": "Data from temerproperties.com — verify details with Temer before purchase.",
+            "body": "Data from temerproperties.com - verify details with Temer before purchase.",
             "image_url": null
           }
         ],
@@ -169,23 +169,23 @@
       {
         "location_id": "piyassa-area",
         "title": "Piyassa",
-        "subtitle": "Temer Properties — Piyassa",
+        "subtitle": "Temer Properties - Piyassa",
         "description": "Sumaletera is a centrally located neighborhood in Addis Ababa, Ethiopia, situated near the historic Piassa area.",
         "video_url": null,
         "cards": [
           {
             "title": "1 bedroom",
-            "body": "From 75.0 m² in Piyassa. 2 layout(s) listed — price on request.",
+            "body": "From 75.0 m² in Piyassa. 2 layout(s) listed - price on request.",
             "image_url": "https://temerproperties.com/wp-content/uploads/2025/05/LYCEEBURAT1-1.jpg"
           },
           {
             "title": "2 bedrooms",
-            "body": "From 116.0 m² in Piyassa. 3 layout(s) listed — price on request.",
+            "body": "From 116.0 m² in Piyassa. 3 layout(s) listed - price on request.",
             "image_url": "https://temerproperties.com/wp-content/uploads/2025/05/LYCEBURAT2.jpg"
           },
           {
             "title": "3 bedrooms",
-            "body": "From 123.0 m² in Piyassa. 4 layout(s) listed — price on request.",
+            "body": "From 123.0 m² in Piyassa. 4 layout(s) listed - price on request.",
             "image_url": "https://temerproperties.com/wp-content/uploads/2026/02/sumale-tera3.jpg"
           },
           {
@@ -195,7 +195,7 @@
           },
           {
             "title": "Source",
-            "body": "Data from temerproperties.com — verify details with Temer before purchase.",
+            "body": "Data from temerproperties.com - verify details with Temer before purchase.",
             "image_url": null
           }
         ],
@@ -206,24 +206,24 @@
     "shops": [
       {
         "location_id": "piyassa-area",
-        "title": "Piyassa — Shops",
+        "title": "Piyassa - Shops",
         "subtitle": "Temer commercial units",
         "description": "Sumaletera is a centrally located neighborhood in Addis Ababa, Ethiopia, situated near the historic Piassa area.",
         "video_url": null,
         "cards": [
           {
             "title": "Arada Site, Shops",
-            "body": "Approx. 20.0 m² — price on request. Temer ref. 21356.",
+            "body": "Approx. 20.0 m² - price on request. Temer ref. 21356.",
             "image_url": "https://temerproperties.com/wp-content/uploads/2025/05/GoldmallAds-1.jpg"
           },
           {
             "title": "Adwa -ewket, Shops",
-            "body": "Approx. 20.0 m² — price on request. Temer ref. 21354.",
+            "body": "Approx. 20.0 m² - price on request. Temer ref. 21354.",
             "image_url": "https://temerproperties.com/wp-content/uploads/2025/05/GoldmallAds-1.jpg"
           },
           {
             "title": "Source",
-            "body": "Data from temerproperties.com — verify details with Temer before purchase.",
+            "body": "Data from temerproperties.com - verify details with Temer before purchase.",
             "image_url": null
           }
         ],
@@ -232,19 +232,19 @@
       },
       {
         "location_id": "gelan-area",
-        "title": "Gelan — Shops",
+        "title": "Gelan - Shops",
         "subtitle": "Temer commercial units",
         "description": "Gelan Shopping Center is a modern commercial hub located in a prime area. Designed as a full-scale commercial center, it offers a variety of retail, office, and service spaces to meet the needs of businesses and shoppers alike. With its strategic location and vibrant layout, Gelan Shopping Center provides a dynamic environment that combines convenience, accessibility, and a premier shopping and business experience in one of the city’s most sought-after areas.",
         "video_url": null,
         "cards": [
           {
             "title": "Gelan Shopping Center",
-            "body": "Approx. 2835.0 m² — price on request. Temer ref. 25918.",
+            "body": "Approx. 2835.0 m² - price on request. Temer ref. 25918.",
             "image_url": "https://temerproperties.com/wp-content/uploads/2025/11/test.jpg"
           },
           {
             "title": "Source",
-            "body": "Data from temerproperties.com — verify details with Temer before purchase.",
+            "body": "Data from temerproperties.com - verify details with Temer before purchase.",
             "image_url": null
           }
         ],
@@ -361,7 +361,7 @@
     },
     {
       "slug": "shop-piyassa-area",
-      "name": "Piyassa — Shops",
+      "name": "Piyassa - Shops",
       "city": "Addis Ababa",
       "area": "Piyassa",
       "location_kind": "shop",
@@ -396,7 +396,7 @@
     },
     {
       "slug": "shop-gelan-area",
-      "name": "Gelan — Shops",
+      "name": "Gelan - Shops",
       "city": "Addis Ababa",
       "area": "Gelan",
       "location_kind": "shop",
@@ -729,8 +729,8 @@
         "unit_number": "T25920"
       },
       "slug": "temer-aware-one-bedroom-apartment-3",
-      "title": "Aware – One BedRoom Apartment",
-      "description": "Aware – One BedRoom Apartment — Temer Properties, Aware, Addis Ababa. Delivery: 36 Months. Building type: Residential. Temer listing ref. 25920. Price on request — contact Habesha Real Estate Advisory.",
+      "title": "Aware - One BedRoom Apartment",
+      "description": "Aware - One BedRoom Apartment - Temer Properties, Aware, Addis Ababa. Delivery: 36 Months. Building type: Residential. Temer listing ref. 25920. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Aware",
       "is_public": true,
@@ -800,7 +800,7 @@
       },
       "slug": "temer-sumaletera-three-bedroom-apartment",
       "title": "SumaleTera,Three BedRoom Apartment",
-      "description": "SumaleTera,Three BedRoom Apartment — Temer Properties, Piyassa, Addis Ababa. Temer listing ref. 21248. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "SumaleTera,Three BedRoom Apartment - Temer Properties, Piyassa, Addis Ababa. Temer listing ref. 21248. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Piyassa",
       "is_public": true,
@@ -867,7 +867,7 @@
       },
       "slug": "temer-lycee-burat-one-bedroom-apartment",
       "title": "Lycee Burat,One BedRoom Apartment",
-      "description": "Lycee Burat,One BedRoom Apartment — Temer Properties, Piyassa, Addis Ababa. Temer listing ref. 21234. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Lycee Burat,One BedRoom Apartment - Temer Properties, Piyassa, Addis Ababa. Temer listing ref. 21234. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Piyassa",
       "is_public": true,
@@ -935,7 +935,7 @@
       },
       "slug": "temer-lycee-burat-two-bedroom-apartment",
       "title": "Lycee Burat,Two BedRoom Apartment",
-      "description": "Lycee Burat,Two BedRoom Apartment — Temer Properties, Piyassa, Addis Ababa. Temer listing ref. 21236. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Lycee Burat,Two BedRoom Apartment - Temer Properties, Piyassa, Addis Ababa. Temer listing ref. 21236. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Piyassa",
       "is_public": true,
@@ -1003,7 +1003,7 @@
       },
       "slug": "temer-lycee-burat-three-bedroom-apartment",
       "title": "Lycee Burat,Three BedRoom Apartment",
-      "description": "Lycee Burat,Three BedRoom Apartment — Temer Properties, Piyassa, Addis Ababa. Temer listing ref. 21237. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Lycee Burat,Three BedRoom Apartment - Temer Properties, Piyassa, Addis Ababa. Temer listing ref. 21237. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Piyassa",
       "is_public": true,
@@ -1071,7 +1071,7 @@
       },
       "slug": "temer-lycee-newroad-three-bedroom-apartment-2",
       "title": "Lycee NewRoad,Two BedRoom Apartment",
-      "description": "Lycee NewRoad,Two BedRoom Apartment — Temer Properties, Piyassa, Addis Ababa. Temer listing ref. 21238. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Lycee NewRoad,Two BedRoom Apartment - Temer Properties, Piyassa, Addis Ababa. Temer listing ref. 21238. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Piyassa",
       "is_public": true,
@@ -1139,7 +1139,7 @@
       },
       "slug": "temer-lycee-003-one-bedroom-apartment",
       "title": "LYCEE Seken- One BedRoom Apartment",
-      "description": "LYCEE Seken- One BedRoom Apartment — Temer Properties, Piyassa, Addis Ababa. Delivery: 30 Months. Building type: Residential. Temer listing ref. 22257. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "LYCEE Seken- One BedRoom Apartment - Temer Properties, Piyassa, Addis Ababa. Delivery: 30 Months. Building type: Residential. Temer listing ref. 22257. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Piyassa",
       "is_public": true,
@@ -1211,7 +1211,7 @@
       },
       "slug": "temer-lycee-003-seken-three-bedroom",
       "title": "LYCEE Seken- Two BedRoom Apartment",
-      "description": "LYCEE Seken- Two BedRoom Apartment — Temer Properties, Piyassa, Addis Ababa. Delivery: 30 Months. Building type: Residential. Temer listing ref. 22250. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "LYCEE Seken- Two BedRoom Apartment - Temer Properties, Piyassa, Addis Ababa. Delivery: 30 Months. Building type: Residential. Temer listing ref. 22250. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Piyassa",
       "is_public": true,
@@ -1283,7 +1283,7 @@
       },
       "slug": "temer-lycee-seken-seken-three-bedroom-2",
       "title": "LYCEE Seken- Three BedRoom Apartment",
-      "description": "LYCEE Seken- Three BedRoom Apartment — Temer Properties, Piyassa, Addis Ababa. Delivery: 30 Months. Building type: Residential. Temer listing ref. 22236. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "LYCEE Seken- Three BedRoom Apartment - Temer Properties, Piyassa, Addis Ababa. Delivery: 30 Months. Building type: Residential. Temer listing ref. 22236. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Piyassa",
       "is_public": true,
@@ -1355,7 +1355,7 @@
       },
       "slug": "temer-sarbet-blue-point-three-bedroom-apartment",
       "title": "Sarbet -Blue Point Three BedRoom Apartment",
-      "description": "Sarbet -Blue Point Three BedRoom Apartment — Temer Properties, Sarbet, Addis Ababa. Delivery: 36 Months. Building type: Residential. Temer listing ref. 25947. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Sarbet -Blue Point Three BedRoom Apartment - Temer Properties, Sarbet, Addis Ababa. Delivery: 36 Months. Building type: Residential. Temer listing ref. 25947. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Sarbet",
       "is_public": true,
@@ -1425,8 +1425,8 @@
         "unit_number": "T25934"
       },
       "slug": "temer-aware-three-bedroom-apartment",
-      "title": "Aware – Three BedRoom Apartment",
-      "description": "Aware – Three BedRoom Apartment — Temer Properties, Aware, Addis Ababa. Delivery: 36 Months. Building type: Residential. Temer listing ref. 25934. Price on request — contact Habesha Real Estate Advisory.",
+      "title": "Aware - Three BedRoom Apartment",
+      "description": "Aware - Three BedRoom Apartment - Temer Properties, Aware, Addis Ababa. Delivery: 36 Months. Building type: Residential. Temer listing ref. 25934. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Aware",
       "is_public": true,
@@ -1497,7 +1497,7 @@
       },
       "slug": "temer-sarbet-au-three-bedroom-apartment",
       "title": "Sarbet -Au,Three BedRoom Apartment",
-      "description": "Sarbet -Au,Three BedRoom Apartment — Temer Properties, Sarbet, Addis Ababa. Delivery: 30 months. Building type: Residential. Temer listing ref. 21653. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Sarbet -Au,Three BedRoom Apartment - Temer Properties, Sarbet, Addis Ababa. Delivery: 30 months. Building type: Residential. Temer listing ref. 21653. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Sarbet",
       "is_public": true,
@@ -1568,7 +1568,7 @@
       },
       "slug": "temer-sarbet-au-two-bedroom-apartment",
       "title": "Sarbet -Au,Two BedRoom Apartment",
-      "description": "Sarbet -Au,Two BedRoom Apartment — Temer Properties, Sarbet, Addis Ababa. Delivery: 30 Months. Building type: Residential. Temer listing ref. 21654. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Sarbet -Au,Two BedRoom Apartment - Temer Properties, Sarbet, Addis Ababa. Delivery: 30 Months. Building type: Residential. Temer listing ref. 21654. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Sarbet",
       "is_public": true,
@@ -1640,7 +1640,7 @@
       },
       "slug": "temer-ayat-to-center-three-bedroom-apartment-2",
       "title": "Ayat To Center,Three BedRoom Apartment",
-      "description": "Ayat To Center,Three BedRoom Apartment — Temer Properties, Ayat, Addis Ababa. Delivery: 30 Months. Building type: Residential. Temer listing ref. 21349. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Ayat To Center,Three BedRoom Apartment - Temer Properties, Ayat, Addis Ababa. Delivery: 30 Months. Building type: Residential. Temer listing ref. 21349. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Ayat",
       "is_public": true,
@@ -1711,7 +1711,7 @@
       },
       "slug": "temer-arada-site-shops-2",
       "title": "Arada Site, Shops",
-      "description": "Arada Site, Shops — Temer Properties, Piyassa, Addis Ababa. Delivery: 16 Months. Building type: Residential. Temer listing ref. 21356. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Arada Site, Shops - Temer Properties, Piyassa, Addis Ababa. Delivery: 16 Months. Building type: Residential. Temer listing ref. 21356. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Piyassa",
       "is_public": true,
@@ -1777,7 +1777,7 @@
       },
       "slug": "temer-adwa-ewketshops-2",
       "title": "Adwa -ewket, Shops",
-      "description": "Adwa -ewket, Shops — Temer Properties, Piyassa, Addis Ababa. Delivery: 16 Months. Building type: Commercial. Temer listing ref. 21354. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Adwa -ewket, Shops - Temer Properties, Piyassa, Addis Ababa. Delivery: 16 Months. Building type: Commercial. Temer listing ref. 21354. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Piyassa",
       "is_public": true,
@@ -1845,7 +1845,7 @@
       },
       "slug": "temer-achantan-three-bedroom-apartment",
       "title": "Achantan,Three BedRoom Apartment",
-      "description": "Achantan,Three BedRoom Apartment — Temer Properties, Ayat, Addis Ababa. Delivery: 30 Months. Building type: Residential. Temer listing ref. 21263. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Achantan,Three BedRoom Apartment - Temer Properties, Ayat, Addis Ababa. Delivery: 30 Months. Building type: Residential. Temer listing ref. 21263. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Ayat",
       "is_public": true,
@@ -1916,7 +1916,7 @@
       },
       "slug": "temer-ayatferesbet-two-bedroom-apartment",
       "title": "Ayat Feres Bet,Two BedRoom Apartment",
-      "description": "Ayat Feres Bet,Two BedRoom Apartment — Temer Properties, Ayat, Addis Ababa. Delivery: 30 Months. Building type: Residential. Temer listing ref. 21261. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Ayat Feres Bet,Two BedRoom Apartment - Temer Properties, Ayat, Addis Ababa. Delivery: 30 Months. Building type: Residential. Temer listing ref. 21261. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Ayat",
       "is_public": true,
@@ -1987,7 +1987,7 @@
       },
       "slug": "temer-ayat-feres-betthree-bedroom-apartment",
       "title": "Ayat Feres Bet,Three BedRoom Apartment",
-      "description": "Ayat Feres Bet,Three BedRoom Apartment — Temer Properties, Ayat, Addis Ababa. Temer listing ref. 21259. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Ayat Feres Bet,Three BedRoom Apartment - Temer Properties, Ayat, Addis Ababa. Temer listing ref. 21259. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Ayat",
       "is_public": true,
@@ -2054,7 +2054,7 @@
       },
       "slug": "temer-ayat-lomiyad-four-bedroom-apartment",
       "title": "Ayat Lomiyad,Four BedRoom Apartment",
-      "description": "Ayat Lomiyad,Four BedRoom Apartment — Temer Properties, Ayat, Addis Ababa. Temer listing ref. 21247. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Ayat Lomiyad,Four BedRoom Apartment - Temer Properties, Ayat, Addis Ababa. Temer listing ref. 21247. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Ayat",
       "is_public": true,
@@ -2121,7 +2121,7 @@
       },
       "slug": "temer-ayat-lomiyad-three-bedroom-apartment-2",
       "title": "Ayat Lomiyad,Three BedRoom Apartment",
-      "description": "Ayat Lomiyad,Three BedRoom Apartment — Temer Properties, Ayat, Addis Ababa. Temer listing ref. 21246. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Ayat Lomiyad,Three BedRoom Apartment - Temer Properties, Ayat, Addis Ababa. Temer listing ref. 21246. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Ayat",
       "is_public": true,
@@ -2188,7 +2188,7 @@
       },
       "slug": "temer-ayatlomiyad-two-bedroom-apartment",
       "title": "Ayat Lomiyad,Two BedRoom Apartment",
-      "description": "Ayat Lomiyad,Two BedRoom Apartment — Temer Properties, Ayat, Addis Ababa. Temer listing ref. 21245. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Ayat Lomiyad,Two BedRoom Apartment - Temer Properties, Ayat, Addis Ababa. Temer listing ref. 21245. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Ayat",
       "is_public": true,
@@ -2255,7 +2255,7 @@
       },
       "slug": "temer-aware-4kilo-two-bedroom-apartment",
       "title": "Aware-4 kilo,Two BedRoom Apartment",
-      "description": "Aware-4 kilo,Two BedRoom Apartment — Temer Properties, Aware, Addis Ababa. Temer listing ref. 21244. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Aware-4 kilo,Two BedRoom Apartment - Temer Properties, Aware, Addis Ababa. Temer listing ref. 21244. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Aware",
       "is_public": true,
@@ -2322,7 +2322,7 @@
       },
       "slug": "temer-aware-4-kilo-three-bedroom-apartment",
       "title": "Aware-4 Kilo,Three BedRoom Apartment",
-      "description": "Aware-4 Kilo,Three BedRoom Apartment — Temer Properties, Aware, Addis Ababa. Temer listing ref. 21243. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Aware-4 Kilo,Three BedRoom Apartment - Temer Properties, Aware, Addis Ababa. Temer listing ref. 21243. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Aware",
       "is_public": true,
@@ -2389,7 +2389,7 @@
       },
       "slug": "temer-sarbet-three-bedroom-apartment-2",
       "title": "Sarbet -Seken,Three BedRoom Apartment",
-      "description": "Sarbet -Seken,Three BedRoom Apartment — Temer Properties, Sarbet, Addis Ababa. Temer listing ref. 21242. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Sarbet -Seken,Three BedRoom Apartment - Temer Properties, Sarbet, Addis Ababa. Temer listing ref. 21242. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Sarbet",
       "is_public": true,
@@ -2456,7 +2456,7 @@
       },
       "slug": "temer-haile-garment-three-bedroom-apartment",
       "title": "Haile Garment,Three BedRoom Apartment",
-      "description": "Haile Garment,Three BedRoom Apartment — Temer Properties, Garment, Addis Ababa. Temer listing ref. 21240. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Haile Garment,Three BedRoom Apartment - Temer Properties, Garment, Addis Ababa. Temer listing ref. 21240. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Garment",
       "is_public": true,
@@ -2523,7 +2523,7 @@
       },
       "slug": "temer-lycee-newroad-three-bedroom-apartment-2-2",
       "title": "Lycee NewRoad,Three BedRoom Apartment",
-      "description": "Lycee NewRoad,Three BedRoom Apartment — Temer Properties, Piyassa, Addis Ababa. Temer listing ref. 21239. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Lycee NewRoad,Three BedRoom Apartment - Temer Properties, Piyassa, Addis Ababa. Temer listing ref. 21239. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Piyassa",
       "is_public": true,
@@ -2591,7 +2591,7 @@
       },
       "slug": "temer-gelan-shopping-center",
       "title": "Gelan Shopping Center",
-      "description": "Gelan Shopping Center — Temer Properties, Gelan, Addis Ababa. Delivery: 30 Months. Building type: Commercial. Temer listing ref. 25918. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Gelan Shopping Center - Temer Properties, Gelan, Addis Ababa. Delivery: 30 Months. Building type: Commercial. Temer listing ref. 25918. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Gelan",
       "is_public": true,
@@ -2657,7 +2657,7 @@
       },
       "slug": "temer-sarbet-city-plus-three-bedroom-apartment",
       "title": "Sarbet -City Plus Three BedRoom Apartment",
-      "description": "Sarbet -City Plus Three BedRoom Apartment — Temer Properties, Sarbet, Addis Ababa. Delivery: 36 Months. Building type: Mixed Use. Temer listing ref. 28802. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Sarbet -City Plus Three BedRoom Apartment - Temer Properties, Sarbet, Addis Ababa. Delivery: 36 Months. Building type: Mixed Use. Temer listing ref. 28802. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Sarbet",
       "is_public": true,
@@ -2729,7 +2729,7 @@
       },
       "slug": "temer-sarbet-city-plus-two-bedroom",
       "title": "Sarbet -City Plus Two BedRoom Apartment",
-      "description": "Sarbet -City Plus Two BedRoom Apartment — Temer Properties, Sarbet, Addis Ababa. Delivery: 36 Months. Building type: Mixed Use. Temer listing ref. 28893. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Sarbet -City Plus Two BedRoom Apartment - Temer Properties, Sarbet, Addis Ababa. Delivery: 36 Months. Building type: Mixed Use. Temer listing ref. 28893. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Sarbet",
       "is_public": true,
@@ -2801,7 +2801,7 @@
       },
       "slug": "temer-sarbet-city-plus-one-bedroom-apartment",
       "title": "Sarbet -City Plus One BedRoom Apartment",
-      "description": "Sarbet -City Plus One BedRoom Apartment — Temer Properties, Sarbet, Addis Ababa. Delivery: 36 Months. Building type: Mixed Use. Temer listing ref. 28908. Price on request — contact Habesha Real Estate Advisory.",
+      "description": "Sarbet -City Plus One BedRoom Apartment - Temer Properties, Sarbet, Addis Ababa. Delivery: 36 Months. Building type: Mixed Use. Temer listing ref. 28908. Price on request - contact Habesha Real Estate Advisory.",
       "city": "Addis Ababa",
       "area": "Sarbet",
       "is_public": true,

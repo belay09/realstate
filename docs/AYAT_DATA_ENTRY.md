@@ -1,8 +1,8 @@
-# Ayat Share Company — data entry guide
+# Ayat Share Company - data entry guide
 
 ## Official pricing (Ayat/116/2018)
 
-**Source of truth:** `backend/data/ayat_official_2018.json` (from company strategy scans — not sample data). After edits, sync to the frontend copy used in production builds:
+**Source of truth:** `backend/data/ayat_official_2018.json` (from company strategy scans - not sample data). After edits, sync to the frontend copy used in production builds:
 
 ```bash
 cp backend/data/ayat_official_2018.json frontend/src/data/ayat_official_2018.json
@@ -78,9 +78,9 @@ The seed **removes** the demo `sunshine-developers` company and **archives** old
 }
 ```
 
-- **Per sqm, VAT included** — matches Ayat document format.
-- **Floor bands** — Ayat prices often **decrease on higher floors**; use bands like `1-4`, `5-8`, `9-12`, `13-17`.
-- **Unit type codes** — from Ayat tables: `SFCA`, `SFCR`, `RFCA`, `RFCR` (semi-finished vs regular finished).
+- **Per sqm, VAT included** - matches Ayat document format.
+- **Floor bands** - Ayat prices often **decrease on higher floors**; use bands like `1-4`, `5-8`, `9-12`, `13-17`.
+- **Unit type codes** - from Ayat tables: `SFCA`, `SFCR`, `RFCA`, `RFCR` (semi-finished vs regular finished).
 
 ### Important
 
@@ -90,10 +90,10 @@ Numbers in the JSON are **starting estimates** (CMC benchmark ~173k ETB/sqm from
 
 After the seed runs, use **Admin** at `https://realtor.belay-sirak.com/admin`:
 
-1. **Companies** — confirm Ayat Share Company.
-2. **Projects / Blocks / Unit types / Units** — add new stock.
-3. **Listings** — attach a unit, set public, add image URLs.
-4. **Pricing** — create draft version → add rows → publish.
+1. **Companies** - confirm Ayat Share Company.
+2. **Projects / Blocks / Unit types / Units** - add new stock.
+3. **Listings** - attach a unit, set public, add image URLs.
+4. **Pricing** - create draft version → add rows → publish.
 
 The JSON seed is faster for bulk price tables; the admin UI is better for one-off units.
 

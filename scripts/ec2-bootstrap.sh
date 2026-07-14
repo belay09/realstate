@@ -19,7 +19,7 @@ elif command -v dnf >/dev/null 2>&1; then
     sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
   fi
 else
-  echo "Unsupported OS — install Docker manually." >&2
+  echo "Unsupported OS - install Docker manually." >&2
   exit 1
 fi
 sudo systemctl enable --now docker
@@ -27,7 +27,7 @@ sudo usermod -aG docker "$USER"
 
 echo "==> Cloning repository..."
 if [ -d "$INSTALL_DIR/.git" ]; then
-  echo "Already cloned at $INSTALL_DIR — git pull"
+  echo "Already cloned at $INSTALL_DIR - git pull"
   git -C "$INSTALL_DIR" pull
 else
   git clone "$REPO_URL" "$INSTALL_DIR"
@@ -38,11 +38,11 @@ chmod +x scripts/*.sh 2>/dev/null || true
 
 if [ ! -f .env ]; then
   cp .env.production.example .env
-  echo "Created .env — EDIT before starting production stack."
+  echo "Created .env - EDIT before starting production stack."
 fi
 if [ ! -f backend/.env.production ]; then
   cp backend/.env.production.example backend/.env.production
-  echo "Created backend/.env.production — EDIT JWT and CORS."
+  echo "Created backend/.env.production - EDIT JWT and CORS."
 fi
 
 echo ""

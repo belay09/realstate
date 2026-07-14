@@ -273,7 +273,7 @@ def _seed_pricing(
         .first()
     )
     if existing is not None:
-        print(f"Pricing version already exists: {version_name} — skipping pricing seed")
+        print(f"Pricing version already exists: {version_name} - skipping pricing seed")
         return
 
     doc = PricingDocument(

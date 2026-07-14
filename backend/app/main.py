@@ -29,7 +29,7 @@ def create_app() -> FastAPI:
         "allow_headers": ["*"],
     }
     if settings.debug:
-        # Vite may use 5173, 5174, … when ports are taken — allow any local dev origin.
+        # Vite may use 5173, 5174, … when ports are taken - allow any local dev origin.
         cors_kwargs["allow_origin_regex"] = r"https?://(localhost|127\.0\.0\.1)(:\d+)?"
     cors_kwargs["allow_origins"] = settings.backend_cors_origins
     app.add_middleware(CORSMiddleware, **cors_kwargs)

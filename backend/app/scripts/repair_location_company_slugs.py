@@ -66,7 +66,7 @@ def repair(*, dry_run: bool) -> None:
         if dry_run:
             db.rollback()
             print(
-                f"\nDry run — would fix {temer_fixed} Temer + {ayat_fixed} Ayat rows "
+                f"\nDry run - would fix {temer_fixed} Temer + {ayat_fixed} Ayat rows "
                 f"({skipped} already ok)"
             )
         else:

@@ -1,4 +1,4 @@
-/** Habesha Real Estate Advisory — site-wide contact. */
+/** Habesha Real Estate Advisory - site-wide contact. */
 export const SITE_BRAND = {
   name: 'Habesha Real Estate Advisory',
 } as const

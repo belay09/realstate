@@ -1,11 +1,11 @@
-# Temer Properties — data entry (Ayat-style)
+# Temer Properties - data entry (Ayat-style)
 
 Temer inventory uses the same dashboard pattern as Ayat:
 
-- **Apartment location pages** — one per area (`/apartments/sarbet`, `/apartments/aware-area`, …)
-- **Shop location pages** — one per area with commercial units (`/shops/sarbet`, …)
-- **Building blocks** — City Plus, Blue Point, etc. are blocks inside the area project
-- **Listings** — public units linked to a location page via `location_kind` + `location_id`
+- **Apartment location pages** - one per area (`/apartments/sarbet`, `/apartments/aware-area`, …)
+- **Shop location pages** - one per area with commercial units (`/shops/sarbet`, …)
+- **Building blocks** - City Plus, Blue Point, etc. are blocks inside the area project
+- **Listings** - public units linked to a location page via `location_kind` + `location_id`
 
 **Source file:** `backend/data/temer_production.json`  
 **Build from scrape:** `scripts/build_temer_production_from_scrape.py`  
@@ -30,7 +30,7 @@ Production (when ready):
 docker compose -f docker-compose.prod.yml exec -T api python -m app.scripts.seed_temer_production
 ```
 
-Re-run after edits — upserts in place. Stale `temer-*` listings are hidden automatically.
+Re-run after edits - upserts in place. Stale `temer-*` listings are hidden automatically.
 
 ## JSON structure
 
@@ -46,7 +46,7 @@ Re-run after edits — upserts in place. Stale `temer-*` listings are hidden aut
 
 Apartment `location_id` = area slug (e.g. `sarbet`). Shop `location_id` = same area slug; inventory project slug = `shop-{area}`.
 
-No pricing seed — listings show **price on request** on Belay.
+No pricing seed - listings show **price on request** on Belay.
 
 ## Verify locally
 
@@ -57,9 +57,9 @@ curl -s "http://localhost:8000/api/v1/public/location-content/apartment/summarie
 
 Public URLs:
 
-- `/apartments?company_slug=temer-properties` — area cards (Sarbet, Aware, …)
-- `/apartments/sarbet` — Sarbet location page + listings
-- `/listings/temer-sarbet-city-plus-1br` — unit detail
+- `/apartments?company_slug=temer-properties` - area cards (Sarbet, Aware, …)
+- `/apartments/sarbet` - Sarbet location page + listings
+- `/listings/temer-sarbet-city-plus-1br` - unit detail
 
 ## Manual edits
 

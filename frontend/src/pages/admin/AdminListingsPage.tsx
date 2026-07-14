@@ -525,7 +525,7 @@ export function AdminListingsPage() {
         </div>
       </section>
 
-      {/* Phase4+ slim: legacy home cards — unused on public home (Companies CMS). Restore via SHOW_ADMIN_ADVANCED */}
+      {/* Phase4+ slim: legacy home cards - unused on public home (Companies CMS). Restore via SHOW_ADMIN_ADVANCED */}
       {SHOW_ADMIN_ADVANCED ? (
       <section className="space-y-4 rounded-xl border border-dashed border-stone-300 bg-stone-50/80 p-4 dark:border-stone-700 dark:bg-stone-900/40">
         <h2 className="text-base font-semibold text-stone-900 dark:text-stone-50">
@@ -533,7 +533,7 @@ export function AdminListingsPage() {
         </h2>
         <p className="text-sm text-stone-600 dark:text-stone-400">
           Home now uses <strong>Companies</strong> (developer cards). These inventory-style home
-          cards are unused on the public home page — keep only if you need them for other surfaces.
+          cards are unused on the public home page - keep only if you need them for other surfaces.
           Prefer editing{' '}
           <Link to="/admin/companies" className="font-medium text-brand-700 underline dark:text-brand-400">
             Companies
@@ -780,7 +780,7 @@ export function AdminListingsPage() {
                     }
                   }}
                 >
-                  <option value="">— Start blank —</option>
+                  <option value="">- Start blank -</option>
                   {(locationContent.data?.items ?? [])
                     .filter((row) => row.kind === createForm.kind)
                     .map((row) => (
@@ -790,7 +790,7 @@ export function AdminListingsPage() {
                     ))}
                 </select>
                 <span className="mt-1 block text-[11px] text-stone-500 dark:text-stone-400">
-                  Copies subtitle, description, cards, and media — you still choose a new location ID.
+                  Copies subtitle, description, cards, and media - you still choose a new location ID.
                 </span>
               </label>
             ) : null}
@@ -812,7 +812,7 @@ export function AdminListingsPage() {
                     }))
                   }}
                 >
-                  <option value="">— Type your own id above —</option>
+                  <option value="">- Type your own id above -</option>
                   {locationOptions.map((opt) => (
                     <option key={opt.value} value={opt.value}>
                       {opt.label} ({opt.value})
@@ -922,7 +922,7 @@ export function AdminListingsPage() {
                 checked={createForm.is_public}
                 onChange={(e) => setCreateForm((prev) => ({ ...prev, is_public: e.target.checked }))}
               />
-              Active — show on public Residential / Shops location lists
+              Active - show on public Residential / Shops location lists
             </label>
             <button type="submit" className="btn-primary md:col-span-2" disabled={createLocationContent.isPending}>
               Create location content
@@ -1212,7 +1212,7 @@ function LocationContentEditor({
             checked={form.is_public}
             onChange={(e) => setForm((prev) => ({ ...prev, is_public: e.target.checked }))}
           />
-          Active — show on public Residential / Shops lists and this location page
+          Active - show on public Residential / Shops lists and this location page
             </label>
         <button type="submit" className="btn-secondary md:col-span-2">
           Save location details

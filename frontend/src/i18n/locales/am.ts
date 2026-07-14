@@ -64,14 +64,14 @@ export const am = {
     listing: 'የቤት ዝርዝር',
     calculator: 'የዋጋ ስሌት',
     calculatorPaused: 'የዋጋ መመሪያ',
-    developerKind: '{{brand}} — ዓይነት ይምረጡ',
+    developerKind: '{{brand}}: ዓይነት ይምረጡ',
     developerShops: 'የ{{brand}} መደብር ቦታዎች',
   },
   seo: {
     defaultDescription:
-      'በአዲስ አበባ ነጻ የሪል ኢስቴት ምክር። የአያት እና የቴመር አፓርታማዎችን እና መደብሮችን ያወዳድሩ። ከገዢ ምንም ክፍያ ወይም ኮሚሽን የለም — ሐበሻ ሪል ኢስቴት አድቫይዘሪ።',
+      'በአዲስ አበባ ነጻ የሪል ኢስቴት ምክር። የአያት እና የቴመር አፓርታማዎችን እና መደብሮችን ያወዳድሩ። ከገዢ ምንም ክፍያ ወይም ኮሚሽን የለም። ሐበሻ ሪል ኢስቴት አድቫይዘሪ።',
     homeDescription:
-      'ሐበሻ ሪል ኢስቴት አድቫይዘሪ በበጀትዎ እና በኑሮ ተስማሚ ቤት በአዲስ አበባ ያገኝዎታል። የአያት እና ቴመር ዝርዝሮችን ያወዳድሩ — 100% ነጻ።',
+      'ሐበሻ ሪል ኢስቴት አድቫይዘሪ በበጀትዎ እና በኑሮ ተስማሚ ቤት በአዲስ አበባ ያገኝዎታል። የአያት እና ቴመር ዝርዝሮችን ያወዳድሩ፡ 100% ነጻ።',
     apartmentsDescription:
       'በአዲስ አበባ ከአያት አክሲዮን ማኅበር እና ቴመር ፕሮፐርቲስ የአፓርታማ ቦታዎችን ያስሱ። ትክክለኛውን አካባቢ እና አቀማመጥ ለመምረጥ ነጻ ምክር።',
     shopsDescription:
@@ -81,11 +81,11 @@ export const am = {
     developerShopsDescription:
       'በአዲስ አበባ የ{{brand}} መደብር ቦታዎችን ያስሱ። ከሐበሻ ሪል ኢስቴት አድቫይዘሪ ነጻ መመሪያ።',
     calculatorDescription:
-      'በአዲስ አበባ የአያት አፓርታማ እና መደብር ዋጋ ቅድመ ስሌት። ነጻ መሳሪያ — ከመግዛትዎ በፊት ከአያት ያረጋግጡ።',
+      'በአዲስ አበባ የአያት አፓርታማ እና መደብር ዋጋ ቅድመ ስሌት። ነጻ መሳሪያ። ከመግዛትዎ በፊት ከአያት ያረጋግጡ።',
     calculatorPausedDescription:
-      'ለአያት እና ቴመር ዋጋ መመሪያ ወደ ሐበሻ ሪል ኢስቴት አድቫይዘሪ ይደውሉ ወይም በዋትስአፕ ይጻፉ። ነጻ ምክር — ከገዢ ክፍያ የለም።',
+      'ለአያት እና ቴመር ዋጋ መመሪያ ወደ ሐበሻ ሪል ኢስቴት አድቫይዘሪ ይደውሉ ወይም በዋትስአፕ ይጻፉ። ነጻ ምክር፣ ከገዢ ክፍያ የለም።',
     listingDescriptionFallback:
-      'በአዲስ አበባ ለዚህ ቤት ፎቶ፣ ዝርዝር እና ዋጋ ይመልከቱ። ከሐበሻ ሪል ኢስቴት አድቫይዘሪ ነጻ ጥያቄ — ከገዢ ክፍያ የለም።',
+      'በአዲስ አበባ ለዚህ ቤት ፎቶ፣ ዝርዝር እና ዋጋ ይመልከቱ። ከሐበሻ ሪል ኢስቴት አድቫይዘሪ ነጻ ጥያቄ፣ ከገዢ ክፍያ የለም።',
     projectDescriptionFallback:
       'በዚህ የአዲስ አበባ ፕሮጀክት ቤቶችን እና አቀማመጦችን ያስሱ። ከሐበሻ ሪል ኢስቴት አድቫይዘሪ ነጻ የገዢ ምክር።',
   },
@@ -119,7 +119,7 @@ export const am = {
     noLocations: 'የታየ መደብር ቦታ የለም። ለመመሪያ ይደውሉ ወይም በዋትስአፕ ይጻፉ።',
     emptyTitleFiltered: 'የ{{brand}} መደብሮች ገና አልታተሙም',
     emptyBodyFiltered:
-      'ለ{{brand}} የመደብር ቦታዎች ገና አልተዘረዘሩም። ለመመሪያ ወደ ሐበሻ ሪል ኢስቴት አድቫይዘሪ ይደውሉ ወይም በዋትስአፕ ይጻፉ — ወይም የመኖሪያ ቦታዎችን ያስሱ።',
+      'ለ{{brand}} የመደብር ቦታዎች ገና አልተዘረዘሩም። ለመመሪያ ወደ ሐበሻ ሪል ኢስቴት አድቫይዘሪ ይደውሉ ወይም በዋትስአፕ ይጻፉ፣ ወይም የመኖሪያ ቦታዎችን ያስሱ።',
     commercial: 'የንግድ መደብር',
     developer: 'አያት አክሲዮን ማኅበር',
     tapForDetails: 'የወለል ዋጋ ይመልከቱ',
@@ -147,23 +147,23 @@ export const am = {
     heroTitleEnd: 'ይምረጡ።',
     heroBody:
       'በበጀትዎ፣ በቦታ እና በኑሮ ተስማሚ የሆኑትን ከ{{ayatBrand}} እና {{temerBrand}} ምርጥ ቤቶች እንመክራለን። {{advisoryNotAyat}} አልሚዎችን ያወዳድሩና ያግኙን።',
-    heroMinimalBody: 'የአያትና የቴመር ሪል እስቴት ያወዳድሩ — ከዚያ መኖሪያ ወይም መደብር ይክፈቱ።',
+    heroMinimalBody: 'የአያትና የቴመር ሪል እስቴት ያወዳድሩ፣ ከዚያ መኖሪያ ወይም መደብር ይክፈቱ።',
     advisoryNotAyat: 'እኛ አልሚ አይደለንም።',
-    heroFreeLine: '100% ነጻ ምክር — ከእርስዎ ምንም ክፍያ ወይም ኮሚሽን የለም።',
+    heroFreeLine: '100% ነጻ ምክር፣ ከእርስዎ ምንም ክፍያ ወይም ኮሚሽን የለም።',
     advisoryEyebrow: 'ነጻ ምክር',
-    advisoryTitle: 'ለምርጫዎ የሚስማማ ቤት — ሙሉ በሙሉ ነጻ',
+    advisoryTitle: 'ለምርጫዎ የሚስማማ ቤት፣ ሙሉ በሙሉ ነጻ',
     advisorySummary:
       'ምን እንደሚፈልጉ ይንገሩን። ታመኑ አልሚዎችን እናወዳድራለን እና ወደ ምርጥ አማራጭ እንመራዎታለን። አገልግሎታችን ለገዢዎች ነጻ ነው፡ የምክር ክፍያም የለም፣ ከእርስዎም ኮሚሽን አንወስድም።',
     advisoryPoint1Title: 'ከምርጫዎ ጋር የሚስማማ',
     advisoryPoint1Text:
-      'የመኝታ ቁጥር፣ አካባቢ፣ በጀት እና የክፍያ ዕቅድ — ለእርስዎ የሚስማሙ አማራጮችን እንመርጣለን።',
+      'የመኝታ ቁጥር፣ አካባቢ፣ በጀት እና የክፍያ ዕቅድ። ለእርስዎ የሚስማሙ አማራጮችን እንመርጣለን።',
     advisoryPoint2Title: 'ከእርስዎ ምንም ክፍያ የለም',
     advisoryPoint2Text:
       'ለምክር፣ ለማወዳደር ወይም ለጥያቄ ለሐበሻ ሪል ኢስቴት አድቫይዘሪ በጭራሽ አትከፍሉም።',
     advisoryPoint3Title: 'ለገዢ ኮሚሽን የለም',
     advisoryPoint3Text: 'ከገዢዎች ምንም ኮሚሽን አንወስድም። የምናቀርበው ሁሉ ነጻ ነው።',
     advisoryCta: 'ነጻ ምክር ያግኙ',
-    advisoryCtaHint: 'ይደውሉ ወይም በዋትስአፕ ይጻፉ — ሁልጊዜ ነጻ።',
+    advisoryCtaHint: 'ይደውሉ ወይም በዋትስአፕ ይጻፉ፡ ሁልጊዜ ነጻ።',
     freeBadge: '100% ነጻ',
     exploreListings: 'ቦታዎችን ያስሱ',
     pickDeveloperTitle: 'አጋር አልሚ ይምረጡ',
@@ -181,7 +181,7 @@ export const am = {
     partnersEyebrow: 'አጋሮቻችን',
     partnersTitle: 'ከእኛ ጋር የሚወዳደሩ አልሚዎች',
     partnersDescription:
-      'ከዚህ በታች ያለው እያንዳንዱ አጋር ሙሉ ትዕይንት ነው — የመኖሪያ ቤቶችን ወይም የንግድ መደብሮችን ያስሱ። አዲስ አጋሮች በCMS ሲታተሙ እዚህ ይታያሉ።',
+      'ከዚህ በታች ያለው እያንዳንዱ አጋር ሙሉ ትዕይንት ነው፡ የመኖሪያ ቤቶችን ወይም የንግድ መደብሮችን ያስሱ። አዲስ አጋሮች በCMS ሲታተሙ እዚህ ይታያሉ።',
     browseDevelopers: 'አልሚዎችን ይመልከቱ',
     developersCta: '{{name}}ን ይመልከቱ',
     developersOfficialSite: 'ኦፊሴላዊ ድረ-ገጽ',
@@ -189,10 +189,10 @@ export const am = {
       'ከ{{name}} የመኖሪያና የንግድ አማራጮችን በነጻ የሐበሻ ምክር ያስሱ።',
     developersEmptyTitle: 'አልሚዎች በቅርቡ',
     developersEmptyBody:
-      'አጋር አልሚዎች ገና አልታተሙም። ይደውሉ ወይም በዋትስአፕ ይጻፉ — በግል እንመራዎታለን።',
+      'አጋር አልሚዎች ገና አልታተሙም። ይደውሉ ወይም በዋትስአፕ ይጻፉ፣ በግል እንመራዎታለን።',
     developersErrorTitle: 'አልሚዎችን መጫን አልተቻለም',
     developersErrorBody: 'እባክዎ ትንሽ ቆይተው እንደገና ይሞክሩ፣ ወይም ለነጻ ምክር ያግኙን።',
-    developersContactPrefill: 'ሰላም — በሐበሻ ሆምስ አልሚ ለመምረጥ እርዳታ እፈልጋለሁ።',
+    developersContactPrefill: 'ሰላም፣ በሐበሻ ሆምስ አልሚ ለመምረጥ እርዳታ እፈልጋለሁ።',
     inventoryDescription: 'አልሚ ይምረጡ፣ ከዚያ የመኖሪያ ወይም መደብር በመምረጥ የዚያን ኩባንያ ቦታዎች ይመልከቱ።',
     cardAyatTitle: 'የአያት አፓርታማዎች እና መደብሮች',
     cardAyatDescription:
@@ -203,7 +203,7 @@ export const am = {
       'ሳርቤት ሲቲ ፕላስ፣ ብሉ ፖይንት፣ አዋሬ፣ ገላን ሾፒንግ ሴንተር እና ሌሎች የቴመር ዝርዝሮች።',
     cardCommercialTitle: 'የንግድ መደብሮች',
     cardCommercialDescription:
-      'ልደታ፣ ካዛንቺስ፣ ቦሌ ኤር እና ሌሎች ክፍል 11 ቦታዎች — ከአፓርታማዎች የተለየ።',
+      'ልደታ፣ ካዛንቺስ፣ ቦሌ ኤር እና ሌሎች ክፍል 11 ቦታዎች፣ ከአፓርታማዎች የተለየ።',
     cardTagHomes: 'ቤቶች',
     cardTagShops: 'መደብሮች',
     viewListings: 'ዝርዝሮችን ይመልከቱ',
@@ -233,7 +233,7 @@ export const am = {
     browseShops: 'የመደብር ቦታዎችን ይመልከቱ',
     backHome: '← ወደ መነሻ',
     backToKind: '← መኖሪያ ወይም መደብር',
-    contactHint: 'በማንኛውም ጊዜ ይደውሉ ወይም በዋትስአፕ ይጻፉ — ለገዢዎች ምክር ነጻ ነው።',
+    contactHint: 'በማንኛውም ጊዜ ይደውሉ ወይም በዋትስአፕ ይጻፉ፤ ለገዢዎች ምክር ነጻ ነው።',
     whatsappPrefill: 'ሰላም፣ በሐበሻ ሪል ኢስቴት አድቫይዘሪ ስለ {{brand}} ፍላጎት አለኝ።',
   },
   temer: {
@@ -254,7 +254,7 @@ export const am = {
     beds: 'መኝታ',
     baths: 'መታጠቢያ',
     size: 'ስፋት',
-    specDash: '—',
+    specDash: '-',
     viewDetails: 'ዝርዝር ይመልከቱ',
     browseIntro:
       'በአዲስ አበባ የቴመር ፕሮፐርቲዝ የሚሸጡ አፓርታማዎችን በሐበሻ ሪል ኢስቴት አድቫይዘሪ ያስሱ።',
@@ -281,7 +281,7 @@ export const am = {
     eyebrow: 'እንዴት እንሰራለን',
     title: 'ሐበሻ ሪል ኢስቴት አድቫይዘሪ ምንድን ነው?',
     summary:
-      'ሐበሻ ሪል ኢስቴት አድቫይዘሪ አልሚ አይደለም። ለገዢዎች በምርጫቸው መሰረት ምርጥ ንብረት እንመክራለን፣ ከብዙ ኩባንያዎች ቤቶችን እናወዳድራለን እና ወደ ትክክለኛው አልሚ እንገናኝዎታለን — ሁሉም ከእርስዎ ምንም ወጪ ሳይኖር።',
+      'ሐበሻ ሪል ኢስቴት አድቫይዘሪ አልሚ አይደለም። ለገዢዎች በምርጫቸው መሰረት ምርጥ ንብረት እንመክራለን፣ ከብዙ ኩባንያዎች ቤቶችን እናወዳድራለን እና ወደ ትክክለኛው አልሚ እንገናኝዎታለን፣ ሁሉም ከእርስዎ ምንም ወጪ ሳይኖር።',
     feature1Title: 'የአልሚው ስም በየዝርዝሩ ላይ',
     feature1Text:
       'እያንዳንዱ የቤት ዝርዝር የአልሚውን ስም ያሳያል። ፕሮጀክቱን ማን እንደገነባው እና ከማን እንደሚገዙ አስቀድመው ያውቃሉ።',
@@ -295,7 +295,7 @@ export const am = {
     heroEyebrow: 'ያስሱ · ያወዳድሩ · ይጠይቁ',
     heroTitle: 'ከአያት፣ ቴመር እና ሌሎች አልሚዎች የቀረቡ ቤቶች',
     heroBody:
-      'እያንዳንዱ ዝርዝር አልሚውን በግልጽ ያሳያል — {{ayatBrand}} ወይም {{temerBrand}}። ሐበሻ ሪል ኢስቴት አድቫይዘሪ አማራጮችን ያወዳድራል። በግዢዎ ሂደት ላይ አልሚውን አንተካም።',
+      'እያንዳንዱ ዝርዝር አልሚውን በግልጽ ያሳያል፡ {{ayatBrand}} ወይም {{temerBrand}}። ሐበሻ ሪል ኢስቴት አድቫይዘሪ አማራጮችን ያወዳድራል። በግዢዎ ሂደት ላይ አልሚውን አንተካም።',
     loadError: 'ዝርዝሮችን መጫን አልተሳካም። እባክዎ የኢንተርኔት ግንኙነትዎን አረጋግጠው ገጹን ያድሱ።',
     emptyTitle: 'እስካሁን ምንም አልተገኘም',
     emptyDescription: 'እባክዎ ሌላ አካባቢ ወይም የክፍል (የአልጋ) ቁጥር ይሞክሩ፣ ወይም ሁሉንም የአጋር አልሚ ቤቶች ያስሱ።',
@@ -321,12 +321,12 @@ export const am = {
     tapForLayouts: 'የቦታ ዝርዝር ይመልከቱ',
     locationIntroFallback: 'ከታች ለዚህ ቦታ የቤት አይነቶች፣ ሚዲያ እና የወለል ዋጋ ይመልከቱ።',
     ayatLocationIntro:
-      'በዚህ የአያት ልማት የቤት አይነቶች፣ ፎቶ/ቪዲዮ እና የወለል ዋጋ ይመልከቱ — ከዚያ ይደውሉ ወይም በዋትስአፕ ይጻፉ።',
+      'በዚህ የአያት ልማት የቤት አይነቶች፣ ፎቶ/ቪዲዮ እና የወለል ዋጋ ይመልከቱ፣ ከዚያ ይደውሉ ወይም በዋትስአፕ ይጻፉ።',
     layoutsAvailable: 'የቤት አይነቶች',
     layoutAvailable: 'የቤት አይነት',
     viewLayouts: 'አይነቶችን ይመልከቱ',
     layoutsTitle: 'የሚገኙ አይነቶች',
-    layoutsSubtitle: 'በዚህ ቦታ {{count}} የቤት አይነቶች — ፎቶ እና ዝርዝር ከዝርዝራችን።',
+    layoutsSubtitle: 'በዚህ ቦታ {{count}} የቤት አይነቶች፡ ፎቶ እና ዝርዝር ከዝርዝራችን።',
     mediaTitle: 'ፎቶ እና ቪዲዮ',
     mediaSubtitle: 'የሬና እና ስዕላዊ ምስሎች ለዚህ ልማት።',
     videoNav: 'ቪዲዮ',
@@ -339,7 +339,7 @@ export const am = {
     homeCount: '{{count}} የምሳሌ ቤቶች',
     bedroomCount: '{{count}} መኝታ',
     chooseLayout:
-      'ከታች ያሉት እያንዳንዱ በዚህ ቦታ ያለው የምሳሌ ክፍል ነው። የመኝታ ብዛት፣ ጨረታ እና ስፋት ያወዳድሩ — ከዚያ ይደውሉ ወይም በዋትስአፕ ይጻፉ።',
+      'ከታች ያሉት እያንዳንዱ በዚህ ቦታ ያለው የምሳሌ ክፍል ነው። የመኝታ ብዛት፣ ጨረታ እና ስፋት ያወዳድሩ፣ ከዚያ ይደውሉ ወይም በዋትስአፕ ይጻፉ።',
     layoutsIntro:
       'ቤቶች በየየህንፃ አይነት ተመድበዋል። ዝርዝር እና ፎቶ በዚህ ገጽ ላይ ናቸው፤ የወለል ዋጋ እና ግንኙነት ከታች ናቸው።',
     filterBedrooms: 'መኝታ',
@@ -349,11 +349,11 @@ export const am = {
     homeTypeColumn: 'የቤት አይነት',
     pricePerSqmColumn: 'ዋጋ',
     ratesNote:
-      'አመልካች ETB/m² — ተገቢ ሲሆን ቫት ይጨምራል። የመጨረሻ ዋጋ በሐበሻ ሪል ኢስቴት አድቫይዘሪ በኩል ይረጋገጣል።',
+      'አመልካች ETB/m²፤ ተገቢ ሲሆን ቫት ይጨምራል። የመጨረሻ ዋጋ በሐበሻ ሪል ኢስቴት አድቫይዘሪ በኩል ይረጋገጣል።',
     ratesNav: 'የወለል ዋጋ',
     contactNav: 'ግንኙነት',
     whatsappPrefill: 'ሰላም፣ በሐበሻ ሪል ኢስቴት አድቫይዘሪ ስለ {{location}} ፍላጎት አለኝ።',
-    contactHint: 'ስለዚህ ቦታ ይደውሉ ወይም በዋትስአፕ ይጻፉ — ምክር ነጻ ነው።',
+    contactHint: 'ስለዚህ ቦታ ይደውሉ ወይም በዋትስአፕ ይጻፉ፤ ምክር ነጻ ነው።',
     priceOnRequestTitle: 'ዋጋ በጥያቄ',
     priceOnRequestBody:
       'ለዚህ ቦታ የወለል ዋጋ ገና አልታተመም። አመልካች ዋጋ ለማግኘት በ {{phone}} ይደውሉ ወይም በዋትስአፕ ይጻፉ።',
@@ -373,7 +373,7 @@ export const am = {
       'Shops and mall on ground to floor {{retailMax}}. Apartments from floor {{residentialMin}} upward.',
     mixedIntroFallback: 'Combined retail and residential towers.',
     duplexIntro: 'Duplex apartments at this location.',
-    flatIntro: 'Residential-only towers — no shop floors.',
+    flatIntro: 'Residential-only towers, no shop floors.',
     shopFloorsHint: 'For shop floors in mixed towers,',
     shopCalculatorLink: 'use the shop price calculator',
     shopRatesLink: 'የመደብር የወለል ዋጋ ይመልከቱ',
@@ -385,7 +385,7 @@ export const am = {
     finish: 'Finish',
     size: 'Size',
     floor: 'Floor',
-    notSpecified: '—',
+    notSpecified: '-',
     viewDetails: 'View full details',
     viewDetailsHint: 'Photos, specs & indicative price',
     buildingMixedApt: 'Mixed · Apartment',
@@ -540,12 +540,12 @@ export const am = {
       ayatMainVillage: 'አያት (ዋና መንደር)፣ አዲስ አበባ',
     },
     projects: {
-      lideta: 'ልደታ — ግንባታው አልተጀመረም',
-      kazanchis: 'ካዛንቺስ — ግንባታ ተጀምሯል',
-      bole: 'ቦሌ — ግንባታው አልተጀመረም',
+      lideta: 'ልደታ፡ ግንባታው አልተጀመረም',
+      kazanchis: 'ካዛንቺስ፡ ግንባታ ተጀምሯል',
+      bole: 'ቦሌ፡ ግንባታው አልተጀመረም',
       cmc: 'ሲኤምሲ መኖሪያ መንደሮች',
-      cmcUnstarted: 'ሲኤምሲ እና ሌሎች — ግንባታው አልተጀመረም',
-      cmcNearCompletion: 'ሲኤምሲ እና ሌሎች — ሊጠናቀቅ የተቃረበ',
+      cmcUnstarted: 'ሲኤምሲ እና ሌሎች፡ ግንባታው አልተጀመረም',
+      cmcNearCompletion: 'ሲኤምሲ እና ሌሎች፡ ሊጠናቀቅ የተቃረበ',
       ayatHills: 'አያት ሂልስ (ዋና መንደር)',
     },
     completionLabel: 'የሲኤምሲ ግንባታ ደረጃ',
@@ -630,9 +630,9 @@ export const am = {
     tierDiscount: 'በዝርዝር ዋጋ ላይ {{percent}}% የደንበኛ ቅናሽ',
     resultTitle: 'የእርስዎ ቅድመ ስሌት ውጤት',
     resultPending: 'በካሬ ሜትር ዋጋን፣ ቅናሾችን እና ክፍያዎችን ለማየት እባክዎ ደረጃዎቹን ያጠናቅቁ።',
-    compactAdjustHint: 'አማራጮችዎን ይምረጡ — ቅድመ ስሌቱ ከታች ይዘምናል።',
+    compactAdjustHint: 'አማራጮችዎን ይምረጡ፤ ቅድመ ስሌቱ ከታች ይዘምናል።',
     compactDisclaimer:
-      'ይህ ቅድመ ስሚት ብቻ ነው — ከመግዛት በፊት ከአያት ኦፊሴላዊ የዋጋ ማረጋገጫ ያስፈልጋል።',
+      'ይህ ቅድመ ስሚት ብቻ ነው። ከመግዛት በፊት ከአያት ኦፊሴላዊ የዋጋ ማረጋገጫ ያስፈልጋል።',
     compactFieldKind: 'የንብረት አይነት',
     compactFieldArea: 'የአፓርታማ አካባቢ',
     compactFieldShopZone: 'የመደብር ቦታ',
@@ -655,13 +655,13 @@ export const am = {
     locationPromotionHint: 'ለዚህ ቦታ ለተወሰነ ጊዜ ተጨማሪ ቅናሽ፣ ከአያት ቅናሽ በኋላ ይተገበራል።',
     priceAfterDiscount: 'ጠቅላላ ዋጋ (ሁሉም ቅናሾች)',
     totalAfterTier: 'ከቅድመ ክፍያ ቅናሽ በኋላ ጠቅላላ',
-    pricePerSqmAfterTier: 'በካሬ ሜትር — ከቅድመ ክፍያ ቅናሽ በኋላ',
+    pricePerSqmAfterTier: 'በካሬ ሜትር፣ ከቅድመ ክፍያ ቅናሽ በኋላ',
     totalAfterPromotion: 'ከልዩ ቅናሽ በኋላ ጠቅላላ',
-    pricePerSqmAfterPromotion: 'በካሬ ሜትር — ከልዩ ቅናሽ በኋላ',
+    pricePerSqmAfterPromotion: 'በካሬ ሜትር፣ ከልዩ ቅናሽ በኋላ',
     finalSummaryTitle: 'የመጨረሻ ማጠቃለያ (ሁሉም ቅናሾች)',
-    effectivePricePerSqmFinal: 'በካሬ ሜትር — ሁሉም ቅናሾች ተጭኖ',
+    effectivePricePerSqmFinal: 'በካሬ ሜትር፣ ሁሉም ቅናሾች ተጭኖ',
     effectivePricePerSqmSummary:
-      '{{area}} — ዝርዝር {{listRate}}/ካሜ² → ከቅድመ ክፍያ {{tierRate}}/ካሜ² → መጨረሻ {{finalRate}}/ካሜ²።',
+      '{{area}}፡ ዝርዝር {{listRate}}/ካሜ² → ከቅድመ ክፍያ {{tierRate}}/ካሜ² → መጨረሻ {{finalRate}}/ካሜ²።',
     downPayment6040: 'አሁን የሚከፈል ቅድመ ክፍያ (በ60/40 እቅድ)',
     balance6040: 'በርክክብ ወቅት የሚከፈል ቀሪ ክፍያ',
     firstMilestone: 'ውል ሲፈረም (የመጀመሪያ ደረጃ ክፍያ)',

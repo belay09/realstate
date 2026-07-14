@@ -242,7 +242,7 @@ export function CalculatorConfigEditor({ companyId, initialConfig }: Props) {
                     <tr key={zone.id} className="border-b border-stone-100 dark:border-stone-800">
                       <td className="py-2 pr-2 font-mono text-xs">{zone.id}</td>
                       <td className="py-2 pr-2 text-xs text-stone-600 dark:text-stone-400">
-                        {shop?.title ?? '—'}
+                        {shop?.title ?? '-'}
                       </td>
                       {(['GF', '1F', '2F', '3F'] as const).map((floor) => (
                         <td key={floor} className="py-2 pr-2">

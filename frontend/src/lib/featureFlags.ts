@@ -1,6 +1,6 @@
 /**
  * Public UX feature flags.
- * Keep calculator source restorable — flip to true to re-enable public mounts.
+ * Keep calculator source restorable - flip to true to re-enable public mounts.
  */
 export const SHOW_PUBLIC_CALCULATOR = false
 

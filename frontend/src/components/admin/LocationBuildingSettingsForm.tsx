@@ -117,7 +117,7 @@ export function LocationBuildingSettingsForm({
                   })
                 }
               >
-                <option value="">— select shop zone —</option>
+                <option value="">- select shop zone -</option>
                 {shopZoneOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>
                     {opt.label} ({opt.value})

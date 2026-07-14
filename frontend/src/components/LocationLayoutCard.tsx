@@ -41,7 +41,7 @@ function SpecItem({ label, value }: { label: string; value: string }) {
   )
 }
 
-/** Inline layout summary for the location terminal page — no listing-detail hop required. */
+/** Inline layout summary for the location terminal page - no listing-detail hop required. */
 export function LocationLayoutCard({ listing, index = 0 }: Props) {
   const { t } = useTranslation()
   const title = formatListingCardTitle(listing, t)

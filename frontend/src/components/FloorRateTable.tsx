@@ -49,7 +49,7 @@ export function FloorRateTable({
         <h2 className="text-sm font-semibold tracking-tight text-fg sm:text-base">{title}</h2>
       </div>
 
-      {/* Mobile: stacked rows — easier to read than a narrow table */}
+      {/* Mobile: stacked rows - easier to read than a narrow table */}
       <ul className="divide-y divide-border sm:hidden">
         {rows.map((row) => (
           <li key={row.key} className="flex items-start justify-between gap-4 px-5 py-4">
@@ -84,7 +84,7 @@ export function FloorRateTable({
               <tr key={row.key} className="border-b border-border last:border-0">
                 <td className="px-5 py-3.5 text-fg sm:px-6">{row.floorLabel}</td>
                 {showDetail ? (
-                  <td className="px-5 py-3.5 text-fg-muted sm:px-6">{row.detailLabel ?? '—'}</td>
+                  <td className="px-5 py-3.5 text-fg-muted sm:px-6">{row.detailLabel ?? '-'}</td>
                 ) : null}
                 <td className="px-5 py-3.5 font-medium tabular-nums text-fg sm:px-6">
                   {formatMoney(row.pricePerSqm, currency)}

@@ -298,7 +298,7 @@ The following phases are ordered for a clear dependency chain: **database and AP
 
 - **While backend phases are in progress (roughly Phases 2–9):** use FastAPI `/docs`, `curl`, the database, and automated tests (`pytest`) to prove each phase’s checklist. That stays the fastest feedback loop during API work.
 - **Primary manual testing for real users:** once the **React UI exists**, repeat the same scenarios **in the browser** (public site and admin). Swagger alone is not enough to validate layout, mobile behavior, forms, and end-to-end flows.
-- **Recommended overlap (so you are not blocked on Swagger for months):** as soon as **Phase 5 (inventory and listing API)** is usable, start **thin vertical slices of Phase 10 (public)** and **Phase 11 (admin)**—for example admin login, company/project/unit listing forms, and public listing + detail pages wired to the API. Then extend the UI **alongside** Phases 6–9 so new APIs get a minimal screen early and full acceptance stays UI-driven where it matters.
+- **Recommended overlap (so you are not blocked on Swagger for months):** as soon as **Phase 5 (inventory and listing API)** is usable, start **thin vertical slices of Phase 10 (public)** and **Phase 11 (admin)**-for example admin login, company/project/unit listing forms, and public listing + detail pages wired to the API. Then extend the UI **alongside** Phases 6–9 so new APIs get a minimal screen early and full acceptance stays UI-driven where it matters.
 
 After each phase, run that phase’s **API-level** checklist before moving on. When the UI covers a feature, add the same scenario to your **browser** checklist so both layers stay aligned.
 
@@ -751,8 +751,8 @@ Tick only after **you** confirm in the browser (and on a phone-sized viewport wh
 
 ### Implementation status (repo)
 
-- [x] `.github/workflows/ci.yml` — backend Ruff + migrate + pytest; frontend `npm ci` + build.
-- [x] `docs/GITHUB_SETUP.md` — init, remote `belay09/realstate`, commit/push checklist.
+- [x] `.github/workflows/ci.yml` - backend Ruff + migrate + pytest; frontend `npm ci` + build.
+- [x] `docs/GITHUB_SETUP.md` - init, remote `belay09/realstate`, commit/push checklist.
 - [ ] You still push `main` from your machine and confirm Actions green on GitHub.
 
 ### Build Scope
@@ -792,10 +792,10 @@ Tick only after **you** confirm in the browser (and on a phone-sized viewport wh
 
 ### Implementation status (repo)
 
-- [x] `docker-compose.prod.yml` — `db`, `api` (`Dockerfile.prod`), `web` (nginx static), `caddy`.
+- [x] `docker-compose.prod.yml` - `db`, `api` (`Dockerfile.prod`), `web` (nginx static), `caddy`.
 - [x] `backend/Dockerfile.prod`, `frontend/Dockerfile.prod`, `deploy/Caddyfile`.
 - [x] `scripts/deploy-migrate.sh`, `scripts/backup-db.sh`, `.env.production.example` files.
-- [x] `docs/DEPLOYMENT.md` — EC2 bootstrap, compose, migrations, backups.
+- [x] `docs/DEPLOYMENT.md` - EC2 bootstrap, compose, migrations, backups.
 - [ ] You provision EC2, open ports, and run the stack on a real server.
 
 ### Build Scope

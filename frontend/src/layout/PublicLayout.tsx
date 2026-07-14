@@ -93,7 +93,7 @@ export function PublicLayout() {
         <Outlet />
       </main>
 
-      {/* Footer already has a contact hero — hide fixed strip on home to avoid duplicate contact. */}
+      {/* Footer already has a contact hero - hide fixed strip on home to avoid duplicate contact. */}
       {!isHome ? <SiteContactStrip /> : null}
 
       <PublicFooter brandName={brand.name} reserveContactStrip={!isHome} />

@@ -46,7 +46,7 @@ def main() -> None:
             project_slug = f"shop-{area_slug}"
             location_kind = "shop"
             location_id = area_slug
-            project_name = f"{area_label} — Shops"
+            project_name = f"{area_label} - Shops"
         else:
             project_slug = area_slug
             location_kind = "apartment"
@@ -149,7 +149,7 @@ def main() -> None:
     out = {
         "_meta": {
             "description": (
-                "Temer inventory for Habesha Real Estate Advisory — Ayat-style layout: area location pages "
+                "Temer inventory for Habesha Real Estate Advisory - Ayat-style layout: area location pages "
                 "(apartment + shop), building blocks within each area project, rich listing metadata."
             ),
             "source": data.get("source", "https://temerproperties.com/"),
@@ -161,7 +161,7 @@ def main() -> None:
                 "shops": len(location_content["shops"]),
             },
             "currency": "ETB",
-            "pricing_note": "No calculator pricing — Temer listings show price on request.",
+            "pricing_note": "No calculator pricing - Temer listings show price on request.",
         },
         "company": {
             "slug": company_src.get("suggested_slug", "temer-properties"),

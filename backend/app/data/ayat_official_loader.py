@@ -9,7 +9,7 @@ from typing import Any
 # Sync with frontend/src/data/ayat_official_2018.json (production web image uses that copy).
 OFFICIAL_PATH = Path(__file__).resolve().parents[2] / "data" / "ayat_official_2018.json"
 
-# 3BR semi-finished uses SFCR; Section 10 has no SFCR semi column — fall back to SFCA band.
+# 3BR semi-finished uses SFCR; Section 10 has no SFCR semi column - fall back to SFCA band.
 SEMI_FINISHED_TYPES = ("SFCA", "SFCR")
 REGULAR_FINISHED_TYPES = ("RFCA", "RFCR")
 
@@ -152,7 +152,7 @@ def build_pricing_block(official: dict[str, Any]) -> dict[str, Any]:
                 "conditions": {
                     "min_buyers": group["min_buyers"],
                     "max_buyers": group.get("max_buyers"),
-                    "note": "Section 7 — additional discount on top of base client discount",
+                    "note": "Section 7 - additional discount on top of base client discount",
                 },
             }
         )

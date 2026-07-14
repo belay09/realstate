@@ -122,7 +122,7 @@ export function CopyRatesPanel({
         Copy apartment rates to another location
       </h2>
       <p className="mt-1 text-xs text-stone-600 dark:text-stone-400">
-        Reuse the same unit types, floor bands, and ETB/m² on other projects — no need to retype each
+        Reuse the same unit types, floor bands, and ETB/m² on other projects - no need to retype each
         row.
       </p>
 

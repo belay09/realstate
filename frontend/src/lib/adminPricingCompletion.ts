@@ -1,4 +1,4 @@
-/** CMC calculator uses two Ayat strategy tables — configured via price row construction stage. */
+/** CMC calculator uses two Ayat strategy tables - configured via price row construction stage. */
 
 export const CMC_INVENTORY_SLUG = 'cmc-extension'
 
